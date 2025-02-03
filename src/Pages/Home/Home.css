@@ -1,0 +1,95 @@
+  .header {
+      text-align: center;
+      margin-bottom: 40px;
+  }
+
+  .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+  }
+
+  .header h2 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+  }
+
+  .features {
+      list-style-type: none;
+      padding: 0;
+  }
+
+  .features li {
+      display: inline-block;
+      margin: 0 10px;
+      font-size: 1.2em;
+  }
+
+  .services {
+      text-align: center;
+      margin-bottom: 40px;
+  }
+
+  .services h3 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+  }
+
+  .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+  }
+
+  .stats div {
+      font-size: 1.5em;
+      font-weight: bold;
+  }
+
+  .services button {
+      padding: 10px 20px;
+      font-size: 1.2em;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+  }
+
+  .security,
+  .experience,
+  .ease-of-use {
+      text-align: center;
+      margin-bottom: 40px;
+  }
+
+  .security h3,
+  .experience h3,
+  .ease-of-use h3 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+  }
+
+  .ease-of-use p {
+      font-size: 1.2em;
+  }
+
+  .testimonials {
+      text-align: center;
+  }
+
+  .testimonials h3 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+  }
+
+  .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+      gap: 10px;
+  }
+
+  .testimonial-item {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+      font-size: 1.2em;
+  }

@@ -1,0 +1,15 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+
+}
+
+body {
+    width: 100vw;
+    overflow-x: hidden;
+    background: #FFFFFF;
+    color: #000000;
+    font-family: "Raleway", sans-serif;
+}
