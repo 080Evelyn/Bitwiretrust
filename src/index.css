@@ -11,5 +11,7 @@ body {
     overflow-x: hidden;
     background: #FFFFFF;
     color: #000000;
-    font-family: "Raleway", sans-serif;
+    font-family: "Raleway", serif;
+    max-width: 1440px;
+    margin: 0 auto;
 }

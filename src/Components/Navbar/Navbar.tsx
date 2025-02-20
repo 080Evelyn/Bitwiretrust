@@ -1,8 +1,7 @@
-
 import { useState } from "react";
-import logo from "../../assets/Logofull.png"
-import "./Navbar.css"
-
+import logo from "../../assets/Logofull.png";
+import "./Navbar.css";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,7 +11,6 @@ const Navbar = () => {
   };
   return (
     <div className="navbar">
-
       <img src={logo} alt="Bitwire logo" className="navbar-logo" />
       <button
         className="menu-toggle"
@@ -23,21 +21,22 @@ const Navbar = () => {
         {isMenuOpen ? "✖" : "☰"}
       </button>
 
-      <div className={`nav-menu-container ${isMenuOpen ? "active" : ""}`}
-        role="menu">
-        <a href="/">Home</a>
-        <a href="/">About</a>
-        <a href="/">Contact Us</a>
-        <div className="nav-register">
-          <button><a href="/register">Register</a></button>
-        </div>
+      <div
+        className={`nav-menu-container ${isMenuOpen ? "active" : ""}`}
+        role="menu"
+      >
+        <Link to="/">Home</Link>
+        <Link to="/about">About</Link>
+        <Link to="/contact">Contact Us</Link>
+       
       </div>
-
+      <div className="nav-register">
+          <button>
+          <Link to="/register">Register</Link>
+          </button>
+        </div>
     </div>
+  );
+};
 
-
-
-  )
-}
-
-export default Navbar
+export default Navbar;

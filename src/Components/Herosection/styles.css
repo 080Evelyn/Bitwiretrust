@@ -1,0 +1,286 @@
+.hero-container {
+  position: relative;
+  padding-bottom: 200px;
+}
+
+.hero-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  padding-bottom: 200px;
+}
+
+.hero-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: "Raleway", serif;
+  text-align: center;
+}
+
+.hero-content {
+  display: flex;
+  gap: 100px;
+  max-width: 90%;
+  margin: 0 auto;
+}
+
+.hero-header {
+  width: 1031px;
+  height: 160px;
+  padding-top: 30px;
+}
+
+.hero-header {
+  width: 100%;
+  max-width: 1031px;
+  text-align: center;
+}
+
+.hero-header h1 {
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 80px;
+}
+
+.hero-header h1 span {
+  color: #7910b1;
+}
+
+.hero-header p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18.78px;
+  color: #615d5d99;
+  padding: 25px 0 10px 0;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 21px;
+  padding: 10px 15px 10px 15px;
+}
+
+.button-group .primary {
+  width: 197px;
+  height: 50px;
+  border-radius: 4px;
+  outline: none;
+  border: none;
+  background-color: #7910B1;
+  color: #fff;
+}
+
+.button-group .secondary {
+  width: 197px;
+  height: 50px;
+  border-radius: 4px;
+  outline: none;
+  border: 1px solid #7910B1;
+  background-color: transparent;
+  color: #7910B1;
+}
+
+.hero-preview {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 100px;
+  margin: 0 auto;
+  margin-bottom: 150px;
+}
+
+.phone-container.primary {
+  position: relative;
+  z-index: 2;
+}
+
+.phone-container.secondary {
+  position: absolute;
+  z-index: 1;
+  width: 450.8px;
+  height: 696.02px;
+  top: 128.8px;
+  left: 260.2px;
+}
+
+.phone-container img {
+  height: auto;
+  display: block;
+}
+
+.phone-container img {
+  width: 100%;
+  display: block;
+}
+
+.transactions {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.transaction {
+  display: flex;
+  align-items: center;
+  width: 337px;
+  height: 69px;
+  padding: 0.75rem;
+  background: #f8f8f8;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.primary,
+.secondary {
+  position: relative;
+}
+
+.primary .transaction.successful {
+  position: absolute;
+  top: -115px;
+  margin-left: -36.5%;
+}
+
+.secondary .transaction.successful {
+  position: absolute;
+  top: -119px;
+  margin-left: 50%;
+}
+
+.primary .transaction.pending {
+  position: absolute;
+  bottom: -235px;
+  margin-left: -37.5%;
+  background-color: #fcf8ff;
+}
+
+.secondary .transaction.pending {
+  margin-left: 66.5%;
+  background-color: #fcf8ff;
+}
+
+.icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.75rem;
+  font-weight: 500;
+}
+
+.icon img {
+  width: 20px;
+  height: 20px;
+}
+
+.transaction.successful .icon {
+  background-color: #0FA301;
+  color: #fff;
+}
+
+.transaction.pending .icon {
+  background-color: #2EBAC6;
+  color: #fff;
+}
+
+.details {
+  flex-grow: 0;
+  text-align: start;
+}
+
+.type {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+}
+
+.date {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.amount-container {
+  margin-left: auto;
+  text-align: right;
+}
+
+.amount,
+.value {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16.44px;
+  color: #000;
+  margin-bottom: 0.25rem;
+}
+
+.pending-amount {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 11.74px;
+  color: #615d5d;
+}
+
+.status {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 11.74px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.transaction.successful .status {
+  color: #16a34a;
+}
+
+.transaction.pending .status {
+  color: #d97706;
+}
+
+@media(max-width: 425px){
+  .hero-container {
+    max-width: 500px;
+  }
+
+.hero-header h1 {
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 40px;
+}
+
+.hero-preview {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50px;
+  margin-bottom: 150px;
+  transform: scale(0.5);
+  top: 20px;
+}
+
+.phone-container.secondary {
+  position: absolute;
+  z-index: 1;
+  width: 450.8px;
+  height: 696.02px;
+  top: 128.8px;
+  left: 150.2px;
+  left: 120px;
+}
+}

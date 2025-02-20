@@ -1,0 +1,92 @@
+.why-section-content {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+    align-items: center;
+    justify-content: center;
+    /* margin: 0 auto; */
+    text-align: center;
+  }
+  
+  .subtitle {
+    display: block;
+    color: #7910b1;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 44px;
+    letter-spacing: 0%;
+    text-align: center;
+  }
+  
+  .main-title {
+    width: 714px;
+    height: 68px;
+  
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 34px;
+    letter-spacing: 0%;
+    text-align: center;
+  }
+  
+  .description {
+    color: #615d5d99;
+    /* max-width: 600px;
+    margin: 0 auto;
+    font-family: Raleway; */
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 18.78px;
+    letter-spacing: 0%;
+    text-align: center;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 139px;
+    /* margin-bottom: 64px; */
+  }
+  
+  .stat-item h3 {
+    font-weight: 600;
+    font-size: 64px;
+    line-height: 54px;
+    letter-spacing: 0%;
+    text-align: center;
+    color: #7910b1;
+  }
+  
+  .stat-item p {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 44px;
+    letter-spacing: 0%;
+    text-align: center;
+  }
+  
+  .preference-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    /* justify-content: space-between; */
+  }
+  
+  .preference-section h4 {
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 44px;
+    letter-spacing: 0%;
+    text-align: center;
+    color: #7910b1;
+  }
+  
+  .preference-section p {
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 44px;
+    letter-spacing: 0%;
+    text-align: center;
+    color: #615d5d99;
+  }
+  
