@@ -1,0 +1,113 @@
+.faqs-container {
+    transform: translateY(-95px);
+    background: #FBEFFF;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 27px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    max-width: 1360px;
+    height: 762px;
+}
+
+.faqs-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    gap: 10px;
+}
+
+.faqs-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 714px;
+    height: 44px;
+}
+
+.faqs-header p {
+    text-transform: capitalize;
+}
+
+  .faq-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+
+  .faq-item {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+    height: fit-content;
+  }
+  
+  
+  .faq-item.active {
+    background-color: #E9A9FF;
+  }
+
+  .faq-question {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    font-weight: 500;
+  }
+
+  
+/* .faq-question:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+  } */
+  
+  .icon {
+    font-size: 30px;
+    color: #615D5D99;
+    min-width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0 20px;
+    position: relative;
+  }
+  
+  .faq-item.active .faq-answer {
+    max-height: 200px;
+    padding-bottom: 20px;
+  }
+
+  @media (max-width: 425px) {
+    .faqs-container {
+        max-width: 365px;
+        margin: 0 auto;
+    }
+
+    .faq-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 30px;
+      }
+  }
+
+  

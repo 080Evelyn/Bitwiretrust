@@ -1,14 +1,16 @@
+import { Outlet } from 'react-router-dom'
 import './App.css'
-import Home from './Pages/Home/Home'
+import Navbar from './Components/Navbar/Navbar'
 
 const App = () => {
 
 
   return (
-    <>
-      <Home />
+    <div className='app'>
+    <Navbar/>
+    <Outlet/>
 
-    </>
+    </div>
   )
 }
 

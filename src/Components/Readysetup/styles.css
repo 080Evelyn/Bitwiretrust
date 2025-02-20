@@ -1,0 +1,20 @@
+.setup-container {
+  display: flex;
+  background: #33024e;
+  border-radius: 10px;
+  padding: 30px;
+  gap: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  height: 237px;
+  width: 1000px;
+  z-index: 3;
+  transform: translateY(25%);
+  position: relative;
+  align-items: center;
+}
+
+
+.setup-content .usage-title,
+.setup-content .usage-text {
+    color: white;}
