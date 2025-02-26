@@ -14,10 +14,14 @@ import ellipse from './Ellipse 654.png'
 import user from './Rectangle 5625.png'
 import security_validation from './security-validation.svg'
 import solar_copy from './solar_copy-bold.svg'
+import Xicon from './Vector.png'
+import gray_circle_arrow from './circle-arrow-right-02 (2).svg'
+import footer_logo from './without background 1.png'
 
 
 
 export {
     primaryPhone, secondaryPhone, naira, a_vector, bitcoin_ellipse, circle_arrow_left, circle_arrow,
-    payment, wifi, gift_card, logo, full_logo, ellipse, user, security_validation, solar_copy
+    payment, wifi, gift_card, logo, full_logo, ellipse, user, security_validation, solar_copy, Xicon,
+    gray_circle_arrow, footer_logo
 }

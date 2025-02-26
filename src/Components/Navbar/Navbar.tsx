@@ -9,6 +9,7 @@ const Navbar = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  
   return (
     <div className="navbar">
       <img src={logo} alt="Bitwire logo" className="navbar-logo" />
@@ -21,20 +22,17 @@ const Navbar = () => {
         {isMenuOpen ? "✖" : "☰"}
       </button>
 
-      <div
-        className={`nav-menu-container ${isMenuOpen ? "active" : ""}`}
-        role="menu"
-      >
-        <Link to="/">Home</Link>
-        <Link to="/about">About</Link>
-        <Link to="/contact">Contact Us</Link>
-       
-      </div>
-      <div className="nav-register">
-          <button>
-          <Link to="/register">Register</Link>
-          </button>
+      <div className={`nav-links ${isMenuOpen ? "active" : ""}`}>
+        <div className="nav-menu-container">
+          <Link to="/">Home</Link>
+          <Link to="/about">About</Link>
+          <Link to="/contact">Contact Us</Link>
         </div>
+        
+        <div className="nav-register">
+          <Link to="/register">Register</Link>
+        </div>
+      </div>
     </div>
   );
 };

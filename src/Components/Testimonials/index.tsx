@@ -1,8 +1,9 @@
-import React from 'react'
-import './styles.css'
+import React, { useEffect, useState } from 'react';
 import { testimonials } from '../../constants';
 import { Testimonial } from '../../types';
-
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Autoplay } from 'swiper/modules';
+import './styles.css';
 
 interface TestimonialItemProps {
   testimonial: Testimonial;
@@ -24,7 +25,7 @@ const TestimonialItem: React.FC<TestimonialItemProps> = ({ testimonial }) => {
               <span className="testimonial-author-username">@{testimonial.author.username}</span>
             </div>
           </div>
-          <span className="testimonial-timestamp">{testimonial.icon}</span>
+          <img src={testimonial.icon} className="testimonial-timestamp"></img>
         </div>
         <p className="testimonial-text">{testimonial.content}</p>
       </div>
@@ -33,6 +34,33 @@ const TestimonialItem: React.FC<TestimonialItemProps> = ({ testimonial }) => {
 };
 
 const Testimonials: React.FC = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 425);
+    };
+    
+    checkMobile();
+    
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) {
+      const existingLink = document.getElementById('swiper-css');
+      if (!existingLink) {
+        const swiperCoreCSS = document.createElement('link');
+        swiperCoreCSS.id = 'swiper-css';
+        swiperCoreCSS.rel = 'stylesheet';
+        swiperCoreCSS.href = 'https://cdnjs.cloudflare.com/ajax/libs/swiper/10.0.0/swiper-bundle.min.css';
+        document.head.appendChild(swiperCoreCSS);
+      }
+    }
+  }, [isMobile]);
+
   return (
     <div className='testimonials-container'>
       <div className='testimonials-content'>
@@ -47,13 +75,39 @@ const Testimonials: React.FC = () => {
         </div>
       </div>
 
-      <div className="testimonials-list">
-        {testimonials.map((testimonial) => (
-          <TestimonialItem key={testimonial.id} testimonial={testimonial} />
-        ))}
-      </div>
+      {isMobile ? (
+        <div className="testimonials-swiper-container">
+          <Swiper
+            pagination={{
+              clickable: true,
+              bulletClass: 'swiper-pagination-bullet testimonial-dot',
+              bulletActiveClass: 'swiper-pagination-bullet-active testimonial-dot-active',
+            }}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+            }}
+            modules={[Pagination, Autoplay]}
+            spaceBetween={5}
+            slidesPerView={1.25}
+            className="testimonials-swiper"
+          >
+            {testimonials.map((testimonial) => (
+              <SwiperSlide key={testimonial.id}>
+                <TestimonialItem testimonial={testimonial} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      ) : (
+        <div className="testimonials-list">
+          {testimonials.map((testimonial) => (
+            <TestimonialItem key={testimonial.id} testimonial={testimonial} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
-export default Testimonials
+export default Testimonials;

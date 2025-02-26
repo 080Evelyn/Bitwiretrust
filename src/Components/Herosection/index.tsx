@@ -1,9 +1,8 @@
-import React from "react";
 import Buttons from "../Buttons";
 import { a_vector, circle_arrow, circle_arrow_left, naira, primaryPhone, secondaryPhone } from "../../assets";
 import transactionData from "../../constants";
-import "./styles.css";
 import Offersection from "../Offersection";
+import "./styles.css";
 
 type Props = {};
 

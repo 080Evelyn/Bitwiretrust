@@ -1,9 +1,8 @@
-import React from 'react'
 import './styles.css'
 
 type Props = {}
 
-const WhysubSection = (props: Props) => {
+const WhysubSection = (_props: Props) => {
   return (
     <>
          <div className="why-section-content">

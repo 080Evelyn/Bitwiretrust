@@ -1,4 +1,4 @@
-import { ellipse, user } from "../assets";
+import { ellipse, user, Xicon } from "../assets";
 import { FAQItem, Testimonial, Transaction, } from "../types";
 
 const transactionData: Transaction[] = [
@@ -39,8 +39,8 @@ const transactionData: Transaction[] = [
       value:'1 AAVE'
     }
   ];
-  
-  export default transactionData;
+
+  export default transactionData
 
   export const testimonials: Testimonial[] = [
     {
@@ -51,7 +51,7 @@ const transactionData: Transaction[] = [
         avatar: ellipse,
       },
       content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
-      icon: '3h',
+      icon: Xicon,
     },
     {
       id: '2',
@@ -61,7 +61,7 @@ const transactionData: Transaction[] = [
         avatar: user,
       },
       content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla',
-      icon: '3h',
+      icon: Xicon,
     },
     {
       id: '3',
@@ -71,7 +71,7 @@ const transactionData: Transaction[] = [
         avatar: ellipse,
       },
       content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
-      icon: '3h',
+      icon: Xicon,
       
     },
     {
@@ -82,7 +82,7 @@ const transactionData: Transaction[] = [
         avatar: user,
       },
       content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl',
-      icon: '3h',
+      icon: Xicon,
      
     },
     {
@@ -93,7 +93,7 @@ const transactionData: Transaction[] = [
         avatar: ellipse,
       },
       content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
-      icon: '3h',
+      icon: Xicon,
      
     },
     {
@@ -104,7 +104,7 @@ const transactionData: Transaction[] = [
         avatar: user,
       },
       content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl',
-      icon: '3h',
+      icon: Xicon,
      
     },
 ]

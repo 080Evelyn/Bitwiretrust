@@ -1,7 +1,6 @@
-import React from "react";
 import "./styles.css";
 import Buttons from "../Buttons";
-import { circle_arrow, circle_arrow_left } from "../../assets";
+import { circle_arrow_left, gray_circle_arrow } from "../../assets";
 
 type Props = {};
 
@@ -26,8 +25,8 @@ const Readysetup = (_props: Props) => {
           Get Started
         </Buttons>
         <Buttons
-          variant="secondary"
-          iconSrc={circle_arrow}
+          variant="secondary" className="gray"
+          iconSrc={gray_circle_arrow}
           iconPosition="right"
         >
           Learn More

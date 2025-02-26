@@ -5,6 +5,7 @@ export interface ButtonsProps {
   iconSrc?: string;
   altText?: string;
   iconPosition?: "left" | "right";
+  className?: string;
 }
 
 export interface Transaction {
