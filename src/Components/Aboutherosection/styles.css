@@ -1,0 +1,357 @@
+.hero-container.about {
+  position: relative;
+  font-family: "Raleway", serif;
+  max-width: 1440px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding-bottom: 10px;
+}
+
+.about-hero-content,
+.third-section,
+.fourth-section {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1350px;
+  margin: 0 auto;
+  padding: 80px 20px;
+  gap: 60px;
+  position: relative;
+}
+
+.about-hero-left-content {
+  flex: 1;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 15px;
+}
+
+.about-hero-left-content h1,
+.third-section h2,
+.fourth-section h2 {
+  font-size: 48px;
+  line-height: 64px;
+  font-weight: 600;
+  margin: 0;
+  color: #000;
+}
+
+.about-hero-left-content h1 span,
+.third-section span {
+  color: #7910b1;
+}
+
+.fourth-section span {
+  color: #7910b1;
+  align-self: flex-end;
+}
+
+.about-hero-content p,
+.third-section p,
+.fourth-section p {
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 400;
+  color: #000000;
+  margin: 0;
+  padding-bottom: 20px;
+}
+
+.third-section h2,
+.fourth-section h2,
+.third-section span,
+.fourth-section span {
+  margin-bottom: 20px;
+}
+
+.about-hero-content .button-group {
+  margin-left: -13px;
+}
+
+.about-hero-right-content {
+  flex: 1;
+  position: relative;
+  max-width: 500px;
+}
+
+.about-hero-right-content .main-image {
+  width: 100%;
+  max-width: 450px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
+
+.about-hero-right-content .circular-element {
+  position: absolute;
+  bottom: -12px;
+  left: -12px;
+}
+
+.about-hero-right-content .circular-element img {
+  width: 80px;
+  height: 80px;
+}
+
+.third-section-left img,
+.fourth-section-right img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  display: block;
+}
+
+.third-section-right,
+.fourth-section-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.fourth-section-left {
+  text-align: right;
+}
+
+@media (max-width: 1024px) {
+  .about-hero-content,
+  .third-section,
+  .fourth-section {
+    padding: 60px 20px;
+    gap: 30px;
+    max-width: 1200px;
+  }
+
+  .about-hero-left-content h1,
+  .third-section h2,
+  .fourth-section h2 {
+    font-size: 40px;
+    line-height: 56px;
+  }
+
+  .about-hero-content p,
+  .third-section p,
+  .fourth-section p {
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  .fourth-section span {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-hero-left-content h1,
+  .third-section h2,
+  .fourth-section h2 {
+    font-size: 40px;
+    line-height: 48px;
+  }
+
+  .about-hero-content p,
+  .third-section p,
+  .fourth-section p {
+    font-size: 18px;
+    line-height: 24px;
+    width: 100%;
+    height: auto;
+  }
+
+  .about-hero-left-content {
+    align-items: flex-start;
+    max-width: 100%;
+  }
+
+  .about-hero-content .button-group .primary {
+    margin-left: -150px;
+    align-self: flex-start;
+  }
+
+  .about-hero-right-content {
+    max-width: 100%;
+  }
+
+  .about-hero-right-content .circular-element {
+    position: absolute;
+    bottom: 125px;
+    left: -5px;
+  }
+
+  .about-hero-right-content .circular-element img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .third-section img,
+  .fourth-section img {
+    width: 350px;
+    height: auto;
+  }
+
+  .fourth-section-right h2 {
+    text-align: left;
+  }
+
+  .third-section-right,
+  .fourth-section-left {
+    order: 2;
+  }
+}
+
+@media (max-width: 425px) {
+  .about-hero-content,
+  .third-section,
+  .fourth-section {
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 25px;
+  }
+
+  .about-hero-left-content {
+    order: 1;
+    text-align: center;
+    align-items: center;
+  }
+
+  .about-hero-right-content {
+    order: 0;
+    margin-bottom: 20px;
+  }
+
+  .about-hero-left-content h1,
+  .third-section h2,
+  .fourth-section h2 {
+    font-size: 26px;
+    line-height: 38px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .about-hero-content p,
+  .third-section p,
+  .fourth-section p {
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+  }
+
+  .about-hero-content .button-group {
+    /* margin-left: 0; */
+    justify-content: center;
+    align-self: center;
+    margin-left: 130px;
+  }
+
+  .about-hero-content .button-group .primary {
+    width: 150px;
+    align-self: center;
+  }
+
+  .about-hero-right-content .circular-element {
+    position: absolute;
+    bottom: -5px;
+    left: -1px;
+  }
+
+  .about-component.why-section-content {
+    margin-top: 20px;
+    margin-bottom: 40px;
+  }
+
+  .third-section img,
+  .fourth-section img {
+    width: 100%;
+    height: auto;
+  }
+
+  .third-section span,
+  .fourth-section span {
+    align-self: center;
+  }
+}
+
+@media (max-width: 375px) {
+  .about-hero-content,
+  .third-section,
+  .fourth-section {
+    padding: 25px 15px;
+  }
+
+  .about-hero-left-content h1,
+  .third-section h2,
+  .fourth-section h2 {
+    font-size: 24px;
+    line-height: 34px;
+  }
+
+  .about-hero-content p,
+  .third-section p,
+  .fourth-section p {
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  .third-section-right,
+  .fourth-section-left {
+    width: 350px;
+  }
+
+  .about-hero-right-content .circular-element {
+    position: absolute;
+    bottom: -3px;
+    left: 5px;
+  }
+
+  .about-hero-right-content .circular-element img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 320px) {
+  .about-hero-content,
+  .third-section,
+  .fourth-section {
+    padding: 20px 12px;
+  }
+
+  .about-hero-left-content h1,
+  .third-section h2,
+  .fourth-section h2 {
+    font-size: 22px;
+    line-height: 30px;
+  }
+
+  .about-hero-content p,
+  .third-section p,
+  .fourth-section p {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .about-hero-right-content .circular-element {
+    position: absolute;
+    bottom: -3px;
+    left: -1px;
+  }
+
+  .about-hero-right-content .circular-element img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .third-section-right,
+  .fourth-section-left {
+    width: 300px;
+  }
+
+  .about-hero-content .button-group .get-started {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}

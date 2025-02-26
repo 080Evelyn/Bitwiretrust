@@ -1,10 +1,14 @@
-import React from 'react'
+import Footer from '../../Components/Footer'
+import Aboutherosection from '../../Components/Aboutherosection'
 
 type Props = {}
 
-const About = (props: Props) => {
+const About = (_props: Props) => {
   return (
-    <div>About</div>
+    <>
+    <Aboutherosection />
+    <Footer />
+    </>
   )
 }
 

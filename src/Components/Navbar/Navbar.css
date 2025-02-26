@@ -18,6 +18,7 @@
     font-size: 16px;
     text-decoration: none;
     font-weight: 500;
+    position: relative;
 }
 
 .navbar a:hover {
@@ -39,6 +40,22 @@
     justify-content: center;
 }
 
+.navbar a.active {
+    color: #7910B1;
+    /* position: relative; */
+    font-weight: 700;
+}
+
+.navbar a.active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 50%;
+    height: 2px;
+    background-color: #7910B1;
+}
+
 /* Register Button */
 .nav-register {
     background: #7910B1;
@@ -51,7 +68,8 @@
     transform: scale(1.05);
 }
 
-.nav-register a {
+.nav-register a,
+.nav-register a.active {
     color: #ffffff;
 }
 
@@ -69,6 +87,12 @@
 @media (max-width: 425px) {
     .navbar {
         padding: 20px;
+    }
+
+    .navbar a.active::after {
+        bottom: -6px;
+        width: 10%;
+        height: 2px;
     }
     
     /* Show hamburger menu */

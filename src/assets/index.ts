@@ -17,11 +17,15 @@ import solar_copy from './solar_copy-bold.svg'
 import Xicon from './Vector.png'
 import gray_circle_arrow from './circle-arrow-right-02 (2).svg'
 import footer_logo from './without background 1.png'
+import circular_frame from './Frame 114.png'
+import person_one from './image.png'
+import person_two from './image (1).png'
+import person_three from './image (2).png'
 
 
 
 export {
     primaryPhone, secondaryPhone, naira, a_vector, bitcoin_ellipse, circle_arrow_left, circle_arrow,
     payment, wifi, gift_card, logo, full_logo, ellipse, user, security_validation, solar_copy, Xicon,
-    gray_circle_arrow, footer_logo
+    gray_circle_arrow, footer_logo, circular_frame, person_one, person_two, person_three
 }

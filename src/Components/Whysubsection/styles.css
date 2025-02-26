@@ -246,7 +246,7 @@
   .stats-grid {
     gap: 25px;
     width: 100%;
-    margin-right: 30px;
+    /* margin-right: 30px; */
   }
 
   .stat-item h3 {
