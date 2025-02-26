@@ -9,9 +9,10 @@ import './styles.css'
     iconSrc,
     altText = 'icon',
     iconPosition = "left",
+    className
   }) => {
     return (
-      <button className={`button ${variant}`} onClick={onClick}>
+      <button className={`button ${variant} ${className || ""}`} onClick={onClick}>
       {children}
       {iconSrc && iconPosition === "right" && (
         <img src={iconSrc} alt={altText} className="button-icon" />

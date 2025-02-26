@@ -1,43 +1,23 @@
 .hero-container {
   position: relative;
-  padding-bottom: 200px;
-}
-
-.hero-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-  padding-bottom: 200px;
-}
-
-.hero-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
   font-family: "Raleway", serif;
-  text-align: center;
+  padding-bottom: 200px;
+  max-width: 1440px;
 }
 
 .hero-content {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
   gap: 100px;
-  max-width: 90%;
-  margin: 0 auto;
 }
 
 .hero-header {
   width: 1031px;
   height: 160px;
   padding-top: 30px;
-}
-
-.hero-header {
-  width: 100%;
-  max-width: 1031px;
   text-align: center;
 }
 
@@ -74,6 +54,7 @@
   border: none;
   background-color: #7910B1;
   color: #fff;
+  transition: transform 0.5s;
 }
 
 .button-group .secondary {
@@ -84,6 +65,12 @@
   border: 1px solid #7910B1;
   background-color: transparent;
   color: #7910B1;
+  transition: transform 0.5s;
+}
+
+.button-group .primary:hover,
+.button-group .secondary:hover {
+  transform: scale(1.05);
 }
 
 .hero-preview {
@@ -115,11 +102,6 @@
   display: block;
 }
 
-.phone-container img {
-  width: 100%;
-  display: block;
-}
-
 .transactions {
   position: absolute;
   top: 30%;
@@ -128,7 +110,7 @@
   width: 80%;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .transaction {
@@ -136,9 +118,9 @@
   align-items: center;
   width: 337px;
   height: 69px;
-  padding: 0.75rem;
+  padding: 12px;
   background: #f8f8f8;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
@@ -178,7 +160,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 0.75rem;
+  margin-right: 12px;
   font-weight: 500;
 }
 
@@ -203,14 +185,14 @@
 }
 
 .type {
-  font-size: 0.875rem;
+  font-size: 12.8px;
   font-weight: 500;
   color: #1f2937;
-  margin-bottom: 0.25rem;
+  margin-bottom: 4px;
 }
 
 .date {
-  font-size: 0.75rem;
+  font-size: 12px;
   color: #6b7280;
 }
 
@@ -225,7 +207,7 @@
   font-weight: 500;
   line-height: 16.44px;
   color: #000;
-  margin-bottom: 0.25rem;
+  margin-bottom: 4px;
 }
 
 .pending-amount {
@@ -252,35 +234,264 @@
   color: #d97706;
 }
 
-@media(max-width: 425px){
-  .hero-container {
-    max-width: 500px;
+@media (max-width: 1024px) {
+  .secondary .transaction.successful {
+    margin-left: 35%;
   }
 
-.hero-header h1 {
-  font-weight: 600;
-  font-size: 28px;
-  line-height: 40px;
+  .secondary .transaction.pending {
+    margin-left: 35%;
+  }
 }
 
-.hero-preview {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 50px;
-  margin-bottom: 150px;
-  transform: scale(0.5);
-  top: 20px;
+@media (max-width: 768px) {
+  .hero-container {
+    padding-bottom: 150px;
+  }
+
+  .hero-content {
+    gap: 70px;
+  }
+
+  .hero-header {
+    width: 90%;
+    height: auto;
+  }
+
+  .hero-header h1 {
+    font-size: 40px;
+    line-height: 60px;
+  }
+
+  .hero-header p {
+    font-size: 15px;
+    line-height: 18px;
+    padding: 20px 0 8px 0;
+  }
+
+  .button-group {
+    flex-direction: row;
+    width: 100%;
+    gap: 15px;
+  }
+
+  .button-group .primary,
+  .button-group .secondary {
+    width: 170px;
+    white-space: nowrap;
+  }
+
+  .hero-preview {
+    transform: scale(0.85);
+    top: -80px;
+    margin-bottom: 100px;
+  }
+
+  .button-group .secondary {
+    font-size: 14px;
+  }
+
+  .phone-container.secondary {
+    width: 400px;
+    height: 620px;
+    top: 140px;
+    left: 230px;
+  }
+
+  .transaction {
+    width: 250px;
+    height: 60px;
+  }
+
+  .primary .transaction.successful {
+    margin-left: -20%;
+  }
+
+  .secondary .transaction.successful {
+    margin-left: 50%;
+  }
+
+  .primary .transaction.pending {
+    bottom: -220px;
+    margin-left: -20%;
+  }
+
+  .secondary .transaction.pending {
+    margin-left: 50%;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+  }
+
+  .icon img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .type {
+    font-size: 12.8px;
+  }
+
+  .date {
+    font-size: 11.2px;
+  }
+
+  .amount, .value {
+    font-size: 12px;
+  }
+
+  .pending-amount, .status {
+    font-size: 9px;
+  }
 }
 
-.phone-container.secondary {
-  position: absolute;
-  z-index: 1;
-  width: 450.8px;
-  height: 696.02px;
-  top: 128.8px;
-  left: 150.2px;
-  left: 120px;
+@media (max-width: 425px) {
+  .hero-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .hero-content {
+    width: 100%;
+    max-width: 400px; 
+    gap: 50px;
+  }
+
+  .hero-header {
+    width: 100%;
+    height: auto;
+    padding-top: 20px;
+    margin: 0 auto;
+  }
+
+  .hero-header h1 {
+    font-size: 32px;
+    line-height: 50px;
+  }
+
+  .hero-header p {
+    font-size: 14px;
+  }
+
+  .button-group .primary,
+  .button-group .secondary {
+    width: 100%;
+  }
+
+  .hero-preview {
+    transform: scale(0.7);
+    top: -120px;
+    margin-left:-140px;
+  }
+
+  .transaction {
+    width: 200px;
+    padding: 8px;
+  }
+
+  .primary .transaction.successful {
+    margin-left: 5%;
+  }
+
+  .secondary .transaction.successful {
+    margin-left: 55%;
+  }
+
+  .primary .transaction.pending {
+    bottom: -200px;
+    margin-left: 5%;
+  }
+
+  .secondary .transaction.pending {
+    margin-left: 55%;
+  }
+
+  .icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .icon img {
+    width: 16px;
+    height: 16px;
+  }
+
+  .type {
+    font-size: 12px;
+  }
+
+  .date,
+  .amount,
+  .value {
+    font-size: 11.2px;
+  }
+
+  .pending-amount,
+  .status {
+    font-size: 10.4px;
+  }
 }
+
+@media (max-width: 375px) {
+  .hero-preview {
+    transform: scale(0.6);
+    top: -150px;
+    margin-left: -150px;
+}
+  
+  .transaction {
+    width: 220px;
+    padding: 8px;
+  }
+
+  .primary .transaction.successful {
+    margin-left: 5%;
+  }
+
+  .secondary .transaction.successful {
+    margin-left: 55%;
+  }
+
+  .primary .transaction.pending {
+    bottom: -200px;
+    margin-left: 5%;
+  }
+
+  .secondary .transaction.pending {
+    margin-left: 55%;
+  }
+}
+
+@media (max-width: 320px) {
+  .hero-preview {
+    transform: scale(0.6);
+    top: -150px;
+    margin-left: -170px;
+}
+  
+  .transaction {
+    width: 180px;
+    padding: 8px;
+  }
+
+  .primary .transaction.successful {
+    margin-left: 12%;
+  }
+
+  .secondary .transaction.successful {
+    margin-left: 52%;
+  }
+
+  .primary .transaction.pending {
+    bottom: -200px;
+    margin-left: 12%;
+  }
+
+  .secondary .transaction.pending {
+    margin-left: 52%;
+  }
 }

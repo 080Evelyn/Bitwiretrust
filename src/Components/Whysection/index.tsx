@@ -1,4 +1,3 @@
-import React from "react";
 import "./styles.css";
 import WhysubSection from "../Whysubsection";
 import { full_logo, security_validation, solar_copy, user } from "../../assets";

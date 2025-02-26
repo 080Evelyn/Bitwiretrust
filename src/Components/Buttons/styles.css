@@ -9,3 +9,9 @@
   gap: 8px;
 }
 
+@media (max-width: 425px) {
+  .button-icon {
+    width: 25px;
+    height: 25px;
+  }
+}

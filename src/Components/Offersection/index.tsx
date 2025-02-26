@@ -1,4 +1,3 @@
-import React from 'react'
 import './styles.css'
 import { bitcoin_ellipse, gift_card, payment, wifi } from '../../assets'
 

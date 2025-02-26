@@ -7,8 +7,7 @@
   bottom: -80px;
   left: 50%;
   transform: translateX(-50%);
-  max-width: 1359px;
-  z-index: 3; 
+  z-index: 3;
   background: #fff;
   border-radius: 20px;
   gap: 20px;
@@ -19,11 +18,11 @@
 }
 
 .offer-content {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    gap: 80px;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 80px;
+  width: 100%;
 }
 
 .first-content {
@@ -34,33 +33,32 @@
 }
 
 .second-content {
-    display: flex;
-    gap: 14px;
+  display: flex;
+  gap: 14px;
 }
 
 .second-content .box {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: start;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: start;
+  gap: 10px;
 }
 
 .box p {
-font-weight: 400;
-font-size: 16px;
-line-height: 18.78px;
-letter-spacing: 0%;
-color: #615D5D99;
-text-align: left;
-
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18.78px;
+  letter-spacing: 0%;
+  color: #615d5d99;
+  text-align: left;
 }
 
 .offer-content span {
   font-weight: 500;
   font-size: 16px;
   line-height: 44px;
-  color: #7910B1;
+  color: #7910b1;
 }
 
 .first-content h2 {
@@ -81,10 +79,197 @@ text-align: left;
   color: #615d5d99;
 }
 
-/* @media (max-width: 375px) {
-  .offer-container {
-    max-width: 343px;
+@media (max-width: 1024px) {
+  .offer-content {
+    display: flex;
     flex-direction: column;
+    text-align: left;
+    gap: 80px;
+    width: 76%;
   }
-} */
 
+  .second-content {
+    display: flex;
+    gap: 20px;
+}
+}
+
+@media (max-width: 768px) {
+  .offer-container {
+    height: 700px;
+    bottom: -100px;
+    width: 90%;
+    padding: 50px 25px;
+    gap: 15px;
+  }
+
+  .offer-content {
+    width: 100%;
+    gap: 60px;
+    text-align: center;
+  }
+
+  .first-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    text-align: center;
+  }
+
+  .first-content h2 {
+    width: 100%;
+    height: auto;
+    font-size: 32px;
+    line-height: 38px;
+    margin-bottom: 10px;
+  }
+
+  .first-content p {
+    width: 100%;
+    height: auto;
+    font-size: 15px;
+    line-height: 18px;
+  }
+
+  .second-content {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .second-content .box {
+    width: 45%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .box p {
+    font-size: 15px;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  .offer-content span {
+    font-size: 15px;
+    line-height: 38px;
+  }
+}
+
+@media (max-width: 425px) {
+  .offer-container {
+    height: 1080px;
+    bottom: -400px;
+    width: 95%;
+  }
+
+  .offer-content {
+    text-align: center;
+    width: 320px;
+  }
+
+  .first-content {
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .first-content h2 {
+    font-size: 24px;
+    line-height: 26px;
+    width: 343px;
+    height: 52px;
+    font-weight: 500;
+  }
+
+  .first-content p {
+    font-size: 14px;
+    font-weight: 400;
+    width: 343px;
+    height: 36px;
+    line-height: 18px;
+  }
+
+  .second-content {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 25px;
+  }
+
+  .second-content .box {
+    align-items: center;
+    text-align: center;
+    width: 311px;
+  }
+
+  .box p {
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 375px) {
+  .offer-container {
+    padding: 30px 15px;
+    min-height: 750px;
+    bottom: -400px;
+  }
+
+  .offer-content {
+    gap: 30px;
+  }
+
+  .first-content h2 {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  .offer-content span {
+    font-size: 14px;
+    line-height: 32px;
+  }
+}
+
+@media (max-width: 320px) {
+  .offer-container {
+    padding: 25px 12px;
+    min-height: 700px;
+  }
+
+  .offer-content {
+    gap: 25px;
+    margin-top: -150px;
+  }
+
+  .first-content {
+    gap: 15px;
+  }
+
+  .first-content h2 {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  .first-content p {
+    font-size: 13px;
+    font-weight: 400;
+    width: 303px;
+    height: 36px;
+    line-height: 18px;
+  }
+
+  .second-content {
+    gap: 20px;
+  }
+
+  .box p {
+    font-size: 13px;
+    line-height: 16px;
+  }
+
+  .offer-content span {
+    font-size: 13px;
+    line-height: 28px;
+  }
+}

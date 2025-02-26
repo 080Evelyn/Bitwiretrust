@@ -1,7 +1,8 @@
 .whysection-container {
   background: #fbefff;
-  height: 1600px;
-  transform: translateY(-200px);
+  padding: 60px 0;
+  margin: -150px 0 0 0;
+  width: 100%;
 }
 
 .whysection-content {
@@ -9,27 +10,28 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  transform: translateY(280px);
   max-width: 1141px;
-  margin-left: 149px;
-  height: 1301px;
-  margin: 0 auto;
+  margin: 200px  auto 0px;
+  padding: 0 20px;
 }
 
 .security-section {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  align-items: center;
   gap: 17px;
   padding: 40px;
   border-radius: 13px;
+  width: 100%;
 }
 
 .security-feature,
 .stats-feature {
   flex: 1;
+  min-width: 250px;
+  height: 320px;
   background: #ffffff;
-  height: 324px;
   padding: 33px 16.74px;
   text-align: center;
   border-radius: 13px;
@@ -39,12 +41,12 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
+  margin-bottom: 20px;
 }
 
 .feature-icon {
   width: 150px;
   height: 150px;
-  margin-bottom: 20px;
 }
 
 .stats-number {
@@ -52,7 +54,6 @@
   font-weight: 600;
   font-size: 126.04px;
   line-height: 109.24px;
-  letter-spacing: 0%;
   text-align: center;
   padding-bottom: 20px;
 }
@@ -74,12 +75,13 @@
   padding: 20px;
   gap: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin: 0 auto;
-  height: 437px;
+  margin: 30px auto;
+  width: 100%;
 }
 
 .usage-info {
   flex: 1;
+  min-width: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -91,7 +93,6 @@
   font-weight: 500;
   font-size: 40.27px;
   line-height: 36.91px;
-  letter-spacing: 0%;
 }
 
 .usage-text {
@@ -99,16 +100,14 @@
   font-weight: 500;
   font-size: 16.78px;
   line-height: 30.91px;
-  letter-spacing: 0%;
 }
 
 .payment-wrapper {
   flex: 1;
+  min-width: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 341.8px;
-  height: 413px;
 }
 
 .payment-card {
@@ -119,7 +118,6 @@
   align-items: start;
   text-align: center;
   width: 305px;
-  height: 336px;
   gap: 6.73px;
   border-radius: 10.77px;
   padding: 18.17px 13.46px;
@@ -131,13 +129,12 @@
 .wallet-box {
   position: absolute;
   top: -88px;
-  left: 199px;
+  right: -30px;
   background: #7910b1;
   color: white;
   border-radius: 10px;
   text-align: left;
   width: 142.6px;
-  height: 164.7px;
 }
 
 .wallet-title {
@@ -145,7 +142,6 @@
   font-weight: 600;
   font-size: 10.77px;
   line-height: 12.64px;
-  letter-spacing: 0%;
 }
 
 .wallet-address {
@@ -206,7 +202,6 @@
 }
 
 .welcome {
-  font-family: Raleway;
   font-weight: 500;
   font-size: 8.07px;
   line-height: 9.48px;
@@ -247,8 +242,8 @@
 }
 
 .copy-address img {
-width: 10px;
-height: 10px;
+  width: 10px;
+  height: 10px;
 }
 
 .payment-input {
@@ -268,7 +263,6 @@ height: 10px;
 }
 
 .payment-input::placeholder {
-  font-family: Raleway;
   font-weight: 500;
   font-size: 10.09px;
   line-height: 11.85px;
@@ -289,3 +283,280 @@ height: 10px;
   line-height: 15.8px;
 }
 
+@media (max-width: 768px) {
+  .whysection-container {
+    background: #fbefff;
+    padding: 60px 0;
+    margin: 60px 0;
+    width: 100%;
+}
+  
+  .whysection-content {
+    padding: 0 15px;
+  }
+  
+  .security-section {
+    padding: 30px;
+  }
+}
+
+@media (max-width: 425px) {
+  .whysection-container {
+    padding: 40px 0;
+    margin: 20px 0;
+  }
+  
+  .whysection-content {
+    padding: 0 10px;
+    margin: 10px  auto 0px;
+  }
+  
+  .security-section {
+    padding: 20px;
+  }
+  
+  .feature-text,
+  .stats-text {
+    font-size: 14px;
+    line-height: 22px;
+  }
+  
+  .main-content {
+    flex-direction: column;
+    margin: 20px auto;
+    padding: 15px;
+  }
+  
+  .usage-info {
+    text-align: center;
+  }
+  
+  .usage-title {
+    text-align: center;
+    font-size: 28px;
+    line-height: 34px;
+  }
+  
+  .usage-text {
+    font-size: 16px;
+    text-align: center;
+    line-height: 26px;
+  }
+  
+  .payment-wrapper {
+    margin: 20px auto;
+  }
+
+  .wallet-box {
+    right: -20px;
+  }
+}
+
+@media (max-width: 375px) {
+  .whysection-container {
+    padding: 30px 0;
+    margin: 15px 0;
+  }
+  
+  .whysection-content {
+    padding: 0 8px;
+  }
+  
+  .security-section {
+    padding: 15px;
+    gap: 12px;
+  }
+  
+  .security-feature,
+  .stats-feature {
+    min-width: 100%;
+    padding: 25px 12px;
+    margin-bottom: 15px;
+  }
+  
+  .feature-icon {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .stats-number {
+    font-size: 90px;
+    line-height: 80px;
+    padding-bottom: 15px;
+  }
+  
+  .feature-text,
+  .stats-text {
+    font-size: 14px;
+    line-height: 20px;
+  }
+  
+  .main-content {
+    padding: 12px;
+    gap: 15px;
+  }
+  
+  .usage-info {
+    gap: 20px;
+    min-width: 100%;
+  }
+  
+  .usage-title {
+    font-size: 24px;
+    line-height: 30px;
+  }
+  
+  .usage-text {
+    font-size: 14px;
+    line-height: 22px;
+  }
+  
+  .payment-wrapper {
+    margin: 15px auto;
+    width: 100%;
+  }
+  
+  .payment-card {
+    width: 280px;
+    padding: 15px 10px;
+    margin-top: 70px;
+    gap: 20px;
+  }
+  
+  .wallet-box {
+    top: -80px;
+    width: 130px;
+  }
+  
+  .wallet-icon {
+    width: 130px;
+    height: 35px;
+    margin-top: 45px;
+  }
+  
+  .payment-input {
+    width: 260px;
+  }
+  
+  .payment-button {
+    width: 260px;
+  }
+}
+
+@media (max-width: 320px) {
+  .whysection-container {
+    padding: 25px 0;
+    margin: 10px 0;
+  }
+  
+  .whysection-content {
+    padding: 0 5px;
+  }
+  
+  .security-section {
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .security-feature,
+  .stats-feature {
+    padding: 20px 10px;
+    margin-bottom: 10px;
+  }
+  
+  .feature-icon {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .stats-number {
+    font-size: 72px;
+    line-height: 70px;
+    padding-bottom: 10px;
+  }
+  
+  .feature-text,
+  .stats-text {
+    font-size: 13px;
+    line-height: 18px;
+  }
+  
+  .main-content {
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .usage-info {
+    gap: 15px;
+  }
+  
+  .usage-title {
+    font-size: 22px;
+    line-height: 26px;
+  }
+  
+  .usage-text {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .usage-text {
+    font-size: 12px;
+    line-height: 22px;
+    margin-right: 26px;
+}
+  
+  .payment-wrapper {
+    margin: 10px auto;
+  }
+  
+  .payment-card {
+    width: 240px;
+    padding: 12px 8px;
+    margin-top: 65px;
+    margin-right: 45px;
+    gap: 15px;
+  }
+  
+  .wallet-box {
+    top: -75px;
+    width: 110px;
+    margin-right: -20px;
+  }
+  
+  .wallet-icon {
+    width: 110px;
+    height: 32px;
+    margin-top: 40px;
+    padding: 8px 10px;
+  }
+  
+  .wallet-icon img {
+    width: 35px;
+  }
+  
+  .payment-input {
+    width: 220px;
+    height: 40px;
+  }
+  
+  .payment-button {
+    width: 220px;
+    height: 40px;
+    font-size: 12px;
+  }
+  
+  .payment-amount {
+    font-size: 28px;
+    line-height: 32px;
+  }
+  
+  .payment-header {
+    gap: 8px;
+  }
+  
+  .user-avatar {
+    width: 35px;
+    height: 35px;
+  }
+}
