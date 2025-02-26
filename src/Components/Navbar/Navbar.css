@@ -70,13 +70,13 @@
     .navbar {
         padding: 20px;
     }
-    
+
     /* Show hamburger menu */
     .menu-toggle {
         display: block;
         z-index: 1001;
     }
-    
+
     /* Hide nav links by default */
     .nav-links {
         display: none;
@@ -94,19 +94,19 @@
         border-radius: 8px;
         transition: all 0.3s ease-in-out;
     }
-    
+
     /* When menu is active */
     .nav-links.active {
         display: flex;
     }
-    
+
     .nav-menu-container {
         display: flex;
         flex-direction: column;
         width: 100%;
         gap: 20px;
     }
-    
+
     .nav-register {
         margin-top: 20px;
         align-self: flex-start;
