@@ -3,6 +3,7 @@ import { a_vector, circle_arrow, circle_arrow_left, naira, primaryPhone, seconda
 import transactionData from "../../constants";
 import Offersection from "../Offersection";
 import "./styles.css";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -35,8 +36,8 @@ const Herosection = (_props: Props) => {
             financial life like never before.
           </p>
           <div className="button-group">
-            <Buttons variant="primary" iconSrc={circle_arrow_left}  iconPosition="right">Get Started</Buttons>
-            <Buttons variant="secondary" iconSrc={circle_arrow}  iconPosition="right">Learn More</Buttons>
+           <Link to={'/get-started'}><Buttons variant="primary" iconSrc={circle_arrow_left}  iconPosition="right">Get Started</Buttons></Link>
+           <Link to={''}><Buttons variant="secondary" iconSrc={circle_arrow}  iconPosition="right">Learn More</Buttons></Link>
           </div>
         </div>
 

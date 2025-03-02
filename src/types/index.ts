@@ -33,3 +33,17 @@ export type FAQItem = {
   question: string;
   answer: string;
 };
+
+export interface FormData {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export enum Step {
+  CREATE_ACCOUNT = 0,
+  VERIFY_EMAIL = 1,
+  GET_STARTED = 2,
+  CREATE_PASSCODE = 3
+}

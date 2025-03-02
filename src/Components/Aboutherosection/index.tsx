@@ -4,6 +4,7 @@ import { circle_arrow_left, circular_frame, person_one, person_three, person_two
 import WhysubSection from "../Whysubsection";
 import Testimonials from "../Testimonials";
 import Faqs from "../Faqs";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -22,13 +23,14 @@ const Aboutherosection = (_props: Props) => {
             solutions designed to streamline your everyday transactions.{" "}
           </p>
           <div className="button-group">
-            <Buttons
+           <Link to={'/get-started'}> <Buttons
               variant="primary"
               iconSrc={circle_arrow_left}
               iconPosition="right"
             >
               Get Started
             </Buttons>
+            </Link>
           </div>
         </div>
         <div className="about-hero-right-content">

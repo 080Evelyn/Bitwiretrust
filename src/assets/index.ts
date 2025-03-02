@@ -21,11 +21,16 @@ import circular_frame from './Frame 114.png'
 import person_one from './image.png'
 import person_two from './image (1).png'
 import person_three from './image (2).png'
+import get_started_png from './Download free image of Happy millennial african american man in glasses portrait adult smile_ by Boom about face, person, men, adult, and portrait 13235562.png'
+import verify_email_png from './image (3).png'
+import create_account_png from './Premium-Photo.png'
+import circled_frame from './Group 3052.png'
 
 
 
 export {
     primaryPhone, secondaryPhone, naira, a_vector, bitcoin_ellipse, circle_arrow_left, circle_arrow,
     payment, wifi, gift_card, logo, full_logo, ellipse, user, security_validation, solar_copy, Xicon,
-    gray_circle_arrow, footer_logo, circular_frame, person_one, person_two, person_three
+    gray_circle_arrow, footer_logo, circular_frame, person_one, person_two, person_three, get_started_png,
+    verify_email_png, create_account_png, circled_frame
 }
