@@ -12,6 +12,8 @@ type Props = {
   initialStep?: Step;
 };
 
+// work in progress:
+
 const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
   const [currentStep, setCurrentStep] = useState<Step>(initialStep);
   const [formData, setFormData] = useState<FormData>({
