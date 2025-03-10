@@ -5,6 +5,9 @@ import About from "../Pages/About";
 import Register from "../Pages/Register";
 import Authlayout from "../Authlayout";
 import { Step } from "../types";
+import Dashboard from "../Dashboard";
+import HomeDashboard from "../Components/HomeDashboard";
+import Utilitypayment from "../Components/Utilitypayment";
 
 export const router = createBrowserRouter([
   {
@@ -24,4 +27,12 @@ export const router = createBrowserRouter([
         
     ],
   },
+
+  {
+    element: <Dashboard />,
+    children: [
+      {path: 'home-dashboard', element: <HomeDashboard/>},
+      {path: 'utility-payment', element: <Utilitypayment/>},
+    ]
+  }
 ]);

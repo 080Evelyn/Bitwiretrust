@@ -1,0 +1,113 @@
+.side-navbar-wrapper {
+  /* background-color: #4b0082; */
+  background: linear-gradient(
+    185.06deg,
+    #28003e 6.3%,
+    #370055 59.47%,
+    #400062 79.09%,
+    #52007d 92%,
+    #6b00a4 107.31%
+  );
+
+  width: 209px;
+  min-height: 100vh;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 0;
+  color: white;
+  z-index: 1;
+}
+
+.side-navbar-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.side-navbar-top {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.side-navbar-top img {
+  /* background-color: #9932CC; */
+  /* color: white; */
+  width: 60px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border-radius: 10px; */
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.side-navbar-links {
+  flex-grow: 1;
+}
+
+.side-navbar-links li {
+  margin: 10px 0;
+}
+
+.side-navbar-links a {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  /* opacity: 0.7; */
+  transition: opacity 0.3s ease;
+}
+
+.side-navbar-links li {
+    position: relative; /* Ensures the ::before pseudo-element is positioned relative to li */
+  }
+
+.side-navbar-links li.active a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 30px;
+  background-color: #fff;
+  border-radius: 0 4px 4px 0;
+}
+
+.side-navbar-links a:hover,
+.side-navbar-links li.active a {
+  opacity: 1;
+  /* background-color: rgba(255, 255, 255, 0.1); */
+}
+
+.side-navbar-links a img,
+.side-navbar-actions a img {
+  margin-right: 10px;
+}
+
+.side-navbar-bottom {
+  /* justify-content: end; */
+  padding: 20px 0;
+  /* border-top: 1px solid rgba(255, 255, 255, 0.1); */
+  align-items: end;
+}
+
+.side-navbar-actions {
+  display: flex;
+  flex-direction: column;
+  /* margin-top: 110px; */
+}
+
+.side-navbar-actions a {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  /* opacity: 0.7; */
+  transition: opacity 0.3s ease;
+}

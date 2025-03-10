@@ -24,7 +24,7 @@ const Footer = (_props: Props) => {
         <h3>Customer Support</h3>
         <ul>
           <li><a href="#">Help Center</a></li>
-          <li><a href="#">FAQs</a></li>
+          <li><a href="#faqs">FAQs</a></li>
         </ul>
       </div>
 

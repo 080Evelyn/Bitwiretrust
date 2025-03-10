@@ -37,7 +37,7 @@ const Herosection = (_props: Props) => {
           </p>
           <div className="button-group">
            <Link to={'/get-started'}><Buttons variant="primary" iconSrc={circle_arrow_left}  iconPosition="right">Get Started</Buttons></Link>
-           <Link to={''}><Buttons variant="secondary" iconSrc={circle_arrow}  iconPosition="right">Learn More</Buttons></Link>
+           <Link to={'/about'}><Buttons variant="secondary" iconSrc={circle_arrow}  iconPosition="right">Learn More</Buttons></Link>
           </div>
         </div>
 

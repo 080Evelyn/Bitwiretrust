@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
 import { FormData, Step } from "../../types";
-import { full_logo } from "../../assets";
-import { get_started_png } from "../../assets";
-import { create_account_png } from "../../assets";
-import { verify_email_png } from "../../assets";
-import { circled_frame } from "../../assets";
+import { full_logo, passcode_lock, create_account_png, verify_email_png, get_started_png, circled_frame } from "../../assets";
 import { FaCheck } from "react-icons/fa";
 import "./styles.css";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   initialStep?: Step;
 };
-
-// work in progress:
 
 const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
   const [currentStep, setCurrentStep] = useState<Step>(initialStep);
@@ -50,6 +45,8 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
   const [codeError, setCodeError] = useState<boolean>(false);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const [_showPasscodeScreen, setShowPasscodeScreen] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     switch (currentStep) {
@@ -111,7 +108,6 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     newPasscode[index] = value.replace(/[^0-9]/g, "").slice(0, 1);
     setPasscode(newPasscode);
 
-    // Auto-focus next input field if the current one is filled
     if (value && index < 5) {
       const nextInput = document.getElementById(`passcode-input-${index + 1}`);
       if (nextInput) {
@@ -124,40 +120,34 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     if (!isButtonEnabled) return;
 
     if (currentStep === Step.CREATE_ACCOUNT) {
-      // Store the credentials when moving from create account
       setStoredCredentials({
         email: formData.email,
         password: formData.password
       });
       setCurrentStep(currentStep + 1);
     } else if (currentStep === Step.VERIFY_EMAIL) {
-      // Mock verification - in a real app, you would validate against a backend
+
       const enteredCode = verificationCode.join("");
       if (enteredCode !== "3534") {
-        // Example correct code
         setCodeError(true);
         return;
       }
       setCurrentStep(currentStep + 1);
     } else if (currentStep === Step.GET_STARTED) {
-      // Verify the entered credentials match the stored ones
       if (
         getStartedFields.email === storedCredentials.email &&
         getStartedFields.password === storedCredentials.password
       ) {
         setShowSuccessModal(true);
         
-        // Set a timeout to hide the modal and show the passcode screen
         setTimeout(() => {
           setShowSuccessModal(false);
           setShowPasscodeScreen(true);
           setCurrentStep(Step.CREATE_PASSCODE);
-        }, 2000);
+        }, 5000);
       } else {
-        // For demo purposes, show success modal anyway
         setShowSuccessModal(true);
         
-        // Set a timeout to hide the modal and show the passcode screen
         setTimeout(() => {
           setShowSuccessModal(false);
           setShowPasscodeScreen(true);
@@ -165,11 +155,9 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
         }, 2000);
       }
     } else if (currentStep === Step.CREATE_PASSCODE) {
-      // Handle passcode completion (e.g., save the passcode)
-      // Here you would typically save the passcode and redirect to dashboard
-      // For this demo, we'll just log it
       console.log("Passcode created:", passcode.join(""));
-      // You might want to navigate to the dashboard or show another success message
+
+      navigate('/home-dashboard');
     }
   };
 
@@ -199,8 +187,8 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
           <input
             key={index}
             id={`passcode-input-${index}`}
-            type="text"
-            className="passcode-input"
+            type="password"
+            className={`passcode-input ${digit ? 'filled' : ''}`}
             value={digit}
             onChange={(e) => handlePasscodeChange(index, e.target.value)}
             maxLength={1}
@@ -337,22 +325,17 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                 <div className="progress-dot"></div>
               </div>
             </div>
-            <div className="right-side">
+            <div className="right-side verify-email">
               <div className="app-logo">
                 <img src={full_logo} alt="Bitwire" />
               </div>
               <h2>Verify your E-mail</h2>
-              <p>Enter the 4-digit code sent to your e-mail {formData.email}</p>
+              <p>Enter the 4-digit code sent to your e-mail <span>{formData.email}</span> </p>
               <form>
                 {renderCodeInputs()}
                 {codeError && (
                   <div className="error-message">Incorrect code</div>
                 )}
-                <div className="resend-link">
-                  <p>
-                    Didn't get code? <span className="resend">Resend</span>
-                  </p>
-                </div>
                 <div className="button-container">
                   <button
                     type="button"
@@ -364,6 +347,11 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                   >
                     Next
                   </button>
+                </div>
+                <div className="resend-link">
+                  <p>
+                    Didn't get code? <span className="resend">Resend</span>
+                  </p>
                 </div>
               </form>
             </div>
@@ -454,7 +442,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                 <div className="progress-dot active"></div>
               </div>
             </div>
-            <div className="right-side">
+            <div className="right-side create-passcode">
               <div className="app-logo">
                 <img src={full_logo} alt="Bitwire" />
               </div>
@@ -462,7 +450,10 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
               <p>Set up your 6-digit security passcode.<br />Please, do not share this code with anyone.</p>
               <form>
                 <div className="form-group passcode-form-group">
-                  <label>Enter Passcode to continue</label>
+                  <div className="passcode-lock">
+                  <img src={passcode_lock} alt="lock" />
+                  <p>Enter Passcode to continue</p>
+                  </div>
                   {renderPasscodeInputs()}
                 </div>
                 <div className="button-container">

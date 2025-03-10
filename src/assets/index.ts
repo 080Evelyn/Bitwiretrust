@@ -22,9 +22,34 @@ import person_one from './image.png'
 import person_two from './image (1).png'
 import person_three from './image (2).png'
 import get_started_png from './Download free image of Happy millennial african american man in glasses portrait adult smile_ by Boom about face, person, men, adult, and portrait 13235562.png'
-import verify_email_png from './image (3).png'
+import verify_email_png from './image_verify.png'
 import create_account_png from './Premium-Photo.png'
 import circled_frame from './Group 3052.png'
+import passcode_lock from './Vector_lock.svg'
+import arrow_data from './arrow-data-transfer-vertical.svg'
+import arrow_reload from './arrow-reload-horizontal.svg'
+import bitcoin from './bitcoin-01.svg'
+import ellipse_user from './Ellipse-user.png'
+import exchange from './exchange-01.svg'
+import export_png from './export.svg'
+import gala_add from './gala_add.svg'
+import gift_card_svg from './gift-card.svg'
+import help_circle from './help-circle.svg'
+import image_verify from './image_verify.png'
+import login_png from './login-03.svg'
+import notification from './notification-02.svg'
+import password from './Password-Presented.svg'
+import payment_svg from './payment-02 (1).svg'
+import setting from './settings-02.svg'
+import menu from './menu-square.svg'
+import calendar_svg from './calendar-03.svg'
+import wallet from './wallet-01.svg'
+import wallet_done from './wallet-done-01.svg'
+import green_arrow from './square-arrow-up-right-02.svg'
+import red_arrow from './square-arrow-up-down.svg'
+import google_play from './Vector-google-play.svg'
+import bitcoin_svg from './Vector-bitcoin.svg'
+import white_logo from './Vector-Smart-Object.svg'
 
 
 
@@ -32,5 +57,9 @@ export {
     primaryPhone, secondaryPhone, naira, a_vector, bitcoin_ellipse, circle_arrow_left, circle_arrow,
     payment, wifi, gift_card, logo, full_logo, ellipse, user, security_validation, solar_copy, Xicon,
     gray_circle_arrow, footer_logo, circular_frame, person_one, person_two, person_three, get_started_png,
-    verify_email_png, create_account_png, circled_frame
+    verify_email_png, create_account_png, circled_frame, passcode_lock, arrow_data, arrow_reload, bitcoin,
+    ellipse_user, export_png, exchange, gala_add, gift_card_svg, help_circle, image_verify, login_png, notification,
+    password, payment_svg, setting, menu, calendar_svg, wallet, wallet_done, green_arrow, red_arrow,google_play, bitcoin_svg,
+    white_logo
+
 }

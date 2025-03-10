@@ -13,7 +13,7 @@ const Faqs = (_props: Props) => {
   };
   
   return (
-    <div className='faqs-container'>
+    <div id="faqs" className='faqs-container'>
         <div className='faqs-content'>
             <div className='faqs-header'>
             <p className="subtitle">FAQs</p>
