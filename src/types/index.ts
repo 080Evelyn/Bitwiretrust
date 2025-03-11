@@ -47,3 +47,26 @@ export enum Step {
   GET_STARTED = 2,
   CREATE_PASSCODE = 3
 }
+
+export interface HeaderProps {
+  username: string;
+}
+
+export interface TransactionRate {
+  id: string;
+  image: string;
+  type: 'received' | 'transferred' | 'updated';
+  amount: string;
+  currency: string;
+  description: string;
+  subdescription: string;
+  status: 'green' | 'orange' | 'red';
+}
+
+export interface RateData {
+  id: string;
+  name: string;
+  image: string;
+  amount: string;
+  icon: string;
+}

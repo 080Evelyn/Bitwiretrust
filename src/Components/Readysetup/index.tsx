@@ -1,6 +1,7 @@
 import "./styles.css";
 import Buttons from "../Buttons";
 import { circle_arrow_left, gray_circle_arrow } from "../../assets";
+import { Link } from "react-router-dom";
 
 type Props = {};
 
@@ -17,20 +18,22 @@ const Readysetup = (_props: Props) => {
         </div>
       </div>
       <div className="button-group">
-        <Buttons
+      <Link to={'/get-started'}><Buttons
           variant="primary"
           iconSrc={circle_arrow_left}
           iconPosition="right"
         >
           Get Started
         </Buttons>
-        <Buttons
+        </Link>
+        <Link to={'/about'}><Buttons
           variant="secondary" className="gray"
           iconSrc={gray_circle_arrow}
           iconPosition="right"
         >
           Learn More
         </Buttons>
+        </Link>
       </div>
     </div>
   );

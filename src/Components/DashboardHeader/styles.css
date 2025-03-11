@@ -1,0 +1,44 @@
+.dashboard-header {
+    background-color: white;
+    width: 100%;
+    padding: 10px 28px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    /* margin-left: 173px; */
+    margin: 0 auto;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding: 10px 28px;
+  }
+
+  .welcome-section p {
+    margin: 15px 0 0;
+    color: #666;
+    font-size: 14px;
+    margin-left: 5px;
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 15px;
+    margin-top: 15px;
+  }
+
+  .calendar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .notification{
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+  }

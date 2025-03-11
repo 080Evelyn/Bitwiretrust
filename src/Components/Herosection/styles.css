@@ -494,4 +494,9 @@
   .secondary .transaction.pending {
     margin-left: 52%;
   }
+
+  .button.secondary {
+    padding: 8px 10px;
+    font-size: 12px;
+}
 }

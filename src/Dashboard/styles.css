@@ -1,0 +1,14 @@
+.dashboard-container {
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: start;
+    background-color: #fff;
+}
+
+.dashboard-content {
+    flex: 1;
+    margin-left: 173px; /* Same as sidebar width */
+    min-height: 100vh;
+    width: calc(100% - 173px);
+    background-color: #f5f5f5;
+  }
