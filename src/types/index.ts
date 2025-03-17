@@ -70,3 +70,11 @@ export interface RateData {
   amount: string;
   icon: string;
 }
+
+export interface ProfileModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  profileImage: string;
+  email: string;
+  username: string;
+}

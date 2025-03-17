@@ -3,19 +3,23 @@ import "./styles.css";
 import { bottomLinks, navLinks } from "../../constants";
 import { full_logo } from "../../assets";
 
-type Props = {};
+type Props = {
+  isMobileView?: boolean;
+  closeMenu?: () => void;
+};
 
-const SideNavbar = (_props: Props) => {
+const SideNavbar = ({ isMobileView = false, closeMenu }: Props) => {
   const location = useLocation();
 
   return (
-    <div className="side-navbar-wrapper">
-      <div className="side-navbar-top">
-        <div></div>
-        <Link to="/home-dashboard">
-          <img src={full_logo} alt="" className="side-navbar-logo" />
-        </Link>
-      </div>
+    <div className={`side-navbar-wrapper ${isMobileView ? 'mobile-view' : ''}`}>
+      {!isMobileView && (
+        <div className="side-navbar-top">
+          <Link to="/home-dashboard">
+            <img src={full_logo} alt="Bitwire Logo" className="side-navbar-logo" />
+          </Link>
+        </div>
+      )}
 
       <div className="side-navbar-links">
         <ul>
@@ -24,7 +28,7 @@ const SideNavbar = (_props: Props) => {
               key={link.to}
               className={location.pathname === link.to ? "active" : ""}
             >
-              <Link to={link.to}>
+              <Link to={link.to} onClick={isMobileView ? closeMenu : undefined}>
                 <img src={link.icon} alt="" className="side-navbar-icon" />
                 {link.text}
               </Link>
@@ -41,7 +45,7 @@ const SideNavbar = (_props: Props) => {
                 key={link.to}
                 className={location.pathname === link.to ? "active" : ""}
               >
-                <Link to={link.to}>
+                <Link to={link.to} onClick={isMobileView ? closeMenu : undefined}>
                   <img src={link.icon} alt="" className="side-navbar-icon" />
                   {link.text}
                 </Link>
