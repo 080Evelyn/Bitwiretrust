@@ -5,7 +5,7 @@ import About from "../Pages/About";
 import Register from "../Pages/Register";
 import Authlayout from "../Authlayout";
 import { Step } from "../types";
-import Dashboard from "../Dashboard";
+import Dashboard from "../Pages/Dashboard";
 import HomeDashboard from "../Components/HomeDashboard";
 import Utilitypayment from "../Components/Utilitypayment";
 
