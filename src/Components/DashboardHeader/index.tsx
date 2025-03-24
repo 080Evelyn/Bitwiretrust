@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import './styles.css'
-import { HeaderProps } from '../../types'
+import React, { useState, useEffect } from 'react';
+import './styles.css';
+import { HeaderProps } from '../../types';
 import { format } from 'date-fns';
 import { calendar_svg, ellipse_user } from '../../assets';
 import { HiOutlineBell } from "react-icons/hi2";
@@ -10,10 +10,36 @@ interface ExtendedHeaderProps extends HeaderProps {
   isMobileView?: boolean;
 }
 
-const DashboardHeader: React.FC<ExtendedHeaderProps> = ({ username, isMobileView = false }) => {
+const DashboardHeader: React.FC<ExtendedHeaderProps> = ({ username, isMobileView: propsMobileView = false }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const currentDate = format(new Date(), 'MMMM dd, yyyy - h:mm a');
+  const [isMobileView, setIsMobileView] = useState(propsMobileView);
+  const [isTabletView, setIsTabletView] = useState(false);
   
+ 
+  const formatDate = () => {
+    if (window.innerWidth <= 768) {
+      return format(new Date(), 'MMM dd, yyyy');
+    } else {
+      return format(new Date(), 'MMMM dd, yyyy - h:mm a');
+    }
+  };
+  
+  const currentDate = formatDate();
+  
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth <= 425 || propsMobileView);
+      setIsTabletView(window.innerWidth <= 768 && window.innerWidth > 425);
+    };
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    
+    return () => window.removeEventListener('resize', handleResize);
+  }, [propsMobileView]);
+
   const toggleProfileModal = () => {
     setIsProfileModalOpen(!isProfileModalOpen);
   };

@@ -8,6 +8,7 @@ import { Step } from "../types";
 import Dashboard from "../Pages/Dashboard";
 import HomeDashboard from "../Components/HomeDashboard";
 import Utilitypayment from "../Components/Utilitypayment";
+import Contact from "../Pages/Contact";
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,7 @@ export const router = createBrowserRouter([
     children: [
       { path: "", element: <Home /> },
       { path: "about", element: <About /> },
+      { path: "contact", element: <Contact /> },
     ],
   },
 

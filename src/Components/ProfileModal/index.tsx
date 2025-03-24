@@ -5,6 +5,7 @@ import { IoIosArrowForward, IoIosEye, IoIosEyeOff, IoMdCopy } from "react-icons/
 import { IoArrowBackOutline } from "react-icons/io5";
 import { FaFacebook, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { about_us, contact_email, contact_us, dark_mode, facebook_contact, faq, illustration, instagram, invite_friends, kyc, legal, phone_icon, settings, twitter } from "../../assets";
 
 type ModalType = "profile" | "invite" | "contact" | 'settings' 
 | 'security-settings' 
@@ -78,7 +79,6 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
   return (
     <div className="modal-overlay">
-      {/* Profile Modal */}
       {activeModal === "profile" && (
         <div className="modal profile-modal">
           <div className="profile-header">
@@ -93,7 +93,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           <div className="profile-options">
             <div className="option" onClick={() => toggleModal("invite")}>
               <div className="option-left">
-                <span className="option-icon invite-icon">👥</span>
+                <img src={invite_friends} alt="" className="option-icon invite-icon"/>
                 <span>Invite Friends</span>
               </div>
               <IoIosArrowForward />
@@ -101,7 +101,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
             <div className="option">
               <div className="option-left">
-                <span className="option-icon dark-mode-icon">🌙</span>
+                <img src={dark_mode} alt="" className="option-icon dark-mode-icon"/>
                 <span>Dark Mode</span>
               </div>
               <label className="toggle-switch">
@@ -116,7 +116,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
             <div className="option" onClick={() => toggleModal("contact")}>
               <div className="option-left">
-                <span className="option-icon contact-icon">📞</span>
+                <img src={contact_us} alt="contact-us" className="option-icon contact-icon"/>
                 <span>Contact Us</span>
               </div>
               <IoIosArrowForward />
@@ -124,7 +124,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
             <div className="option">
               <div className="option-left">
-                <span className="option-icon settings-icon">⚙️</span>
+                <img src={settings} alt="settings" className="option-icon settings-icon"/>
                 <span>Settings</span>
               </div>
               <IoIosArrowForward />
@@ -132,7 +132,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
             <div className="option">
               <div className="option-left">
-                <span className="option-icon legal-icon">📑</span>
+                <img src={legal} alt="legal" className="option-icon legal-icon"/>
                 <span>Legal</span>
               </div>
               <IoIosArrowForward />
@@ -140,7 +140,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
             <div className="option">
               <div className="option-left">
-                <span className="option-icon account-icon">🔒</span>
+                <img src={kyc} alt="kyc" className="option-icon account-icon"/>
                 <span>Account Limitations (KYC)</span>
               </div>
               <IoIosArrowForward />
@@ -148,7 +148,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
             <div className="option">
               <div className="option-left">
-                <span className="option-icon about-icon">ℹ️</span>
+                <img src={about_us} alt="about-us" className="option-icon about-icon"/>
                 <span>About Us</span>
               </div>
               <IoIosArrowForward />
@@ -161,27 +161,20 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
         </div>
       )}
 
-      {/* Invite Friends Modal */}
       {activeModal === "invite" && (
         <div className="modal invite-modal">
           <div className="modal-header">
             <button className="back-btn" onClick={() => toggleModal("profile")}>
-              <IoArrowBackOutline /> Back
+             Back
             </button>
             <h3>Invite Friends</h3>
           </div>
 
           <div className="invite-content">
             <div className="invite-illustration">
-              {/* This would be your illustration image */}
               <div className="invite-graphic">
                 <div className="people-circles">
-                  {/* <div className="person-circle p1"></div>
-                <div className="person-circle p2"></div>
-                <div className="person-circle p3"></div>
-                <div className="person-circle p4"></div>
-                <div className="person-circle p5"></div> */}
-                  <img src="" alt="" />
+                  <img src={illustration} alt="illustration" />
                 </div>
               </div>
             </div>
@@ -199,12 +192,11 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
         </div>
       )}
 
-      {/* Contact Us Modal */}
       {activeModal === "contact" && (
         <div className="modal contact-modal">
           <div className="modal-header">
             <button className="back-btn" onClick={() => toggleModal("profile")}>
-              <IoArrowBackOutline /> Back
+              Back
             </button>
             <h3>Contact Us</h3>
           </div>
@@ -212,7 +204,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           <div className="contact-options">
             <div className="contact-option">
               <div className="option-left">
-                <span className="option-icon support-icon">📧</span>
+                <img src={contact_email} alt='email' className="option-icon support-icon"/>
                 <span>Support@bitwire.com</span>
               </div>
               <IoIosArrowForward />
@@ -220,7 +212,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
             <div className="contact-option">
               <div className="option-left">
-                <span className="option-icon phone-icon">📱</span>
+                <img src={phone_icon} alt="phone-icon" className="option-icon phone-icon"/>
                 <span>01234567890</span>
               </div>
               <IoIosArrowForward />
@@ -228,7 +220,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
             <div className="contact-option">
               <div className="option-left">
-                <span className="option-icon faq-icon">❓</span>
+                <img src={faq} alt="faq" className="option-icon faq-icon"/>
                 <span>FAQs</span>
               </div>
               <IoIosArrowForward />
@@ -239,13 +231,14 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
             <h4>Social Media</h4>
             <div className="social-icons">
               <a href="#" className="social-icon facebook">
-                <FaFacebook />
+                <img src={facebook_contact} alt='facebook'/>
+
               </a>
               <a href="#" className="social-icon twitter">
-                <FaXTwitter />
+                <img src={twitter} alt='twitter'/>
               </a>
               <a href="#" className="social-icon instagram">
-                <FaInstagram />
+                <img src={instagram} alt='instragram'/>
               </a>
             </div>
           </div>
@@ -377,7 +370,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
         </div>
       )}
 
-       {/* Transaction Pin Modal */}
+   
        {activeModal === 'transaction-pin' && (
         <div className="modal transaction-pin-modal">
           <div className="modal-header">
