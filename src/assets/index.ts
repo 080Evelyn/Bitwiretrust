@@ -50,6 +50,21 @@ import red_arrow from './square-arrow-up-down.svg'
 import google_play from './Vector-google-play.svg'
 import bitcoin_svg from './Vector-bitcoin.svg'
 import white_logo from './Vector-Smart-Object.svg'
+import about_us from './mdi_about.svg'
+import invite_friends from './Vector (12).svg'
+import dark_mode from './Vector (13).svg'
+import settings from './Vector (14).svg'
+import contact_us from './Vector (15).svg'
+import legal from './Vector (16).svg'
+import edit_profile from './Vector (19).svg'
+import kyc from './speedometer.svg'
+import illustration from './Illustration.svg'
+import facebook_contact from './ic_baseline-facebook.svg'
+import contact_email from './ic_round-email.svg'
+import instagram from './ri_instagram-line.svg'
+import twitter from './simple-icons_x.svg'
+import phone_icon from './Vector (21).svg'
+import faq from './Vector (22).svg'
 
 
 
@@ -60,6 +75,7 @@ export {
     verify_email_png, create_account_png, circled_frame, passcode_lock, arrow_data, arrow_reload, bitcoin,
     ellipse_user, export_png, exchange, gala_add, gift_card_svg, help_circle, image_verify, login_png, notification,
     password, payment_svg, setting, menu, calendar_svg, wallet, wallet_done, green_arrow, red_arrow,google_play, bitcoin_svg,
-    white_logo
+    white_logo, about_us, invite_friends, dark_mode, settings, contact_us, legal, edit_profile, kyc, illustration,
+    facebook_contact, contact_email, instagram, twitter, phone_icon, faq
 
 }

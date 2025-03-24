@@ -6,12 +6,17 @@
 
 }
 
+html,
 body {
-    width: 100vw;
+    width: 100%;
     overflow-x: hidden;
     background: #FFFFFF;
     color: #000000;
     font-family: "Raleway", serif;
     max-width: 1440px;
     margin: 0 auto;
+}
+
+.side-navbar-actions ul li {
+    list-style-type: none;
 }

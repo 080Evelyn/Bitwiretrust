@@ -9,13 +9,23 @@ import { useEffect, useState } from "react";
 type Props = {};
 
 const Dashboard = (_props: Props) => {
-  const currentDate = format(new Date(), 'MMMM dd, yyyy - h:mm a');
+  // const currentDate = format(new Date(), 'MMMM dd, yyyy - h:mm a');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 425);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+   const formatDate = () => {
+      if (window.innerWidth <= 768) {
+        return format(new Date(), 'MMM dd, yyyy');
+      } else {
+        return format(new Date(), 'MMMM dd, yyyy - h:mm a');
+      }
+    };
+    
+    const currentDate = formatDate();
 
   useEffect(() => {
     const handleResize = () => {

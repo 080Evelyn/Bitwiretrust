@@ -78,3 +78,19 @@ export interface ProfileModalProps {
   email: string;
   username: string;
 }
+
+export interface ContactData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  message: string;
+}
+
+export interface ContactErrors {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  phone?: string;
+  message?: string;
+}
