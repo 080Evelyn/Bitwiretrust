@@ -68,6 +68,36 @@
   padding: 10px 15px;
 }
 
+.notification-badge {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.orange {
+  background-color: orange;
+  bottom: 8px;
+  right: 1px;
+}
+
+.green {
+  background-color: green;
+  bottom: 6px;
+  right: 1px;
+}
+
+.notification-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-icon {
+  position: relative;
+  display: inline-block;
+}
+
+
 @media (max-width: 1024px) {
   .dashboard-header {
     margin-left: 100px;

@@ -1,31 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import './styles.css';
-import { HeaderProps } from '../../types';
-import { format } from 'date-fns';
-import { calendar_svg, ellipse_user } from '../../assets';
+import React, { useState, useEffect } from "react";
+import "./styles.css";
+import { HeaderProps } from "../../types";
+import { format } from "date-fns";
+import { calendar_svg, ellipse_user } from "../../assets";
 import { HiOutlineBell } from "react-icons/hi2";
-import ProfileModal from '../ProfileModal';
+import ProfileModal from "../ProfileModal";
 
 interface ExtendedHeaderProps extends HeaderProps {
   isMobileView?: boolean;
 }
 
-const DashboardHeader: React.FC<ExtendedHeaderProps> = ({ username, isMobileView: propsMobileView = false }) => {
+const DashboardHeader: React.FC<ExtendedHeaderProps> = ({
+  username,
+  isMobileView: propsMobileView = false,
+}) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(propsMobileView);
-  const [isTabletView, setIsTabletView] = useState(false);
-  
- 
+  const [_isTabletView, setIsTabletView] = useState(false);
+  const [hasNotifications, setHasNotifications] = useState(true);
+  const [hasProfileNotifications, setHasProfileNotifications] = useState(true);
+   
+
   const formatDate = () => {
     if (window.innerWidth <= 768) {
-      return format(new Date(), 'MMM dd, yyyy');
+      return format(new Date(), "MMM dd, yyyy");
     } else {
-      return format(new Date(), 'MMMM dd, yyyy - h:mm a');
+      return format(new Date(), "MMMM dd, yyyy - h:mm a");
     }
   };
-  
+
   const currentDate = formatDate();
-  
 
   useEffect(() => {
     const handleResize = () => {
@@ -35,9 +39,9 @@ const DashboardHeader: React.FC<ExtendedHeaderProps> = ({ username, isMobileView
 
     handleResize();
 
-    window.addEventListener('resize', handleResize);
-    
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
   }, [propsMobileView]);
 
   const toggleProfileModal = () => {
@@ -45,14 +49,14 @@ const DashboardHeader: React.FC<ExtendedHeaderProps> = ({ username, isMobileView
   };
 
   return (
-    <div className='dashboard-header'>
-      <div className={`header-top ${isMobileView ? 'mobile-view' : ''}`}>
+    <div className="dashboard-header">
+      <div className={`header-top ${isMobileView ? "mobile-view" : ""}`}>
         {isMobileView && (
           <div className="mobile-profile-icon" onClick={toggleProfileModal}>
             <img src={ellipse_user} alt="profile" />
           </div>
         )}
-        
+
         <div className="welcome-section">
           <h1>Welcome to Bitwire</h1>
           <p>Hi, {username}! Welcome Back</p>
@@ -67,18 +71,24 @@ const DashboardHeader: React.FC<ExtendedHeaderProps> = ({ username, isMobileView
           )}
 
           <div className="notification-icon">
-            <HiOutlineBell className='notification' />
+            <HiOutlineBell className="notification" />
+            {hasNotifications && (
+              <span className="notification-badge orange"></span>
+            )}
           </div>
-          
+
           {!isMobileView && (
             <div className="profile-icon" onClick={toggleProfileModal}>
               <img src={ellipse_user} alt="profile" />
+              {hasProfileNotifications && (
+                <span className="notification-badge green"></span>
+              )}
             </div>
           )}
         </div>
       </div>
 
-      <ProfileModal 
+      <ProfileModal
         isOpen={isProfileModalOpen}
         onClose={toggleProfileModal}
         profileImage={ellipse_user}

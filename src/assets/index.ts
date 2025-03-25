@@ -65,7 +65,12 @@ import instagram from './ri_instagram-line.svg'
 import twitter from './simple-icons_x.svg'
 import phone_icon from './Vector (21).svg'
 import faq from './Vector (22).svg'
-
+import policies from './ic_round-privacy-tip.svg'
+import notification_key from './key-square.svg'
+import change_password from './lock.svg'
+import notification_bell from './mdi_notifications.svg'
+import transaction_pin from './password-check.svg'
+import term_condition from './solar_document-bold.svg'
 
 
 export {
@@ -76,6 +81,7 @@ export {
     ellipse_user, export_png, exchange, gala_add, gift_card_svg, help_circle, image_verify, login_png, notification,
     password, payment_svg, setting, menu, calendar_svg, wallet, wallet_done, green_arrow, red_arrow,google_play, bitcoin_svg,
     white_logo, about_us, invite_friends, dark_mode, settings, contact_us, legal, edit_profile, kyc, illustration,
-    facebook_contact, contact_email, instagram, twitter, phone_icon, faq
+    facebook_contact, contact_email, instagram, twitter, phone_icon, faq, term_condition, transaction_pin, notification_bell,
+    change_password, notification_key, policies
 
 }
