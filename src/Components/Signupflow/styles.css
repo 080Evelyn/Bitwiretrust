@@ -319,23 +319,26 @@
 }
 
 .success-modal {
-  background-color: white;
+  background-color: #fff;
   padding: 1.5rem;
   border-radius: 12px;
   text-align: center;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  max-width: 300px;
-  width: 100%;
+  width: 300px; 
   height: 300px;
+  position: absolute; 
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%, -50%); 
 }
 
 .success-modal-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 200px;
-  height: 200px;
-  margin: 30px auto;
+  justify-content: center; 
+  height: 100%;
+  position: relative;
 }
 
 .success-icon {
@@ -347,8 +350,8 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 46.5%;
-  left: 50%;
+  top: 38%; 
+  left: 50%; 
   transform: translate(-50%, -50%);
   z-index: 2;
 }

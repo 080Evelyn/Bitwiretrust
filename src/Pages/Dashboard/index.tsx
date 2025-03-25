@@ -6,10 +6,7 @@ import { calendar_svg, full_logo } from "../../assets";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 
-type Props = {};
-
-const Dashboard = (_props: Props) => {
-  // const currentDate = format(new Date(), 'MMMM dd, yyyy - h:mm a');
+const Dashboard = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(window.innerWidth <= 425);
 
