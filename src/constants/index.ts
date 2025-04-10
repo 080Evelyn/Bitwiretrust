@@ -1,112 +1,112 @@
-import { a_vector, arrow_data, bitcoin, bitcoin_svg, ellipse, exchange, gift_card_svg, google_play, green_arrow, login_png, logo, menu, payment_svg, red_arrow, setting, user, wallet_done, white_logo, Xicon } from "../assets";
+import { a_vector, arrow_data, bitcoin, bitcoin_svg, ellipse, exchange, gift_card_svg, google_play, green_arrow, login_png, menu, payment_svg, red_arrow, setting, user, wallet_done, white_logo, Xicon } from "../assets";
 import { FAQItem, RateData, Testimonial, Transaction, TransactionRate, } from "../types";
 
 const transactionData: Transaction[] = [
-    {
-      id: 1,
-      type: 'withdrawal',
-      amount: 78000.00,
-      status: 'successful',
-      date: '15th Apr, 2023',
-      currency: 'NGN',
-      value: ''
-    },
-    {
-      id: 2,
-      type: 'withdrawal',
-      amount: 45000.00,
-      status: 'successful',
-      date: '15th Apr, 2023',
-      currency: 'NGN',
-      value:''
-    },
-    {
-      id: 3,
-      type: 'deposit',
-      amount: 92500.00,
-      status: 'pending',
-      date: '15th Apr, 2023',
-      currency: 'NGN',
-      value: '1 AAVE'
-    },
-    {
-      id: 4,
-      type: 'deposit',
-      amount: 63750.00,
-      status: 'pending',
-      date: '15th Apr, 2023',
-      currency: 'NGN',
-      value:'1 AAVE'
-    }
-  ];
+  {
+    id: 1,
+    type: 'withdrawal',
+    amount: 78000.00,
+    status: 'successful',
+    date: '15th Apr, 2023',
+    currency: 'NGN',
+    value: ''
+  },
+  {
+    id: 2,
+    type: 'withdrawal',
+    amount: 45000.00,
+    status: 'successful',
+    date: '15th Apr, 2023',
+    currency: 'NGN',
+    value: ''
+  },
+  {
+    id: 3,
+    type: 'deposit',
+    amount: 92500.00,
+    status: 'pending',
+    date: '15th Apr, 2023',
+    currency: 'NGN',
+    value: '1 AAVE'
+  },
+  {
+    id: 4,
+    type: 'deposit',
+    amount: 63750.00,
+    status: 'pending',
+    date: '15th Apr, 2023',
+    currency: 'NGN',
+    value: '1 AAVE'
+  }
+];
 
-  export default transactionData
+export default transactionData
 
-  export const testimonials: Testimonial[] = [
-    {
-      id: '1',
-      author: {
-        name: 'Okoro Emmanuel',
-        username: 'activity',
-        avatar: ellipse,
-      },
-      content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
-      icon: Xicon,
+export const testimonials: Testimonial[] = [
+  {
+    id: '1',
+    author: {
+      name: 'Okoro Emmanuel',
+      username: 'activity',
+      avatar: ellipse,
     },
-    {
-      id: '2',
-      author: {
-        name: 'Okoro Emmanuel',
-        username: 'activity',
-        avatar: user,
-      },
-      content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla',
-      icon: Xicon,
+    content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
+    icon: Xicon,
+  },
+  {
+    id: '2',
+    author: {
+      name: 'Okoro Emmanuel',
+      username: 'activity',
+      avatar: user,
     },
-    {
-      id: '3',
-      author: {
-        name: 'Okoro Emmanuel',
-        username: 'activity',
-        avatar: ellipse,
-      },
-      content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
-      icon: Xicon,
-      
+    content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla',
+    icon: Xicon,
+  },
+  {
+    id: '3',
+    author: {
+      name: 'Okoro Emmanuel',
+      username: 'activity',
+      avatar: ellipse,
     },
-    {
-      id: '4',
-      author: {
-        name: 'Okoro Emmanuel',
-        username: 'activity',
-        avatar: user,
-      },
-      content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl',
-      icon: Xicon,
-     
+    content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
+    icon: Xicon,
+
+  },
+  {
+    id: '4',
+    author: {
+      name: 'Okoro Emmanuel',
+      username: 'activity',
+      avatar: user,
     },
-    {
-      id: '5',
-      author: {
-        name: 'Okoro Emmanuel',
-        username: 'activity',
-        avatar: ellipse,
-      },
-      content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
-      icon: Xicon,
-     
+    content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl',
+    icon: Xicon,
+
+  },
+  {
+    id: '5',
+    author: {
+      name: 'Okoro Emmanuel',
+      username: 'activity',
+      avatar: ellipse,
     },
-    {
-      id: '6',
-      author: {
-        name: 'Okoro Emmanuel',
-        username: 'activity',
-        avatar: user,
-      },
-      content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl',
-      icon: Xicon,
-     
+    content: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.',
+    icon: Xicon,
+
+  },
+  {
+    id: '6',
+    author: {
+      name: 'Okoro Emmanuel',
+      username: 'activity',
+      avatar: user,
     },
+    content: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl',
+    icon: Xicon,
+
+  },
 ]
 
 export const faqData: FAQItem[] = [
@@ -169,193 +169,193 @@ export const navLinks = [
   },
 ];
 
- export const bottomLinks = [
-    {
-      to: "/log-out",
-      icon: login_png,
-      text: "Log Out",
-    },
-    {
-      to: "/switch-accounts",
-      icon: exchange,
-      text: "Switch Accounts",
-    },
-  ];
+export const bottomLinks = [
+  {
+    to: "/log-out",
+    icon: login_png,
+    text: "Log Out",
+  },
+  {
+    to: "/switch-accounts",
+    icon: exchange,
+    text: "Switch Accounts",
+  },
+];
 
-  export const giftcardRates: RateData[] = [
-    { 
-      id: 'amazon-1', 
-      name: 'Amazon', 
-      image: a_vector, 
-      amount: '540,000.00', 
-      icon: green_arrow
-    },
-    { 
-      id: 'googleplay-2', 
-      name: 'GooglePlay', 
-      image: google_play, 
-      amount: '120,000.00',
-      icon: red_arrow
-    },
-    { 
-      id: 'googleplay-3', 
-      name: 'GooglePlay', 
-      image: google_play, 
-      amount: '120,000.00',
-      icon: red_arrow
-    },
-    { 
-      id: 'googleplay-4', 
-      name: 'GooglePlay', 
-      image: google_play, 
-      amount: '120,000.00',
-      icon: red_arrow
-    },
-    { 
-      id: 'fortrite-5', 
-      name: 'Fortrite', 
-      image: bitcoin_svg, 
-      amount: '120,000,000.00',
-      icon: red_arrow
-    },
-    { 
-      id: 'fortrite-6', 
-      name: 'Fortrite', 
-      image: bitcoin_svg, 
-      amount: '120,000,000.00',
-      icon: red_arrow
-    },
-    { 
-      id: 'fortrite-7', 
-      name: 'Fortrite', 
-      image: bitcoin_svg, 
-      amount: '120,000,000.00',
-      icon: red_arrow
-    },
-  ];
-  
-  export const coinRates: RateData[] = [
-    { 
-      id: 'aave-1', 
-      name: 'AAVE', 
-      image: a_vector, 
-      amount: '54,000.00', 
-      icon: green_arrow
-    },
-    { 
-      id: 'bitcoin-2', 
-      name: 'Bitcoin', 
-      image: google_play, 
-      amount: '120,000,000.00',
-      icon: red_arrow
-    },
-    { 
-      id: 'googleplay-3', 
-      name: 'GooglePlay', 
-      image: google_play, 
-      amount: '120,000,000.00',
-      icon: red_arrow
-    },
-    { 
-      id: 'googleplay-4', 
-      name: 'GooglePlay', 
-      image: google_play, 
-      amount: '120,000,000.00',
-      icon: red_arrow
-    },
-    { 
-      id: 'fortrite-5', 
-      name: 'Fortrite', 
-      image: bitcoin_svg, 
-      amount: '120,000,000.00',
-      icon: red_arrow
-    },
-    { 
-      id: 'fortrite-6', 
-      name: 'Fortrite', 
-      image: bitcoin_svg, 
-      amount: '120,000,000.00',
-      icon: red_arrow
-    },
-    { 
-      id: 'fortrite-7', 
-      name: 'Fortrite', 
-      image: bitcoin_svg, 
-      amount: '120,000,000.00',
-      icon: red_arrow
-    },
-   
-  ];
-  
-  export const transactions: TransactionRate[] = [
-    { 
-      id: '1', 
-      image: wallet_done, 
-      type: 'received', 
-      amount: '0.3237788', 
-      currency: 'BTC',
-      description: 'You have recieved 0.3237788 BTC',
-      subdescription: 'Your BTC wallet has been credited with received 0.3237788',
-      status: 'green'
-    },
-    { 
-      id: '2', 
-      image: wallet_done, 
-      type: 'transferred', 
-      amount: '0.3237788', 
-      currency: 'BTC',
-      description: 'You have recieved 0.3237788 BTC',
-      subdescription: 'Your BTC wallet has been debited with transferred 0.3237788 BTC',
-      status: 'green'
-    },
-    { 
-      id: '3', 
-      image: wallet_done, 
-      type: 'transferred', 
-      amount: '0.3237788', 
-      currency: 'BTC',
-      description: 'You have recieved 0.3237788 BTC',
-      subdescription: 'Your BTC wallet has been debited with transferred 0.3237788 BTC',
-      status: 'green'
-    },
-    { 
-      id: '4', 
-      image: wallet_done, 
-      type: 'transferred', 
-      amount: '0.3237788', 
-      currency: 'BTC',
-      description: 'You have recieved 0.3237788 BTC',
-      subdescription: 'Your BTC wallet has been debited with transferred 0.3237788 BTC',
-      status: 'green'
-    },
-    { 
-      id: '5', 
-      image: wallet_done, 
-      type: 'transferred', 
-      amount: '0.3237788', 
-      currency: 'BTC',
-      description: 'You have recieved 0.3237788 BTC',
-      subdescription: 'Your BTC wallet has been debited with transferred 0.3237788 BTC',
-      status: 'green'
-    },
-    { 
-      id: '6', 
-      image: white_logo, 
-      type: 'updated', 
-      amount: '', 
-      currency: '',
-      description: 'Talk more, Always Stay Updated',
-      subdescription: 'Top up your Airtime and mobile data and always stay updated on trending news.',
-      status: 'orange'
-    },
-    { 
-      id: '7', 
-      image: white_logo, 
-      type: 'updated', 
-      amount: '', 
-      currency: '',
-      description: 'Talk more, Always Stay Updated',
-      subdescription: 'Top up your Airtime and mobile data and always stay updated on trending news.',
-      status: 'orange'
-    }
-  ];
+export const giftcardRates: RateData[] = [
+  {
+    id: 'amazon-1',
+    name: 'Amazon',
+    image: a_vector,
+    amount: '540,000.00',
+    icon: green_arrow
+  },
+  {
+    id: 'googleplay-2',
+    name: 'GooglePlay',
+    image: google_play,
+    amount: '120,000.00',
+    icon: red_arrow
+  },
+  {
+    id: 'googleplay-3',
+    name: 'GooglePlay',
+    image: google_play,
+    amount: '120,000.00',
+    icon: red_arrow
+  },
+  {
+    id: 'googleplay-4',
+    name: 'GooglePlay',
+    image: google_play,
+    amount: '120,000.00',
+    icon: red_arrow
+  },
+  {
+    id: 'fortrite-5',
+    name: 'Fortrite',
+    image: bitcoin_svg,
+    amount: '120,000,000.00',
+    icon: red_arrow
+  },
+  {
+    id: 'fortrite-6',
+    name: 'Fortrite',
+    image: bitcoin_svg,
+    amount: '120,000,000.00',
+    icon: red_arrow
+  },
+  {
+    id: 'fortrite-7',
+    name: 'Fortrite',
+    image: bitcoin_svg,
+    amount: '120,000,000.00',
+    icon: red_arrow
+  },
+];
+
+export const coinRates: RateData[] = [
+  {
+    id: 'aave-1',
+    name: 'AAVE',
+    image: a_vector,
+    amount: '54,000.00',
+    icon: green_arrow
+  },
+  {
+    id: 'bitcoin-2',
+    name: 'Bitcoin',
+    image: google_play,
+    amount: '120,000,000.00',
+    icon: red_arrow
+  },
+  {
+    id: 'googleplay-3',
+    name: 'GooglePlay',
+    image: google_play,
+    amount: '120,000,000.00',
+    icon: red_arrow
+  },
+  {
+    id: 'googleplay-4',
+    name: 'GooglePlay',
+    image: google_play,
+    amount: '120,000,000.00',
+    icon: red_arrow
+  },
+  {
+    id: 'fortrite-5',
+    name: 'Fortrite',
+    image: bitcoin_svg,
+    amount: '120,000,000.00',
+    icon: red_arrow
+  },
+  {
+    id: 'fortrite-6',
+    name: 'Fortrite',
+    image: bitcoin_svg,
+    amount: '120,000,000.00',
+    icon: red_arrow
+  },
+  {
+    id: 'fortrite-7',
+    name: 'Fortrite',
+    image: bitcoin_svg,
+    amount: '120,000,000.00',
+    icon: red_arrow
+  },
+
+];
+
+export const transactions: TransactionRate[] = [
+  {
+    id: '1',
+    image: wallet_done,
+    type: 'received',
+    amount: '0.3237788',
+    currency: 'BTC',
+    description: 'You have recieved 0.3237788 BTC',
+    subdescription: 'Your BTC wallet has been credited with received 0.3237788',
+    status: 'green'
+  },
+  {
+    id: '2',
+    image: wallet_done,
+    type: 'transferred',
+    amount: '0.3237788',
+    currency: 'BTC',
+    description: 'You have recieved 0.3237788 BTC',
+    subdescription: 'Your BTC wallet has been debited with transferred 0.3237788 BTC',
+    status: 'green'
+  },
+  {
+    id: '3',
+    image: wallet_done,
+    type: 'transferred',
+    amount: '0.3237788',
+    currency: 'BTC',
+    description: 'You have recieved 0.3237788 BTC',
+    subdescription: 'Your BTC wallet has been debited with transferred 0.3237788 BTC',
+    status: 'green'
+  },
+  {
+    id: '4',
+    image: wallet_done,
+    type: 'transferred',
+    amount: '0.3237788',
+    currency: 'BTC',
+    description: 'You have recieved 0.3237788 BTC',
+    subdescription: 'Your BTC wallet has been debited with transferred 0.3237788 BTC',
+    status: 'green'
+  },
+  {
+    id: '5',
+    image: wallet_done,
+    type: 'transferred',
+    amount: '0.3237788',
+    currency: 'BTC',
+    description: 'You have recieved 0.3237788 BTC',
+    subdescription: 'Your BTC wallet has been debited with transferred 0.3237788 BTC',
+    status: 'green'
+  },
+  {
+    id: '6',
+    image: white_logo,
+    type: 'updated',
+    amount: '',
+    currency: '',
+    description: 'Talk more, Always Stay Updated',
+    subdescription: 'Top up your Airtime and mobile data and always stay updated on trending news.',
+    status: 'orange'
+  },
+  {
+    id: '7',
+    image: white_logo,
+    type: 'updated',
+    amount: '',
+    currency: '',
+    description: 'Talk more, Always Stay Updated',
+    subdescription: 'Top up your Airtime and mobile data and always stay updated on trending news.',
+    status: 'orange'
+  }
+];
