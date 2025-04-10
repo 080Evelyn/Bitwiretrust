@@ -16,10 +16,11 @@ const DashboardHeader: React.FC<ExtendedHeaderProps> = ({
 }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(propsMobileView);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_isTabletView, setIsTabletView] = useState(false);
-  const [hasNotifications, setHasNotifications] = useState(true);
-  const [hasProfileNotifications, setHasProfileNotifications] = useState(true);
-   
+  const [hasNotifications] = useState(true);
+  const [hasProfileNotifications] = useState(true);
+
 
   const formatDate = () => {
     if (window.innerWidth <= 768) {

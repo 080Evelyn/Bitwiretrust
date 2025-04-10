@@ -15,9 +15,9 @@ const TestimonialItem: React.FC<TestimonialItemProps> = ({ testimonial }) => {
       <div className="testimonial-content">
         <div className="testimonial-header">
           <div className='testimonial-header-img'>
-            <img 
-              src={testimonial.author.avatar} 
-              alt={testimonial.author.name} 
+            <img
+              src={testimonial.author.avatar}
+              alt={testimonial.author.name}
               className='testimonial-avatar'
             />
             <div className="testimonial-header-info">
@@ -25,7 +25,7 @@ const TestimonialItem: React.FC<TestimonialItemProps> = ({ testimonial }) => {
               <span className="testimonial-author-username">@{testimonial.author.username}</span>
             </div>
           </div>
-          <img src={testimonial.icon} className="testimonial-timestamp"></img>
+          <img src={testimonial.icon} className="testimonial-timestamp" alt=''></img>
         </div>
         <p className="testimonial-text">{testimonial.content}</p>
       </div>
@@ -35,16 +35,16 @@ const TestimonialItem: React.FC<TestimonialItemProps> = ({ testimonial }) => {
 
 const Testimonials: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
-  
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 425);
     };
-    
+
     checkMobile();
-    
+
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 

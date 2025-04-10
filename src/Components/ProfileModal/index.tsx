@@ -111,15 +111,15 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
       const newPin = isPinConfirmation
         ? [...confirmTransactionPin]
         : [...transactionPin];
-  
+
       newPin[index] = value;
-  
+
       if (isPinConfirmation) {
         setConfirmTransactionPin(newPin);
       } else {
         setTransactionPin(newPin);
       }
-  
+
       if (value !== "" && index < 3) {
         const nextInput = document.getElementById(
           `${isPinConfirmation ? "confirm-pin" : "pin"}-${index + 1}`
@@ -412,7 +412,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           </div>
 
           <div className="security-content">
-            <div className="option" onClick={() => {}}>
+            <div className="option" onClick={() => { }}>
               <div className="option-left">
                 <img
                   src={change_password}
@@ -563,14 +563,14 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
               ))}
             </div>
 
-            <button className="done"    onClick={() => {
-          if (transactionPin.join('') === confirmTransactionPin.join('')) {
-            toggleModal("profile");
-          } else {
-            alert("PINs do not match. Please try again.");
-            setConfirmTransactionPin(["", "", "", ""]);
-          }
-        }}>Done </button>
+            <button className="done" onClick={() => {
+              if (transactionPin.join('') === confirmTransactionPin.join('')) {
+                toggleModal("profile");
+              } else {
+                alert("PINs do not match. Please try again.");
+                setConfirmTransactionPin(["", "", "", ""]);
+              }
+            }}>Done </button>
           </div>
         </div>
       )}
@@ -646,7 +646,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
               onClick={() => toggleModal("terms-and-conditions")}
             >
               <div className="option-left">
-              <img
+                <img
                   src={term_condition}
                   alt="terms-conditions"
                   className="option-icon security-icon"
@@ -658,7 +658,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 
             <div className="option" onClick={() => toggleModal("policies")}>
               <div className="option-left">
-              <img
+                <img
                   src={policies}
                   alt="policies"
                   className="option-icon security-icon"

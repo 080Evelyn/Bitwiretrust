@@ -5,8 +5,9 @@ import Offersection from "../Offersection";
 import "./styles.css";
 import { Link } from "react-router-dom";
 
-type Props = {};
+type Props = object;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Herosection = (_props: Props) => {
   const successfulTransactions = transactionData.filter(
     (tx) => tx.status === "successful"
@@ -36,8 +37,8 @@ const Herosection = (_props: Props) => {
             financial life like never before.
           </p>
           <div className="button-group">
-           <Link to={'/get-started'}><Buttons variant="primary" iconSrc={circle_arrow_left}  iconPosition="right">Get Started</Buttons></Link>
-           <Link to={'/about'}><Buttons variant="secondary" iconSrc={circle_arrow}  iconPosition="right">Learn More</Buttons></Link>
+            <Link to={'/get-started'}><Buttons variant="primary" iconSrc={circle_arrow_left} iconPosition="right">Get Started</Buttons></Link>
+            <Link to={'/about'}><Buttons variant="secondary" iconSrc={circle_arrow} iconPosition="right">Learn More</Buttons></Link>
           </div>
         </div>
 
@@ -71,14 +72,12 @@ const Herosection = (_props: Props) => {
                     )}
                     <p className="amount">
                       {transaction.status === "successful" ? (
-                        `${
-                          transaction.currency
+                        `${transaction.currency
                         } ${transaction.amount.toLocaleString()}`
                       ) : (
                         <span className="pending-amount">
-                          {`${transaction.amount.toLocaleString()} ${
-                            transaction.currency
-                          }`}
+                          {`${transaction.amount.toLocaleString()} ${transaction.currency
+                            }`}
                         </span>
                       )}
                     </p>
@@ -118,14 +117,12 @@ const Herosection = (_props: Props) => {
                     )}
                     <p className="amount">
                       {transaction.status === "successful" ? (
-                        `${
-                          transaction.currency
+                        `${transaction.currency
                         } ${transaction.amount.toLocaleString()}`
                       ) : (
                         <span className="pending-amount">
-                          {`${transaction.amount.toLocaleString()} ${
-                            transaction.currency
-                          }`}
+                          {`${transaction.amount.toLocaleString()} ${transaction.currency
+                            }`}
                         </span>
                       )}
                     </p>
@@ -139,7 +136,7 @@ const Herosection = (_props: Props) => {
         </div>
       </div>
 
-      <Offersection/>
+      <Offersection />
     </div>
   );
 };

@@ -3,8 +3,9 @@ import Buttons from "../Buttons";
 import { circle_arrow_left, gray_circle_arrow } from "../../assets";
 import { Link } from "react-router-dom";
 
-type Props = {};
+type Props = object;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Readysetup = (_props: Props) => {
   return (
     <div className="setup-container">
@@ -18,7 +19,7 @@ const Readysetup = (_props: Props) => {
         </div>
       </div>
       <div className="button-group">
-      <Link to={'/get-started'}><Buttons
+        <Link to={'/get-started'}><Buttons
           variant="primary"
           iconSrc={circle_arrow_left}
           iconPosition="right"

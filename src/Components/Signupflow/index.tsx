@@ -17,7 +17,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     password: "",
     confirmPassword: "",
   });
- 
+
   const [storedCredentials, setStoredCredentials] = useState<{
     email: string;
     password: string;
@@ -25,7 +25,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     email: "",
     password: "",
   });
- 
+
   const [getStartedFields, setGetStartedFields] = useState<{
     email: string;
     password: string;
@@ -39,11 +39,12 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     "",
     "",
   ]);
-  
+
   const [passcode, setPasscode] = useState<string[]>(["", "", "", "", "", ""]);
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
   const [codeError, setCodeError] = useState<boolean>(false);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_showPasscodeScreen, setShowPasscodeScreen] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -53,10 +54,10 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       case Step.CREATE_ACCOUNT:
         setIsButtonEnabled(
           formData.fullName.trim() !== "" &&
-            formData.email.trim() !== "" &&
-            formData.password.trim() !== "" &&
-            formData.confirmPassword.trim() !== "" &&
-            formData.password === formData.confirmPassword
+          formData.email.trim() !== "" &&
+          formData.password.trim() !== "" &&
+          formData.confirmPassword.trim() !== "" &&
+          formData.password === formData.confirmPassword
         );
         break;
       case Step.VERIFY_EMAIL:
@@ -64,7 +65,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
         break;
       case Step.GET_STARTED:
         setIsButtonEnabled(
-          getStartedFields.email.trim() !== "" && 
+          getStartedFields.email.trim() !== "" &&
           getStartedFields.password.trim() !== ""
         );
         break;
@@ -139,7 +140,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
         getStartedFields.password === storedCredentials.password
       ) {
         setShowSuccessModal(true);
-        
+
         setTimeout(() => {
           setShowSuccessModal(false);
           setShowPasscodeScreen(true);
@@ -147,7 +148,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
         }, 5000);
       } else {
         setShowSuccessModal(true);
-        
+
         setTimeout(() => {
           setShowSuccessModal(false);
           setShowPasscodeScreen(true);
@@ -297,9 +298,8 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                 <div className="button-container">
                   <button
                     type="button"
-                    className={`next-button ${
-                      isButtonEnabled ? "enabled" : "disabled"
-                    }`}
+                    className={`next-button ${isButtonEnabled ? "enabled" : "disabled"
+                      }`}
                     onClick={handleNextStep}
                     disabled={!isButtonEnabled}
                   >
@@ -339,9 +339,8 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                 <div className="button-container">
                   <button
                     type="button"
-                    className={`next-button ${
-                      isButtonEnabled ? "enabled" : "disabled"
-                    }`}
+                    className={`next-button ${isButtonEnabled ? "enabled" : "disabled"
+                      }`}
                     onClick={handleNextStep}
                     disabled={!isButtonEnabled}
                   >
@@ -410,9 +409,8 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                 <div className="button-container">
                   <button
                     type="button"
-                    className={`next-button ${
-                      isButtonEnabled ? "enabled" : "disabled"
-                    }`}
+                    className={`next-button ${isButtonEnabled ? "enabled" : "disabled"
+                      }`}
                     onClick={handleNextStep}
                     disabled={!isButtonEnabled}
                   >
@@ -423,7 +421,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
             </div>
           </div>
         );
-        
+
       case Step.CREATE_PASSCODE:
         return (
           <div className="step-content">
@@ -451,17 +449,16 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
               <form>
                 <div className="form-group passcode-form-group">
                   <div className="passcode-lock">
-                  <img src={passcode_lock} alt="lock" />
-                  <p>Enter Passcode to continue</p>
+                    <img src={passcode_lock} alt="lock" />
+                    <p>Enter Passcode to continue</p>
                   </div>
                   {renderPasscodeInputs()}
                 </div>
                 <div className="button-container">
                   <button
                     type="button"
-                    className={`next-button ${
-                      isButtonEnabled ? "enabled" : "disabled"
-                    }`}
+                    className={`next-button ${isButtonEnabled ? "enabled" : "disabled"
+                      }`}
                     onClick={handleNextStep}
                     disabled={!isButtonEnabled}
                   >
@@ -493,7 +490,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
 
             <div className="success-icon">
               <div className='checkmark-background'>
-              <FaCheck className="checkmark"/>
+                <FaCheck className="checkmark" />
               </div>
             </div>
 

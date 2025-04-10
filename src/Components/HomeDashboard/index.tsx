@@ -12,26 +12,28 @@ import {
   wallet,
 } from "../../assets";
 
-type Props = {};
+type Props = object;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const HomeDashboard = (_props: Props) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_activeTab, setActiveTab] = useState("All");
   const [hideBalance, setHideBalance] = useState(false);
 
   const getBackgroundColor = (name: string) => {
     switch (name.toLowerCase()) {
       case "amazon":
-        return "#2EBAC6"; 
+        return "#2EBAC6";
       case "googleplay":
-        return "#F7AE02"; 
+        return "#F7AE02";
       case "fortrite":
         return "#F7931A";
       case "aave":
         return "#2EBAC6";
       case "bitcoin":
-        return "#F7AE02"; 
+        return "#F7AE02";
       default:
-        return "#ddd"; 
+        return "#ddd";
     }
   };
 
@@ -49,13 +51,13 @@ const HomeDashboard = (_props: Props) => {
   const getBackgroundColorTransaction = (type: string) => {
     switch (type.toLowerCase()) {
       case "received":
-        return "#16D005"; 
+        return "#16D005";
       case "transferred":
-        return "#2EBAC6"; 
+        return "#2EBAC6";
       case "updated":
-        return "#7910B1"; 
+        return "#7910B1";
       default:
-        return "#E0E0E0"; 
+        return "#E0E0E0";
     }
   };
 
@@ -105,9 +107,9 @@ const HomeDashboard = (_props: Props) => {
               </>
             )}
           </h2>
-          <button onClick={() => setHideBalance(!hideBalance)}>
-            <img src={password} alt="" />
-          </button>
+
+          <img src={password} onClick={() => setHideBalance(!hideBalance)} alt="" />
+
         </div>
       </div>
 
@@ -201,7 +203,7 @@ const HomeDashboard = (_props: Props) => {
           <div className="transaction-list">
             {transactions.map((transaction) => (
               <div key={transaction.id} className="transaction-item">
-                
+
                 <div
                   className="transaction-icon-wrapper"
                   style={{

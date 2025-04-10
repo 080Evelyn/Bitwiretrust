@@ -2,8 +2,9 @@ import { useState } from 'react'
 import './styles.css'
 import { faqData } from '../../constants';
 
-type Props = {}
+type Props = object
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Faqs = (_props: Props) => {
 
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -11,24 +12,24 @@ const Faqs = (_props: Props) => {
   const toggleAccordion = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
-  
+
   return (
     <div id="faqs" className='faqs-container'>
-        <div className='faqs-content'>
-            <div className='faqs-header'>
-            <p className="subtitle">FAQs</p>
-            <h3 className="main-title">
+      <div className='faqs-content'>
+        <div className='faqs-header'>
+          <p className="subtitle">FAQs</p>
+          <h3 className="main-title">
             Here What The Public Has To Say About Us
-            </h3>
-            <p className="description">
+          </h3>
+          <p className="description">
             Find Out How Our Users Are Spreading The Word!
-            </p>
-            </div>
+          </p>
         </div>
+      </div>
 
-        <div className="faq-grid">
+      <div className="faq-grid">
         {faqData.map((item, index) => (
-         <div
+          <div
             key={index}
             className={`faq-item ${openIndex === index ? 'active' : ''}`}
           >
