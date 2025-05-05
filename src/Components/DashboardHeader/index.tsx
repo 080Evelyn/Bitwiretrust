@@ -1,91 +1,62 @@
-import React, { useState, useEffect } from "react";
 import "./styles.css";
 import { HeaderProps } from "../../types";
 import { format } from "date-fns";
 import { calendar_svg, ellipse_user } from "../../assets";
 import { HiOutlineBell } from "react-icons/hi2";
 import ProfileModal from "../ProfileModal";
+import { useState } from "react";
 
-interface ExtendedHeaderProps extends HeaderProps {
-  isMobileView?: boolean;
-}
-
-const DashboardHeader: React.FC<ExtendedHeaderProps> = ({
-  username,
-  isMobileView: propsMobileView = false,
-}) => {
+const DashboardHeader: React.FC<HeaderProps> = ({ username }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [isMobileView, setIsMobileView] = useState(propsMobileView);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_isTabletView, setIsTabletView] = useState(false);
   const [hasNotifications] = useState(true);
   const [hasProfileNotifications] = useState(true);
-
-
-  const formatDate = () => {
-    if (window.innerWidth <= 768) {
-      return format(new Date(), "MMM dd, yyyy");
-    } else {
-      return format(new Date(), "MMMM dd, yyyy - h:mm a");
-    }
-  };
-
-  const currentDate = formatDate();
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobileView(window.innerWidth <= 425 || propsMobileView);
-      setIsTabletView(window.innerWidth <= 768 && window.innerWidth > 425);
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, [propsMobileView]);
 
   const toggleProfileModal = () => {
     setIsProfileModalOpen(!isProfileModalOpen);
   };
 
-  return (
-    <div className="dashboard-header">
-      <div className={`header-top ${isMobileView ? "mobile-view" : ""}`}>
-        {isMobileView && (
-          <div className="mobile-profile-icon" onClick={toggleProfileModal}>
-            <img src={ellipse_user} alt="profile" />
-          </div>
-        )}
+  const currentDate = format(new Date(), "MMMM dd, yyyy - h:mm a");
 
-        <div className="welcome-section">
-          <h1>Welcome to Bitwire</h1>
+  return (
+    <div className="!ps-4 !pe-10 !py-4 lg:w-[calc(100dvw-var(--sidebar-width))]">
+      <div className="dashboard-header flex items-center justify-between">
+        <div className="sm:hidden" onClick={toggleProfileModal}>
+          <img
+            src={ellipse_user}
+            alt="profile"
+            className="h-8 w-8 rounded-full"
+          />
+        </div>
+
+        <div className="welcome-section ">
+          <h1 className=" font-semibold">Welcome to Bitwire</h1>
           <p>Hi, {username}! Welcome Back</p>
         </div>
 
-        <div className="header-actions">
-          {!isMobileView && (
-            <div className="calendar-icon">
-              <img src={calendar_svg} alt="Calendar" />
-              <p>{currentDate}</p>
-            </div>
-          )}
-
-          <div className="notification-icon">
-            <HiOutlineBell className="notification" />
-            {hasNotifications && (
-              <span className="notification-badge orange"></span>
-            )}
+        <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-2 calendar-icon">
+            <img src={calendar_svg} alt="Calendar" />
+            <p>{currentDate}</p>
           </div>
 
-          {!isMobileView && (
-            <div className="profile-icon" onClick={toggleProfileModal}>
-              <img src={ellipse_user} alt="profile" />
-              {hasProfileNotifications && (
-                <span className="notification-badge green"></span>
-              )}
-            </div>
-          )}
+          <div className="relative">
+            <HiOutlineBell className="text-xl" />
+            {hasNotifications && <span className="notification-badge orange" />}
+          </div>
+
+          <div
+            className="hidden md:block relative cursor-pointer"
+            onClick={toggleProfileModal}
+          >
+            <img
+              src={ellipse_user}
+              alt="profile"
+              className="h-8 w-8 rounded-full"
+            />
+            {hasProfileNotifications && (
+              <span className="notification-badge green" />
+            )}
+          </div>
         </div>
       </div>
 

@@ -90,7 +90,7 @@ const HomeDashboard = (_props: Props) => {
   );
 
   return (
-    <div className="home-dashboard">
+    <div className="dashboard lg:!ps-4 lg:!pe-6 md:w-full lg:w-[calc(100dvw-var(--sidebar-width))]">
       <div className="total-balance">
         <div>
           <p>Total Balance</p>
@@ -108,12 +108,15 @@ const HomeDashboard = (_props: Props) => {
             )}
           </h2>
 
-          <img src={password} onClick={() => setHideBalance(!hideBalance)} alt="" />
-
+          <img
+            src={password}
+            onClick={() => setHideBalance(!hideBalance)}
+            alt=""
+          />
         </div>
       </div>
 
-      <div className="rate-container">
+      <div className="rate-container overflow-x-auto">
         <div className="rate-container-left">
           <div className="action-buttons">
             <div className="action-button">
@@ -203,7 +206,6 @@ const HomeDashboard = (_props: Props) => {
           <div className="transaction-list">
             {transactions.map((transaction) => (
               <div key={transaction.id} className="transaction-item">
-
                 <div
                   className="transaction-icon-wrapper"
                   style={{

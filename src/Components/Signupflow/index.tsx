@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { FormData, Step } from "../../types";
-import { full_logo, passcode_lock, create_account_png, verify_email_png, get_started_png, circled_frame } from "../../assets";
+import {
+  full_logo,
+  passcode_lock,
+  create_account_png,
+  verify_email_png,
+  get_started_png,
+  circled_frame,
+} from "../../assets";
 import { FaCheck } from "react-icons/fa";
 import "./styles.css";
 import { useNavigate } from "react-router-dom";
@@ -54,10 +61,10 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       case Step.CREATE_ACCOUNT:
         setIsButtonEnabled(
           formData.fullName.trim() !== "" &&
-          formData.email.trim() !== "" &&
-          formData.password.trim() !== "" &&
-          formData.confirmPassword.trim() !== "" &&
-          formData.password === formData.confirmPassword
+            formData.email.trim() !== "" &&
+            formData.password.trim() !== "" &&
+            formData.confirmPassword.trim() !== "" &&
+            formData.password === formData.confirmPassword
         );
         break;
       case Step.VERIFY_EMAIL:
@@ -66,7 +73,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       case Step.GET_STARTED:
         setIsButtonEnabled(
           getStartedFields.email.trim() !== "" &&
-          getStartedFields.password.trim() !== ""
+            getStartedFields.password.trim() !== ""
         );
         break;
       case Step.CREATE_PASSCODE:
@@ -82,7 +89,9 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleGetStartedInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleGetStartedInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const { name, value } = e.target;
     setGetStartedFields({ ...getStartedFields, [name]: value });
   };
@@ -123,11 +132,10 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     if (currentStep === Step.CREATE_ACCOUNT) {
       setStoredCredentials({
         email: formData.email,
-        password: formData.password
+        password: formData.password,
       });
       setCurrentStep(currentStep + 1);
     } else if (currentStep === Step.VERIFY_EMAIL) {
-
       const enteredCode = verificationCode.join("");
       if (enteredCode !== "3534") {
         setCodeError(true);
@@ -158,7 +166,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     } else if (currentStep === Step.CREATE_PASSCODE) {
       console.log("Passcode created:", passcode.join(""));
 
-      navigate('/home-dashboard');
+      navigate("/dashboard");
     }
   };
 
@@ -189,7 +197,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
             key={index}
             id={`passcode-input-${index}`}
             type="password"
-            className={`passcode-input ${digit ? 'filled' : ''}`}
+            className={`passcode-input ${digit ? "filled" : ""}`}
             value={digit}
             onChange={(e) => handlePasscodeChange(index, e.target.value)}
             maxLength={1}
@@ -298,8 +306,9 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                 <div className="button-container">
                   <button
                     type="button"
-                    className={`next-button ${isButtonEnabled ? "enabled" : "disabled"
-                      }`}
+                    className={`next-button ${
+                      isButtonEnabled ? "enabled" : "disabled"
+                    }`}
                     onClick={handleNextStep}
                     disabled={!isButtonEnabled}
                   >
@@ -330,7 +339,10 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                 <img src={full_logo} alt="Bitwire" />
               </div>
               <h2>Verify your E-mail</h2>
-              <p>Enter the 4-digit code sent to your e-mail <span>{formData.email}</span> </p>
+              <p>
+                Enter the 4-digit code sent to your e-mail{" "}
+                <span>{formData.email}</span>{" "}
+              </p>
               <form>
                 {renderCodeInputs()}
                 {codeError && (
@@ -339,8 +351,9 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                 <div className="button-container">
                   <button
                     type="button"
-                    className={`next-button ${isButtonEnabled ? "enabled" : "disabled"
-                      }`}
+                    className={`next-button ${
+                      isButtonEnabled ? "enabled" : "disabled"
+                    }`}
                     onClick={handleNextStep}
                     disabled={!isButtonEnabled}
                   >
@@ -409,8 +422,9 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                 <div className="button-container">
                   <button
                     type="button"
-                    className={`next-button ${isButtonEnabled ? "enabled" : "disabled"
-                      }`}
+                    className={`next-button ${
+                      isButtonEnabled ? "enabled" : "disabled"
+                    }`}
                     onClick={handleNextStep}
                     disabled={!isButtonEnabled}
                   >
@@ -445,7 +459,11 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                 <img src={full_logo} alt="Bitwire" />
               </div>
               <h2>Create a Passcode</h2>
-              <p>Set up your 6-digit security passcode.<br />Please, do not share this code with anyone.</p>
+              <p>
+                Set up your 6-digit security passcode.
+                <br />
+                Please, do not share this code with anyone.
+              </p>
               <form>
                 <div className="form-group passcode-form-group">
                   <div className="passcode-lock">
@@ -457,8 +475,9 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
                 <div className="button-container">
                   <button
                     type="button"
-                    className={`next-button ${isButtonEnabled ? "enabled" : "disabled"
-                      }`}
+                    className={`next-button ${
+                      isButtonEnabled ? "enabled" : "disabled"
+                    }`}
                     onClick={handleNextStep}
                     disabled={!isButtonEnabled}
                   >
@@ -489,7 +508,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
             />
 
             <div className="success-icon">
-              <div className='checkmark-background'>
+              <div className="checkmark-background">
                 <FaCheck className="checkmark" />
               </div>
             </div>

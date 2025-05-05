@@ -5,7 +5,7 @@ import About from "../Pages/About";
 import Register from "../Pages/Register";
 import Authlayout from "../Authlayout";
 import { Step } from "../types";
-import Dashboard from "../Pages/Dashboard";
+import DashboardLayout from "../Pages/DashboardLayout";
 import HomeDashboard from "../Components/HomeDashboard";
 import Utilitypayment from "../Components/Utilitypayment";
 import Contact from "../Pages/Contact";
@@ -24,17 +24,19 @@ export const router = createBrowserRouter([
   {
     element: <Authlayout />,
     children: [
-        { path: "register", element: <Register /> },
-        { path: "get-started", element: <Register initialStep={Step.GET_STARTED} /> },
-        
+      { path: "register", element: <Register /> },
+      {
+        path: "get-started",
+        element: <Register initialStep={Step.GET_STARTED} />,
+      },
     ],
   },
 
   {
-    element: <Dashboard />,
+    element: <DashboardLayout />,
     children: [
-      {path: 'home-dashboard', element: <HomeDashboard/>},
-      {path: 'utility-payment', element: <Utilitypayment/>},
-    ]
-  }
+      { path: "dashboard", element: <HomeDashboard /> },
+      { path: "utility-payment", element: <Utilitypayment /> },
+    ],
+  },
 ]);
