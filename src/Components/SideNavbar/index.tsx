@@ -43,7 +43,7 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
                 {link.subLinks ? (
                   <div className="flex flex-col">
                     <div
-                      className="flex items-center gap-2 !px-4 lg:!px-5 !py-2 cursor-pointer"
+                      className="flex items-center gap-2 px-4 lg:px-5 py-2 cursor-pointer"
                       onClick={() => handleDropdownToggle(link.to)}
                     >
                       <img
@@ -60,7 +60,7 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
                     </div>
 
                     {openDropdown === link.to && (
-                      <ul className="!pl-4">
+                      <ul className="pl-4">
                         {link.subLinks.map((subLink) => (
                           <li
                             key={subLink.to}
@@ -134,11 +134,11 @@ const SideNavbar = () => {
       </aside>
 
       <div
-        className={`lg:hidden !pt-4 fixed top-0 left-0 right-0 z-50 bg-white transition-colors duration-300 ${
+        className={`lg:hidden pt-4 fixed top-0 left-0 right-0 z-50 bg-white transition-colors duration-300 ${
           scrolled ? "shadow-sm" : ""
         }`}
       >
-        <div className="flex items-center justify-between !px-5 !pt-4 !pb-3 ">
+        <div className="flex items-center justify-between px-5 pt-4 pb-3 ">
           <Link to="/dashboard" className="flex items-center gap-2">
             <img src={full_logo} alt="Bitwire Logo" className="h-6" />
           </Link>

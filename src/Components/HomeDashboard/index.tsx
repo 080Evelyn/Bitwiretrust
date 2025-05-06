@@ -7,12 +7,10 @@ import {
   circle_arrow_left,
   export_png,
   gala_add,
-  help_circle,
-  password,
   wallet,
 } from "../../assets";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
-import { FaEye } from "react-icons/fa";
+import BalanceOverview from "./BalanceOverview";
 
 type Props = object;
 
@@ -20,7 +18,6 @@ type Props = object;
 const HomeDashboard = (_props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_activeTab, setActiveTab] = useState("All");
-  const [hideBalance, setHideBalance] = useState(false);
 
   const getBackgroundColor = (name: string) => {
     switch (name.toLowerCase()) {
@@ -68,7 +65,7 @@ const HomeDashboard = (_props: Props) => {
       {rates.map((rate) => (
         <div
           key={rate.id}
-          className="flex justify-between items-center !py-2 border-b-[0.78px] md:border-b-[0.45px] border-[#F9EDFF]"
+          className="flex justify-between items-center py-2 border-b-[0.78px] md:border-b-[0.45px] border-[#F9EDFF]"
         >
           <div className="flex items-center">
             <div
@@ -98,37 +95,8 @@ const HomeDashboard = (_props: Props) => {
   );
 
   return (
-    <div className="dashboard lg:!ps-4  md:!pe-6 w-full lg:w-[calc(100dvw-var(--sidebar-width))]">
-      <div className="total-balance">
-        <div>
-          <p>Total Balance</p>
-          <img src={help_circle} alt="" />
-        </div>
-        <div>
-          <h2>
-            ₦
-            {hideBalance ? (
-              "******"
-            ) : (
-              <>
-                152,000.<span className="decimal">00</span>
-              </>
-            )}
-          </h2>
-          {hideBalance ? (
-            <FaEye
-              className="size-8 cursor-pointer"
-              onClick={() => setHideBalance(!hideBalance)}
-            />
-          ) : (
-            <img
-              src={password}
-              onClick={() => setHideBalance(!hideBalance)}
-              alt=""
-            />
-          )}
-        </div>
-      </div>
+    <div className="dashboard lg:ps-4  md:pe-6 w-full lg:w-[calc(100dvw-var(--sidebar-width))]">
+      <BalanceOverview />
 
       <div className="rate-container overflow-x-auto">
         <div className="rate-container-left">
@@ -183,18 +151,18 @@ const HomeDashboard = (_props: Props) => {
               {renderRatesTable(coinRates)}
             </div>
           </div>
-          <div className="md:hidden border-[1.75px] border-[#F1F1F1] shadow-xs rounded-sm w-full !p-4">
+          <div className="md:hidden border-[1.75px] border-[#F1F1F1] shadow-xs rounded-sm w-full p-4">
             <Tabs defaultValue="gift-card">
               <TabsList className="flex gap-5 w-full">
                 <TabsTrigger
                   value="gift-card"
-                  className="bg-[#B71FFF66]  cursor-pointer text-foreground px-4 !py-5.5 rounded-[5.16px] text-sm data-[state=active]:bg-[#7910B1] data-[state=active]:text-white"
+                  className="bg-[#B71FFF66]  cursor-pointer text-foreground px-4 py-5.5 rounded-[5.16px] text-sm data-[state=active]:bg-[#7910B1] data-[state=active]:text-white"
                 >
                   Giftcard Rates
                 </TabsTrigger>
                 <TabsTrigger
                   value="coin-rates"
-                  className="bg-[#B71FFF66] cursor-pointer text-foreground px-4 !py-5.5 rounded-[5.16px] text-sm data-[state=active]:bg-[#7910B1]  data-[state=active]:text-white"
+                  className="bg-[#B71FFF66] cursor-pointer text-foreground px-4 py-5.5 rounded-[5.16px] text-sm data-[state=active]:bg-[#7910B1]  data-[state=active]:text-white"
                 >
                   Coin Rates
                 </TabsTrigger>
