@@ -18,7 +18,7 @@ const DashboardHeader: React.FC<HeaderProps> = ({ username }) => {
   const currentDate = format(new Date(), "MMMM dd, yyyy - h:mm a");
 
   return (
-    <div className="!ps-4 !pe-10 !pt-9 !pb-3 lg:w-[calc(100dvw-var(--sidebar-width))]">
+    <div className="!ps-4 !pe-10 !pt-9 lg:!pt-5 !pb-3 lg:w-[calc(100dvw-var(--sidebar-width))]">
       <div className="dashboard-header flex items-center justify-between">
         <div className="flex gap-4 items-center">
           <div className="sm:hidden" onClick={toggleProfileModal}>
