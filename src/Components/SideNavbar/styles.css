@@ -102,6 +102,10 @@
 }
 
 @media (max-width: 1024px) {
+  .side-navbar-wrapper {
+    width: 180px;
+  }
+
   .side-navbar-top img {
     width: 50px;
     height: 28px;
@@ -132,7 +136,7 @@
   .side-navbar-links a,
   .side-navbar-actions a {
     padding: 6px 14px;
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .side-navbar-icon {

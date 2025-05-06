@@ -11,6 +11,8 @@ import {
   password,
   wallet,
 } from "../../assets";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { FaEye } from "react-icons/fa";
 
 type Props = object;
 
@@ -64,25 +66,31 @@ const HomeDashboard = (_props: Props) => {
   const renderRatesTable = (rates: RateData[]) => (
     <div>
       {rates.map((rate) => (
-        <div key={rate.id} className="rates-table-row">
-          <div
-            className="rates-icon-wrapper"
-            style={{ backgroundColor: getBackgroundColor(rate.name) }}
-          >
-            <img
-              src={rate.image}
-              alt={`${rate.name} logo`}
-              className="rates-icon"
-            />
+        <div
+          key={rate.id}
+          className="flex justify-between items-center !py-2 border-b-[0.78px] md:border-b-[0.45px] border-[#F9EDFF]"
+        >
+          <div className="flex items-center">
+            <div
+              className="rates-icon-wrapper"
+              style={{ backgroundColor: getBackgroundColor(rate.name) }}
+            >
+              <img
+                src={rate.image}
+                alt={`${rate.name} logo`}
+                className="rates-icon"
+              />
+            </div>
+            <div className="text-xs md:text-[10px] text-[#8C8C8C]">
+              {rate.name}
+            </div>
           </div>
-          <div className="rates-details">
-            <div className="rates-name">{rate.name}</div>
-            <div className="rates-values">
-              <span>₦{rate.amount}</span>
-            </div>
-            <div>
-              <img src={rate.icon} alt="" />
-            </div>
+
+          <div className="flex items-center gap-1 text-sm">
+            <span className="text-[17px] md:text-[10px] text-foreground font-medium">
+              ₦{rate.amount}
+            </span>
+            <img src={rate.icon} alt="" className="size-5" />
           </div>
         </div>
       ))}
@@ -90,7 +98,7 @@ const HomeDashboard = (_props: Props) => {
   );
 
   return (
-    <div className="dashboard lg:!ps-4 lg:!pe-6 md:w-full lg:w-[calc(100dvw-var(--sidebar-width))]">
+    <div className="dashboard lg:!ps-4  md:!pe-6 w-full lg:w-[calc(100dvw-var(--sidebar-width))]">
       <div className="total-balance">
         <div>
           <p>Total Balance</p>
@@ -107,12 +115,18 @@ const HomeDashboard = (_props: Props) => {
               </>
             )}
           </h2>
-
-          <img
-            src={password}
-            onClick={() => setHideBalance(!hideBalance)}
-            alt=""
-          />
+          {hideBalance ? (
+            <FaEye
+              className="size-8 cursor-pointer"
+              onClick={() => setHideBalance(!hideBalance)}
+            />
+          ) : (
+            <img
+              src={password}
+              onClick={() => setHideBalance(!hideBalance)}
+              alt=""
+            />
+          )}
         </div>
       </div>
 
@@ -154,7 +168,7 @@ const HomeDashboard = (_props: Props) => {
             </div>
           </div>
 
-          <div className="gift-cards-rates">
+          <div className="hidden md:flex gap-[15px]">
             <div className="rates-section">
               <div className="rates-header">
                 <span>Giftcard Rates</span>
@@ -168,6 +182,31 @@ const HomeDashboard = (_props: Props) => {
               </div>
               {renderRatesTable(coinRates)}
             </div>
+          </div>
+          <div className="md:hidden border-[1.75px] border-[#F1F1F1] shadow-xs rounded-sm w-full !p-4">
+            <Tabs defaultValue="gift-card">
+              <TabsList className="flex gap-5 w-full">
+                <TabsTrigger
+                  value="gift-card"
+                  className="bg-[#B71FFF66]  cursor-pointer text-foreground px-4 !py-5.5 rounded-[5.16px] text-sm data-[state=active]:bg-[#7910B1] data-[state=active]:text-white"
+                >
+                  Giftcard Rates
+                </TabsTrigger>
+                <TabsTrigger
+                  value="coin-rates"
+                  className="bg-[#B71FFF66] cursor-pointer text-foreground px-4 !py-5.5 rounded-[5.16px] text-sm data-[state=active]:bg-[#7910B1]  data-[state=active]:text-white"
+                >
+                  Coin Rates
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="gift-card">
+                {renderRatesTable(giftcardRates)}
+              </TabsContent>
+              <TabsContent value="coin-rates">
+                {renderRatesTable(coinRates)}
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
 

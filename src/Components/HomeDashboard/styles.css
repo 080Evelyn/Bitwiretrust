@@ -184,8 +184,7 @@
   padding-bottom: 10px;
   margin-bottom: 10px;
 }
-
-.rates-table-row {
+-row {
   display: flex;
   align-items: center;
   padding: 8px 0;
@@ -207,7 +206,7 @@
   height: 15px;
 }
 
-.rates-details {
+.custom {
   display: flex;
   align-items: center;
   width: 100%;
@@ -251,7 +250,7 @@
   border-radius: 15px;
   font-weight: 600;
   color: #4a148c;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
 }
 
@@ -402,7 +401,8 @@
 @media (max-width: 768px) {
   .dashboard {
     margin-left: 0px;
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 25px;
   }
 
   .total-balance h2 {
@@ -442,7 +442,8 @@
 
   .all-view {
     overflow-x: auto;
-    padding: 8px;
+    padding: 4px 8px;
+    gap: 6px;
   }
 
   .tab-item {
@@ -509,7 +510,7 @@
     font-size: 12px;
   }
 
-  .rates-table-row {
+  -row {
     padding: 6px 0;
   }
 

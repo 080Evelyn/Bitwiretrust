@@ -7,7 +7,7 @@ import Authlayout from "../Authlayout";
 import { Step } from "../types";
 import DashboardLayout from "../Pages/DashboardLayout";
 import HomeDashboard from "../Components/HomeDashboard";
-import Utilitypayment from "../Components/Utilitypayment";
+import Utilitypayment from "../Pages/Utilitypayment";
 import Contact from "../Pages/Contact";
 
 export const router = createBrowserRouter([

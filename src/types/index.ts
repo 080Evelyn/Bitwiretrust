@@ -45,7 +45,7 @@ export enum Step {
   CREATE_ACCOUNT = 0,
   VERIFY_EMAIL = 1,
   GET_STARTED = 2,
-  CREATE_PASSCODE = 3
+  CREATE_PASSCODE = 3,
 }
 
 export interface HeaderProps {
@@ -55,12 +55,12 @@ export interface HeaderProps {
 export interface TransactionRate {
   id: string;
   image: string;
-  type: 'received' | 'transferred' | 'updated';
+  type: "received" | "transferred" | "updated";
   amount: string;
   currency: string;
   description: string;
   subdescription: string;
-  status: 'green' | 'orange' | 'red';
+  status: "green" | "orange" | "red";
 }
 
 export interface RateData {
@@ -69,6 +69,21 @@ export interface RateData {
   image: string;
   amount: string;
   icon: string;
+}
+
+interface NavLink {
+  to: string;
+  text: string;
+  icon: string;
+  subLinks?: {
+    to: string;
+    text: string;
+  }[];
+}
+export interface SidebarContentProps {
+  onClick?: () => void;
+  navLinks: NavLink[];
+  bottomLinks: NavLink[];
 }
 
 export interface ProfileModalProps {

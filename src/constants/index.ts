@@ -186,9 +186,12 @@ export const navLinks = [
     text: "VirtualTopUps",
   },
   {
-    to: "/trade-gift-cards",
     icon: gift_card_svg,
-    text: "TradeGiftCards",
+    text: "Trade Gift Cards",
+    subLinks: [
+      { to: "/gift-cards/buy", text: "Buy Gift Card" },
+      { to: "/gift-cards/sell", text: "Sell Gift Card" },
+    ],
   },
   {
     to: "/crypto-trading",

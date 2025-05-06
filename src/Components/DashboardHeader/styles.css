@@ -148,11 +148,6 @@
 
 /* Phones */
 @media (max-width: 430px) {
-  .dashboard-header {
-    padding: 5px 10px;
-    padding-right: 35px;
-  }
-
   .header-top {
     padding: 5px;
   }
@@ -162,7 +157,6 @@
   }
 
   .welcome-section p {
-    margin-top: 5px;
     font-size: 11px;
   }
 

@@ -18,29 +18,35 @@ const DashboardHeader: React.FC<HeaderProps> = ({ username }) => {
   const currentDate = format(new Date(), "MMMM dd, yyyy - h:mm a");
 
   return (
-    <div className="!ps-4 !pe-10 !py-4 lg:w-[calc(100dvw-var(--sidebar-width))]">
+    <div className="!ps-4 !pe-10 !pt-9 !pb-3 lg:w-[calc(100dvw-var(--sidebar-width))]">
       <div className="dashboard-header flex items-center justify-between">
-        <div className="sm:hidden" onClick={toggleProfileModal}>
-          <img
-            src={ellipse_user}
-            alt="profile"
-            className="h-8 w-8 rounded-full"
-          />
-        </div>
+        <div className="flex gap-4 items-center">
+          <div className="sm:hidden" onClick={toggleProfileModal}>
+            <img
+              src={ellipse_user}
+              alt="profile"
+              className="h-9 w-9 rounded-full"
+            />
+          </div>
 
-        <div className="welcome-section ">
-          <h1 className=" font-semibold">Welcome to Bitwire</h1>
-          <p>Hi, {username}! Welcome Back</p>
+          <div className="welcome-section ">
+            <h1 className=" font-semibold">Welcome to Bitwire</h1>
+            <p>Hi, {username}! Welcome Back</p>
+          </div>
         </div>
 
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2 calendar-icon">
-            <img src={calendar_svg} alt="Calendar" />
-            <p>{currentDate}</p>
+            <img
+              src={calendar_svg}
+              alt="Calendar"
+              className="hidden lg:block"
+            />
+            <p className="hidden lg:block">{currentDate}</p>
           </div>
 
           <div className="relative">
-            <HiOutlineBell className="text-xl" />
+            <HiOutlineBell className="h-7.5 w-7.5" />
             {hasNotifications && <span className="notification-badge orange" />}
           </div>
 
@@ -51,7 +57,7 @@ const DashboardHeader: React.FC<HeaderProps> = ({ username }) => {
             <img
               src={ellipse_user}
               alt="profile"
-              className="h-8 w-8 rounded-full"
+              className="h-9 w-9 rounded-full"
             />
             {hasProfileNotifications && (
               <span className="notification-badge green" />

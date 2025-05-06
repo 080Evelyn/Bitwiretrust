@@ -12,13 +12,8 @@
 
 html,
 body {
-  width: 100%;
   overflow-x: hidden;
-  background: #ffffff;
-  color: #000000;
   font-family: "Raleway", serif;
-  max-width: 1440px;
-  margin: 0 auto;
 }
 
 .side-navbar-actions ul li {
