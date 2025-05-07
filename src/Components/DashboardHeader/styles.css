@@ -1,9 +1,5 @@
 .dashboard-header {
   background-color: white;
-  width: 100%;
-  padding: 10px 28px;
-  margin-left: 200px;
-  padding-right: 200px;
   overflow-x: hidden;
 }
 
@@ -20,7 +16,6 @@
 }
 
 .welcome-section p {
-  margin: 15px 0 0;
   color: #666;
   font-size: 14px;
   margin-left: 5px;
@@ -37,7 +32,6 @@
 .calendar-icon {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
   gap: 8px;
   cursor: pointer;
 }
@@ -54,11 +48,13 @@
   cursor: pointer;
 }
 
-.profile-icon, .mobile-profile-icon {
+.profile-icon,
+.mobile-profile-icon {
   cursor: pointer;
 }
 
-.profile-icon img, .mobile-profile-icon img {
+.profile-icon img,
+.mobile-profile-icon img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -97,91 +93,83 @@
   display: inline-block;
 }
 
-
+/* Tablet */
 @media (max-width: 1024px) {
-  .dashboard-header {
-    margin-left: 100px;
-    padding-right: 100px;
-  }
-  
   .header-top {
     padding: 10px 15px;
   }
-  
+
   .welcome-section h1 {
     font-size: 22px;
   }
-  
+
   .welcome-section p {
     margin-top: 10px;
     font-size: 13px;
   }
-  
+
   .calendar-icon p {
     font-size: 13px;
   }
 }
 
+/* Small tablets & large phones */
 @media (max-width: 768px) {
   .dashboard-header {
     margin-left: 0;
-    padding: 10px 15px;
   }
-  
+
   .header-top {
     padding: 8px 10px;
   }
-  
+
   .welcome-section h1 {
     font-size: 20px;
   }
-  
+
   .welcome-section p {
     font-size: 12px;
   }
-  
+
   .header-actions {
     gap: 10px;
   }
-  
+
   .calendar-icon p {
-    display: none; 
+    display: none;
   }
-  
-  .profile-icon img, .mobile-profile-icon img {
+
+  .profile-icon img,
+  .mobile-profile-icon img {
     width: 35px;
     height: 35px;
   }
 }
 
-@media (max-width: 425px) {
-  .dashboard-header {
-    padding: 5px 10px;
-  }
-  
+/* Phones */
+@media (max-width: 430px) {
   .header-top {
     padding: 5px;
   }
-  
+
   .welcome-section h1 {
     font-size: 18px;
   }
-  
+
   .welcome-section p {
-    margin-top: 5px;
     font-size: 11px;
   }
-  
+
   .header-actions {
     margin-top: 10px;
     gap: 8px;
   }
-  
+
   .notification {
     width: 20px;
     height: 20px;
   }
-  
+
   .mobile-profile-icon img {
     width: 30px;
     height: 30px;

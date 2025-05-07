@@ -1,0 +1,45 @@
+import { useState } from "react";
+import "./styles.css";
+import { help_circle, password } from "../../assets";
+import { FaEye } from "react-icons/fa";
+
+const BalanceOverview = () => {
+  const [hideBalance, setHideBalance] = useState(false);
+
+  return (
+    <div>
+      <div className="total-balance">
+        <div>
+          <p>Total Balance</p>
+          <img src={help_circle} alt="" />
+        </div>
+        <div>
+          <h2>
+            ₦
+            {hideBalance ? (
+              "******"
+            ) : (
+              <>
+                152,000.<span className="decimal">00</span>
+              </>
+            )}
+          </h2>
+          {hideBalance ? (
+            <FaEye
+              className="size-8 cursor-pointer"
+              onClick={() => setHideBalance(!hideBalance)}
+            />
+          ) : (
+            <img
+              src={password}
+              onClick={() => setHideBalance(!hideBalance)}
+              alt=""
+            />
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BalanceOverview;

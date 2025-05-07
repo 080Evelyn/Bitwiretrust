@@ -1,10 +1,7 @@
-.home-dashboard {
+.dashboard {
   font-family: "Raleway", sans-serif;
-  /* max-width: 1250px; */
   margin: 0 auto;
   background-color: #fdfbfc;
-  width: 100%;
-  margin-left: 100px;
 }
 
 .total-balance {
@@ -20,8 +17,7 @@
   padding: 20px 30px;
   color: #fff;
   width: 100%;
-  max-width: 1090px;
-  height: 120px;
+  height: 130px;
   margin: 0 auto;
   margin-bottom: 20px;
   position: relative;
@@ -72,7 +68,6 @@
   display: flex;
   gap: 20px;
   width: 100%;
-  max-width: 1090px;
   margin: 0 auto;
 }
 
@@ -189,8 +184,7 @@
   padding-bottom: 10px;
   margin-bottom: 10px;
 }
-
-.rates-table-row {
+-row {
   display: flex;
   align-items: center;
   padding: 8px 0;
@@ -212,7 +206,7 @@
   height: 15px;
 }
 
-.rates-details {
+.custom {
   display: flex;
   align-items: center;
   width: 100%;
@@ -256,7 +250,7 @@
   border-radius: 15px;
   font-weight: 600;
   color: #4a148c;
-  font-size: 13px;
+  font-size: 12px;
   cursor: pointer;
 }
 
@@ -364,39 +358,39 @@
 }
 
 @media (max-width: 1024px) {
-  .home-dashboard {
-    margin-left: 100px;
+  .dashboard {
     padding: 10px;
+    padding-left: 16px;
   }
-  
+
   .total-balance {
-    max-width: 100%;
     height: auto;
     padding: 15px 20px;
   }
-  
+
   .total-balance h2 {
     font-size: 32px;
   }
-  
+
   .total-balance h2 .decimal {
     font-size: 20px;
   }
-  
+
   .rate-container {
     max-width: 100%;
     gap: 15px;
   }
-  
-  .rate-container-left, .rate-container-right {
+
+  .rate-container-left,
+  .rate-container-right {
     width: 100%;
   }
-  
+
   .action-buttons {
     justify-content: space-between;
     gap: 10px;
   }
-  
+
   .action-button {
     margin-right: 0;
     width: 23%;
@@ -405,15 +399,16 @@
 }
 
 @media (max-width: 768px) {
-  .home-dashboard {
+  .dashboard {
     margin-left: 0px;
-    padding: 10px;
-}
+    padding-left: 10px;
+    padding-right: 25px;
+  }
 
   .total-balance h2 {
     font-size: 28px;
   }
-  
+
   .total-balance h2 .decimal {
     font-size: 18px;
   }
@@ -423,119 +418,122 @@
     flex-direction: column;
     gap: 15px;
   }
-  
+
   .action-buttons {
     flex-wrap: wrap;
     gap: 15px;
   }
-  
+
   .action-button {
     width: calc(25% - 12px);
     height: 65px;
     margin-right: 0;
   }
-  
-  .quick-action, .gift-cards-rates {
+
+  .quick-action,
+  .gift-cards-rates {
     gap: 10px;
   }
-  
-  .quick-action > div, .rates-section {
+
+  .quick-action > div,
+  .rates-section {
     width: 100%;
   }
-  
+
   .all-view {
     overflow-x: auto;
-    padding: 8px;
+    padding: 4px 8px;
+    gap: 6px;
   }
-  
+
   .tab-item {
     margin-left: 10px;
     white-space: nowrap;
   }
 }
 
-@media screen and (max-width: 425px) {
-  .home-dashboard {
+@media screen and (max-width: 430px) {
+  .dashboard {
     padding: 0 10px;
   }
-  
+
   .total-balance {
     padding: 15px;
     height: auto;
     border-radius: 12px;
   }
-  
+
   .total-balance > div:first-child {
     font-size: 12px;
   }
-  
+
   .total-balance h2 {
     font-size: 24px;
   }
-  
+
   .total-balance h2 .decimal {
     font-size: 16px;
   }
-  
+
   .action-buttons {
     justify-content: space-between;
     gap: 10px;
   }
-  
+
   .action-button {
     width: 22%;
     height: 60px;
     padding: 5px;
     border-radius: 8px;
   }
-  
+
   .action-button img {
     width: 18px;
     height: 18px;
     margin-bottom: 3px;
   }
-  
+
   .action-button span {
     font-size: 10px;
   }
-  
+
   .quick-action-header {
     font-size: 12px;
   }
-  
+
   .quick-action-content {
     height: auto;
     padding: 8px 12px;
   }
-  
+
   .quick-action-content p {
     font-size: 12px;
   }
-  
-  .rates-table-row {
+
+  -row {
     padding: 6px 0;
   }
-  
-  .rates-name, .rates-values span {
+
+  .rates-name,
+  .rates-values span {
     font-size: 11px;
   }
-  
+
   .transaction-item {
     padding: 8px 5px;
   }
-  
+
   .transaction-icon-wrapper {
     width: 30px;
     height: 30px;
   }
-  
+
   .transaction-title {
     font-size: 12px;
   }
-  
+
   .transaction-subtitle {
     font-size: 10px;
     max-width: 200px;
   }
 }
-
