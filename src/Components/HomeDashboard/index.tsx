@@ -95,7 +95,7 @@ const HomeDashboard = (_props: Props) => {
   );
 
   return (
-    <div className="dashboard lg:ps-4  md:pe-6 w-full lg:w-[calc(100dvw-var(--sidebar-width))]">
+    <>
       <BalanceOverview />
 
       <div className="rate-container overflow-x-auto">
@@ -250,7 +250,7 @@ const HomeDashboard = (_props: Props) => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
