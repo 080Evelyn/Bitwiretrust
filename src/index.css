@@ -133,3 +133,9 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#7910B1] cursor-pointer hover:bg-[#7910B1]/90 text-white border-[#7910B1] px-4 py-2.5 rounded-[4.75px] text-sm font-medium border transition-colors;
+  }
+}

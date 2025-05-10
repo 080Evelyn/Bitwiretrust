@@ -1,6 +1,5 @@
 .dashboard {
   font-family: "Raleway", sans-serif;
-  margin: 0 auto;
   background-color: #fdfbfc;
 }
 
@@ -358,10 +357,10 @@
 }
 
 @media (max-width: 1024px) {
-  .dashboard {
+  /* .dashboard {
     padding: 10px;
     padding-left: 16px;
-  }
+  } */
 
   .total-balance {
     height: auto;
@@ -399,11 +398,11 @@
 }
 
 @media (max-width: 768px) {
-  .dashboard {
+  /* .dashboard {
     margin-left: 0px;
     padding-left: 10px;
     padding-right: 25px;
-  }
+  } */
 
   .total-balance h2 {
     font-size: 28px;
@@ -453,9 +452,9 @@
 }
 
 @media screen and (max-width: 430px) {
-  .dashboard {
+  /* .dashboard {
     padding: 0 10px;
-  }
+  } */
 
   .total-balance {
     padding: 15px;
