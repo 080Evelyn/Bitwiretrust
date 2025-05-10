@@ -183,7 +183,7 @@ export const navLinks = [
   {
     to: "/virtual-topups",
     icon: arrow_data,
-    text: "VirtualTopUps",
+    text: "Virtual Top Ups",
   },
   {
     icon: gift_card_svg,

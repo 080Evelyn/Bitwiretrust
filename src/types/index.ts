@@ -109,3 +109,5 @@ export interface ContactErrors {
   phone?: string;
   message?: string;
 }
+
+export type NetworkProviderKey = "mtn" | "airtel" | "nineMobile" | "glo";

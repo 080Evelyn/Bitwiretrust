@@ -9,21 +9,12 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { billers } from "@/constants/billers-option";
+import useAmount from "@/hooks/amountUpdate";
 
 const Betting = () => {
-  const [amount, setAmount] = useState<number | null>(null);
+  const { amount, setAmount, handleAmountChange } = useAmount();
   const [selectedBiller, setSelectedBiller] = useState(billers[2]);
   const amounts: number[] = [50, 100, 200, 500, 1000];
-
-  function AmountUpdate(event: React.ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
-    const num = parseInt(val, 10);
-    if (!isNaN(num)) {
-      setAmount(num);
-    } else if (val === "") {
-      setAmount(null);
-    }
-  }
 
   return (
     <div className="flex flex-col gap-3">
@@ -86,7 +77,7 @@ const Betting = () => {
         type="tel"
         placeholder="Enter Amount"
         value={amount !== null ? amount : ""}
-        onChange={(event) => AmountUpdate(event)}
+        onChange={(event) => handleAmountChange(event)}
       />
 
       <div className="flex justify-between">

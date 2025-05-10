@@ -75,8 +75,16 @@ import change_password from "./lock.svg";
 import notification_bell from "./mdi_notifications.svg";
 import transaction_pin from "./password-check.svg";
 import term_condition from "./solar_document-bold.svg";
+import Glo from "./Glo.svg";
+import NineMobile from "./9Mobile.svg";
+import Mtn from "./Mtn.svg";
+import Airtel from "./Airtel.svg";
 
 export {
+  Glo,
+  NineMobile,
+  Mtn,
+  Airtel,
   best_rate,
   primaryPhone,
   secondaryPhone,
