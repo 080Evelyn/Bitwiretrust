@@ -10,9 +10,18 @@ import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { useState } from "react";
 import { billers } from "@/constants/billers-option";
+import { usePinModal } from "@/context/PinModalContext";
 
 const MediaSubscriptions = () => {
   const [selectedBiller, setSelectedBiller] = useState(billers[1]);
+  const { openPinModal } = usePinModal();
+
+  const handleSubmit = () => {
+    openPinModal((pin) => {
+      console.log("PIN entered:", pin);
+      // we call the api here
+    });
+  };
   function changeValue(value: string) {
     const found = billers.find((b) => b.id === value);
     if (found) setSelectedBiller(found);
@@ -76,7 +85,9 @@ const MediaSubscriptions = () => {
         />
       </div>
 
-      <button className="btn-primary w-full">Pay Bill</button>
+      <button className="btn-primary w-full" onClick={handleSubmit}>
+        Pay Bill
+      </button>
     </div>
   );
 };

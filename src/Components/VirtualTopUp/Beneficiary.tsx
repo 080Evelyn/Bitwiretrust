@@ -23,8 +23,8 @@ const Beneficiary = () => {
         Beneficiary
       </div>
 
-      {beneficiaries.length > 0 && (
-        <div className="flex flex-col gap-2.5 card-container rounded-md p-3 md:p-4 h-full max-h-[125px] md:max-h-[312px] overflow-y-auto">
+      {beneficiaries.length > 0 ? (
+        <div className="flex flex-col gap-2.5 card-container rounded-md p-3 md:p-4 h-full max-h-[125px] md:max-h-[314px] overflow-y-auto">
           {beneficiaries.map((number) => (
             <div
               key={number}
@@ -38,6 +38,10 @@ const Beneficiary = () => {
               {number}
             </div>
           ))}
+        </div>
+      ) : (
+        <div className="text-xs md:text-lg gap-2.5 card-container rounded-md p-3 md:p-4 md:h-full md:max-h-[314px]">
+          No Beneficiary
         </div>
       )}
     </div>

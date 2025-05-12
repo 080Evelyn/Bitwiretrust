@@ -79,8 +79,10 @@ import Glo from "./Glo.svg";
 import NineMobile from "./9Mobile.svg";
 import Mtn from "./Mtn.svg";
 import Airtel from "./Airtel.svg";
+import Padlock from "./padlock.svg";
 
 export {
+  Padlock,
   Glo,
   NineMobile,
   Mtn,

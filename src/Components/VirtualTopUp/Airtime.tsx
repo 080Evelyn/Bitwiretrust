@@ -11,6 +11,7 @@ import { Checkbox } from "../ui/checkbox";
 import useAmount from "@/hooks/amountUpdate";
 import { networkProviders } from "@/constants/billers-option";
 import { usePhoneNumber } from "./PhoneNumber-context";
+import { usePinModal } from "@/context/PinModalContext";
 
 const Airtime = () => {
   const { amount, setAmount, handleAmountChange } = useAmount();
@@ -18,13 +19,21 @@ const Airtime = () => {
   const amounts: number[] = [50, 100, 200, 500, 1000];
   const { beneficiaryNumber } = usePhoneNumber();
   const [phoneNumber, setPhoneNumber] = useState("");
+  const { openPinModal } = usePinModal();
+
+  const handleSubmit = () => {
+    openPinModal((pin) => {
+      console.log("PIN entered:", pin);
+      // we call the api here
+    });
+  };
 
   useEffect(() => {
     setPhoneNumber(beneficiaryNumber);
   }, [beneficiaryNumber]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3">
       <div className="text-center hidden md:block card-container rounded-[4px] py-1.75">
         Airtime
       </div>
@@ -48,18 +57,24 @@ const Airtime = () => {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {networkProviders.map((provider) => (
-                <SelectItem key={provider.id} value={provider.id}>
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={provider.image}
-                      alt={provider.name}
-                      className="size-7 rounded-[3px]"
-                    />
-                    <span>{provider.name}</span>
-                  </div>
-                </SelectItem>
-              ))}
+              <div className="flex flex-col gap-2 mt-1">
+                {networkProviders.map((provider) => (
+                  <SelectItem
+                    key={provider.id}
+                    value={provider.id}
+                    className="w-full rounded-sm bg-[#E9A9FF] text-white"
+                  >
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={provider.image}
+                        alt={provider.name}
+                        className="size-7 rounded-[3px]"
+                      />
+                      <span>{provider.name}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </div>
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -74,8 +89,8 @@ const Airtime = () => {
                 onClick={() => setAmount(a)}
                 className={`w-1/2 size-11.25 cursor-pointer rounded-[4.75px] border text-sm font-medium transition-colors ${
                   isSelected
-                    ? "bg-[#7910B1] text-white border-[#7910B1]"
-                    : "bg-[#F9EDFF] text-[#000000]/45 border-[#F9EDFF]"
+                    ? "bg-[#28003E] text-white"
+                    : "bg-[#F9EDFF] text-black/45 border-[#F9EDFF]"
                 }`}
               >
                 {a}
@@ -110,7 +125,9 @@ const Airtime = () => {
           />
         </div>
 
-        <button className="btn-primary w-full">Buy Now</button>
+        <button className="btn-primary w-full" onClick={handleSubmit}>
+          Buy Now
+        </button>
       </div>
     </div>
   );

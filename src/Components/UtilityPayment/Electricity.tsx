@@ -9,10 +9,19 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { billers } from "@/constants/billers-option";
+import { usePinModal } from "@/context/PinModalContext";
 
 const Electricity = () => {
-  const [selected, setSelected] = useState<"prepaid" | "postpaid">("prepaid");
+  const [selected, setSelected] = useState<"Prepaid" | "Postpaid">("Prepaid");
   const [selectedBiller, setSelectedBiller] = useState(billers[0]);
+  const { openPinModal } = usePinModal();
+
+  const handleSubmit = () => {
+    openPinModal((pin) => {
+      console.log("PIN entered:", pin);
+      // we call the api here
+    });
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -51,11 +60,11 @@ const Electricity = () => {
       </Select>
 
       <div className="flex w-full gap-2">
-        {["prepaid", "postpaid"].map((type) => (
+        {["Prepaid", "Postpaid"].map((type) => (
           <button
             key={type}
             type="button"
-            onClick={() => setSelected(type as "prepaid" | "postpaid")}
+            onClick={() => setSelected(type as "Prepaid" | "Postpaid")}
             className={`cursor-pointer px-4 h-11.25 w-1/2 rounded-[4.75px] text-sm font-medium border transition-colors ${
               selected === type
                 ? "bg-[#7910B1] text-white border-[#7910B1]"
@@ -79,7 +88,9 @@ const Electricity = () => {
         />
       </div>
 
-      <button className="btn-primary w-full">Pay Now</button>
+      <button className="btn-primary w-full" onClick={handleSubmit}>
+        Pay Now
+      </button>
     </div>
   );
 };

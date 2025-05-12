@@ -12,10 +12,19 @@ import { useEffect, useState } from "react";
 import { dataPlans, networkProviders } from "@/constants/billers-option";
 import { NetworkProviderKey } from "@/types";
 import { usePhoneNumber } from "./PhoneNumber-context";
+import { usePinModal } from "@/context/PinModalContext";
 
 const Data = () => {
   const { beneficiaryNumber } = usePhoneNumber();
   const [phoneNumber, setPhoneNumber] = useState("");
+  const { openPinModal } = usePinModal();
+
+  const handleSubmit = () => {
+    openPinModal((pin) => {
+      console.log("PIN entered:", pin);
+      // we call the api here
+    });
+  };
 
   useEffect(() => {
     setPhoneNumber(beneficiaryNumber);
@@ -64,18 +73,24 @@ const Data = () => {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {networkProviders.map((provider) => (
-                <SelectItem key={provider.id} value={provider.id}>
-                  <div className="flex items-center gap-2 rounded-[3px]">
-                    <img
-                      src={provider.image}
-                      alt={provider.name}
-                      className="size-7"
-                    />
-                    <span>{provider.name}</span>
-                  </div>
-                </SelectItem>
-              ))}
+              <div className="flex flex-col gap-2 mt-1">
+                {networkProviders.map((provider) => (
+                  <SelectItem
+                    key={provider.id}
+                    value={provider.id}
+                    className="w-full rounded-sm bg-[#E9A9FF] text-white"
+                  >
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={provider.image}
+                        alt={provider.name}
+                        className="size-7 rounded-[3px]"
+                      />
+                      <span>{provider.name}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </div>
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -134,7 +149,9 @@ const Data = () => {
           />
         </div>
 
-        <button className="btn-primary w-full">Pay Now</button>
+        <button className="btn-primary w-full" onClick={handleSubmit}>
+          Pay Now
+        </button>
       </div>
     </div>
   );

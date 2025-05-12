@@ -142,3 +142,28 @@ body {
     @apply shadow-sm border border-[#f1f1f1] bg-white w-full;
   }
 }
+
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
