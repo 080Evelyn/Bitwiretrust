@@ -9,21 +9,21 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { billers } from "@/constants/billers-option";
+import useAmount from "@/hooks/amountUpdate";
+import { usePinModal } from "@/context/PinModalContext";
 
 const Betting = () => {
-  const [amount, setAmount] = useState<number | null>(null);
+  const { amount, setAmount, handleAmountChange } = useAmount();
   const [selectedBiller, setSelectedBiller] = useState(billers[2]);
   const amounts: number[] = [50, 100, 200, 500, 1000];
+  const { openPinModal } = usePinModal();
 
-  function AmountUpdate(event: React.ChangeEvent<HTMLInputElement>) {
-    const val = event.target.value;
-    const num = parseInt(val, 10);
-    if (!isNaN(num)) {
-      setAmount(num);
-    } else if (val === "") {
-      setAmount(null);
-    }
-  }
+  const handleSubmit = () => {
+    openPinModal((pin) => {
+      console.log("PIN entered:", pin);
+      // we call the api here
+    });
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -71,7 +71,7 @@ const Betting = () => {
               onClick={() => setAmount(a)}
               className={`w-1/2 size-11.25 cursor-pointer rounded-[4.75px] border text-sm font-medium transition-colors ${
                 isSelected
-                  ? "bg-[#7910B1] text-white border-[#7910B1]"
+                  ? "bg-[#28003E] text-white "
                   : "bg-[#F9EDFF] text-[#000000]/45 border-[#F9EDFF]"
               }`}
             >
@@ -86,7 +86,7 @@ const Betting = () => {
         type="tel"
         placeholder="Enter Amount"
         value={amount !== null ? amount : ""}
-        onChange={(event) => AmountUpdate(event)}
+        onChange={(event) => handleAmountChange(event)}
       />
 
       <div className="flex justify-between">
@@ -99,7 +99,9 @@ const Betting = () => {
         />
       </div>
 
-      <button className="btn-primary w-full">Pay Bill</button>
+      <button className="btn-primary w-full" onClick={handleSubmit}>
+        Pay Bill
+      </button>
     </div>
   );
 };
