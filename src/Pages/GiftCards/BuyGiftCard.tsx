@@ -1,7 +1,9 @@
+import BalanceOverview from "@/Components/HomeDashboard/BalanceOverview";
+
 const BuyGiftCard = () => {
   return (
     <div>
-      <div className="flex">buy gift card page</div>
+      <BalanceOverview pathName="Trade Gift Cards" />
     </div>
   );
 };

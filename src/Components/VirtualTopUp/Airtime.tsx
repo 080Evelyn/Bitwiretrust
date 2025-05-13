@@ -34,7 +34,7 @@ const Airtime = () => {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="text-center hidden md:block card-container rounded-[4px] py-1.75">
+      <div className="text-center font-medium hidden md:block card-container rounded-[4px] py-1.75">
         Airtime
       </div>
 
