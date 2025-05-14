@@ -6,9 +6,10 @@ import { Input } from "../ui/input";
 
 type SelectGiftCardsProps = {
   onSelect: (card: (typeof giftCards)[0]) => void;
+  title: string;
 };
 
-const SelectGiftCards = ({ onSelect }: SelectGiftCardsProps) => {
+const SelectGiftCards = ({ onSelect, title }: SelectGiftCardsProps) => {
   const [selectedCard, setSelectedCard] = useState<string>("");
 
   const handleSelect = (card: (typeof giftCards)[0]) => {
@@ -22,7 +23,7 @@ const SelectGiftCards = ({ onSelect }: SelectGiftCardsProps) => {
         Select Card
       </div>
       <div className="md:hidden absolute top-3 left-1/2 transform -translate-x-1/2 pt-6.5 flex font-semibold ">
-        Sell Gift Card
+        {title}
       </div>
 
       <div className="flex flex-col gap-2 desktop-card-container rounded-md p-2 lg:max-h-74">
@@ -42,7 +43,7 @@ const SelectGiftCards = ({ onSelect }: SelectGiftCardsProps) => {
             <div
               key={card.image}
               onClick={() => handleSelect(card)}
-              className={`flex font-medium justify-between py-3 px-1 md:px-2.5 rounded-sm cursor-pointer ${
+              className={`flex font-medium justify-between py-4 md:py-3 px-1 md:px-2.5 rounded-sm cursor-pointer ${
                 selectedCard === card.tittle
                   ? "bg-[#28003E] text-white"
                   : "bg-[#FCF6FF] "

@@ -23,8 +23,8 @@ const SellGiftCards = () => {
       </div>
 
       {/* Desktop View */}
-      <div className="hidden md:grid grid-cols-3 gap-5 w-full">
-        <SelectGiftCards onSelect={setSelectedCard} />
+      <div className="hidden md:grid grid-cols-3 gap-3 w-full">
+        <SelectGiftCards title="Sell Gift Card" onSelect={setSelectedCard} />
         <GiftCardDetails
           selectedCard={selectedCard}
           amount={amount}
@@ -45,6 +45,7 @@ const SellGiftCards = () => {
             </button>
 
             <SelectGiftCards
+              title="Sell Gift Card"
               onSelect={(card) => {
                 setSelectedCard(card);
                 setMobileStep(2);

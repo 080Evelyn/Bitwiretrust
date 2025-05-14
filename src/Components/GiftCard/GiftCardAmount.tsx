@@ -70,7 +70,7 @@ const GiftCardAmount = ({ selectedCard, amount }: GiftCardAmountProps) => {
             />
           </div>
         </div>
-        <div className="flex flex-col py-1 gap-[3px] bg-[#FCF6FF] items-center justify-center rounded-md font-medium text-[11px]">
+        <div className="flex flex-col py-2.5 md:py-1 shadow-xs gap-[3px] bg-[#FCF6FF] items-center justify-center rounded-2xl font-medium text-sm md:text-[11px]">
           <span className="tracking-[-0.13px]"> You will recieve</span>
           <h2 className="text-xl text-[#7910B1] font-semibold">
             ₦{totalAmount}
