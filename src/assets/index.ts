@@ -85,7 +85,7 @@ import Netflix from "./Netflix.svg";
 import Playstore from "./playstore.png";
 import Playstation from "./PlayStation.svg";
 import Dominos from "./Dominos.svg";
-import DoorDash from "./Doordash.svg";
+import DoorDash from "./DoorDash.svg";
 import Addidas from "./Addidas.svg";
 import GroceryBazaar from "./grocery-bazaar.svg";
 import Amazon from "./Amazon.svg";
