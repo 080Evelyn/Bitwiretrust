@@ -29,7 +29,7 @@ const Currency = ({ onProceed }: CurrencyProps) => {
               className="rounded-[9.5px] px-4 py-5.5 text-sm md:text-[11px] font-medium text-[#7910B1] shadow-xs border border-[#7910B1] md:border-[#f1f1f1] flex justify-between cursor-pointer"
             >
               {currency.country}
-              <Checkbox className="border-[#7910B1]" />
+              <Checkbox />
             </div>
           ))}
         </div>

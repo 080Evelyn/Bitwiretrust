@@ -18,12 +18,14 @@ const BuyGiftCard = () => {
         <BalanceOverview pathName="Trade Gift Cards" />
       </div>
 
+      {/* Desktop View */}
       <div className="hidden md:grid grid-cols-3 gap-3 w-full">
         <Currency />
         <SelectGiftCards title="Buy Gift Card" onSelect={setSelectedCard} />
         <GiftCardBuyAmount amount={null} selectedCard={selectedCard} />
       </div>
 
+      {/* Mobile View */}
       <div className="md:hidden">
         {mobileStep === 1 && (
           <>
