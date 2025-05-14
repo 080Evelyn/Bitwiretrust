@@ -80,9 +80,31 @@ import NineMobile from "./9Mobile.svg";
 import Mtn from "./Mtn.svg";
 import Airtel from "./Airtel.svg";
 import Padlock from "./padlock.svg";
+import SearchIcon from "./search-icon.svg";
+import Netflix from "./Netflix.svg";
+import Playstore from "./playstore.png";
+import Playstation from "./PlayStation.svg";
+import Dominos from "./Dominos.svg";
+import DoorDash from "./DoorDash.svg";
+import Addidas from "./Addidas.svg";
+import GroceryBazaar from "./grocery-bazaar.svg";
+import Amazon from "./Amazon.svg";
+import Fortnite from "./fortnite.svg";
+import Gallery from "./gallery.svg";
 
 export {
+  Gallery,
+  Amazon,
+  Fortnite,
+  Netflix,
+  Playstore,
+  Playstation,
+  Dominos,
+  DoorDash,
+  Addidas,
+  GroceryBazaar,
   Padlock,
+  SearchIcon,
   Glo,
   NineMobile,
   Mtn,

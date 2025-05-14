@@ -27,54 +27,62 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
       <div className="side-navbar-links">
         <ul>
           {navLinks.map((link) => {
+            const isActive = location.pathname === link.to;
+
             const isSubLinkActive = link.subLinks?.some(
               (sub) => location.pathname === sub.to
             );
 
             return (
               <li
-                key={link.to}
+                key={link.to || link.text}
                 className={`${
-                  location.pathname === link.to || isSubLinkActive
-                    ? "active font-semibold text-xs"
+                  isActive || isSubLinkActive
+                    ? "active font-semibold text-[11px]"
                     : "text-[0.625rem]"
                 }`}
               >
                 {link.subLinks ? (
                   <div className="flex flex-col">
                     <div
-                      className="flex items-center gap-2 px-4 lg:px-5 py-2 cursor-pointer"
-                      onClick={() => handleDropdownToggle(link.to)}
+                      className={`nav-parent-header flex items-center gap-2 px-4 lg:px-5 py-2 cursor-pointer relative ${
+                        isActive || isSubLinkActive ? "active" : ""
+                      }`}
+                      onClick={() => handleDropdownToggle(link.text)}
                     >
                       <img
                         src={link.icon}
                         alt="icon"
                         className="side-navbar-icon"
                       />
-                      {link.text}
+                      <span>{link.text}</span>{" "}
                       <ChevronRight
                         className={`ml-auto size-4 transition-transform ${
-                          openDropdown === link.to ? "rotate-90" : ""
+                          openDropdown === link.text ? "rotate-90" : ""
                         }`}
                       />
                     </div>
 
-                    {openDropdown === link.to && (
+                    {openDropdown === link.text && (
                       <ul className="pl-4">
-                        {link.subLinks.map((subLink) => (
-                          <li
-                            key={subLink.to}
-                            className={`${
-                              location.pathname === subLink.to
-                                ? "font-semibold text-xs"
-                                : "text-[0.625rem]"
-                            }`}
-                          >
-                            <Link to={subLink.to} onClick={onClick}>
-                              {subLink.text}
-                            </Link>
-                          </li>
-                        ))}
+                        {link.subLinks.map((subLink) => {
+                          const isThisSubLinkActive =
+                            location.pathname === subLink.to;
+
+                          return (
+                            <li key={subLink.to}>
+                              <Link
+                                to={subLink.to}
+                                onClick={onClick}
+                                className={`${
+                                  isThisSubLinkActive ? "active" : ""
+                                }`}
+                              >
+                                {subLink.text}
+                              </Link>
+                            </li>
+                          );
+                        })}
                       </ul>
                     )}
                   </div>
@@ -82,7 +90,9 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
                   <Link
                     to={link.to}
                     onClick={onClick}
-                    className="flex items-center"
+                    className={`nav-parent-header flex items-center relative ${
+                      isActive ? "active" : ""
+                    }`}
                   >
                     <img src={link.icon} alt="" className="side-navbar-icon" />
                     {link.text}
@@ -118,6 +128,8 @@ const SideNavbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const closeSidebar = () => setIsOpen(false);
+  const location = useLocation();
+  const isGiftCardSellPage = location.pathname.startsWith("/gift-cards/");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -134,30 +146,59 @@ const SideNavbar = () => {
       </aside>
 
       <div
-        className={`lg:hidden pt-4 fixed top-0 left-0 right-0 z-50 bg-white transition-colors duration-300 ${
-          scrolled ? "shadow-sm" : ""
-        }`}
+        className={`lg:hidden pt-4 fixed top-0 left-0 right-0 z-50 transition-colors duration-300
+    ${scrolled && !isGiftCardSellPage ? "shadow-sm" : ""}
+    ${isGiftCardSellPage ? "bg-transparent" : "bg-white"}`}
       >
-        <div className="flex items-center justify-between px-5 pt-4 pb-3 ">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <img src={full_logo} alt="Bitwire Logo" className="h-6" />
-          </Link>
-          <div className="flex lg:hidden items-center gap-2 cursor-pointer">
-            <img src={calendar_svg} alt="Calendar" />
-            <p className="text-xs sm:text-sm">{currentDate}</p>
-          </div>
+        {isGiftCardSellPage ? (
+          <div className="flex items-center justify-between px-5 pt-4 pb-3 relative">
+            <Link to="/dashboard" className="hidden items-center gap-2">
+              <img src={full_logo} alt="Bitwire Logo" className="h-6" />
+            </Link>
+            <div className=" hidden items-center gap-2 cursor-pointer">
+              <img src={calendar_svg} alt="Calendar" />
+              <p className="text-xs sm:text-sm">{currentDate}</p>
+            </div>
 
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild>
-              <button>
-                <Menu className="text-[#7910B1] h-6 w-6" />
-              </button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-50 sm:w-45 p-0 text-white">
-              <SidebarContent onClick={closeSidebar} />
-            </SheetContent>
-          </Sheet>
-        </div>
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <button className="cursor-pointer">
+                  <Menu className="text-[#7910B1] absolute right-5 h-6 w-6" />
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="w-50 sm:w-45 p-0 text-white"
+              >
+                <SidebarContent onClick={closeSidebar} />
+              </SheetContent>
+            </Sheet>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between px-5 pt-4 pb-3 relative">
+            <Link to="/dashboard" className="flex items-center gap-2">
+              <img src={full_logo} alt="Bitwire Logo" className="h-6" />
+            </Link>
+            <div className="flex lg:hidden items-center gap-2 cursor-pointer">
+              <img src={calendar_svg} alt="Calendar" />
+              <p className="text-xs sm:text-sm">{currentDate}</p>
+            </div>
+
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <button className="">
+                  <Menu className="text-[#7910B1] h-6 w-6" />
+                </button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="w-50 sm:w-45 p-0 text-white"
+              >
+                <SidebarContent onClick={closeSidebar} />
+              </SheetContent>
+            </Sheet>
+          </div>
+        )}
       </div>
     </div>
   );

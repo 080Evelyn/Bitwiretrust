@@ -33,6 +33,10 @@ const PinModal = ({ isOpen, onClose, onConfirm }: PinModalProps) => {
 
   const handleFocus = (index: number) => {
     setActiveIndex(index);
+    inputsRef.current[index]?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
   };
 
   const handleKeyDown = (
@@ -51,7 +55,7 @@ const PinModal = ({ isOpen, onClose, onConfirm }: PinModalProps) => {
     const enteredPin = pin.join("");
 
     if (enteredPin.length < 4) {
-      setError("This field cannot be empty or incomplete.");
+      setError("This field cannot be incomplete.");
       triggerShake();
       return;
     }
@@ -79,7 +83,7 @@ const PinModal = ({ isOpen, onClose, onConfirm }: PinModalProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="w-[95dvw] md:w-[440px] xl:max-w-md rounded-2xl p-6 space-y-5">
+      <DialogContent className="w-[95dvw] md:w-[440px] xl:max-w-md rounded-2xl p-4 md:p-6 space-y-5 relative md:fixed bottom-0 md:bottom-auto overflow-y-auto h-auto max-h-[90dvh]">
         <DialogHeader>
           <DialogTitle className="text-center font-semibold">
             Confirm Pin

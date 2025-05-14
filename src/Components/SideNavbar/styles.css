@@ -60,7 +60,7 @@
   list-style-type: none;
 }
 
-.side-navbar-links li.active a::before {
+.nav-parent-header.active::before {
   content: "";
   position: absolute;
   left: 0;
@@ -70,6 +70,15 @@
   height: 30px;
   background-color: #fff;
   border-radius: 0 4px 4px 0;
+}
+
+.side-navbar-links ul ul a {
+  font-size: 0.625rem;
+  font-weight: normal;
+}
+
+.side-navbar-links ul ul a.active {
+  font-weight: bold;
 }
 
 .side-navbar-links a:hover,
