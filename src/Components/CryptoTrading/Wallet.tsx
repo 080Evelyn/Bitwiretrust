@@ -1,0 +1,107 @@
+import hexToRgba from "@/lib/hexToRgba";
+import { Coin } from "@/types";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
+import { actions } from "@/constants/coins";
+
+interface WalletProps {
+  coin: Coin | null;
+}
+
+const Wallet = ({ coin }: WalletProps) => {
+  const [selectedAction, setSelectedAction] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleActionClick = (actionTitle: string) => {
+    setSelectedAction(actionTitle);
+    setIsDialogOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedAction(null);
+    setIsDialogOpen(false);
+  };
+
+  const renderDialogContent = () => {
+    switch (selectedAction) {
+      case "Buy":
+        return (
+          <div>
+            <span>Buy Crypto Content Here</span>
+            <div className="btn-primary" onClick={closeModal}>
+              Buy Now
+            </div>
+          </div>
+        );
+      case "Send":
+        return <div>Send Crypto Content Here</div>;
+      case "Deposit":
+        return <div>Deposit Crypto Content Here</div>;
+      case "Swap":
+        return <div>Swap Crypto Content Here</div>;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="text-center font-medium hidden md:block desktop-card-container rounded-[4px] py-1.75">
+        Wallet
+      </div>
+
+      <div
+        className="flex flex-col items-center text-white gap-4 rounded-md px-3 py-7.5"
+        style={{ backgroundColor: coin?.bgColor }}
+      >
+        {coin ? (
+          <>
+            <h3 className="font-semibold text-[15px]">{coin.symbol} Wallet</h3>
+            <div className="flex flex-col items-center">
+              <span className="text-xs">Balance</span>
+              <h1 className="font-bold text-[1.6rem] tracking-[-0.13px]">
+                N{coin.value}
+              </h1>
+            </div>
+          </>
+        ) : (
+          <h3>No Wallet Selected</h3>
+        )}
+
+        <div className="flex justify-between w-full px-2">
+          {actions.map((action) => (
+            <div
+              key={action.title}
+              className="flex flex-col items-center gap-2 cursor-pointer"
+              onClick={() => handleActionClick(action.title)}
+            >
+              <div
+                className="size-9.75 rounded-[4.5px] drop-shadow-lg flex items-center justify-center"
+                style={{
+                  backgroundColor: coin
+                    ? hexToRgba(coin.bgColor, 0.5)
+                    : undefined,
+                  mixBlendMode: "screen",
+                }}
+              >
+                <img src={action.img} className="size-4.5" alt={action.title} />
+              </div>
+              <span className="text-[10px]">{action.title}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{selectedAction}</DialogTitle>
+          </DialogHeader>
+          {renderDialogContent()}
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default Wallet;

@@ -91,8 +91,26 @@ import GroceryBazaar from "./grocery-bazaar.svg";
 import Amazon from "./Amazon.svg";
 import Fortnite from "./fortnite.svg";
 import Gallery from "./gallery.svg";
+import Bitcoin from "./bitcoin.svg";
+import BUSD from "./busd.svg";
+import BNB from "./bnb.svg";
+import AAVE from "./aave.svg";
+import NairaLogo from "./Naira.svg";
+import depositCrypto from "./received.svg";
+import plusCircle from "./add-circle.svg";
+import sendCrypto from "./exportNew.svg";
+import swapCrypto from "./swap.svg";
 
 export {
+  depositCrypto,
+  plusCircle,
+  sendCrypto,
+  swapCrypto,
+  Bitcoin,
+  BUSD,
+  BNB,
+  AAVE,
+  NairaLogo,
   Gallery,
   Amazon,
   Fortnite,
