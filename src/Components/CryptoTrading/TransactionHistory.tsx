@@ -28,13 +28,15 @@ const TransactionHistory = ({ coin }: Transactions) => {
             <img src={SearchIcon} className="absolute size-4 top-3 left-3" />
           </div>
         </div>
-
+        <h3 className="md:hidden font-medium self-start tracking-[-0.17px]">
+          Transaction Hisotry
+        </h3>
         <div className="flex flex-col gap-2 overflow-y-auto">
           {filteredTransactions.length > 0 ? (
             filteredTransactions.map((tx) => (
               <div
                 key={tx.id}
-                className="flex font-medium justify-between py-4 md:py-1.5 px-1 md:px-2.5 bg-[#F8F8F8] rounded-sm cursor-pointer"
+                className="flex font-medium justify-between py-4 md:py-1.5 px-1 md:px-2.5 bg-[#F8F8F8] rounded-sm"
               >
                 <div className="flex gap-2 items-center">
                   <img src={tx.image} alt={tx.type} className="size-8" />
@@ -42,7 +44,7 @@ const TransactionHistory = ({ coin }: Transactions) => {
                     <span className="text-sm font-medium md:text-xs">
                       {tx.type}
                     </span>
-                    <span className="text-[8px] tracking-[-0.13px]">
+                    <span className="text-[10px] md:text-[8px] tracking-[-0.17px] md:tracking-[-0.13px]">
                       {tx.date}
                     </span>
                   </div>

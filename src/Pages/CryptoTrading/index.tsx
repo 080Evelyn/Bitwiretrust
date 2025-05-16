@@ -21,7 +21,7 @@ const CryptoTrading = () => {
   return (
     <div>
       <div className="hidden md:block">
-        <BalanceOverview pathName="Trade Gift Cards" />
+        <BalanceOverview pathName="Trade Crypto" />
       </div>
 
       {/* Desktop View */}

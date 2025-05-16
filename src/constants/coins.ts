@@ -15,7 +15,7 @@ export const coinAssets = [
     name: "Naira",
     image: NairaLogo,
     amount: "",
-    value: "28,000",
+    value: "1",
     symbol: "NGN",
     bgColor: "#0FA301",
   },
@@ -24,7 +24,7 @@ export const coinAssets = [
     name: "Aave",
     image: AAVE,
     amount: "1",
-    value: "54,000",
+    value: "54,400",
     symbol: "AAVE",
     bgColor: "#2EBAC6",
   },
@@ -33,7 +33,7 @@ export const coinAssets = [
     name: "Bitcoin",
     image: Bitcoin,
     amount: "0.00",
-    value: "0.00",
+    value: "600,000",
     symbol: "BTC",
     bgColor: "#F7AE02",
   },
@@ -49,7 +49,6 @@ export const coinAssets = [
 ];
 
 export const coinTransactions = [
-  // Naira Transactions
   {
     id: 1,
     coinId: "1",
@@ -81,7 +80,6 @@ export const coinTransactions = [
     date: "05 May, 2025",
   },
 
-  // Aave Transactions
   {
     id: 4,
     coinId: "2",
@@ -113,7 +111,6 @@ export const coinTransactions = [
     date: "02 May, 2025",
   },
 
-  // Bitcoin Transactions
   {
     id: 7,
     coinId: "3",
@@ -145,7 +142,6 @@ export const coinTransactions = [
     date: "06 May, 2025",
   },
 
-  // BUSD Transactions
   {
     id: 10,
     coinId: "4",

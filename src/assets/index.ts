@@ -100,8 +100,12 @@ import depositCrypto from "./received.svg";
 import plusCircle from "./add-circle.svg";
 import sendCrypto from "./exportNew.svg";
 import swapCrypto from "./swap.svg";
+import QrCode from "./qrcode.svg";
+import DoneIcon from "./Done.svg";
 
 export {
+  DoneIcon,
+  QrCode,
   depositCrypto,
   plusCircle,
   sendCrypto,
