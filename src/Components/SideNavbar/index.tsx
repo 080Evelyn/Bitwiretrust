@@ -129,7 +129,9 @@ const SideNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const closeSidebar = () => setIsOpen(false);
   const location = useLocation();
-  const isGiftCardSellPage = location.pathname.startsWith("/gift-cards/");
+  const isGiftCardSellPage =
+    location.pathname.startsWith("/gift-cards/") ||
+    location.pathname.startsWith("/crypto-trading");
 
   useEffect(() => {
     const handleScroll = () => {

@@ -112,12 +112,27 @@ export interface ContactErrors {
 
 export type NetworkProviderKey = "mtn" | "airtel" | "nineMobile" | "glo";
 
-export type GiftCardDetailsProps = {
+export interface GiftCardDetailsProps {
   amount: number | null;
   setAmount: (value: number | null) => void;
   selectedCard: { tittle: string; image: string; rate: number };
-};
-export type GiftCardAmountProps = {
+}
+export interface GiftCardAmountProps {
   amount: number | null;
   selectedCard: { tittle: string; image: string; rate: number };
-};
+}
+
+export interface Coin {
+  id: string;
+  name: string;
+  image: string;
+  amount: string;
+  value?: string;
+  symbol: string;
+  bgColor: string;
+}
+
+export interface SelectWalletProps {
+  title?: string;
+  onSelect?: (coin: Coin) => void;
+}

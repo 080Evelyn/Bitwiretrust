@@ -10,7 +10,7 @@ const DashboardLayout = () => {
 
       <div className="flex flex-col lg:ml-[var(--sidebar-width)] w-full lg:w-[calc(100vw-var(--sidebar-width))] max-lg:mt-10">
         <DashboardHeader username="John Doe" />
-        <div className="mx-[5vw] bg-[#FEFBFB] sm:mx-[4vw] md:mx-[3vw] lg:mx-4 lg:pe-4">
+        <div className="mx-[4vw] bg-[#FEFBFB]  md:mx-[3vw] lg:mx-4 lg:pe-4">
           <Outlet />
         </div>
       </div>
