@@ -1,5 +1,12 @@
 import Buttons from "../Buttons";
-import { a_vector, circle_arrow, circle_arrow_left, naira, primaryPhone, secondaryPhone } from "../../assets";
+import {
+  a_vector,
+  circle_arrow,
+  circle_arrow_left,
+  naira,
+  primaryPhone,
+  secondaryPhone,
+} from "../../assets";
 import transactionData from "../../constants";
 import Offersection from "../Offersection";
 import "./styles.css";
@@ -30,15 +37,31 @@ const Herosection = (_props: Props) => {
         <div className="hero-header">
           <h1>
             Effortlessly Simplify All Your Personal Finances with{" "}
-            <span>Bitwire</span>
+            <span>Bitwire Trust</span>
           </h1>
           <p>
             The revolutionary app that brings simplicity and convenienceto your
             financial life like never before.
           </p>
           <div className="button-group">
-            <Link to={'/get-started'}><Buttons variant="primary" iconSrc={circle_arrow_left} iconPosition="right">Get Started</Buttons></Link>
-            <Link to={'/about'}><Buttons variant="secondary" iconSrc={circle_arrow} iconPosition="right">Learn More</Buttons></Link>
+            <Link to={"/get-started"}>
+              <Buttons
+                variant="primary"
+                iconSrc={circle_arrow_left}
+                iconPosition="right"
+              >
+                Get Started
+              </Buttons>
+            </Link>
+            <Link to={"/about"}>
+              <Buttons
+                variant="secondary"
+                iconSrc={circle_arrow}
+                iconPosition="right"
+              >
+                Learn More
+              </Buttons>
+            </Link>
           </div>
         </div>
 
@@ -72,12 +95,14 @@ const Herosection = (_props: Props) => {
                     )}
                     <p className="amount">
                       {transaction.status === "successful" ? (
-                        `${transaction.currency
+                        `${
+                          transaction.currency
                         } ${transaction.amount.toLocaleString()}`
                       ) : (
                         <span className="pending-amount">
-                          {`${transaction.amount.toLocaleString()} ${transaction.currency
-                            }`}
+                          {`${transaction.amount.toLocaleString()} ${
+                            transaction.currency
+                          }`}
                         </span>
                       )}
                     </p>
@@ -117,12 +142,14 @@ const Herosection = (_props: Props) => {
                     )}
                     <p className="amount">
                       {transaction.status === "successful" ? (
-                        `${transaction.currency
+                        `${
+                          transaction.currency
                         } ${transaction.amount.toLocaleString()}`
                       ) : (
                         <span className="pending-amount">
-                          {`${transaction.amount.toLocaleString()} ${transaction.currency
-                            }`}
+                          {`${transaction.amount.toLocaleString()} ${
+                            transaction.currency
+                          }`}
                         </span>
                       )}
                     </p>

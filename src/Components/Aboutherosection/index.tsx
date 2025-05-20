@@ -1,6 +1,12 @@
 import "./styles.css";
 import Buttons from "../Buttons";
-import { circle_arrow_left, circular_frame, person_one, person_three, person_two } from "../../assets";
+import {
+  circle_arrow_left,
+  circular_frame,
+  person_one,
+  person_three,
+  person_two,
+} from "../../assets";
 import WhysubSection from "../Whysubsection";
 import Testimonials from "../Testimonials";
 import Faqs from "../Faqs";
@@ -15,7 +21,7 @@ const Aboutherosection = (_props: Props) => {
         <div className="about-hero-left-content">
           <h1>
             Discover a Smarter Way to Manage Your Finances, With{" "}
-            <span>Bitwire</span>
+            <span>Bitwire Trust</span>
           </h1>
           <p>
             Experience the ultimate convenience in managing your digital
@@ -23,25 +29,30 @@ const Aboutherosection = (_props: Props) => {
             solutions designed to streamline your everyday transactions.{" "}
           </p>
           <div className="button-group">
-           <Link to={'/get-started'}> <Buttons
-              variant="primary"
-              iconSrc={circle_arrow_left}
-              iconPosition="right"
-            >
-              Get Started
-            </Buttons>
+            <Link to={"/get-started"}>
+              {" "}
+              <Buttons
+                variant="primary"
+                iconSrc={circle_arrow_left}
+                iconPosition="right"
+              >
+                Get Started
+              </Buttons>
             </Link>
           </div>
         </div>
         <div className="about-hero-right-content">
-          <img src={person_one} alt="person" className="main-image"/>
+          <img src={person_one} alt="person" className="main-image" />
           <div className="circular-element">
             <img src={circular_frame} alt="Bitwire frame" />
           </div>
         </div>
       </div>
 
-      <WhysubSection hidePreferenceSection={true} containerClass="about-component" />
+      <WhysubSection
+        hidePreferenceSection={true}
+        containerClass="about-component"
+      />
 
       <div className="third-section">
         <div className="third-section-left">

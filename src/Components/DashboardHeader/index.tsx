@@ -24,7 +24,7 @@ const DashboardHeader: React.FC<HeaderProps> = ({ username }) => {
         </div>
 
         <div className="welcome-section">
-          <h1 className="font-semibold">Welcome to Bitwire</h1>
+          <h1 className="font-semibold">Welcome to Bitwire Trust</h1>
           <p>Hi, {username}! Welcome Back</p>
         </div>
       </div>

@@ -104,14 +104,22 @@ const Wallet = ({ coin }: WalletProps) => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="flex flex-col h-full max-w-full md:h-auto md:max-w-[28.7rem]">
-          <DialogHeader>
-            <DialogTitle className="font-semibold max-md:mt-4 text-center">
+        <DialogContent className="flex flex-col h-full max-w-full md:h-auto md:max-w-[28.7rem] max-md:rounded-t-none [&>button.absolute]:hidden">
+          <DialogHeader className="relative">
+            <span
+              onClick={() => setIsDialogOpen(false)}
+              className="cursor-pointer absolute left-1 top-1/2 -translate-y-1/2 text-sm text-[#7910B1] font-semibold z-10"
+            >
+              Back
+            </span>
+
+            <DialogTitle className="text-center font-semibold max-md:mt-4">
               {(selectedAction === "Buy" || selectedAction === "Send") && coin
                 ? `${selectedAction} ${coin.symbol}`
                 : selectedAction}
             </DialogTitle>
           </DialogHeader>
+
           {renderDialogContent()}
         </DialogContent>
       </Dialog>

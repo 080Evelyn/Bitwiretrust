@@ -30,15 +30,17 @@ const Deposit = () => {
               <Check className="size-5 text-[#7910B1]" />
             </>
           ) : (
-            <>
+            <div
+              className="flex items-center gap-1.5 cursor-pointer"
+              onClick={handleCopy}
+            >
               <span>Copy Address</span>
               <img
                 src={solar_copy}
                 alt="copy icon"
                 className="size-5 cursor-pointer"
-                onClick={handleCopy}
               />
-            </>
+            </div>
           )}
         </div>
       </div>
