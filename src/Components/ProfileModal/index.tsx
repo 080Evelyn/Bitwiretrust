@@ -269,7 +269,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
             </div>
 
             <h4>Get Rewarded for Inviting Users</h4>
-            <p>Refer friends to Bitwire and earn referral bonuses</p>
+            <p>Refer friends to Bitwire Trust and earn referral bonuses</p>
 
             <div className="referral-code">
               <code>bitwirejoneswie3iu44</code>
@@ -412,7 +412,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           </div>
 
           <div className="security-content">
-            <div className="option" onClick={() => { }}>
+            <div className="option" onClick={() => {}}>
               <div className="option-left">
                 <img
                   src={change_password}
@@ -515,12 +515,17 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
                   maxLength={1}
                   value={digit}
                   onChange={(e) => handlePinChange(index, e.target.value)}
-                  className={`pin-input ${digit ? 'filled' : ''}`}
+                  className={`pin-input ${digit ? "filled" : ""}`}
                 />
               ))}
             </div>
 
-            <button className="done" onClick={() => toggleModal("confirm-transaction-pin")}>Done</button>
+            <button
+              className="done"
+              onClick={() => toggleModal("confirm-transaction-pin")}
+            >
+              Done
+            </button>
           </div>
         </div>
       )}
@@ -558,19 +563,26 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
                   maxLength={1}
                   value={digit}
                   onChange={(e) => handlePinChange(index, e.target.value, true)}
-                  className={`pin-input ${digit ? 'filled' : ''}`}
+                  className={`pin-input ${digit ? "filled" : ""}`}
                 />
               ))}
             </div>
 
-            <button className="done" onClick={() => {
-              if (transactionPin.join('') === confirmTransactionPin.join('')) {
-                toggleModal("profile");
-              } else {
-                alert("PINs do not match. Please try again.");
-                setConfirmTransactionPin(["", "", "", ""]);
-              }
-            }}>Done </button>
+            <button
+              className="done"
+              onClick={() => {
+                if (
+                  transactionPin.join("") === confirmTransactionPin.join("")
+                ) {
+                  toggleModal("profile");
+                } else {
+                  alert("PINs do not match. Please try again.");
+                  setConfirmTransactionPin(["", "", "", ""]);
+                }
+              }}
+            >
+              Done{" "}
+            </button>
           </div>
         </div>
       )}

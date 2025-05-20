@@ -6,7 +6,9 @@ type Props = {
 };
 
 const WhysubSection = ({
-  hidePreferenceSection = false, containerClass = "",}: Props) => {
+  hidePreferenceSection = false,
+  containerClass = "",
+}: Props) => {
   return (
     <>
       <div className={`why-section-content ${containerClass}`}>
@@ -39,7 +41,7 @@ const WhysubSection = ({
 
         {!hidePreferenceSection && (
           <div className="preference-section">
-            <h4>Why they prefer Bitwire</h4>
+            <h4>Why they prefer Bitwire Trust</h4>
             <p>See what makes use the the best for you</p>
           </div>
         )}
