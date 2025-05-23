@@ -1,28 +1,55 @@
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/Components/ui/input";
 import { usePinModal } from "@/context/PinModalContext";
 import { Coin } from "@/types";
-import { useState } from "react";
 
 interface BuyModalProps {
   coin: Coin | null;
   closeModal: () => void;
 }
 
+const formSchema = z.object({
+  amount: z
+    .string()
+    .refine((val) => val.trim() !== "", {
+      message: "Amount is required",
+    })
+    .refine((val) => !isNaN(Number(val)), {
+      message: "Amount must be a valid number",
+    })
+    .refine((val) => parseFloat(val) > 0, {
+      message: "Amount must be greater than zero",
+    }),
+});
+
 const BuyModal = ({ closeModal, coin }: BuyModalProps) => {
   const { openPinModal } = usePinModal();
-  const [amount, setAmount] = useState<number>(0);
 
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const form = useForm<{ amount: string }>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      amount: "",
+    },
+  });
+
+  const amountStr = form.watch("amount");
+  const ngnValue = parseFloat(coin?.value?.replace(/,/g, "") || "0");
+  const converted =
+    ngnValue && !isNaN(parseFloat(amountStr))
+      ? parseFloat(amountStr) / ngnValue
+      : 0;
+
+  const handleSubmit = form.handleSubmit((values) => {
+    const parsedAmount = parseFloat(values.amount);
     openPinModal((pin) => {
       console.log("PIN entered:", pin);
+      console.log("Amount:", parsedAmount);
       // API call here
     });
     closeModal();
-  };
-
-  const ngnValue = parseFloat(coin?.value?.replace(/,/g, "") || "0");
-  const converted = ngnValue ? amount / ngnValue : 0;
+  });
 
   return (
     <div className="pt-3">
@@ -36,11 +63,18 @@ const BuyModal = ({ closeModal, coin }: BuyModalProps) => {
             NGN
           </span>
           <Input
-            type="tel"
+            type="text"
             className="!pl-15"
-            value={amount || ""}
-            onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
+            value={amountStr}
+            onChange={(e) =>
+              form.setValue("amount", e.target.value, { shouldValidate: true })
+            }
           />
+          {form.formState.errors.amount && (
+            <p className="text-red-500 text-xs mt-1">
+              {form.formState.errors.amount.message}
+            </p>
+          )}
         </div>
 
         <div className="relative">

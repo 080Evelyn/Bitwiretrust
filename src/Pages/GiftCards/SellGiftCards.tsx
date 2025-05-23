@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import GiftCardAmount from "@/Components/GiftCard/GiftCardAmount";
+import GiftCardAmount from "@/Components/GiftCard/Sell-gift-card/GiftCardAmount";
 import SelectGiftCards from "@/Components/GiftCard/SelectGiftCards";
 import Disclaimer from "@/Components/GiftCard/Sell-gift-card/Disclaimer";
 import GiftCardDetails from "@/Components/GiftCard/Sell-gift-card/GiftCardDetails";

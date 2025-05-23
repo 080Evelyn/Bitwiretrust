@@ -146,6 +146,10 @@ body {
   }
 }
 
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
 @keyframes shake {
   0% {
     transform: translateX(0);
@@ -167,6 +171,46 @@ body {
   }
 }
 
-.animate-shake {
-  animation: shake 0.5s ease-in-out;
+.bell-animation {
+  animation: bell-ring 7s infinite;
+  transform-origin: top center;
+}
+
+@keyframes bell-ring {
+  0%,
+  25% {
+    animation-timing-function: ease-in-out;
+    transform: rotate(0deg);
+  }
+  2.5% {
+    transform: rotate(-10deg);
+  }
+  5% {
+    transform: rotate(10deg);
+  }
+  7.5% {
+    transform: rotate(-10deg);
+  }
+  10% {
+    transform: rotate(10deg);
+  }
+  12.5% {
+    transform: rotate(-10deg);
+  }
+  15% {
+    transform: rotate(10deg);
+  }
+  17.5% {
+    transform: rotate(-10deg);
+  }
+  20% {
+    transform: rotate(10deg);
+  }
+  22.5% {
+    transform: rotate(-5deg);
+  }
+  25%,
+  100% {
+    transform: rotate(0deg);
+  }
 }

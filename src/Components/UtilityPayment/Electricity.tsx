@@ -21,13 +21,14 @@ import {
 } from "../ui/select";
 import { billers } from "@/constants/billers-option";
 import { usePinModal } from "@/context/PinModalContext";
+import { amountSchema } from "@/lib/validationSchema";
 
 const formSchema = z.object({
   meterNumber: z
     .string()
     .length(11, "Meter number must be exactly 11 digits")
     .regex(/^\d+$/, "Meter number must contain only digits"),
-  amount: z.string().min(1, "Amount is required"),
+  amount: amountSchema,
   billerId: z.string().min(1, "Select a biller"),
   saveAccount: z.boolean().optional(),
 });

@@ -9,6 +9,7 @@ import {
 } from "../../ui/select";
 import { amountRanges, currencyList } from "@/constants/giftcards";
 import { GiftCardDetailsProps } from "@/types";
+import { Input } from "@/Components/ui/input";
 
 const GiftCardDetails = ({
   selectedCard,
@@ -17,14 +18,17 @@ const GiftCardDetails = ({
 }: GiftCardDetailsProps) => {
   const [selectedCurrency, setSelectedCurrency] = useState(currencyList[0]);
   const [selectedRangeId, setSelectedRangeId] = useState<number | null>(null);
+  const [selectedType, setSelectedType] = useState("Physical");
   const [error, setError] = useState("");
+
   type CurrencyCode = keyof typeof amountRanges;
 
   const handleCurrencyChange = (value: string) => {
     const found = currencyList.find((c) => c.code === value);
     if (found) {
       setSelectedCurrency(found);
-      setSelectedRangeId(null);
+      const newRanges = amountRanges[found.code as CurrencyCode];
+      setSelectedRangeId(newRanges?.length ? 0 : null);
       setAmount(null);
       setError("");
     }
@@ -72,21 +76,25 @@ const GiftCardDetails = ({
     setAmount(numericValue);
   };
 
+  const ranges = amountRanges[selectedCurrency.code as CurrencyCode] || [];
+
   return (
     <div className="flex flex-col gap-3">
       <div className="text-center font-medium hidden md:block desktop-card-container rounded-[4px] py-1.75">
-        Beneficiary
+        Details
       </div>
       <div className="md:hidden absolute top-3 left-1/2 transform -translate-x-1/2 pt-6.5 flex font-semibold ">
         {selectedCard?.tittle}
       </div>
       <div className="flex flex-col gap-2 desktop-card-container rounded-md md:p-2 py-2">
-        {/* Currency Select */}
         <div className="flex flex-col gap-1">
           <span className="font-medium text-sm md:text-xs tracking-[-0.13px]">
             Select Currency
           </span>
-          <Select onValueChange={handleCurrencyChange}>
+          <Select
+            value={selectedCurrency.code}
+            onValueChange={handleCurrencyChange}
+          >
             <SelectTrigger className="text-[#000] font-medium bg-[#FCF6FF] w-full !h-11 rounded-[4.91px]">
               <SelectValue placeholder="Select Currency" />
             </SelectTrigger>
@@ -102,12 +110,11 @@ const GiftCardDetails = ({
           </Select>
         </div>
 
-        {/* Giftcard Type */}
         <div className="flex flex-col gap-1">
           <span className="font-medium text-sm md:text-xs tracking-[-0.13px]">
             Select Giftcard Type
           </span>
-          <Select>
+          <Select value={selectedType} onValueChange={setSelectedType}>
             <SelectTrigger className="text-[#000] font-medium bg-[#FCF6FF] w-full !h-11 rounded-[4.91px]">
               <SelectValue placeholder="Select Type" />
             </SelectTrigger>
@@ -120,35 +127,34 @@ const GiftCardDetails = ({
           </Select>
         </div>
 
-        {/* Sub Category Select */}
         <div className="flex flex-col gap-1">
           <span className="font-medium text-sm md:text-xs tracking-[-0.13px]">
             Select Sub Category
           </span>
-          <Select onValueChange={handleSubCategoryChange}>
+          <Select
+            value={`range-${selectedRangeId}`}
+            onValueChange={handleSubCategoryChange}
+          >
             <SelectTrigger className="text-[#000] font-medium bg-[#FCF6FF] w-full !h-11 rounded-[4.91px]">
               <SelectValue placeholder="Select Sub Category" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {amountRanges[selectedCurrency.code as CurrencyCode]?.map(
-                  (range, idx) => (
-                    <SelectItem key={idx} value={`range-${idx}`}>
-                      {selectedCard.tittle} ({selectedCurrency.symbol}
-                      {range.min} -{" "}
-                      {range.max === Infinity
-                        ? "∞"
-                        : selectedCurrency.symbol + range.max}
-                      )
-                    </SelectItem>
-                  )
-                )}
+                {ranges.map((range, idx) => (
+                  <SelectItem key={idx} value={`range-${idx}`}>
+                    {selectedCard.tittle} ({selectedCurrency.symbol}
+                    {range.min} -{" "}
+                    {range.max === Infinity
+                      ? "∞"
+                      : selectedCurrency.symbol + range.max}
+                    )
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
 
-        {/* Amount Input */}
         <div className="flex flex-col gap-1 relative">
           <span className="font-medium text-sm md:text-xs tracking-[-0.13px]">
             Enter Amount
@@ -157,7 +163,7 @@ const GiftCardDetails = ({
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-500 pointer-events-none select-none">
               {selectedCurrency.symbol}
             </span>
-            <input
+            <Input
               type="tel"
               value={amount !== null ? amount : ""}
               onChange={handleAmountChange}

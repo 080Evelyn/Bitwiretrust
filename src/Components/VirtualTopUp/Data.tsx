@@ -1,4 +1,11 @@
 import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from "../ui/form";
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -13,22 +20,22 @@ import { dataPlans, networkProviders } from "@/constants/billers-option";
 import { NetworkProviderKey } from "@/types";
 import { usePhoneNumber } from "./PhoneNumber-context";
 import { usePinModal } from "@/context/PinModalContext";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { phoneNumberSchema } from "@/lib/validationSchema";
+
+const schema = z.object({
+  phone: phoneNumberSchema,
+  planId: z.string().min(1, "Select a data plan"),
+  saveBeneficiary: z.boolean().optional(),
+});
+
+type FormData = z.infer<typeof schema>;
 
 const Data = () => {
   const { beneficiaryNumber } = usePhoneNumber();
-  const [phoneNumber, setPhoneNumber] = useState("");
   const { openPinModal } = usePinModal();
-
-  const handleSubmit = () => {
-    openPinModal((pin) => {
-      console.log("PIN entered:", pin);
-      // we call the api here
-    });
-  };
-
-  useEffect(() => {
-    setPhoneNumber(beneficiaryNumber);
-  }, [beneficiaryNumber]);
 
   const [selectedProvider, setSelectedProvider] = useState<{
     id: NetworkProviderKey;
@@ -36,11 +43,32 @@ const Data = () => {
     image: string;
   }>(networkProviders[0]);
 
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      phone: beneficiaryNumber || "",
+      planId: "",
+      saveBeneficiary: false,
+    },
+  });
+
   const [selectedPlan, setSelectedPlan] = useState<null | {
     id: number;
     label: string;
     price: number;
   }>(null);
+
+  useEffect(() => {
+    form.setValue("phone", beneficiaryNumber);
+  }, [beneficiaryNumber, form]);
+
+  const onSubmit = (data: FormData) => {
+    openPinModal((pin) => {
+      console.log("PIN entered:", pin);
+      console.log("Form Data:", data);
+      // trigger your API here
+    });
+  };
 
   return (
     <div className="flex flex-col gap-3">
@@ -48,32 +76,31 @@ const Data = () => {
         Data
       </div>
 
-      <div className="flex flex-col card-container gap-2 p-4 rounded-md">
-        {/*Network Provider Selection */}
-        <Select
-          onValueChange={(value) => {
-            const found = networkProviders.find(
-              (p) => p.id === value
-            ) as (typeof networkProviders)[number];
-            if (found) {
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col card-container gap-2 p-4 rounded-md"
+        >
+          <Select
+            onValueChange={(value) => {
+              const found = networkProviders.find((p) => p.id === value)!;
               setSelectedProvider(found);
               setSelectedPlan(null);
-            }
-          }}
-        >
-          <SelectTrigger className="!text-white bg-[#7910B1] w-full rounded-[4.91px] py-5">
-            <div className="flex items-center gap-2">
-              <img
-                src={selectedProvider.image}
-                alt={selectedProvider.name}
-                className="size-7 rounded-[3px]"
-              />
-              <span>{selectedProvider.name}</span>
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <div className="flex flex-col gap-2 mt-1">
+              form.setValue("planId", "");
+            }}
+          >
+            <SelectTrigger className="!text-white bg-[#7910B1] w-full rounded-[4.91px] py-5">
+              <div className="flex items-center gap-2">
+                <img
+                  src={selectedProvider.image}
+                  alt={selectedProvider.name}
+                  className="size-7 rounded-[3px]"
+                />
+                <span>{selectedProvider.name}</span>
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
                 {networkProviders.map((provider) => (
                   <SelectItem
                     key={provider.id}
@@ -90,69 +117,93 @@ const Data = () => {
                     </div>
                   </SelectItem>
                 ))}
-              </div>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
-        {/* Data Plan Selection  */}
-        <Select
-          key={selectedProvider.id}
-          value={selectedPlan ? String(selectedPlan.id) : undefined}
-          onValueChange={(value) => {
-            const planList = dataPlans[selectedProvider.id];
-            const foundPlan = planList.find((p) => String(p.id) === value);
-            if (foundPlan) {
-              setSelectedPlan(foundPlan);
-            }
-          }}
-        >
-          <SelectTrigger className="text-[#000] bg-[#F9EDFF] w-full !h-11 rounded-[4.91px]">
-            <SelectValue
-              placeholder={selectedPlan?.label ?? "Select Data Plan"}
-            />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {dataPlans[selectedProvider.id].map((plan) => (
-                <SelectItem key={plan.id} value={String(plan.id)}>
-                  {plan.label}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
-        <Input
-          type="tel"
-          placeholder="Amount"
-          value={selectedPlan ? selectedPlan.price : ""}
-          className="font-semibold tracking-[-0.13px]"
-          readOnly
-        />
-        <Input
-          type="tel"
-          id="data-phoneNumber"
-          placeholder="Enter Phone Number"
-          className="font-semibold tracking-[-0.13px]"
-          value={phoneNumber}
-          onChange={(e) => setPhoneNumber(e.target.value)}
-        />
-
-        <div className="flex justify-between">
-          <label htmlFor="saveAccount" className="text-[13px] font-medium">
-            Save Account
-          </label>
-          <Checkbox
-            className="border-[1.25px] border-[#1B1C1E]"
-            id="saveAccount"
+          <FormField
+            control={form.control}
+            name="planId"
+            render={({ field }) => (
+              <FormItem>
+                <Select
+                  value={field.value}
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    const foundPlan = dataPlans[selectedProvider.id].find(
+                      (p) => String(p.id) === value
+                    );
+                    if (foundPlan) setSelectedPlan(foundPlan);
+                  }}
+                >
+                  <FormControl>
+                    <SelectTrigger className="text-[#000] bg-[#F9EDFF] w-full !h-11 rounded-[4.91px]">
+                      <SelectValue placeholder="Select Data Plan" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectGroup>
+                      {dataPlans[selectedProvider.id].map((plan) => (
+                        <SelectItem key={plan.id} value={String(plan.id)}>
+                          {plan.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
 
-        <button className="btn-primary w-full" onClick={handleSubmit}>
-          Pay Now
-        </button>
-      </div>
+          <Input
+            type="tel"
+            placeholder="Amount"
+            value={selectedPlan?.price ?? ""}
+            className="font-semibold tracking-[-0.13px]"
+            readOnly
+          />
+
+          <FormField
+            control={form.control}
+            name="phone"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type="tel"
+                    placeholder="Enter phone number"
+                    className="font-semibold tracking-[-0.13px]"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Save Beneficiary */}
+          <FormField
+            control={form.control}
+            name="saveBeneficiary"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                    className="border-[1.25px] border-[#1B1C1E]"
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <button type="submit" className="btn-primary w-full">
+            Pay Now
+          </button>
+        </form>
+      </Form>
     </div>
   );
 };
