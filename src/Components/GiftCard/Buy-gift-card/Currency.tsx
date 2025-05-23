@@ -1,4 +1,5 @@
 import { Checkbox } from "@/Components/ui/checkbox";
+import { useState } from "react";
 
 interface CurrencyProps {
   onProceed?: () => void;
@@ -12,10 +13,12 @@ const Currency = ({ onProceed }: CurrencyProps) => {
     { id: 4, country: "Canada (CA)" },
   ];
 
+  const [checked, setChecked] = useState(Currency[0].id);
+
   return (
     <div className="flex flex-col gap-3">
       <div className="text-center font-medium hidden md:block desktop-card-container rounded-[4px] py-1.75">
-        Select Card
+        Select Currency
       </div>
       <div className="md:hidden absolute top-3 left-1/2 transform -translate-x-1/2 pt-6.5 flex font-semibold">
         Sell Gift Card
@@ -26,10 +29,13 @@ const Currency = ({ onProceed }: CurrencyProps) => {
           {Currency.map((currency) => (
             <div
               key={currency.id}
-              className="rounded-[9.5px] px-4 py-5.5 text-sm md:text-[11px] font-medium text-[#7910B1] shadow-xs border border-[#7910B1] md:border-[#f1f1f1] flex justify-between cursor-pointer"
+              className="rounded-[9.5px] px-4 py-5.5 text-sm md:text-[11px] font-medium text-[#7910B1] shadow-xs border border-[#7910B1] md:border-[#f1f1f1] flex justify-between"
             >
               {currency.country}
-              <Checkbox />
+              <Checkbox
+                checked={checked === currency.id}
+                onCheckedChange={() => setChecked(currency.id)}
+              />
             </div>
           ))}
         </div>

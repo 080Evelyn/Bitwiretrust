@@ -2,45 +2,61 @@ import { Input } from "@/Components/ui/input";
 import { Coin } from "@/types";
 import { Repeat } from "lucide-react";
 import { coinAssets } from "@/constants/coins";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import SwapDone from "../SwapDone";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface SwapModalProps {
   coin: Coin | null;
   closeModal: () => void;
 }
 
+// Validation schema
+const formSchema = z.object({
+  amount: z
+    .string()
+    .refine((val) => val.trim() !== "", { message: "Amount is required" })
+    .refine((val) => !isNaN(Number(val)), { message: "Enter a valid number" })
+    .refine((val) => parseFloat(val) > 0, {
+      message: "Amount must be greater than zero",
+    }),
+});
+
 const SwapModal = ({ coin }: SwapModalProps) => {
   const defaultFrom = coin || coinAssets[0];
   const defaultTo = coinAssets.find((c) => c.symbol === "NGN") ?? coinAssets[0];
   const [showDone, setShowDone] = useState(false);
-
   const [fromCoin, setFromCoin] = useState<Coin>(defaultFrom);
   const [toCoin, setToCoin] = useState<Coin>(defaultTo);
-  const [amount, setAmount] = useState<number>(0);
-  const [converted, setConverted] = useState<number>(0);
 
-  useEffect(() => {
-    const fromRate = parseFloat(fromCoin?.value?.replace(/,/g, "") || "0");
-    const toRate = parseFloat(toCoin?.value?.replace(/,/g, "") || "0");
+  const form = useForm<{ amount: string }>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      amount: "",
+    },
+  });
 
-    if (fromRate && toRate) {
-      const result = amount * (fromRate / toRate);
-      setConverted(result);
-    } else {
-      setConverted(0);
-    }
-  }, [amount, fromCoin, toCoin]);
+  const amount = form.watch("amount");
+  const parsedAmount = parseFloat(amount);
+  const fromRate = parseFloat(fromCoin?.value?.replace(/,/g, "") || "0");
+  const toRate = parseFloat(toCoin?.value?.replace(/,/g, "") || "0");
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const converted =
+    fromRate && toRate && !isNaN(parsedAmount)
+      ? parsedAmount * (fromRate / toRate)
+      : 0;
+
+  const handleSubmit = form.handleSubmit((values) => {
+    const numericAmount = parseFloat(values.amount);
     console.log(
-      `Swapping ${amount} ${fromCoin.symbol} → ${converted.toFixed(6)} ${
+      `Swapping ${numericAmount} ${fromCoin.symbol} → ${converted.toFixed(6)} ${
         toCoin.symbol
       }`
     );
     setShowDone(true);
-  };
+  });
 
   return (
     <div className="pt-3">
@@ -62,15 +78,20 @@ const SwapModal = ({ coin }: SwapModalProps) => {
           </select>
           <span className="px-1 border-r border-[#7910B1]"></span>
           <Input
-            type="tel"
-            min="0"
-            step="any"
+            type="text"
             placeholder="0.00"
-            value={amount || ""}
-            onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
+            value={amount}
+            onChange={(e) =>
+              form.setValue("amount", e.target.value, { shouldValidate: true })
+            }
             className="flex-1"
           />
         </div>
+        {form.formState.errors.amount && (
+          <p className="text-red-500 text-xs -mt-2 ml-auto">
+            {form.formState.errors.amount.message}
+          </p>
+        )}
 
         <div className="flex self-center items-center justify-center w-12.5 h-12 rounded-md shadow-md">
           <Repeat className="size-6 text-[#7910B1]" />

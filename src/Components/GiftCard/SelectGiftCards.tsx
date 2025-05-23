@@ -26,7 +26,7 @@ const SelectGiftCards = ({ onSelect, title }: SelectGiftCardsProps) => {
         {title}
       </div>
 
-      <div className="flex flex-col gap-2 desktop-card-container rounded-md p-2 lg:max-h-74">
+      <div className="flex flex-col gap-2 desktop-card-container rounded-md p-2 md:max-h-74">
         <div className="flex gap-2 w-full">
           <div className="relative flex-1">
             <Input

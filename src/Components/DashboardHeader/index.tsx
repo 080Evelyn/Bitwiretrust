@@ -6,6 +6,8 @@ import { HiOutlineBell } from "react-icons/hi2";
 import ProfileModal from "../ProfileModal";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { dummyNotifications } from "@/constants/notification-detials";
+import NotificationPopover from "../NotificationModal/Notification";
 
 const DashboardHeader: React.FC<HeaderProps> = ({ username }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
@@ -35,10 +37,17 @@ const DashboardHeader: React.FC<HeaderProps> = ({ username }) => {
           <p className="hidden font-bold lg:block">{currentDate}</p>
         </div>
 
-        <div className="relative">
-          <HiOutlineBell className="h-7.5 w-7.5" />
-          {hasNotifications && <span className="notification-badge orange" />}
-        </div>
+        <NotificationPopover
+          notifications={dummyNotifications}
+          trigger={
+            <div className="relative cursor-pointer">
+              <HiOutlineBell className="h-7.5 w-7.5 bell-animation" />
+              {hasNotifications && (
+                <span className="notification-badge orange" />
+              )}
+            </div>
+          }
+        />
 
         <div
           className="hidden md:block relative cursor-pointer"

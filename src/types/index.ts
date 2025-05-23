@@ -136,3 +136,13 @@ export interface SelectWalletProps {
   title?: string;
   onSelect?: (coin: Coin) => void;
 }
+
+export interface NotificationItem {
+  id: string;
+  title: string;
+  message: string;
+  category: string;
+  date: Date;
+  status: "Successful" | "Failed";
+  icon?: "wallet" | "send" | "bell";
+}
