@@ -1,15 +1,13 @@
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
 import GiftCardAmount from "@/Components/GiftCard/Sell-gift-card/GiftCardAmount";
 import SelectGiftCards from "@/Components/GiftCard/SelectGiftCards";
 import Disclaimer from "@/Components/GiftCard/Sell-gift-card/Disclaimer";
 import GiftCardDetails from "@/Components/GiftCard/Sell-gift-card/GiftCardDetails";
 import BalanceOverview from "@/Components/HomeDashboard/BalanceOverview";
 import { giftCards } from "@/constants/giftcards";
+import BackArrowButton from "@/Components/ui/back-arrow-button";
 
 const SellGiftCards = () => {
-  const navigate = useNavigate();
   const [selectedCard, setSelectedCard] = useState(giftCards[0]);
   const [amount, setAmount] = useState<number | null>(null);
   const [mobileStep, setMobileStep] = useState<1 | 2>(1);
@@ -37,12 +35,7 @@ const SellGiftCards = () => {
       <div className="md:hidden ">
         {mobileStep === 1 && (
           <>
-            <button
-              className="absolute pt-7 px-5 top-3 left-3 text-sm z-10"
-              onClick={() => navigate("/dashboard")}
-            >
-              <ArrowLeft className="size-5" />
-            </button>
+            <BackArrowButton pathName="/dashboard" />
 
             <SelectGiftCards
               title="Sell Gift Card"
@@ -56,13 +49,7 @@ const SellGiftCards = () => {
 
         {mobileStep === 2 && (
           <>
-            <button
-              className="absolute pt-7 px-5 top-3 left-3 text-sm z-10"
-              onClick={() => setMobileStep(1)}
-            >
-              <ArrowLeft className="size-5" />
-            </button>
-
+            <BackArrowButton onClick={() => setMobileStep(1)} />
             <div className="flex flex-col gap-5">
               <GiftCardDetails
                 selectedCard={selectedCard}

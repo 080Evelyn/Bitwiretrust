@@ -459,7 +459,7 @@
   .total-balance {
     padding: 15px;
     height: auto;
-    border-radius: 12px;
+    border-radius: 9px;
   }
 
   .total-balance > div:first-child {

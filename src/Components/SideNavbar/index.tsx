@@ -5,8 +5,9 @@ import { full_logo } from "../../assets";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import "./styles.css";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { calendar_svg } from "../../assets";
+import { cn } from "@/lib/utils";
 
 const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
   const location = useLocation();
@@ -29,8 +30,8 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
           {navLinks.map((link) => {
             const isActive = location.pathname === link.to;
 
-            const isSubLinkActive = link.subLinks?.some(
-              (sub) => location.pathname === sub.to
+            const isSubLinkActive = link.subLinks?.some((sub) =>
+              location.pathname.startsWith(sub.to)
             );
 
             return (
@@ -124,19 +125,32 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
 };
 
 const SideNavbar = () => {
-  const currentDate = format(new Date(), "MMMM dd, yyyy - h:mm a");
+  const currentDate = useMemo(
+    () => format(new Date(), "MMMM dd, yyyy - h:mm a"),
+    []
+  );
   const [scrolled, setScrolled] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const closeSidebar = () => setIsOpen(false);
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const isGiftCardSellPage =
-    location.pathname.startsWith("/gift-cards/") ||
-    location.pathname.startsWith("/crypto-trading");
+  const isGiftCardSellPage = useMemo(
+    () =>
+      location.pathname.startsWith("/gift-cards/") ||
+      location.pathname.startsWith("/crypto-trading"),
+    [location.pathname]
+  );
+
+  const headerClasses = cn(
+    "lg:hidden pt-4 fixed top-0 left-0 right-0 z-50 transition-colors duration-300",
+    {
+      "shadow-sm": scrolled && !isGiftCardSellPage,
+      "bg-white": !isGiftCardSellPage,
+      "bg-transparent": isGiftCardSellPage,
+    }
+  );
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -147,60 +161,38 @@ const SideNavbar = () => {
         <SidebarContent />
       </aside>
 
-      <div
-        className={`lg:hidden pt-4 fixed top-0 left-0 right-0 z-50 transition-colors duration-300
-    ${scrolled && !isGiftCardSellPage ? "shadow-sm" : ""}
-    ${isGiftCardSellPage ? "bg-transparent" : "bg-white"}`}
-      >
-        {isGiftCardSellPage ? (
-          <div className="flex items-center justify-between px-5 pt-4 pb-3 relative">
-            <Link to="/dashboard" className="hidden items-center gap-2">
-              <img src={full_logo} alt="Bitwire Logo" className="h-6" />
-            </Link>
-            <div className=" hidden items-center gap-2 cursor-pointer">
-              <img src={calendar_svg} alt="Calendar" />
-              <p className="text-xs sm:text-sm">{currentDate}</p>
-            </div>
+      <div className={headerClasses}>
+        <div className="flex items-center justify-between px-5 pt-4 pb-3 relative">
+          <Link
+            to="/dashboard"
+            className={cn("flex items-center gap-2", {
+              invisible: isGiftCardSellPage,
+            })}
+          >
+            <img src={full_logo} alt="Bitwire Logo" className="h-6" />
+          </Link>
 
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild>
-                <button className="cursor-pointer">
-                  <Menu className="text-[#7910B1] absolute right-5 h-6 w-6" />
-                </button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-50 sm:w-45 p-0 text-white"
-              >
-                <SidebarContent onClick={closeSidebar} />
-              </SheetContent>
-            </Sheet>
+          <div
+            className={cn("flex items-center gap-2 cursor-pointer", {
+              "lg:hidden": !isGiftCardSellPage,
+              invisible: isGiftCardSellPage,
+            })}
+          >
+            <img src={calendar_svg} alt="Calendar" />
+            <p className="text-xs sm:text-sm">{currentDate}</p>
           </div>
-        ) : (
-          <div className="flex items-center justify-between px-5 pt-4 pb-3 relative">
-            <Link to="/dashboard" className="flex items-center gap-2">
-              <img src={full_logo} alt="Bitwire Logo" className="h-6" />
-            </Link>
-            <div className="flex lg:hidden items-center gap-2 cursor-pointer">
-              <img src={calendar_svg} alt="Calendar" />
-              <p className="text-xs sm:text-sm">{currentDate}</p>
-            </div>
 
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild>
-                <button className="">
-                  <Menu className="text-[#7910B1] h-6 w-6" />
-                </button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-50 sm:w-45 p-0 text-white"
-              >
-                <SidebarContent onClick={closeSidebar} />
-              </SheetContent>
-            </Sheet>
-          </div>
-        )}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <button className="text-[#7910B1]">
+                <Menu className="h-6 w-6" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-50 sm:w-45 p-0 text-white">
+              <SidebarContent onClick={closeSidebar} />
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </div>
   );

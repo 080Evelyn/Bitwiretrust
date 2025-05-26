@@ -2,15 +2,13 @@ import SelectWallet from "@/Components/CryptoTrading/SelectWallet";
 import TransactionHistory from "@/Components/CryptoTrading/TransactionHistory";
 import Wallet from "@/Components/CryptoTrading/Wallet";
 import BalanceOverview from "@/Components/HomeDashboard/BalanceOverview";
-import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Coin } from "@/types";
 import { coinAssets } from "@/constants/coins";
+import BackArrowButton from "@/Components/ui/back-arrow-button";
 
 const CryptoTrading = () => {
-  const navigate = useNavigate();
-  const [mobileStep, setMobileStep] = useState<1 | 2 | 3>(1);
+  const [mobileStep, setMobileStep] = useState<1 | 2>(1);
   const [selectedCoin, setSelectedCoin] = useState<Coin>(coinAssets[0]);
 
   const handleSelectCoin = (coin: Coin) => {
@@ -35,35 +33,14 @@ const CryptoTrading = () => {
       <div className="md:hidden">
         {mobileStep === 1 && (
           <>
-            <button
-              className="absolute cursor-pointer pt-7 px-5 top-3 left-3 text-sm z-10"
-              onClick={() => navigate("/dashboard")}
-            >
-              <ArrowLeft className="size-5" />
-            </button>
+            <BackArrowButton pathName="/dashboard" />
             <SelectWallet title="Select Wallet" onSelect={handleSelectCoin} />
           </>
         )}
         {mobileStep === 2 && (
           <>
-            <button
-              className="absolute cursor-pointer pt-7 px-5 top-3 left-3 text-sm z-10"
-              onClick={() => setMobileStep(1)}
-            >
-              <ArrowLeft className="size-5" />
-            </button>
+            <BackArrowButton onClick={() => setMobileStep(1)} />
             <Wallet coin={selectedCoin} />
-            <TransactionHistory coin={selectedCoin} />
-          </>
-        )}
-        {mobileStep === 3 && (
-          <>
-            <button
-              className="absolute cursor-pointer pt-7 px-5 top-3 left-3 text-sm z-10"
-              onClick={() => setMobileStep(2)}
-            >
-              <ArrowLeft className="size-5" />
-            </button>
             <TransactionHistory coin={selectedCoin} />
           </>
         )}
