@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { Bell, Send, Wallet, X } from "lucide-react";
 import NotificationModal from "./NotificationModal";
 import { useScrollLock } from "@/hooks/useScrollLock";
+import { useResponsivePopover } from "@/hooks/viewportResize";
 
 interface NotificationPopoverProps {
   trigger: React.ReactNode;
@@ -65,6 +66,8 @@ const NotificationPopover = ({
 
   useScrollLock(isOpen);
 
+  useResponsivePopover(isOpen, setIsOpen);
+
   return (
     <div className="">
       <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -78,7 +81,7 @@ const NotificationPopover = ({
 
         <PopoverContent
           sideOffset={5}
-          className="z-55 w-screen max-md:h-[94vh] md:pb-4 max-md:-mt-14 md:w-[420px] md:mr-4 p-0 border border-[#F1F1F1] rounded-none md:rounded-2xl shadow-xl bg-white"
+          className="z-55 w-screen max-md:h-[94vh] md:pb-4 max-md:-mt-14 md:w-[420px] md:mr-4 p-0 border border-[#F1F1F1] rounded-none md:rounded-2xl bg-white"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <button

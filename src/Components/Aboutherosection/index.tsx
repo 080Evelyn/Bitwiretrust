@@ -8,7 +8,7 @@ import {
   person_two,
 } from "../../assets";
 import WhysubSection from "../Whysubsection";
-import Testimonials from "../Testimonials";
+// import Testimonials from "../Testimonials";
 import Faqs from "../Faqs";
 import { Link } from "react-router-dom";
 
@@ -98,7 +98,7 @@ const Aboutherosection = (_props: Props) => {
         </div>
       </div>
 
-      <Testimonials />
+      {/* <Testimonials /> */}
       <Faqs />
     </div>
   );
