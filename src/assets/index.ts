@@ -102,8 +102,10 @@ import sendCrypto from "./exportNew.svg";
 import swapCrypto from "./swap.svg";
 import QrCode from "./qrcode.svg";
 import DoneIcon from "./Done.svg";
+import WithrawalImage from "./withdrawal_image.jpg";
 
 export {
+  WithrawalImage,
   DoneIcon,
   QrCode,
   depositCrypto,

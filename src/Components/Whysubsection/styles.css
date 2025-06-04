@@ -99,7 +99,7 @@
     line-height: 32px;
     margin-bottom: 10px;
   }
-  
+
   .main-title {
     height: 68px;
     font-weight: 500;
@@ -109,7 +109,7 @@
     margin: 0 auto;
     margin-bottom: 15px;
     white-space: normal;
-}
+  }
 
   .description {
     height: auto;
@@ -145,7 +145,7 @@
   }
 }
 
-@media (max-width: 425px) {
+@media (max-width: 540px) {
   .why-section-content {
     width: 70%;
     margin-top: 380px;
@@ -267,8 +267,8 @@
 
 @media (max-width: 320px) {
   .stat-item p {
-      font-size: 10px;
-      line-height: 16px;
-      white-space: nowrap;
+    font-size: 10px;
+    line-height: 16px;
+    white-space: nowrap;
   }
 }

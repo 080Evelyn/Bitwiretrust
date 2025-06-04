@@ -1,141 +1,147 @@
 /* General Styles */
 .navbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 50px;
-    position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 50px;
+  position: relative;
 }
 
 .navbar-logo {
-    width: 85px;
-    height: auto;
+  width: 85px;
+  height: auto;
 }
 
 /* Navbar Links */
 .navbar a {
-    color: black;
-    font-size: 16px;
-    text-decoration: none;
-    font-weight: 500;
-    position: relative;
+  color: black;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
 }
 
 .navbar a:hover {
-    color: #7910B1;
+  color: #7910b1;
 }
 
 /* Desktop Navigation */
 .nav-links {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 40px;
-    flex-grow: 0.4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+  flex-grow: 0.4;
 }
 
 .nav-menu-container {
-    display: flex;
-    gap: 40px;
-    justify-content: center;
+  display: flex;
+  gap: 40px;
+  justify-content: center;
 }
 
 .navbar a.active {
-    color: #7910B1;
-    font-weight: 700;
+  color: #7910b1;
+  font-weight: 700;
 }
 
 .navbar a.active::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -6px;
-    width: 50%;
-    height: 2px;
-    background-color: #7910B1;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 50%;
+  height: 2px;
+  background-color: #7910b1;
 }
 
 /* Register Button */
 .nav-register {
-    background: #7910B1;
-    padding: 10px 15px;
-    border-radius: 4px;
-    transition: transform 0.5s;
+  background: #7910b1;
+  padding: 10px 15px;
+  border-radius: 4px;
+  transition: transform 0.5s;
 }
 
 .nav-register:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .nav-register a,
 .nav-register a.active {
-    color: #ffffff;
+  color: #ffffff !important;
 }
 
 /* Hamburger Menu (Hidden on Desktop) */
 .menu-toggle {
-    display: none;
-    font-size: 26px;
-    cursor: pointer;
-    color: #7910B1;
-    background: none;
-    border: none;
+  display: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: #7910b1;
+  background: none;
+  border: none;
 }
 
 /* Responsive Styling */
-@media (max-width: 425px) {
-    .navbar {
-        padding: 20px;
-    }
+@media (max-width: 540px) {
+  .navbar {
+    padding: 20px;
+  }
 
-    /* Show hamburger menu */
-    .menu-toggle {
-        display: block;
-        z-index: 1001;
-    }
+  /* Show hamburger menu */
+  .menu-toggle {
+    display: block;
+    z-index: 1001;
+  }
 
-    /* Hide nav links by default */
-    .nav-links {
-        display: none;
-        position: absolute;
-        top: 70px;
-        right: 20px;
-        background: white;
-        width: 60%;
-        height: 70vh;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        border-radius: 8px;
-        transition: all 0.3s ease-in-out;
-    }
+  /* Hide nav links by default */
+  .nav-links {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: white;
+    width: 50%;
+    height: 50vh;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 65px 15px 15px 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1),
+      opacity 0.2s ease-out;
+    will-change: transform, opacity;
+  }
 
-    /* When menu is active */
-    .nav-links.active {
-        display: flex;
-    }
+  /* When menu is active */
+  .nav-links.active {
+    display: flex;
+    transform: translateX(0);
+    opacity: 1;
+  }
 
-    .nav-menu-container {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        gap: 20px;
-    }
+  .nav-menu-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 20px;
+  }
 
-    .nav-register {
-        margin-top: 20px;
-        align-self: flex-start;
-    }
+  .nav-register {
+    margin-top: 20px;
+    align-self: flex-start;
+  }
 
-    .navbar a.active::after {
-        width: 30%;
-    }
+  .navbar a.active::after {
+    width: 30%;
+  }
 }
 
 @media (max-width: 375px) {
-    .navbar-logo {
-        width: 65px;
-    }
+  .navbar-logo {
+    width: 65px;
+  }
 }

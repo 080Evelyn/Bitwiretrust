@@ -91,7 +91,7 @@
   .second-content {
     display: flex;
     gap: 20px;
-}
+  }
 }
 
 @media (max-width: 768px) {
@@ -156,7 +156,7 @@
   }
 }
 
-@media (max-width: 425px) {
+@media (max-width: 540px) {
   .offer-container {
     height: 1080px;
     bottom: -400px;

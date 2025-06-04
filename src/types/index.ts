@@ -35,7 +35,10 @@ export type FAQItem = {
 };
 
 export interface FormData {
-  fullName: string;
+  first_name: string;
+  last_name: string;
+  phone: string;
+  dateOfBirth: string;
   email: string;
   password: string;
   confirmPassword: string;
