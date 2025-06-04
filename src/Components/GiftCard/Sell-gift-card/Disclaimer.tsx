@@ -19,7 +19,7 @@ const Disclaimer = () => {
   return (
     <Dialog open={showDisclaimer}>
       <DialogOverlay>
-        <DialogContent className="flex flex-col gap-6 p-4 md:p-6 max-md:pt-10 max-w-screen max-md:h-full md:max-w-[603px] overflow-y-auto [&>button.absolute]:hidden">
+        <DialogContent className="max-sm:rounded-none flex flex-col gap-6 p-4 md:p-6 max-md:pt-10 max-w-screen max-md:h-full md:max-w-[603px] overflow-y-auto [&>button.absolute]:hidden">
           <div className="flex flex-col gap-2">
             <h2 className="text-center text-xl font-semibold">
               Sell Gift Cards

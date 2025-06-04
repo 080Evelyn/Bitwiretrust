@@ -116,6 +116,10 @@
   color: #6d1d94;
 }
 
+.action-button:hover {
+  background-color: #f2f2f2;
+}
+
 /* Quick Action Styles */
 .quick-action {
   display: flex;

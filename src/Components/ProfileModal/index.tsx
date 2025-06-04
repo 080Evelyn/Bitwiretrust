@@ -31,6 +31,8 @@ import {
   transaction_pin,
   twitter,
 } from "../../assets";
+import TermsAndCondition from "@/constants/TermsAndCondition";
+import PrivacyAndPolicy from "@/constants/PrivacyAndPolicy";
 
 type ModalType =
   | "profile"
@@ -691,14 +693,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
             </button>
             <h3>Terms & Conditions</h3>
           </div>
-
-          <div className="legal-content">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipiscing elit. Nullam
-              euismod, nisi vel consectetur interdum, nisl nunc egestas nunc,
-              vitae tincidunt nisl nunc euismod nunc.
-            </p>
-          </div>
+          <TermsAndCondition />
         </div>
       )}
 
@@ -711,13 +706,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
             <h3>Policies</h3>
           </div>
 
-          <div className="legal-content">
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipiscing elit. Nullam
-              euismod, nisi vel consectetur interdum, nisl nunc egestas nunc,
-              vitae tincidunt nisl nunc euismod nunc.
-            </p>
-          </div>
+          <PrivacyAndPolicy />
         </div>
       )}
     </div>

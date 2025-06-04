@@ -11,6 +11,8 @@ import {
 } from "../../assets";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import BalanceOverview from "./BalanceOverview";
+import TransferModal from "./TransferModal";
+import FundAccountModal from "./FundAccountModal";
 
 type Props = object;
 
@@ -18,6 +20,8 @@ type Props = object;
 const HomeDashboard = (_props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_activeTab, setActiveTab] = useState("All");
+  const [isWithdrawalOpen, setIsWithdrawalOpen] = useState(false);
+  const [isFundAccountOpen, setIsFundAccountOpen] = useState(false);
 
   const getBackgroundColor = (name: string) => {
     switch (name.toLowerCase()) {
@@ -35,7 +39,6 @@ const HomeDashboard = (_props: Props) => {
         return "#ddd";
     }
   };
-
   const getStatusColorTransaction = (status: string) => {
     switch (status.toLowerCase()) {
       case "green":
@@ -46,7 +49,6 @@ const HomeDashboard = (_props: Props) => {
         return "gray";
     }
   };
-
   const getBackgroundColorTransaction = (type: string) => {
     switch (type.toLowerCase()) {
       case "received":
@@ -59,7 +61,6 @@ const HomeDashboard = (_props: Props) => {
         return "#E0E0E0";
     }
   };
-
   const renderRatesTable = (rates: RateData[]) => (
     <div>
       {rates.map((rate) => (
@@ -101,11 +102,17 @@ const HomeDashboard = (_props: Props) => {
       <div className="rate-container overflow-x-auto">
         <div className="rate-container-left">
           <div className="action-buttons">
-            <div className="action-button">
+            <div
+              className="action-button"
+              onClick={() => setIsFundAccountOpen(true)}
+            >
               <img src={gala_add} alt="" />
               <span>Fund</span>
             </div>
-            <div className="action-button">
+            <div
+              className="action-button"
+              onClick={() => setIsWithdrawalOpen(true)}
+            >
               <img src={export_png} alt="" />
               <span>Withdraw</span>
             </div>
@@ -250,6 +257,17 @@ const HomeDashboard = (_props: Props) => {
           </div>
         </div>
       </div>
+
+      <TransferModal
+        isWithdrawalOpen={isWithdrawalOpen}
+        setIsWithdrawalOpen={() => setIsWithdrawalOpen(!isWithdrawalOpen)}
+      />
+      <FundAccountModal
+        isFundAccountOpen={isFundAccountOpen}
+        setIsFundAccountOpen={() => {
+          setIsFundAccountOpen(!isFundAccountOpen);
+        }}
+      />
     </>
   );
 };

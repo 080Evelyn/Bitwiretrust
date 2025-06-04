@@ -3,10 +3,10 @@ import { Coin } from "@/types";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { actions } from "@/constants/coins";
-import BuyModal from "./modals/BuyModal";
-import SendModal from "./modals/SendModal";
-import DepositModal from "./modals/DepositModal";
-import SwapModal from "./modals/SwapModal";
+import BuyModal from "./modalContents/BuyModal";
+import SendModal from "./modalContents/SendModal";
+import DepositModal from "./modalContents/DepositModal";
+import SwapModal from "./modalContents/SwapModal";
 
 interface WalletProps {
   coin: Coin | null;
