@@ -20,6 +20,7 @@ import {
   verifyEmailCode,
 } from "@/api/auth";
 import { toast } from "sonner";
+import axios from "axios";
 
 type Props = {
   initialStep?: Step;
@@ -35,6 +36,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     email: "",
     password: "",
     confirmPassword: "",
+    terms: false,
   });
 
   const [storedCredentials, setStoredCredentials] = useState<{
@@ -106,6 +108,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
             formData.dateOfBirth.trim() !== "" &&
             formData.password.trim() !== "" &&
             formData.confirmPassword.trim() !== "" &&
+            formData.terms !== false &&
             formData.password === formData.confirmPassword &&
             isAdult
         );
@@ -128,8 +131,8 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
   }, [currentStep, formData, verificationCode, getStartedFields, passcode]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, type, checked, value } = e.target;
+    setFormData({ ...formData, [name]: type === "checkbox" ? checked : value });
   };
 
   const handleGetStartedInputChange = (
@@ -178,8 +181,14 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       });
       setCurrentStep(currentStep + 1);
     },
-    onError: (error) => {
-      console.error("Create account error:", error);
+    onError: (error: unknown) => {
+      if (axios.isAxiosError(error)) {
+        const responseDesc =
+          error.response?.data?.responseDesc || "Something went wrong";
+        toast.error(responseDesc);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
     },
   });
 
@@ -192,9 +201,14 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     onSuccess: () => {
       setCurrentStep(currentStep + 1);
     },
-    onError: () => {
-      setCodeError(true);
-      toast.error("Sonner error");
+    onError: (error: unknown) => {
+      if (axios.isAxiosError(error)) {
+        const responseDesc =
+          error.response?.data?.responseDesc || "Something went wrong";
+        toast.error(responseDesc);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
     },
   });
 
@@ -208,8 +222,14 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
         setCurrentStep(Step.CREATE_PASSCODE);
       }, 2000);
     },
-    onError: (error) => {
-      console.error("Login failed", error);
+    onError: (error: unknown) => {
+      if (axios.isAxiosError(error)) {
+        const responseDesc =
+          error.response?.data?.responseDesc || "Something went wrong";
+        toast.error(responseDesc);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
     },
   });
 
@@ -219,16 +239,22 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     onSuccess: () => {
       navigate("/dashboard");
     },
-    onError: (error) => {
-      console.error("Failed to save passcode:", error);
-      toast.error("Failed to save passcode");
+    onError: (error: unknown) => {
+      if (axios.isAxiosError(error)) {
+        const responseDesc =
+          error.response?.data?.responseDesc || "Something went wrong";
+        toast.error(responseDesc);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
     },
   });
 
   const isLoading =
     createAccountMutation.isPending ||
     verifyCodeMutation.isPending ||
-    loginMutation.isPending;
+    loginMutation.isPending ||
+    savePasscodeMutation.isPending;
 
   const handleNextStep = () => {
     if (!isButtonEnabled) return;

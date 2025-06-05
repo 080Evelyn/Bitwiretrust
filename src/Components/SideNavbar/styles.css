@@ -87,7 +87,8 @@
 }
 
 .side-navbar-links a img,
-.side-navbar-actions a img {
+.side-navbar-actions a img,
+.side-navbar-actions div img {
   margin-right: 10px;
 }
 
@@ -101,7 +102,8 @@
   flex-direction: column;
 }
 
-.side-navbar-actions a {
+.side-navbar-actions a,
+.side-navbar-actions div {
   display: flex;
   align-items: center;
   color: white;
@@ -122,7 +124,8 @@
   }
 
   .side-navbar-links a,
-  .side-navbar-actions a {
+  .side-navbar-actions a,
+  .side-navbar-actions div {
     padding: 8px 16px;
   }
 
@@ -143,7 +146,8 @@
   }
 
   .side-navbar-links a,
-  .side-navbar-actions a {
+  .side-navbar-actions a,
+  .side-navbar-actions div {
     padding: 6px 14px;
     font-size: 12px;
   }

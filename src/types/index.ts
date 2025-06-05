@@ -42,6 +42,7 @@ export interface FormData {
   email: string;
   password: string;
   confirmPassword: string;
+  terms: boolean;
 }
 
 export enum Step {

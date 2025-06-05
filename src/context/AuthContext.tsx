@@ -1,35 +1,48 @@
-import { User } from "@/types/auth";
-import { createContext, useContext, useState } from "react";
+// AuthContext.tsx
+import { createContext, useContext, useEffect, useState } from "react";
+import { FaSpinner } from "react-icons/fa";
 
 interface AuthContextValue {
-  user: User | null;
   isAuthenticated: boolean;
-  login: (data: User) => void;
+  login: (token: string) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => {
-    const stored = localStorage.getItem("user");
-    return stored ? JSON.parse(stored) : null;
-  });
+  const [token, setToken] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const login = (userData: User) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    setToken(savedToken);
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div>
+        <FaSpinner />
+      </div>
+    );
+  }
+
+  const login = (newToken: string) => {
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
   };
 
   const logout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    setToken(null);
   };
 
-  const isAuthenticated = !!user?.jwt;
+  const isAuthenticated = !!token;
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

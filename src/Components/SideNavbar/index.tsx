@@ -1,17 +1,36 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ChevronRight, Menu } from "lucide-react";
-import { navLinks, bottomLinks } from "../../constants";
-import { full_logo } from "../../assets";
+import { navLinks } from "../../constants";
+import { exchange, full_logo, login_png } from "../../assets";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import "./styles.css";
 import { format } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import { calendar_svg } from "../../assets";
 import { cn } from "@/lib/utils";
+import { useMutation } from "@tanstack/react-query";
+import { logout } from "@/api/auth";
+import { useAuth } from "@/context/AuthContext";
 
 const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const { logout: contextLogout } = useAuth();
+
+  const logoutMutation = useMutation({
+    mutationFn: async () => {
+      const token = localStorage.getItem("token");
+      await logout(token);
+    },
+    onSettled: () => {
+      contextLogout();
+      navigate("/", { replace: true });
+    },
+  });
+  const handleClick = () => {
+    logoutMutation.mutate();
+  };
 
   const handleDropdownToggle = (link: string) => {
     setOpenDropdown((prev) => (prev === link ? null : link));
@@ -107,17 +126,14 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
 
       <div className="side-navbar-bottom">
         <div className="side-navbar-actions">
-          {bottomLinks.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              onClick={onClick}
-              className={location.pathname === link.to ? "active" : "text-sm"}
-            >
-              <img src={link.icon} alt="" className="side-navbar-icon" />
-              {link.text}
-            </Link>
-          ))}
+          <div onClick={handleClick} className="text-sm cursor-pointer">
+            <img src={login_png} alt="" className="side-navbar-icon" />
+            Log out
+          </div>
+          <Link to={"#"} onClick={onClick} className="text-sm">
+            <img src={exchange} alt="exchange" className="side-navbar-icon" />
+            Switch account
+          </Link>
         </div>
       </div>
     </div>
@@ -125,10 +141,8 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
 };
 
 const SideNavbar = () => {
-  const currentDate = useMemo(
-    () => format(new Date(), "MMMM dd, yyyy - h:mm a"),
-    []
-  );
+  const currentDate = format(new Date(), "MMMM dd, yyyy - h:mm a");
+
   const [scrolled, setScrolled] = useState(false);
   const closeSidebar = () => setIsOpen(false);
   const [isOpen, setIsOpen] = useState(false);

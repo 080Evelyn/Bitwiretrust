@@ -6,6 +6,7 @@ import { router } from "./Routes/Routes.tsx";
 import { PinModalProvider } from "./hooks/PinModalProvider.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./context/AuthContext.tsx";
+import { Toaster } from "./Components/ui/sonner.tsx";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
@@ -16,6 +17,8 @@ createRoot(document.getElementById("root")!).render(
           <RouterProvider router={router} />
         </PinModalProvider>
       </AuthProvider>
+
+      <Toaster />
     </QueryClientProvider>
   </StrictMode>
 );

@@ -1,17 +1,25 @@
 import { Check, Copy } from "lucide-react";
-import { Dialog, DialogContent, DialogOverlay } from "../ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogOverlay,
+  DialogTitle,
+} from "../ui/dialog";
 import { WithrawalImage } from "@/assets";
 import { useState } from "react";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { DvaAccountInfo } from "@/types/dashboard";
 
 interface FundAccountProps {
   isFundAccountOpen: boolean;
   setIsFundAccountOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  dvaData?: DvaAccountInfo;
 }
 
 const FundAccountModal = ({
   isFundAccountOpen,
   setIsFundAccountOpen,
+  dvaData,
 }: FundAccountProps) => {
   const [copied, setCopied] = useState(false);
   const handleCopy = () => {
@@ -40,10 +48,14 @@ const FundAccountModal = ({
                 alt="withdrawal icon"
               />
               <div className="flex pl-35 py-3 px-3 justify-around items-center bg-white w-full">
-                <div className="flex flex-col text-center">
-                  <h4 className="font-medium text-[#221D7A]">Fund Account</h4>
-                  <span className="text-sm md:text-[10px]">Bank Transfer</span>
-                </div>
+                <DialogTitle>
+                  <div className="flex flex-col text-center">
+                    <h4 className="font-medium text-[#221D7A]">Fund Account</h4>
+                    <span className="text-sm md:text-[10px]">
+                      Bank Transfer
+                    </span>
+                  </div>
+                </DialogTitle>
 
                 <span className="size-[17px] bg-[#221d7a] rounded-full text-end" />
               </div>
@@ -55,7 +67,15 @@ const FundAccountModal = ({
                       Account Name
                     </span>
                     <span className="text-2xl uppercase text-[#221D7A]">
-                      Temidayo Gabriel
+                      {dvaData?.accountName}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-2 items-center px-5 pb-2.5 pt-5 bg-white">
+                    <span className="font-medium text-[#D9D9D9]">
+                      Bank Name
+                    </span>
+                    <span className="text-2xl uppercase text-[#221D7A]">
+                      {dvaData?.bankName}
                     </span>
                   </div>
                   <div className="flex flex-col gap-2.5 items-center px-5 py-2.5 bg-white">
@@ -67,7 +87,7 @@ const FundAccountModal = ({
                         className="text-2xl font-medium"
                         id="account-number"
                       >
-                        53447228468
+                        {dvaData?.accountNumber}
                       </span>
                       {copied ? (
                         <Check className="size-6" />

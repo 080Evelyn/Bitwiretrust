@@ -1,9 +1,8 @@
 import { useAuth } from "@/context/AuthContext";
-import { useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 
 export function ProtectedRoute() {
-  const isAuthenticated = useState(true);
+  const { isAuthenticated } = useAuth();
   return isAuthenticated ? <Outlet /> : <Navigate to="/register" />;
 }
 
