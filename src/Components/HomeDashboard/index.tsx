@@ -13,8 +13,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import BalanceOverview from "./BalanceOverview";
 import TransferModal from "./TransferModal";
 import FundAccountModal from "./FundAccountModal";
+import { useQuery } from "@tanstack/react-query";
+import { dvaInfo } from "@/api/wallet-service";
+import { DvaAccountInfo } from "@/types/dashboard";
 
 type Props = object;
+interface DvaApiResponse {
+  responseCode: string;
+  responseMsg: string;
+  data: DvaAccountInfo;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const HomeDashboard = (_props: Props) => {
@@ -94,6 +102,13 @@ const HomeDashboard = (_props: Props) => {
       ))}
     </div>
   );
+
+  const { data: apiResponse } = useQuery<DvaApiResponse>({
+    queryKey: ["dvaInfo"],
+    queryFn: dvaInfo,
+  });
+
+  const dvaData = apiResponse?.data;
 
   return (
     <>
@@ -267,6 +282,7 @@ const HomeDashboard = (_props: Props) => {
         setIsFundAccountOpen={() => {
           setIsFundAccountOpen(!isFundAccountOpen);
         }}
+        dvaData={dvaData}
       />
     </>
   );

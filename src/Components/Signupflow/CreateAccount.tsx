@@ -1,5 +1,16 @@
+import { useState } from "react";
 import { full_logo } from "@/assets";
 import { FormData } from "@/types";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "../ui/dialog";
+import { DialogOverlay } from "@radix-ui/react-dialog";
+import TermsAndCondition from "@/constants/TermsAndCondition";
 
 interface CreateAccountProps {
   formData: FormData;
@@ -20,6 +31,18 @@ const CreateAccount = ({
   getStepBackground,
   isLoading,
 }: CreateAccountProps) => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <div className="step-content">
       <div
@@ -92,28 +115,75 @@ const CreateAccount = ({
           </div>
           <div className="form-group">
             <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="••••••••"
+                className="!pr-14"
+              />
+              <button
+                type="button"
+                className="absolute top-1/2 right-[24%] md:right-[15%] transform -translate-y-1/2 focus:outline-none"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </div>
           <div className="form-group">
             <label>Confirm Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleInputChange}
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                placeholder="••••••••"
+                className="!pr-14"
+              />
+              <button
+                type="button"
+                className="absolute top-1/2 right-[24%] md:right-[15%] transform -translate-y-1/2 focus:outline-none"
+                onClick={toggleConfirmPasswordVisibility}
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </div>
           <div className="terms-checkbox">
-            <input type="checkbox" id="terms" />
-            <label htmlFor="terms">Accept Terms and Condition</label>
+            <input
+              type="checkbox"
+              id="terms"
+              name="terms"
+              className="size-4"
+              checked={formData.terms}
+              onChange={handleInputChange}
+            />
+            <label
+              htmlFor="terms"
+              className="!underline cursor-pointer hover:text-blue-700"
+              onClick={() => setShowDialog(true)}
+            >
+              Accept Terms and Condition
+            </label>
           </div>
+
+          <Dialog open={showDialog} onOpenChange={setShowDialog}>
+            <DialogOverlay>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Terms and Conditions</DialogTitle>
+                </DialogHeader>
+                <DialogDescription>
+                  <TermsAndCondition />
+                </DialogDescription>
+              </DialogContent>
+            </DialogOverlay>
+          </Dialog>
+
           <div className="button-container">
             <button
               type="button"

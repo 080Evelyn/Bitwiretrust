@@ -20,7 +20,9 @@ export const verifyEmailCode = async (data: { otp: string; email: string }) => {
 };
 
 export const login = async (data: { email: string; password: string }) => {
+  localStorage.setItem("email", data.email);
   const response = await axios.post(`${url}/v1/auth/login`, data);
+  localStorage.setItem("token", response.data.data.jwt);
   return response.data;
 };
 
@@ -30,4 +32,20 @@ export const createPasscode = async (data: {
 }) => {
   const response = await axios.post(`${url}/v1/auth/set-passcode`, data);
   return response.data;
+};
+
+export const logout = async (token: string | null) => {
+  if (!token) return;
+
+  try {
+    await axios.post(
+      `${url}/v1/auth/logout`,
+      {},
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  } catch (error) {
+    console.error("Logout API error:", error);
+    localStorage.removeItem("email");
+    localStorage.removeItem("token");
+  }
 };

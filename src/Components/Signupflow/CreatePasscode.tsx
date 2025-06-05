@@ -13,6 +13,7 @@ interface CreatePasscodeProps {
   setConfirmPasscode: (passcode: string[]) => void;
   passcodeMatchError: boolean;
   setPasscodeMatchError: (error: boolean) => void;
+  isLoading: boolean;
 }
 
 const CreatePasscode = ({
@@ -26,6 +27,7 @@ const CreatePasscode = ({
   setConfirmPasscode,
   passcodeMatchError,
   getStartedFields,
+  isLoading,
   setPasscodeMatchError,
 }: CreatePasscodeProps) => {
   const [isConfirming, setIsConfirming] = useState(false);
@@ -129,9 +131,9 @@ const CreatePasscode = ({
               onClick={
                 isConfirming ? handleSubmit : () => setIsConfirming(true)
               }
-              disabled={!isButtonEnabled}
+              disabled={!isButtonEnabled || isLoading}
             >
-              {isConfirming ? "Submit" : "Next"}
+              {isLoading ? "Processing" : isConfirming ? "Submit" : "Next"}
             </button>
           </div>
         </form>
