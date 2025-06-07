@@ -15,6 +15,7 @@ import BuyGiftCard from "@/Pages/GiftCards/BuyGiftCard";
 import SellGiftCards from "@/Pages/GiftCards/SellGiftCards";
 import CryptoTrading from "@/Pages/CryptoTrading";
 import { ProtectedRoute, PublicRoute } from "./protectedRoutes";
+import ForgotPassword from "@/Pages/Forget-Password/ForgetPassword";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,11 @@ export const router = createBrowserRouter([
             path: "get-started",
             element: <Register initialStep={Step.GET_STARTED} />,
           },
+          {
+            path: "login",
+            element: <Register initialStep={Step.GET_STARTED} />,
+          },
+          { path: "forgot-password", element: <ForgotPassword /> },
         ],
       },
     ],

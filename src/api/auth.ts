@@ -23,6 +23,7 @@ export const login = async (data: { email: string; password: string }) => {
   localStorage.setItem("email", data.email);
   const response = await axios.post(`${url}/v1/auth/login`, data);
   localStorage.setItem("token", response.data.data.jwt);
+  localStorage.setItem("userId", response.data.data.userId);
   return response.data;
 };
 
@@ -48,4 +49,28 @@ export const logout = async (token: string | null) => {
     localStorage.removeItem("email");
     localStorage.removeItem("token");
   }
+};
+
+export const forgotPassword = async (data: { email: string }) => {
+  const response = await axios.post(`${url}/v1/auth/forgot-password`, data);
+  return response.data;
+};
+
+export const verifyResetPasswordOtp = async (data: {
+  email: string;
+  otp: string;
+}) => {
+  const response = await axios.post(
+    `${url}/v1/auth/verify-otp-for-forget-password`,
+    data
+  );
+  return response.data;
+};
+
+export const resetPassword = async (data: {
+  email: string;
+  newPassword: string;
+}) => {
+  const response = await axios.post(`${url}/v1/auth/reset-password`, data);
+  return response.data;
 };

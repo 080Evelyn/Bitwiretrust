@@ -1,5 +1,4 @@
 import "./styles.css";
-import { HeaderProps } from "../../types";
 import { format } from "date-fns";
 import { calendar_svg, ellipse_user } from "../../assets";
 import { HiOutlineBell } from "react-icons/hi2";
@@ -8,11 +7,15 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { dummyNotifications } from "@/constants/notification-detials";
 import NotificationPopover from "../NotificationModal/Notification";
+import { useUser } from "@/context/userContext";
 
-const DashboardHeader: React.FC<HeaderProps> = ({ username }) => {
+const DashboardHeader = () => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [hasNotifications] = useState(true);
   const [hasProfileNotifications] = useState(true);
+  const { user } = useUser();
+
+  const fullName = user?.firstName + " " + user?.lastName;
 
   const HeaderContent = () => (
     <div className="dashboard-header flex items-center justify-between">
@@ -27,7 +30,7 @@ const DashboardHeader: React.FC<HeaderProps> = ({ username }) => {
 
         <div className="welcome-section">
           <h1 className="font-semibold">Welcome to Bitwire Trust</h1>
-          <p>Hi, {username}! Welcome Back</p>
+          <p>Hi, {fullName}! Welcome Back</p>
         </div>
       </div>
 

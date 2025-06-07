@@ -76,12 +76,12 @@ const TransferModal = ({
     <>
       <Dialog open={isWithdrawalOpen} onOpenChange={setIsWithdrawalOpen}>
         <DialogOverlay>
-          <DialogContent className="m-0 p-0 max-md:top-0 transform max-md:translate-y-0 md:px-0 md:pb-[5px] md:pt-2 max-md:rounded-none max-md:h-screen max-md:max-w-screen z-50 [&>button.absolute]:hidden">
+          <DialogContent className="m-0 p-0 max-sm:top-0 transform max-sm:translate-y-0 sm:px-0 sm:pb-[5px] sm:pt-2 max-sm:rounded-none max-sm:h-screen max-sm:max-w-screen z-50 [&>button.absolute]:hidden">
             <div
               className="relative bg-[#F9F9F9] pb-8"
               style={{ fontFamily: "Poppins, sans-serif" }}
             >
-              <div className="hidden md:flex pl-35 py-3 justify-around items-center bg-white w-full px-3">
+              <div className="hidden sm:flex pl-35 py-3 justify-around items-center bg-white w-full px-3">
                 <img
                   src={WithrawalImage}
                   className="size-[85px] rounded-full absolute top-12 left-20 transform -translate-x-1/2 -translate-y-1/2"
@@ -90,7 +90,7 @@ const TransferModal = ({
                 <h4 className="font-medium text-[#221D7A]">Transfer Page</h4>
                 <span className="size-[17px] bg-[#221d7a] rounded-full text-end" />
               </div>
-              <div className="relative md:hidden flex items-center justify-center pt-8 pb-4">
+              <div className="relative sm:hidden flex items-center justify-center pt-8 pb-4">
                 <DialogClose className="absolute left-4 cursor-pointer">
                   <ArrowLeft />
                 </DialogClose>
@@ -100,7 +100,7 @@ const TransferModal = ({
               <Form {...form}>
                 <form
                   onSubmit={form.handleSubmit(onSubmit)}
-                  className="pt-5 md:pt-20"
+                  className="pt-5 sm:pt-20"
                 >
                   <div className="flex flex-col gap-3 px-5">
                     <div className="relative w-full">
