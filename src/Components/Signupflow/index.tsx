@@ -21,6 +21,7 @@ import {
 } from "@/api/auth";
 import { toast } from "sonner";
 import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 
 type Props = {
   initialStep?: Step;
@@ -65,8 +66,6 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
   const [codeError, setCodeError] = useState<boolean>(false);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_showPasscodeScreen, setShowPasscodeScreen] = useState<boolean>(false);
   const [confirmPasscode, setConfirmPasscode] = useState<string[]>([
     "",
     "",
@@ -92,7 +91,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     let isAdult = false;
     if (formData.dateOfBirth) {
       const today = new Date();
-      const birthday = new Date(formData.dateOfBirth); // Temporary conversion just for age check
+      const birthday = new Date(formData.dateOfBirth);
       const age = today.getFullYear() - birthday.getFullYear();
       const month = today.getMonth() - birthday.getMonth();
       isAdult = age >= 18 || (age === 17 && month >= 0);
@@ -212,15 +211,23 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     },
   });
 
+  const { ContextLogin } = useAuth();
+
   const loginMutation = useMutation({
     mutationFn: () => login(getStartedFields),
-    onSuccess: () => {
-      setShowSuccessModal(true);
-      setTimeout(() => {
-        setShowSuccessModal(false);
-        setShowPasscodeScreen(true);
-        setCurrentStep(Step.CREATE_PASSCODE);
-      }, 2000);
+    onSuccess: (response) => {
+      const isPasscodeSet = response.data.isPassCodeSet;
+      ContextLogin(response.data.jwt);
+
+      if (isPasscodeSet) {
+        navigate("/dashboard");
+      } else {
+        setShowSuccessModal(true);
+        setTimeout(() => {
+          setShowSuccessModal(false);
+          setCurrentStep(Step.CREATE_PASSCODE);
+        }, 2000);
+      }
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
@@ -373,6 +380,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
             getStartedFields={getStartedFields}
             renderPasscodeInputs={renderPasscodeInputs}
             passcode={passcode}
+            setPasscode={setPasscode}
             confirmPasscode={confirmPasscode}
             setConfirmPasscode={setConfirmPasscode}
             passcodeMatchError={passcodeMatchError}

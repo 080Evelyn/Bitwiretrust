@@ -1,11 +1,10 @@
-// AuthContext.tsx
 import { createContext, useContext, useEffect, useState } from "react";
-import { FaSpinner } from "react-icons/fa";
 
 interface AuthContextValue {
   isAuthenticated: boolean;
-  login: (token: string) => void;
+  ContextLogin: (token: string) => void;
   logout: () => void;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -20,15 +19,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  if (isLoading) {
-    return (
-      <div>
-        <FaSpinner />
-      </div>
-    );
-  }
-
-  const login = (newToken: string) => {
+  const ContextLogin = (newToken: string) => {
     localStorage.setItem("token", newToken);
     setToken(newToken);
   };
@@ -42,7 +33,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const isAuthenticated = !!token;
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, ContextLogin, logout, isLoading }}
+    >
       {children}
     </AuthContext.Provider>
   );

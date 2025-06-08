@@ -1,4 +1,5 @@
 import { full_logo, passcode_lock } from "@/assets";
+import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
 interface CreatePasscodeProps {
@@ -9,10 +10,11 @@ interface CreatePasscodeProps {
   isButtonEnabled: boolean;
   passcode: string[];
   confirmPasscode: string[];
-  getStartedFields: { email: string; password: string };
+  setPasscode: (passcode: string[]) => void;
   setConfirmPasscode: (passcode: string[]) => void;
   passcodeMatchError: boolean;
   setPasscodeMatchError: (error: boolean) => void;
+  getStartedFields: { email: string; password: string };
   isLoading: boolean;
 }
 
@@ -24,6 +26,7 @@ const CreatePasscode = ({
   isButtonEnabled,
   passcode,
   confirmPasscode,
+  setPasscode,
   setConfirmPasscode,
   passcodeMatchError,
   getStartedFields,
@@ -135,6 +138,22 @@ const CreatePasscode = ({
             >
               {isLoading ? "Processing" : isConfirming ? "Submit" : "Next"}
             </button>
+
+            {isConfirming && (
+              <button
+                type="button"
+                className="text-[#6c0aa1] text-sm flex gap-2 justify-center items-center cursor-pointer mt-4"
+                onClick={() => {
+                  setIsConfirming(false);
+                  setPasscode(["", "", "", "", "", ""]);
+                  setConfirmPasscode(["", "", "", "", "", ""]);
+                  setPasscodeMatchError(false);
+                }}
+              >
+                <ArrowLeft className="size-5" />
+                <span>Re-enter passcode</span>
+              </button>
+            )}
           </div>
         </form>
       </div>

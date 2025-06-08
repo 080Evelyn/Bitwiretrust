@@ -20,7 +20,6 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Function to check if link is active
   const isActive = (path: string) => {
     return location.pathname === path ? "active" : "";
   };
@@ -57,9 +56,16 @@ const Navbar = () => {
           </Link>
         </div>
 
-        <div className="nav-register">
-          <Link to="/register" className={isActive("/register")}>
-            Register
+        <div className="flex items-center gap-3 lg:mt-1">
+          <Link to="/login">
+            <div className="py-1.75 px-3.5 outline-[#7910b9] outline-[1.5px] rounded-sm hover:bg-[#f9f9f9] hover:scale-[1.05] transition-all ease-in-out duration-300">
+              Login
+            </div>
+          </Link>
+          <Link to="/register">
+            <div className="py-2 px-3.5 bg-[#7910b9] text-white rounded-sm hover:bg-[#6809a3] hover:scale-[1.05] transition-all ease-in-out duration-300">
+              Register
+            </div>
           </Link>
         </div>
       </div>

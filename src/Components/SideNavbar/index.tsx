@@ -25,7 +25,7 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
     },
     onSettled: () => {
       contextLogout();
-      navigate("/", { replace: true });
+      navigate("/get-started", { replace: true });
     },
   });
   const handleClick = () => {
