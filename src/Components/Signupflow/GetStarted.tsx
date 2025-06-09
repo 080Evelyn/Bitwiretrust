@@ -3,6 +3,7 @@ import { full_logo } from "@/assets";
 import { Checkbox } from "../ui/checkbox";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { Step } from "@/types";
 
 interface GetStartedProps {
   getLeftSideClass: () => string;
@@ -12,6 +13,7 @@ interface GetStartedProps {
   handleNextStep: () => void;
   isButtonEnabled: boolean;
   isLoading: boolean;
+  setCurrentStep: (step: Step) => void;
 }
 
 const GetStarted = ({
@@ -22,6 +24,7 @@ const GetStarted = ({
   handleNextStep,
   isButtonEnabled,
   isLoading,
+  setCurrentStep,
 }: GetStartedProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -79,8 +82,20 @@ const GetStarted = ({
           <img src={full_logo} alt="Bitwire" />
         </div>
         <h2>Let's get you started!</h2>
+        <div className="flex mb-3 max-md:justify-center items-center gap-2 ">
+          <div className="font-medium text-sm text-gray-600">
+            Don&apos;t have an account?
+          </div>
+          <Link to="/register">
+            <button
+              onClick={() => setCurrentStep(Step.CREATE_ACCOUNT)}
+              className="text-blue-700 cursor-pointer hover:!underline text-sm font-medium transition-colors"
+            >
+              Sign Up
+            </button>
+          </Link>
+        </div>
         <p>Fill in your details</p>
-
         <form>
           <div className="form-group">
             <label>Email</label>

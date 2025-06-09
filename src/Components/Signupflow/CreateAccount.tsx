@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { full_logo } from "@/assets";
-import { FormData } from "@/types";
+import { FormData, Step } from "@/types";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import {
   Dialog,
@@ -11,6 +11,7 @@ import {
 } from "../ui/dialog";
 import { DialogOverlay } from "@radix-ui/react-dialog";
 import TermsAndCondition from "@/constants/TermsAndCondition";
+import { Link } from "react-router-dom";
 
 interface CreateAccountProps {
   formData: FormData;
@@ -20,6 +21,7 @@ interface CreateAccountProps {
   getLeftSideClass: () => string;
   getStepBackground: () => string;
   isLoading: boolean;
+  setCurrentStep: (step: Step) => void;
 }
 
 const CreateAccount = ({
@@ -30,6 +32,7 @@ const CreateAccount = ({
   getLeftSideClass,
   getStepBackground,
   isLoading,
+  setCurrentStep,
 }: CreateAccountProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -62,6 +65,19 @@ const CreateAccount = ({
         </div>
         <h2>Create an account</h2>
         <p>Let's get you started</p>
+        <div className="flex max-md:justify-center -mt-6 mb-6 items-center gap-2 ">
+          <div className="font-medium text-sm text-gray-600">
+            Already have an account?
+          </div>
+          <Link to="/login">
+            <button
+              onClick={() => setCurrentStep(Step.GET_STARTED)}
+              className="text-blue-700 cursor-pointer hover:!underline text-sm font-medium transition-colors"
+            >
+              Login
+            </button>
+          </Link>
+        </div>
         <form>
           <div className="form-group">
             <label>Enter Your First</label>

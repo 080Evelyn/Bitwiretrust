@@ -173,8 +173,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
 
   const createAccountMutation = useMutation({
     mutationFn: createAccount,
-    onSuccess: (data) => {
-      console.log("Account created:", data);
+    onSuccess: () => {
       setStoredCredentials({
         ...storedCredentials,
       });
@@ -201,25 +200,28 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       setCurrentStep(currentStep + 1);
     },
     onError: (error: unknown) => {
+      setCodeError(true);
       if (axios.isAxiosError(error)) {
         const responseDesc =
           error.response?.data?.responseDesc || "Something went wrong";
-        toast.error(responseDesc);
+        console.error(responseDesc);
       } else {
         toast.error("Unexpected error occurred");
       }
     },
   });
 
-  const { ContextLogin } = useAuth();
+  const { ContextLogin, updatePasscodeStatus } = useAuth();
 
   const loginMutation = useMutation({
     mutationFn: () => login(getStartedFields),
     onSuccess: (response) => {
-      const isPasscodeSet = response.data.isPassCodeSet;
-      ContextLogin(response.data.jwt);
+      const isPasscodeSet =
+        response.data.isPassCodeSet === true ||
+        response.data.isPassCodeSet === "true";
 
       if (isPasscodeSet) {
+        console.log(isPasscodeSet);
         navigate("/dashboard");
       } else {
         setShowSuccessModal(true);
@@ -228,6 +230,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
           setCurrentStep(Step.CREATE_PASSCODE);
         }, 2000);
       }
+      ContextLogin(response.data.jwt, isPasscodeSet);
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
@@ -244,6 +247,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     mutationFn: ({ email, passcode }: { email: string; passcode: string }) =>
       createPasscode({ email, passcode }),
     onSuccess: () => {
+      updatePasscodeStatus();
       navigate("/dashboard");
     },
     onError: (error: unknown) => {
@@ -293,13 +297,15 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
 
   const renderCodeInputs = () => {
     return (
-      <div className="code-inputs">
+      <div className="flex justify-center items-center w-full md:w-[80%] lg:w-[90%] gap-3.5 md:gap-5 lg:gap-8 mb-10">
         {verificationCode.map((digit, index) => (
           <input
             key={index}
             id={`code-input-${index}`}
-            type="text"
-            className={`code-input ${codeError ? "error" : ""}`}
+            type="tel"
+            className={`size-15 md:size-13 lg:size-20 !rounded-md text-center font-semibold text-2xl md:text-lg lg:!text-3xl ${
+              codeError ? "error" : ""
+            }`}
             value={digit}
             onChange={(e) => handleCodeChange(index, e.target.value)}
             maxLength={1}
@@ -353,6 +359,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
           <CreateAccount
             {...sharedProps}
             formData={formData}
+            setCurrentStep={setCurrentStep}
             handleInputChange={handleInputChange}
           />
         );
@@ -369,6 +376,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
         return (
           <GetStarted
             {...sharedProps}
+            setCurrentStep={setCurrentStep}
             getStartedFields={getStartedFields}
             handleGetStartedInputChange={handleGetStartedInputChange}
           />
