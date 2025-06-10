@@ -262,15 +262,14 @@
 
 .code-inputs {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 2.5rem;
   gap: 32px;
   width: 90%;
 }
 
 .code-input {
-  width: 80px;
-  height: 80px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 1.5rem;
@@ -278,7 +277,6 @@
   color: #000000;
   font-family: "Montserrat";
   font-weight: 700px;
-  font-size: 79.12px;
   line-height: 49.45px;
   letter-spacing: -0.2px;
 }
