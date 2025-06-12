@@ -153,6 +153,12 @@ select {
   .custom-input {
     @apply w-full h-12.5 !text-base !bg-[#D9D9D933] !rounded-sm placeholder:text-xs placeholder:text-black !border-0;
   }
+  .custom-form-group {
+    @apply w-full flex flex-col gap-0.5 px-4 text-sm md:text-xs font-medium;
+  }
+  .form-input {
+    @apply w-full h-9 !text-base !bg-[#D9D9D933] !rounded-sm placeholder:text-xs !border-0;
+  }
 }
 
 .animate-shake {

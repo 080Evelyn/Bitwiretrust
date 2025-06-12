@@ -1,3 +1,4 @@
+import { getToken } from "@/utils/AuthStorage";
 import axios from "axios";
 
 const url = import.meta.env.VITE_API_URL;
@@ -35,22 +36,6 @@ export const createPasscode = async (data: {
   return response.data;
 };
 
-export const logout = async (token: string | null) => {
-  if (!token) return;
-
-  try {
-    await axios.post(
-      `${url}/v1/auth/logout`,
-      {},
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-  } catch (error) {
-    console.error("Logout API error:", error);
-    localStorage.removeItem("email");
-    localStorage.removeItem("token");
-  }
-};
-
 export const forgotPassword = async (data: { email: string }) => {
   const response = await axios.post(`${url}/v1/auth/forgot-password`, data);
   return response.data;
@@ -72,5 +57,26 @@ export const resetPassword = async (data: {
   newPassword: string;
 }) => {
   const response = await axios.post(`${url}/v1/auth/reset-password`, data);
+  return response.data;
+};
+
+export const bankList = async () => {
+  const response = await axios.get(`${url}/v1/auth/banks-list`);
+  return response.data;
+};
+
+export const verifyBankAccount = async (data: {
+  accountNumber: string;
+  bankName: string;
+}) => {
+  const token = getToken();
+
+  const response = await axios.get(`${url}/v1/auth/verify-bank-account`, {
+    params: data,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   return response.data;
 };

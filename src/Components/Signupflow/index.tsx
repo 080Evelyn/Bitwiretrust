@@ -220,6 +220,8 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
         response.data.isPassCodeSet === true ||
         response.data.isPassCodeSet === "true";
 
+      ContextLogin(response.data.jwt, isPasscodeSet);
+
       if (isPasscodeSet) {
         console.log(isPasscodeSet);
         navigate("/dashboard");
@@ -230,7 +232,6 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
           setCurrentStep(Step.CREATE_PASSCODE);
         }, 2000);
       }
-      ContextLogin(response.data.jwt, isPasscodeSet);
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
@@ -401,11 +402,9 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
   };
 
   return (
-    <div className="signup-wrapper">
-      <div className="signup-container">
-        {renderStepContent()}
-        {showSuccessModal && <SuccessModal />}
-      </div>
+    <div className="max-h-screen overflow-hidden">
+      {renderStepContent()}
+      {showSuccessModal && <SuccessModal />}
     </div>
   );
 };

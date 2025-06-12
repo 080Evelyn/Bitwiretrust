@@ -1,59 +1,23 @@
 import React, { useState } from "react";
 import "./styles.css";
-import { ProfileModalProps } from "../../types";
-import {
-  IoIosArrowForward,
-  IoIosEye,
-  IoIosEyeOff,
-  IoMdCopy,
-} from "react-icons/io";
-import {
-  about_us,
-  change_password,
-  contact_email,
-  contact_us,
-  dark_mode,
-  edit_profile,
-  facebook_contact,
-  faq,
-  illustration,
-  instagram,
-  invite_friends,
-  kyc,
-  legal,
-  notification_bell,
-  notification_key,
-  passcode_lock,
-  phone_icon,
-  policies,
-  settings,
-  term_condition,
-  transaction_pin,
-  twitter,
-} from "../../assets";
-import TermsAndCondition from "@/constants/TermsAndCondition";
-import PrivacyAndPolicy from "@/constants/PrivacyAndPolicy";
-
-type ModalType =
-  | "profile"
-  | "invite"
-  | "contact"
-  | "settings"
-  | "security-settings"
-  | "transaction-pin"
-  | "confirm-transaction-pin"
-  | "notifications"
-  | "legal"
-  | "terms-and-conditions"
-  | "policies"
-  | null;
+import { ModalType, ProfileModalProps } from "../../types";
+import { useUser } from "@/context/userContext";
+import Invite from "./profile-component/Invite";
+import SecuritySettings from "./profile-component/SecuritySettings";
+import TransactionPin from "./profile-component/TransactionPin";
+import ConfirmTransactionPin from "./profile-component/ConfirmTransactionPin";
+import Notifications from "./profile-component/Notification";
+import Legal from "./profile-component/Legal";
+import TermsCondition from "./profile-component/TermsCondition";
+import PrivacyPolicy from "./profile-component/PrivacyPolicy";
+import Profile from "./profile-component/Profile";
+import Settings from "./profile-component/Settings";
+import Contact from "./profile-component/Contact";
 
 const ProfileModal: React.FC<ProfileModalProps> = ({
   isOpen,
   onClose,
   profileImage,
-  email,
-  username,
 }) => {
   const [activeModal, setActiveModal] = useState<ModalType>("profile");
   const [darkMode, setDarkMode] = useState(false);
@@ -72,6 +36,8 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
   ]);
   const [emailNotification, setEmailNotification] = useState(true);
   const [pushNotification, setPushNotification] = useState(true);
+  const { user } = useUser();
+  const fullName = user?.firstName + " " + user?.lastName;
 
   const toggleModal = (modal: ModalType) => {
     setActiveModal(modal);
@@ -144,570 +110,78 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
   return (
     <div className="modal-overlay">
       {activeModal === "profile" && (
-        <div className="modal profile-modal">
-          <div className="profile-header">
-            <div className="profile-image">
-              <img src={profileImage} alt="profile" />
-              <div className="edit-icon">
-                <img src={edit_profile} alt="" className="edit-profile" />
-              </div>
-            </div>
-            <h3>{username}</h3>
-            <p>{email}</p>
-            <span className="verified-badge">Verified</span>
-          </div>
-
-          <div className="profile-options">
-            <div className="option" onClick={() => toggleModal("invite")}>
-              <div className="option-left">
-                <img
-                  src={invite_friends}
-                  alt=""
-                  className="option-icon invite-icon"
-                />
-                <span>Invite Friends</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-
-            <div className="option">
-              <div className="option-left">
-                <img
-                  src={dark_mode}
-                  alt=""
-                  className="option-icon dark-mode-icon"
-                />
-                <span>Dark Mode</span>
-              </div>
-              <label className="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={darkMode}
-                  onChange={toggleDarkMode}
-                />
-                <span className="slider round"></span>
-              </label>
-            </div>
-
-            <div className="option" onClick={() => toggleModal("contact")}>
-              <div className="option-left">
-                <img
-                  src={contact_us}
-                  alt="contact-us"
-                  className="option-icon contact-icon"
-                />
-                <span>Contact Us</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-
-            <div className="option" onClick={() => toggleModal("settings")}>
-              <div className="option-left">
-                <img
-                  src={settings}
-                  alt="settings"
-                  className="option-icon settings-icon"
-                />
-                <span>Settings</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-
-            <div className="option" onClick={() => toggleModal("legal")}>
-              <div className="option-left">
-                <img
-                  src={legal}
-                  alt="legal"
-                  className="option-icon legal-icon"
-                />
-                <span>Legal</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-
-            <div className="option">
-              <div className="option-left">
-                <img src={kyc} alt="kyc" className="option-icon account-icon" />
-                <span>Account Limitations (KYC)</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-
-            <div className="option">
-              <div className="option-left">
-                <img
-                  src={about_us}
-                  alt="about-us"
-                  className="option-icon about-icon"
-                />
-                <span>About Us</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-          </div>
-
-          <button className="close-modal-btn" onClick={handleClose}>
-            Close
-          </button>
-        </div>
+        <Profile
+          toggleModal={toggleModal}
+          fullName={fullName}
+          profileImage={profileImage}
+          user={user || undefined}
+          darkMode={darkMode}
+          toggleDarkMode={toggleDarkMode}
+          handleClose={handleClose}
+        />
       )}
 
       {activeModal === "invite" && (
-        <div className="modal invite-modal">
-          <div className="modal-header">
-            <button className="back-btn" onClick={() => toggleModal("profile")}>
-              Back
-            </button>
-            <h3>Invite Friends</h3>
-          </div>
-
-          <div className="invite-content">
-            <div className="invite-illustration">
-              <div className="invite-graphic">
-                <div className="people-circles">
-                  <img src={illustration} alt="illustration" />
-                </div>
-              </div>
-            </div>
-
-            <h4>Get Rewarded for Inviting Users</h4>
-            <p>Refer friends to Bitwire Trust and earn referral bonuses</p>
-
-            <div className="referral-code">
-              <code>bitwirejoneswie3iu44</code>
-              <button className="copy-btn" onClick={copyReferralCode}>
-                Copy <IoMdCopy />
-              </button>
-            </div>
-          </div>
-        </div>
+        <Invite toggleModal={toggleModal} copyReferralCode={copyReferralCode} />
       )}
 
-      {activeModal === "contact" && (
-        <div className="modal contact-modal">
-          <div className="modal-header">
-            <button className="back-btn" onClick={() => toggleModal("profile")}>
-              Back
-            </button>
-            <h3>Contact Us</h3>
-          </div>
+      {activeModal === "contact" && <Contact toggleModal={toggleModal} />}
 
-          <div className="contact-options">
-            <div className="contact-option">
-              <div className="option-left">
-                <img
-                  src={contact_email}
-                  alt="email"
-                  className="option-icon support-icon"
-                />
-                <span>Support@bitwire.com</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-
-            <div className="contact-option">
-              <div className="option-left">
-                <img
-                  src={phone_icon}
-                  alt="phone-icon"
-                  className="option-icon phone-icon"
-                />
-                <span>01234567890</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-
-            <div className="contact-option">
-              <div className="option-left">
-                <img src={faq} alt="faq" className="option-icon faq-icon" />
-                <span>FAQs</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-          </div>
-
-          <div className="social-media">
-            <h4>Social Media</h4>
-            <div className="social-icons">
-              <a href="#" className="social-icon facebook">
-                <img src={facebook_contact} alt="facebook" />
-              </a>
-              <a href="#" className="social-icon twitter">
-                <img src={twitter} alt="twitter" />
-              </a>
-              <a href="#" className="social-icon instagram">
-                <img src={instagram} alt="instragram" />
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {activeModal === "settings" && (
-        <div className="modal settings-modal">
-          <div className="modal-header">
-            <button className="back-btn" onClick={() => toggleModal("profile")}>
-              Back
-            </button>
-            <h3>Settings</h3>
-          </div>
-
-          <div className="settings-options">
-            <div
-              className="option"
-              onClick={() => toggleModal("security-settings")}
-            >
-              <div className="option-left">
-                <img
-                  src={change_password}
-                  alt=""
-                  className="option-icon security-icon"
-                />
-                <span>Security Settings</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-
-            <div
-              className="option"
-              onClick={() => toggleModal("transaction-pin")}
-            >
-              <div className="option-left">
-                <img
-                  src={transaction_pin}
-                  alt="transaction-pin"
-                  className="option-icon pin-icon"
-                />
-                <span>Transaction Pin</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-
-            <div
-              className="option"
-              onClick={() => toggleModal("notifications")}
-            >
-              <div className="option-left">
-                <img
-                  src={notification_bell}
-                  alt="notification-bell"
-                  className="option-icon notification-icon"
-                />
-                <span>Notifications</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-          </div>
-        </div>
-      )}
+      {activeModal === "settings" && <Settings toggleModal={toggleModal} />}
 
       {activeModal === "security-settings" && (
-        <div className="modal security-settings-modal">
-          <div className="modal-header">
-            <button
-              className="back-btn"
-              onClick={() => toggleModal("settings")}
-            >
-              Back
-            </button>
-            <h3>Security Settings</h3>
-          </div>
-
-          <div className="security-content">
-            <div className="option" onClick={() => {}}>
-              <div className="option-left">
-                <img
-                  src={change_password}
-                  alt="change-password"
-                  className="option-icon password-icon"
-                />
-                <span>Change Password</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-
-            <div className="password-fields">
-              <div className="password-field">
-                <label>Current Password</label>
-                <div className="password-input-container">
-                  <input
-                    type={showCurrentPassword ? "text" : "password"}
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                  />
-                  <button
-                    className="toggle-password"
-                    onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  >
-                    {showCurrentPassword ? <IoIosEyeOff /> : <IoIosEye />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="password-field">
-                <label>New Password</label>
-                <div className="password-input-container">
-                  <input
-                    type={showNewPassword ? "text" : "password"}
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                  />
-                  <button
-                    className="toggle-password"
-                    onClick={() => setShowNewPassword(!showNewPassword)}
-                  >
-                    {showNewPassword ? <IoIosEyeOff /> : <IoIosEye />}
-                  </button>
-                </div>
-              </div>
-
-              <div className="password-field">
-                <label>Confirm New Password</label>
-                <div className="password-input-container">
-                  <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
-                  <button
-                    className="toggle-password"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  >
-                    {showConfirmPassword ? <IoIosEyeOff /> : <IoIosEye />}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <button className="done">Done</button>
-          </div>
-        </div>
+        <SecuritySettings
+          toggleModal={toggleModal}
+          currentPassword={currentPassword}
+          setCurrentPassword={setCurrentPassword}
+          setShowConfirmPassword={setShowConfirmPassword}
+          showConfirmPassword={showConfirmPassword}
+          showCurrentPassword={showCurrentPassword}
+          setShowCurrentPassword={setShowCurrentPassword}
+          showNewPassword={showNewPassword}
+          setShowNewPassword={setShowNewPassword}
+          newPassword={newPassword}
+          setNewPassword={setNewPassword}
+          confirmPassword={confirmPassword}
+          setConfirmPassword={setConfirmPassword}
+        />
       )}
 
       {activeModal === "transaction-pin" && (
-        <div className="modal transaction-pin-modal">
-          <div className="modal-header">
-            <button
-              className="back-btn"
-              onClick={() => toggleModal("settings")}
-            >
-              Back
-            </button>
-            <h3>Transaction Pin</h3>
-          </div>
-
-          <div className="transaction-pin-content">
-            <h4>Create a four digit transaction pin</h4>
-            <p>
-              It's important to keep your transaction PIN confidential and not
-              share it with anyone.
-            </p>
-
-            <div className="pin-instruction">
-              <img src={passcode_lock} alt="lock" className="pin-lock-icon" />
-              <span>Enter Passcode to continue</span>
-            </div>
-
-            <div className="pin-input-container">
-              {transactionPin.map((digit, index) => (
-                <input
-                  key={index}
-                  id={`pin-${index}`}
-                  type="password"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handlePinChange(index, e.target.value)}
-                  className={`pin-input ${digit ? "filled" : ""}`}
-                />
-              ))}
-            </div>
-
-            <button
-              className="done"
-              onClick={() => toggleModal("confirm-transaction-pin")}
-            >
-              Done
-            </button>
-          </div>
-        </div>
+        <TransactionPin
+          toggleModal={toggleModal}
+          transactionPin={transactionPin}
+          handlePinChange={handlePinChange}
+        />
       )}
 
       {activeModal === "confirm-transaction-pin" && (
-        <div className="modal transaction-pin-modal">
-          <div className="modal-header">
-            <button
-              className="back-btn"
-              onClick={() => toggleModal("transaction-pin")}
-            >
-              Back
-            </button>
-            <h3>Confirm Transaction Pin</h3>
-          </div>
-
-          <div className="transaction-pin-content">
-            <h4>Confirm your transaction pin</h4>
-            <p>
-              It's important to keep your transaction PIN confidential and not
-              share it with anyone.
-            </p>
-
-            <div className="pin-instruction">
-              <img src={passcode_lock} alt="lock" className="pin-lock-icon" />
-              <span>Enter Passcode to continue</span>
-            </div>
-
-            <div className="pin-input-container">
-              {confirmTransactionPin.map((digit, index) => (
-                <input
-                  key={index}
-                  id={`confirm-pin-${index}`}
-                  type="password"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handlePinChange(index, e.target.value, true)}
-                  className={`pin-input ${digit ? "filled" : ""}`}
-                />
-              ))}
-            </div>
-
-            <button
-              className="done"
-              onClick={() => {
-                if (
-                  transactionPin.join("") === confirmTransactionPin.join("")
-                ) {
-                  toggleModal("profile");
-                } else {
-                  alert("PINs do not match. Please try again.");
-                  setConfirmTransactionPin(["", "", "", ""]);
-                }
-              }}
-            >
-              Done{" "}
-            </button>
-          </div>
-        </div>
+        <ConfirmTransactionPin
+          toggleModal={toggleModal}
+          confirmTransactionPin={confirmTransactionPin}
+          handlePinChange={handlePinChange}
+          transactionPin={transactionPin}
+          setConfirmTransactionPin={setConfirmTransactionPin}
+        />
       )}
 
       {activeModal === "notifications" && (
-        <div className="modal notifications-modal">
-          <div className="modal-header">
-            <button
-              className="back-btn"
-              onClick={() => toggleModal("settings")}
-            >
-              Back
-            </button>
-            <h3>Notification Settings</h3>
-          </div>
-
-          <div className="notifications-content">
-            <div className="notification-option">
-              <div className="option-left">
-                <img
-                  src={notification_key}
-                  alt=""
-                  className="option-icon password-icon"
-                />
-                <span>Email Notification</span>
-              </div>
-              <label className="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={emailNotification}
-                  onChange={() => toggleNotification("email")}
-                />
-                <span className="slider round"></span>
-              </label>
-            </div>
-
-            <div className="notification-option">
-              <div className="option-left">
-                <img
-                  src={notification_key}
-                  alt=""
-                  className="option-icon password-icon"
-                />
-                <span>Push Notification</span>
-              </div>
-              <label className="toggle-switch">
-                <input
-                  type="checkbox"
-                  checked={pushNotification}
-                  onChange={() => toggleNotification("push")}
-                />
-                <span className="slider round"></span>
-              </label>
-            </div>
-
-            <button className="done">Done</button>
-          </div>
-        </div>
+        <Notifications
+          toggleModal={toggleModal}
+          emailNotification={emailNotification}
+          pushNotification={pushNotification}
+          toggleNotification={toggleNotification}
+        />
       )}
 
-      {activeModal === "legal" && (
-        <div className="modal legal-modal">
-          <div className="modal-header">
-            <button className="back-btn" onClick={() => toggleModal("profile")}>
-              Back
-            </button>
-            <h3>Legal</h3>
-          </div>
-
-          <div className="legal-options">
-            <div
-              className="option"
-              onClick={() => toggleModal("terms-and-conditions")}
-            >
-              <div className="option-left">
-                <img
-                  src={term_condition}
-                  alt="terms-conditions"
-                  className="option-icon security-icon"
-                />
-                <span>Terms & Conditions</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-
-            <div className="option" onClick={() => toggleModal("policies")}>
-              <div className="option-left">
-                <img
-                  src={policies}
-                  alt="policies"
-                  className="option-icon security-icon"
-                />
-                <span>Policies</span>
-              </div>
-              <IoIosArrowForward />
-            </div>
-          </div>
-        </div>
-      )}
+      {activeModal === "legal" && <Legal toggleModal={toggleModal} />}
 
       {activeModal === "terms-and-conditions" && (
-        <div className="modal terms-conditions-modal">
-          <div className="modal-header">
-            <button className="back-btn" onClick={() => toggleModal("legal")}>
-              Back
-            </button>
-            <h3>Terms & Conditions</h3>
-          </div>
-          <TermsAndCondition />
-        </div>
+        <TermsCondition toggleModal={toggleModal} />
       )}
 
       {activeModal === "policies" && (
-        <div className="modal policies-modal">
-          <div className="modal-header">
-            <button className="back-btn" onClick={() => toggleModal("legal")}>
-              Back
-            </button>
-            <h3>Policies</h3>
-          </div>
-
-          <PrivacyAndPolicy />
-        </div>
+        <PrivacyPolicy toggleModal={toggleModal} />
       )}
     </div>
   );

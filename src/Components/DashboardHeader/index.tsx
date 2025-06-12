@@ -7,13 +7,12 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { dummyNotifications } from "@/constants/notification-detials";
 import NotificationPopover from "../NotificationModal/Notification";
-import { useUser } from "@/context/userContext";
+import { User } from "@/types/user";
 
-const DashboardHeader = () => {
+const DashboardHeader = ({ user }: { user: User | null }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [hasNotifications] = useState(true);
   const [hasProfileNotifications] = useState(true);
-  const { user } = useUser();
 
   const fullName = user?.firstName + " " + user?.lastName;
 
