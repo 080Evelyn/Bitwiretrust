@@ -94,8 +94,8 @@ export interface ProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
   profileImage: string;
-  email: string;
-  username: string;
+  email?: string;
+  username?: string;
 }
 
 export interface ContactData {
@@ -113,6 +113,20 @@ export interface ContactErrors {
   phone?: string;
   message?: string;
 }
+
+export type ModalType =
+  | "profile"
+  | "invite"
+  | "contact"
+  | "settings"
+  | "security-settings"
+  | "transaction-pin"
+  | "confirm-transaction-pin"
+  | "notifications"
+  | "legal"
+  | "terms-and-conditions"
+  | "policies"
+  | null;
 
 export type NetworkProviderKey = "mtn" | "airtel" | "nineMobile" | "glo";
 

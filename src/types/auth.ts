@@ -1,5 +1,5 @@
-export interface User {
-  jwt: string;
-  userId: string;
-  userRole: "ADMIN" | "USER" | "SUPERADMIN";
-}
+// export interface User {
+//   jwt: string;
+//   userId: string;
+//   userRole: "ADMIN" | "USER" | "SUPERADMIN";
+// }

@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ChevronRight, Menu } from "lucide-react";
 import { navLinks } from "../../constants";
 import { exchange, full_logo, login_png } from "../../assets";
@@ -8,28 +8,15 @@ import { format } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import { calendar_svg } from "../../assets";
 import { cn } from "@/lib/utils";
-import { useMutation } from "@tanstack/react-query";
-import { logout } from "@/api/auth";
 import { useAuth } from "@/context/AuthContext";
 
 const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const { logout: contextLogout } = useAuth();
+  const { logout } = useAuth();
 
-  const logoutMutation = useMutation({
-    mutationFn: async () => {
-      const token = localStorage.getItem("token");
-      await logout(token);
-    },
-    onSettled: () => {
-      contextLogout();
-      navigate("/get-started", { replace: true });
-    },
-  });
   const handleClick = () => {
-    logoutMutation.mutate();
+    logout();
   };
 
   const handleDropdownToggle = (link: string) => {
@@ -125,7 +112,7 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
       </div>
 
       <div className="side-navbar-bottom">
-        <div className="side-navbar-actions">
+        <div className="side-navbar-actions max-sm:-mt-25">
           <div onClick={handleClick} className="text-sm cursor-pointer">
             <img src={login_png} alt="" className="side-navbar-icon" />
             Log out

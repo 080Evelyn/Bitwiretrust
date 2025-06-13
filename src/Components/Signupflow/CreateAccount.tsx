@@ -12,6 +12,8 @@ import {
 import { DialogOverlay } from "@radix-ui/react-dialog";
 import TermsAndCondition from "@/constants/TermsAndCondition";
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { ScrollArea } from "../ui/scroll-area";
 
 interface CreateAccountProps {
   formData: FormData;
@@ -47,9 +49,12 @@ const CreateAccount = ({
   };
 
   return (
-    <div className="step-content">
+    <div className="flex w-full justify-center items-center">
       <div
-        className={getLeftSideClass()}
+        className={cn(
+          "items-center justify-center hidden sm:flex w-[55%]",
+          getLeftSideClass()
+        )}
         style={{ backgroundImage: `url(${getStepBackground()})` }}
       >
         <h2>Ready To Step Up Your Financial Life?</h2>
@@ -59,160 +64,179 @@ const CreateAccount = ({
           <div className="progress-dot"></div>
         </div>
       </div>
-      <div className="right-side">
-        <div className="app-logo">
-          <img src={full_logo} alt="Bitwire" />
-        </div>
-        <h2>Create an account</h2>
-        <p>Let's get you started</p>
-        <div className="flex max-md:justify-center -mt-6 mb-6 items-center gap-2 ">
-          <div className="font-medium text-sm text-gray-600">
-            Already have an account?
+      <div className="flex flex-1 flex-col">
+        <ScrollArea className="h-[96vh]">
+          <div className="app-logo flex justify-center ">
+            <Link to="/">
+              <img src={full_logo} alt="Bitwire" />
+            </Link>
           </div>
-          <Link to="/login">
-            <button
-              onClick={() => setCurrentStep(Step.GET_STARTED)}
-              className="text-blue-700 cursor-pointer hover:!underline text-sm font-medium transition-colors"
-            >
-              Login
-            </button>
-          </Link>
-        </div>
-        <form>
-          <div className="form-group">
-            <label>Enter Your First</label>
-            <input
-              type="text"
-              name="first_name"
-              value={formData.first_name}
-              onChange={handleInputChange}
-              placeholder="First Name "
-            />
-          </div>
-          <div className="form-group">
-            <label>Enter Your Last Name</label>
-            <input
-              type="text"
-              name="last_name"
-              value={formData.last_name}
-              onChange={handleInputChange}
-              placeholder="Last Name"
-            />
-          </div>
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="example@email.com"
-            />
-          </div>
-          <div className="form-group">
-            <label>Phone Number</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              placeholder="0803 456 7890"
-            />
-          </div>
-          <div className="form-group">
-            <label>Date of Birth</label>
-            <input
-              type="date"
-              name="dateOfBirth"
-              value={formData.dateOfBirth}
-              onChange={handleInputChange}
-              placeholder="DD/MM/YYYY"
-            />
-          </div>
-          <div className="form-group">
-            <label>Password</label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                placeholder="••••••••"
-                className="!pr-14"
-              />
-              <button
-                type="button"
-                className="absolute top-1/2 right-[24%] md:right-[15%] transform -translate-y-1/2 focus:outline-none"
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </button>
+          <h2 className="text-lg font-medium max-md:text-center">
+            Create an account
+          </h2>
+          <p className="text-sm text-gray-600 max-md:text-center">
+            Let's get you started
+          </p>
+          <div className="flex max-md:justify-center mb-6 items-center gap-2 ">
+            <div className="font-medium text-sm text-gray-600">
+              Already have an account?
             </div>
-          </div>
-          <div className="form-group">
-            <label>Confirm Password</label>
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                placeholder="••••••••"
-                className="!pr-14"
-              />
+            <Link to="/login">
               <button
-                type="button"
-                className="absolute top-1/2 right-[24%] md:right-[15%] transform -translate-y-1/2 focus:outline-none"
-                onClick={toggleConfirmPasswordVisibility}
+                onClick={() => setCurrentStep(Step.GET_STARTED)}
+                className="text-blue-700 cursor-pointer hover:!underline text-sm font-medium transition-colors"
               >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                Login
               </button>
+            </Link>
+          </div>
+          <form className="flex flex-col w-full gap-3">
+            <div className="custom-form-group">
+              <label>Enter Your First</label>
+              <input
+                type="text"
+                name="first_name"
+                className="form-input"
+                value={formData.first_name}
+                onChange={handleInputChange}
+                placeholder="First Name"
+              />
             </div>
-          </div>
-          <div className="terms-checkbox">
-            <input
-              type="checkbox"
-              id="terms"
-              name="terms"
-              className="size-4"
-              checked={formData.terms}
-              onChange={handleInputChange}
-            />
-            <label
-              htmlFor="terms"
-              className="!underline cursor-pointer hover:text-blue-700"
-              onClick={() => setShowDialog(true)}
-            >
-              Accept Terms and Condition
-            </label>
-          </div>
+            <div className="custom-form-group">
+              <label>Enter Your Last Name</label>
+              <input
+                type="text"
+                name="last_name"
+                className="form-input"
+                value={formData.last_name}
+                onChange={handleInputChange}
+                placeholder="Last Name"
+              />
+            </div>
+            <div className="custom-form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                className="form-input"
+                onChange={handleInputChange}
+                placeholder="example@email.com"
+              />
+            </div>
+            <div className="custom-form-group">
+              <label>Phone Number</label>
+              <input
+                type="tel"
+                name="phone"
+                value={formData.phone}
+                className="form-input"
+                onChange={handleInputChange}
+                placeholder="0803 456 7890"
+              />
+            </div>
+            <div className="custom-form-group">
+              <label>Date of Birth</label>
+              <input
+                type="date"
+                name="dateOfBirth"
+                value={formData.dateOfBirth}
+                className="form-input"
+                onChange={handleInputChange}
+                placeholder="DD/MM/YYYY"
+              />
+            </div>
+            <div className="custom-form-group">
+              <label>Password</label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="••••••••"
+                  className="!pr-14 form-input placeholder:text-xl"
+                />
+                <button
+                  type="button"
+                  className="absolute top-1/2 right-4 cursor-pointer transform -translate-y-1/2 focus:text-[#7910B1]"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? (
+                    <FaEyeSlash className="size-4.5" />
+                  ) : (
+                    <FaEye className="size-4.5" />
+                  )}
+                </button>
+              </div>
+            </div>
+            <div className="custom-form-group">
+              <label>Confirm Password</label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  className="!pr-14 form-input placeholder:text-xl"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  className="absolute top-1/2 right-4 cursor-pointer transform -translate-y-1/2 focus:text-[#7910B1]"
+                  onClick={toggleConfirmPasswordVisibility}
+                >
+                  {showConfirmPassword ? (
+                    <FaEyeSlash className="size-4.5" />
+                  ) : (
+                    <FaEye className="size-4.5" />
+                  )}
+                </button>
+              </div>
+            </div>
+            <div className="custom-form-group flex-row gap-3 items-center">
+              <input
+                type="checkbox"
+                id="terms"
+                name="terms"
+                className="!size-4"
+                checked={formData.terms}
+                onChange={handleInputChange}
+              />
+              <label
+                htmlFor="terms"
+                className="!underline cursor-pointer text-blue-700 hover:text-foreground"
+                onClick={() => setShowDialog(true)}
+              >
+                Accept Terms and Condition
+              </label>
+            </div>
 
-          <Dialog open={showDialog} onOpenChange={setShowDialog}>
-            <DialogOverlay>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Terms and Conditions</DialogTitle>
-                </DialogHeader>
-                <DialogDescription>
-                  <TermsAndCondition />
-                </DialogDescription>
-              </DialogContent>
-            </DialogOverlay>
-          </Dialog>
+            <Dialog open={showDialog} onOpenChange={setShowDialog}>
+              <DialogOverlay>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Terms and Conditions</DialogTitle>
+                  </DialogHeader>
+                  <DialogDescription>
+                    <TermsAndCondition />
+                  </DialogDescription>
+                </DialogContent>
+              </DialogOverlay>
+            </Dialog>
 
-          <div className="button-container">
             <button
               type="button"
-              className={`next-button ${
-                isButtonEnabled ? "enabled" : "disabled"
+              className={`btn-primary mx-4 ${
+                isButtonEnabled ? "cursor-pointer" : "cursor-not-allowed"
               }`}
               onClick={handleNextStep}
               disabled={!isButtonEnabled || isLoading}
             >
               {isLoading ? "Processing..." : "Next"}
             </button>
-          </div>
-        </form>
+          </form>
+        </ScrollArea>
       </div>
     </div>
   );

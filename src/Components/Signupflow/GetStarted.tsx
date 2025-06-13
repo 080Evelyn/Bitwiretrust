@@ -4,6 +4,7 @@ import { Checkbox } from "../ui/checkbox";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { Step } from "@/types";
+import { cn } from "@/lib/utils";
 
 interface GetStartedProps {
   getLeftSideClass: () => string;
@@ -44,7 +45,7 @@ const GetStarted = ({
       handleGetStartedInputChange(fakeEvent("email", savedEmail));
       setRememberMe(true);
     }
-  }, []);
+  }, [handleGetStartedInputChange]);
 
   const handleCheckboxChange = () => {
     setRememberMe((prev) => !prev);
@@ -60,9 +61,12 @@ const GetStarted = ({
   };
 
   return (
-    <div className="step-content">
+    <div className="flex w-full">
       <div
-        className={getLeftSideClass()}
+        className={cn(
+          "items-center justify-center hidden sm:flex w-[55%]",
+          getLeftSideClass()
+        )}
         style={{ backgroundImage: `url(${getStepBackground()})` }}
       >
         <h2>
@@ -77,12 +81,16 @@ const GetStarted = ({
         </div>
       </div>
 
-      <div className="right-side">
+      <div className="flex flex-1 mt-20 flex-col gap-2 w-full">
         <div className="app-logo">
-          <img src={full_logo} alt="Bitwire" />
+          <Link to="/">
+            <img src={full_logo} alt="Bitwire" />
+          </Link>
         </div>
-        <h2>Let's get you started!</h2>
-        <div className="flex mb-3 max-md:justify-center items-center gap-2 ">
+        <h2 className="text-lg font-medium max-md:text-center">
+          Let's get you started!
+        </h2>
+        <div className="flex mb-2 max-md:justify-center items-center gap-2 ">
           <div className="font-medium text-sm text-gray-600">
             Don&apos;t have an account?
           </div>
@@ -95,45 +103,54 @@ const GetStarted = ({
             </button>
           </Link>
         </div>
-        <p>Fill in your details</p>
-        <form>
-          <div className="form-group">
+        <p className="text-sm text-gray-500 px-4">Fill in your details</p>
+        <form className="mt-3 flex flex-col w-full gap-4">
+          <div className="custom-form-group">
             <label>Email</label>
             <input
               type="email"
               name="email"
+              className="form-input"
               value={getStartedFields.email}
               onChange={handleGetStartedInputChange}
               placeholder="example@email.com"
             />
           </div>
 
-          <div className="form-group relative">
+          <div className="custom-form-group">
             <label>Password</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={getStartedFields.password}
-              onChange={handleGetStartedInputChange}
-              placeholder="••••••••"
-            />
-            <div
-              className="absolute top-[65%] cursor-pointer right-[24%] md:right-[15%] transform -translate-y-1/2 focus:outline-none"
-              onClick={() => setShowPassword((prev) => !prev)}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                className="form-input"
+                value={getStartedFields.password}
+                onChange={handleGetStartedInputChange}
+                placeholder="••••••••"
+              />
+              <div
+                className="absolute top-1/2 right-4 cursor-pointer transform -translate-y-1/2 focus:text-[#7910B1]"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? (
+                  <FaEyeSlash className="size-4.5" />
+                ) : (
+                  <FaEye className="size-4.5" />
+                )}
+              </div>
             </div>
           </div>
 
-          <div className="flex gap-1.5 items-center justify-between w-[80%] md:w-[90%] px-1">
+          <div className="custom-form-group justify-between flex-row gap-3 items-center">
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="remember"
+                className="size-4"
                 checked={rememberMe}
                 onCheckedChange={handleCheckboxChange}
               />
               <label htmlFor="remember" className="text-xs">
-                Remember password
+                Remember me
               </label>
             </div>
             <Link
@@ -144,18 +161,16 @@ const GetStarted = ({
             </Link>
           </div>
 
-          <div className="button-container">
-            <button
-              type="button"
-              className={`next-button ${
-                isButtonEnabled ? "enabled" : "disabled"
-              }`}
-              onClick={handleLogin}
-              disabled={!isButtonEnabled || isLoading}
-            >
-              {isLoading ? "Processing..." : "Next"}
-            </button>
-          </div>
+          <button
+            type="button"
+            className={`btn-primary mx-4 ${
+              isButtonEnabled ? "cursor-pointer" : "cursor-not-allowed"
+            }`}
+            onClick={handleLogin}
+            disabled={!isButtonEnabled || isLoading}
+          >
+            {isLoading ? "Processing..." : "Next"}
+          </button>
         </form>
       </div>
     </div>

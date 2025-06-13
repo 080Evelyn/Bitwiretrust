@@ -4,3 +4,14 @@ export interface DvaAccountInfo {
   bankName: string;
   walletBalance: number;
 }
+
+export interface BankList {
+  name: string;
+  code: string;
+}
+
+export interface BankListInfo {
+  responseCode: string;
+  responseMsg: string;
+  data: BankList[];
+}
