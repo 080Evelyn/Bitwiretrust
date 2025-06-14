@@ -152,11 +152,13 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           toggleModal={toggleModal}
           transactionPin={transactionPin}
           handlePinChange={handlePinChange}
+          setTransactionPin={setTransactionPin}
         />
       )}
 
       {activeModal === "confirm-transaction-pin" && (
         <ConfirmTransactionPin
+          setTransactionPin={setTransactionPin}
           toggleModal={toggleModal}
           confirmTransactionPin={confirmTransactionPin}
           handlePinChange={handlePinChange}

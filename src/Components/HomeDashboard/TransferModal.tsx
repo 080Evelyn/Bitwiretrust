@@ -20,6 +20,8 @@ import { getUserId } from "@/utils/AuthStorage";
 import { Step2Form, Step2Values } from "./transfer/Step2";
 import axios from "axios";
 import TransferConfirmation from "./transfer/TransferConfirmation";
+import { usePinModal } from "@/context/PinModalContext";
+import TransferSuccess from "./transfer/TransferSuccess";
 
 const step1Schema = z.object({
   account: z.string().min(10, "Account number must be at least 10 digits"),
@@ -45,6 +47,7 @@ export default function WithdrawalDialog({
   const [open, setOpen] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [accountName, setAccountName] = useState<string | null>(null);
+  const { openPinModal } = usePinModal();
 
   const step1Form = useForm<Step1Values>({
     resolver: zodResolver(step1Schema),
@@ -192,28 +195,33 @@ export default function WithdrawalDialog({
       toast.error("No data to submit");
       return;
     }
-
-    initiateTransaferMutation.mutate(
-      {
-        amount: payload.amount,
-        source: "",
-        reason: payload.remark || "",
-      },
-      {
-        onSuccess: () => {
-          toast.success("Transfer successful", {
-            duration: 8000,
-          });
-          setIsWithdrawalOpen(false);
-          setStep(1);
-          setAccountDetails(null);
-          setSelectedBank(null);
-          setPayload(null);
-          step1Form.reset();
-          step2Form.reset();
-        },
+    openPinModal((pin) => {
+      if (pin) {
+        initiateTransaferMutation.mutate(
+          {
+            amount: payload.amount,
+            source: "",
+            reason: payload.remark || "",
+          },
+          {
+            onSuccess: () => {
+              toast.success("Transfer successful", {
+                duration: 8000,
+              });
+              setIsWithdrawalOpen(false);
+              setStep(1);
+              setAccountDetails(null);
+              setSelectedBank(null);
+              setPayload(null);
+              step1Form.reset();
+              step2Form.reset();
+            },
+          }
+        );
+      } else {
+        toast.error("PIN is required to proceed");
       }
-    );
+    });
   };
 
   return (
@@ -316,6 +324,10 @@ export default function WithdrawalDialog({
                   initiateTransaferMutation.isPending
                 }
               />
+            )}
+            {/* step 4: display success message */}
+            {step === 4 && (
+              <TransferSuccess onClose={() => setIsWithdrawalOpen(false)} />
             )}
           </div>
         </DialogContent>

@@ -5,16 +5,24 @@ interface TransactionPinProps {
   toggleModal: (modal: ModalType) => void;
   transactionPin: string[];
   handlePinChange: (index: number, value: string) => void;
+  setTransactionPin: (pin: string[]) => void;
 }
 const TransactionPin = ({
   toggleModal,
   transactionPin,
   handlePinChange,
+  setTransactionPin,
 }: TransactionPinProps) => {
   return (
     <div className="modal transaction-pin-modal">
       <div className="modal-header">
-        <button className="back-btn" onClick={() => toggleModal("settings")}>
+        <button
+          className="back-btn"
+          onClick={() => {
+            toggleModal("settings");
+            setTransactionPin(["", "", "", ""]);
+          }}
+        >
           Back
         </button>
         <h3>Transaction Pin</h3>
@@ -37,7 +45,7 @@ const TransactionPin = ({
             <input
               key={index}
               id={`pin-${index}`}
-              type="password"
+              type="tel"
               maxLength={1}
               value={digit}
               onChange={(e) => handlePinChange(index, e.target.value)}

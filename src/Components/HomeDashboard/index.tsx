@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { RateData } from "../../types";
-import { coinRates, giftcardRates, transactions } from "../../constants";
+import { coinRates, giftcardRates } from "../../constants";
 import "./styles.css";
 import {
   arrow_reload,
@@ -8,13 +8,14 @@ import {
   export_png,
   gala_add,
   wallet,
+  wallet_done,
 } from "../../assets";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import BalanceOverview from "./BalanceOverview";
 import TransferModal from "./TransferModal";
 import FundAccountModal from "./FundAccountModal";
 import { useQuery } from "@tanstack/react-query";
-import { dvaInfo } from "@/api/wallet-service";
+import { dvaInfo, transactions } from "@/api/wallet-service";
 import { DvaAccountInfo } from "@/types/dashboard";
 
 type Props = object;
@@ -22,6 +23,28 @@ interface DvaApiResponse {
   responseCode: string;
   responseMsg: string;
   data: DvaAccountInfo;
+}
+
+export interface TransactionData {
+  reference: string;
+  paystack_transaction_id: string;
+  email: string;
+  status: string;
+  channel: string;
+  amount: number;
+  customerCode: string;
+  currency: string;
+  paidAt: string;
+  payloadRes: string;
+  transactionType: string;
+  recipientAccountNo: string;
+  recipientAccountName: string;
+}
+
+export interface TransactionListResponse {
+  responseCode: string;
+  responseMsg: string;
+  data: TransactionData[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -48,7 +71,7 @@ const HomeDashboard = (_props: Props) => {
     }
   };
   const getStatusColorTransaction = (status: string) => {
-    switch (status.toLowerCase()) {
+    switch (status) {
       case "green":
         return "green";
       case "orange":
@@ -57,11 +80,11 @@ const HomeDashboard = (_props: Props) => {
         return "gray";
     }
   };
-  const getBackgroundColorTransaction = (type: string) => {
-    switch (type.toLowerCase()) {
-      case "received":
+  const getBackgroundColorTransaction = (transactionType: string) => {
+    switch (transactionType) {
+      case "CREDIT":
         return "#16D005";
-      case "transferred":
+      case "DEBIT":
         return "#2EBAC6";
       case "updated":
         return "#7910B1";
@@ -109,6 +132,13 @@ const HomeDashboard = (_props: Props) => {
   });
 
   const dvaData = apiResponse?.data;
+
+  const { data: transactionsList } = useQuery<TransactionListResponse>({
+    queryKey: ["transactions"],
+    queryFn: transactions,
+  });
+
+  const transactionsData = transactionsList?.data;
 
   return (
     <>
@@ -232,43 +262,63 @@ const HomeDashboard = (_props: Props) => {
             </div>
           </div>
 
-          <div className="transaction-list">
-            {transactions.map((transaction) => (
-              <div key={transaction.id} className="transaction-item">
+          <div className="transaction-list max-h-[calc(100vh-150px)] overflow-y-auto">
+            {transactionsData
+              ?.filter(
+                (tx) =>
+                  (tx.transactionType === "CREDIT" && tx.amount) ||
+                  (tx.transactionType === "DEBIT" &&
+                    tx.amount &&
+                    tx.recipientAccountName)
+              )
+              .map((transactionData) => (
                 <div
-                  className="transaction-icon-wrapper"
-                  style={{
-                    backgroundColor: getBackgroundColorTransaction(
-                      transaction.type
-                    ),
-                  }}
+                  key={transactionData.paystack_transaction_id}
+                  className="transaction-item"
                 >
-                  <img
-                    src={transaction.image}
-                    alt="Transaction icon"
-                    className="transaction-icon"
-                  />
-                </div>
+                  <div
+                    className="transaction-icon-wrapper"
+                    style={{
+                      backgroundColor: getBackgroundColorTransaction(
+                        transactionData.transactionType
+                      ),
+                    }}
+                  >
+                    <img
+                      src={
+                        transactionData.transactionType === "CREDIT" ||
+                        transactionData.transactionType === "DEBIT"
+                          ? wallet_done
+                          : wallet
+                      }
+                      alt="Transaction icon"
+                      className="transaction-icon"
+                    />
+                  </div>
 
-                {/* Transaction Details */}
-                <div className="transaction-details">
-                  <p className="transaction-title">{transaction.description}</p>
-                  <p className="transaction-subtitle">
-                    {transaction.subdescription}
-                  </p>
-                </div>
+                  <div className="transaction-details">
+                    <p className="transaction-title">
+                      {transactionData.transactionType === "CREDIT"
+                        ? `You have received ₦${transactionData.amount}`
+                        : `You transferred ₦${transactionData.amount}`}
+                    </p>
+                    <p className="transaction-subtitle">
+                      {transactionData.transactionType === "CREDIT"
+                        ? `Your NGN wallet has been credited with ₦${transactionData.amount}`
+                        : `₦${transactionData.amount} was sent to ${transactionData.recipientAccountName}`}
+                    </p>
+                  </div>
 
-                {/* Status Indicator */}
-                <div
-                  className="transaction-status"
-                  style={{
-                    backgroundColor: getStatusColorTransaction(
-                      transaction.status
-                    ),
-                  }}
-                ></div>
-              </div>
-            ))}
+                  <div
+                    className="transaction-status"
+                    style={{
+                      backgroundColor: getStatusColorTransaction(
+                        transactionData.status
+                      ),
+                    }}
+                  ></div>
+                </div>
+              ))}
           </div>
         </div>
       </div>

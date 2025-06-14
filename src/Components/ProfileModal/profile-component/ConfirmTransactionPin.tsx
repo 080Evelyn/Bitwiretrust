@@ -1,5 +1,10 @@
+import { createPin } from "@/api/auth";
 import { passcode_lock } from "@/assets";
 import { ModalType } from "@/types";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface ConfirmTransactionPinProps {
   toggleModal: (modal: ModalType) => void;
@@ -11,6 +16,7 @@ interface ConfirmTransactionPinProps {
   ) => void;
   transactionPin: string[];
   setConfirmTransactionPin: (pin: string[]) => void;
+  setTransactionPin: (pin: string[]) => void;
 }
 const ConfirmTransactionPin = ({
   toggleModal,
@@ -18,13 +24,53 @@ const ConfirmTransactionPin = ({
   handlePinChange,
   transactionPin,
   setConfirmTransactionPin,
+  setTransactionPin,
 }: ConfirmTransactionPinProps) => {
+  const [error, setError] = useState("");
+
+  const setPinMutation = useMutation({
+    mutationFn: async (pin: string) => createPin(pin),
+    onError: (error: unknown) => {
+      if (axios.isAxiosError(error)) {
+        const responseDesc =
+          error.response?.data?.responseDesc || "Something went wrong";
+        toast.error(responseDesc);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    },
+  });
+
+  function handleClick() {
+    if (
+      transactionPin.join("") === confirmTransactionPin.join("") &&
+      confirmTransactionPin.join("").length === 4
+    ) {
+      setPinMutation.mutate(confirmTransactionPin.join(""), {
+        onSuccess: () => {
+          toast.success("Transaction PIN set successfully!");
+          toggleModal("profile");
+          setTransactionPin(["", "", "", ""]);
+          setConfirmTransactionPin(["", "", "", ""]);
+        },
+      });
+    } else {
+      setError("PINs do not match. Please try again.");
+      setConfirmTransactionPin(["", "", "", ""]);
+    }
+  }
+
   return (
     <div className="modal transaction-pin-modal">
       <div className="modal-header">
         <button
           className="back-btn"
-          onClick={() => toggleModal("transaction-pin")}
+          onClick={() => {
+            toggleModal("transaction-pin");
+            setTransactionPin(["", "", "", ""]);
+            setConfirmTransactionPin(["", "", "", ""]);
+            setError("");
+          }}
         >
           Back
         </button>
@@ -51,23 +97,17 @@ const ConfirmTransactionPin = ({
               type="password"
               maxLength={1}
               value={digit}
-              onChange={(e) => handlePinChange(index, e.target.value, true)}
+              onChange={(e) => {
+                handlePinChange(index, e.target.value, true);
+                setError("");
+              }}
               className={`pin-input ${digit ? "filled" : ""}`}
             />
           ))}
         </div>
+        {error && <p className="!text-red-500 text-sm text-center">{error}</p>}
 
-        <button
-          className="done"
-          onClick={() => {
-            if (transactionPin.join("") === confirmTransactionPin.join("")) {
-              toggleModal("profile");
-            } else {
-              alert("PINs do not match. Please try again.");
-              setConfirmTransactionPin(["", "", "", ""]);
-            }
-          }}
-        >
+        <button className="done" onClick={handleClick}>
           Done{" "}
         </button>
       </div>

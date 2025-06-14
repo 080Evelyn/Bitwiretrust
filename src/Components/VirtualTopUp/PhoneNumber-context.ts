@@ -1,4 +1,3 @@
-// phoneNumber-context.ts
 import { createContext, useContext } from "react";
 
 export type PhoneNumberContextType = {
@@ -6,12 +5,10 @@ export type PhoneNumberContextType = {
   setBeneficiaryNumber: (number: string) => void;
 };
 
-// ← one shared context
 export const PhoneNumberContext = createContext<
   PhoneNumberContextType | undefined
 >(undefined);
 
-// ← hook reads from that same context
 export const usePhoneNumber = () => {
   const ctx = useContext(PhoneNumberContext);
   if (!ctx) {
