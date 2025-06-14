@@ -47,7 +47,7 @@ export const transactions = async () => {
   const email = getEmail();
   const token = getToken();
 
-  const response = await axios.post(
+  const response = await axios.get(
     `${url}/v1/user/wallet-service/transactions/${email}`,
     {
       headers: { Authorization: `Bearer ${token}` },

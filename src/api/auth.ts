@@ -1,4 +1,4 @@
-import { getToken } from "@/utils/AuthStorage";
+import { getEmail, getToken } from "@/utils/AuthStorage";
 import axios from "axios";
 
 const url = import.meta.env.VITE_API_URL;
@@ -25,6 +25,40 @@ export const login = async (data: { email: string; password: string }) => {
   const response = await axios.post(`${url}/v1/auth/login`, data);
   localStorage.setItem("token", response.data.data.jwt);
   localStorage.setItem("userId", response.data.data.userId);
+  return response.data;
+};
+
+export const createPin = async (pin: string) => {
+  const token = getToken();
+  const email = getEmail();
+
+  const response = await axios.post(
+    `${url}/v1/auth/pin`,
+    {
+      pin,
+      email,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return response.data;
+};
+
+export const verifyPin = async (pin: string) => {
+  const token = getToken();
+  const email = getEmail();
+  const response = await axios.post(
+    `${url}/v1/auth/verify-pin`,
+    { pin, email },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
   return response.data;
 };
 
