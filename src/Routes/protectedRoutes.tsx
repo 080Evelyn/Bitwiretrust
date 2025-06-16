@@ -29,11 +29,11 @@ export function ProtectedRoute() {
       );
       return res.data.data;
     },
-    enabled: isAuthenticated && isPinSet && !!token && !!userId,
+    enabled: !!token && !!userId && isAuthenticated && isPinSet,
     staleTime: Infinity,
   });
 
-  if (isLoading || isUserLoading) return <div>Loading...</div>; // Add fancy loader later
+  if (isLoading) return <div>Loading...</div>;
 
   if (isLoggingOut)
     return (
@@ -45,17 +45,21 @@ export function ProtectedRoute() {
       </div>
     );
 
-  if (isAuthenticated && isPinSet && user && !isError) {
+  if (!isAuthenticated || !token || !userId) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (isAuthenticated && isPinSet && user && !isUserLoading && !isError) {
     return <Outlet context={{ user }} />;
   }
 
-  return <Navigate to="/login" />;
+  return <div>Loading...</div>;
 }
 
 export function PublicRoute() {
   const { isAuthenticated, isPinSet, isLoading } = useAuth();
 
-  if (isLoading) return null; // todo: loader here
+  if (isLoading) return <div>Loading...</div>;
 
   if (isAuthenticated && isPinSet) {
     return <Navigate to="/dashboard" />;
