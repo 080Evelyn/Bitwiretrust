@@ -1,4 +1,3 @@
-// src/router/index.tsx (or wherever your router is defined)
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Home from "../Pages/Home/Home";

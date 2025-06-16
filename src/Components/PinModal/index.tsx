@@ -155,7 +155,7 @@ const PinModal = ({ isOpen, onClose, onConfirm }: PinModalProps) => {
 
         <div className="flex justify-center items-center gap-2 text-sm text-foreground font-medium">
           <img src={Padlock} alt="padlock" className="inline-block" />
-          <span>Enter passcode to continue</span>
+          <span>Enter pin to continue</span>
         </div>
 
         <div

@@ -113,9 +113,8 @@ export default function WithdrawalDialog({
         },
         {
           onSuccess: (data) => {
-            const name =
-              (data as { data: { account_name: string } }).data?.account_name ||
-              "No Account Found";
+            const name = (data as { data: { account_name: string } }).data
+              ?.account_name;
             setAccountName(name);
           },
           onSettled: () => {
@@ -124,7 +123,7 @@ export default function WithdrawalDialog({
         }
       );
     } else {
-      setAccountName(null);
+      setAccountName("No Account Found");
     }
   }, [watchedAccountNumber, selectedBank]);
 

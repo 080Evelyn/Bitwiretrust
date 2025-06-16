@@ -5,11 +5,11 @@ import axios from "axios";
 
 interface AuthContextValue {
   isAuthenticated: boolean;
-  isPasscodeSet: boolean;
-  ContextLogin: (token: string, isPasscodeSet: boolean) => void;
+  isPinSet: boolean;
+  ContextLogin: (token: string, isPinSet: boolean) => void;
   logout: () => void;
   isLoading: boolean;
-  updatePasscodeStatus: () => void;
+  updatePinStatus: () => void;
   isLoggingOut: boolean;
 }
 
@@ -18,14 +18,14 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isPasscodeSet, setIsPasscodeSet] = useState(false);
+  const [isPinSet, setIsPinSet] = useState(false);
   const logoutTimeout = useRef<NodeJS.Timeout | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const url = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const savedToken = getToken();
-    const savedPasscode = localStorage.getItem("isPasscodeSet") === "true";
+    const savedPasscode = localStorage.getItem("isPinSet") === "true";
 
     if (savedToken) {
       const isExpired = isTokenExpired(savedToken);
@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         clearAuth();
       } else {
         setToken(savedToken);
-        setIsPasscodeSet(savedPasscode);
+        setIsPinSet(savedPasscode);
         setLogoutTimer(savedToken);
       }
     }
@@ -43,15 +43,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const ContextLogin = (newToken: string, passcodeStatus: boolean) => {
     localStorage.setItem("token", newToken);
-    localStorage.setItem("isPasscodeSet", String(passcodeStatus));
+    localStorage.setItem("isPinSet", String(passcodeStatus));
     setToken(newToken);
-    setIsPasscodeSet(passcodeStatus);
+    setIsPinSet(passcodeStatus);
     setLogoutTimer(newToken);
   };
 
-  const updatePasscodeStatus = () => {
-    localStorage.setItem("isPasscodeSet", "true");
-    setIsPasscodeSet(true);
+  const updatePinStatus = () => {
+    localStorage.setItem("isPinSet", "true");
+    setIsPinSet(true);
   };
 
   const logout = async () => {
@@ -74,8 +74,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       clearAuth();
       setToken(null);
-      localStorage.removeItem("isPasscodeSet");
-      setIsPasscodeSet(false);
+      localStorage.removeItem("isPinSet");
+      setIsPinSet(false);
       setIsLoggingOut(false);
     }
   };
@@ -112,11 +112,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider
       value={{
         isAuthenticated,
-        isPasscodeSet,
+        isPinSet,
         ContextLogin,
         logout,
         isLoading,
-        updatePasscodeStatus,
+        updatePinStatus,
         isLoggingOut,
       }}
     >

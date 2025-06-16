@@ -11,7 +11,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { NotificationItem } from "@/types";
 import { format } from "date-fns";
-import { Bell, Send, Wallet, X } from "lucide-react";
+import { ArrowLeft, Bell, Send, Wallet, X } from "lucide-react";
 import NotificationModal from "./NotificationModal";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { useResponsivePopover } from "@/hooks/viewportResize";
@@ -69,7 +69,7 @@ const NotificationPopover = ({
   useResponsivePopover(isOpen, setIsOpen);
 
   return (
-    <div className="">
+    <div>
       <Popover open={isOpen} onOpenChange={setIsOpen}>
         <PopoverTrigger asChild>{trigger}</PopoverTrigger>
         {isOpen && (
@@ -91,10 +91,17 @@ const NotificationPopover = ({
             <X className="size-4" />
           </button>
 
-          <div className="flex justify-between items-center p-4 border-b text-sm font-semibold">
-            <div className="flex justify-between w-full gap-4">
+          <div className="flex flex-1 gap-4.5 justify-between items-center p-4 border-b text-sm font-semibold mx-0.5">
+            <button
+              className="md:hidden -ms-1.5 bg-white rounded-sm border-1 p-1 cursor-pointer shadow-md"
+              onClick={() => setIsOpen(false)}
+            >
+              <span className="sr-only">Back</span>
+              <ArrowLeft className="size-5" />
+            </button>
+            <div className="flex justify-between w-full gap-3">
               <Select onValueChange={setMonthFilter}>
-                <SelectTrigger className="w-[100px] text-muted-foreground bg-transparent h-8">
+                <SelectTrigger className="text-muted-foreground bg-transparent h-8">
                   <SelectValue placeholder="Month">
                     {monthFilter !== "All" ? monthFilter : "Month"}
                   </SelectValue>
@@ -117,7 +124,7 @@ const NotificationPopover = ({
               </Select>
 
               <Select onValueChange={setCategoryFilter}>
-                <SelectTrigger className="w-[130px] text-muted-foreground bg-transparent h-8">
+                <SelectTrigger className=" text-muted-foreground bg-transparent h-8">
                   <SelectValue placeholder="Categories" />
                 </SelectTrigger>
                 <SelectContent className="z-[60]">
@@ -129,7 +136,7 @@ const NotificationPopover = ({
               </Select>
 
               <Select onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-[100px] text-muted-foreground bg-transparent h-8">
+                <SelectTrigger className=" text-muted-foreground bg-transparent h-8">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
                 <SelectContent className="z-[60]">

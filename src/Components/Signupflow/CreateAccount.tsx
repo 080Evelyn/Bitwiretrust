@@ -141,7 +141,7 @@ const CreateAccount = ({
                 type="date"
                 name="dateOfBirth"
                 value={formData.dateOfBirth}
-                className="form-input"
+                className="form-input !w-full"
                 onChange={handleInputChange}
                 placeholder="DD/MM/YYYY"
               />
@@ -199,7 +199,7 @@ const CreateAccount = ({
                 type="checkbox"
                 id="terms"
                 name="terms"
-                className="!size-4"
+                className="!w-4 !h-4"
                 checked={formData.terms}
                 onChange={handleInputChange}
               />

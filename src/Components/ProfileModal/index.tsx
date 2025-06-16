@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./styles.css";
 import { ModalType, ProfileModalProps } from "../../types";
-import { useUser } from "@/context/userContext";
 import Invite from "./profile-component/Invite";
 import SecuritySettings from "./profile-component/SecuritySettings";
 import TransactionPin from "./profile-component/TransactionPin";
@@ -18,6 +17,8 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
   isOpen,
   onClose,
   profileImage,
+  fullName,
+  user,
 }) => {
   const [activeModal, setActiveModal] = useState<ModalType>("profile");
   const [darkMode, setDarkMode] = useState(false);
@@ -36,9 +37,6 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
   ]);
   const [emailNotification, setEmailNotification] = useState(true);
   const [pushNotification, setPushNotification] = useState(true);
-  const { user } = useUser();
-  const fullName = user?.firstName + " " + user?.lastName;
-
   const toggleModal = (modal: ModalType) => {
     setActiveModal(modal);
   };
@@ -114,7 +112,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           toggleModal={toggleModal}
           fullName={fullName}
           profileImage={profileImage}
-          user={user || undefined}
+          user={user || ""}
           darkMode={darkMode}
           toggleDarkMode={toggleDarkMode}
           handleClose={handleClose}

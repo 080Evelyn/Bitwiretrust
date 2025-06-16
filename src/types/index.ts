@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface ButtonsProps {
   variant?: "primary" | "secondary";
   children: React.ReactNode;
@@ -94,8 +96,8 @@ export interface ProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
   profileImage: string;
-  email?: string;
-  username?: string;
+  fullName: string;
+  user: User;
 }
 
 export interface ContactData {

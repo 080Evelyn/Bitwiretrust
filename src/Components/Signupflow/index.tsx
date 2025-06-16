@@ -13,12 +13,7 @@ import GetStarted from "./GetStarted";
 import CreatePasscode from "./CreatePasscode";
 import SuccessModal from "./SuccessModal";
 import { useMutation } from "@tanstack/react-query";
-import {
-  createAccount,
-  createPasscode,
-  login,
-  verifyEmailCode,
-} from "@/api/auth";
+import { createAccount, createPin, login, verifyEmailCode } from "@/api/auth";
 import { toast } from "sonner";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
@@ -62,13 +57,11 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     "",
   ]);
 
-  const [passcode, setPasscode] = useState<string[]>(["", "", "", "", "", ""]);
+  const [passcode, setPasscode] = useState<string[]>(["", "", "", ""]);
   const [isButtonEnabled, setIsButtonEnabled] = useState<boolean>(false);
   const [codeError, setCodeError] = useState<boolean>(false);
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>(false);
   const [confirmPasscode, setConfirmPasscode] = useState<string[]>([
-    "",
-    "",
     "",
     "",
     "",
@@ -163,7 +156,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     newPasscode[index] = value.replace(/[^0-9]/g, "").slice(0, 1);
     setPasscode(newPasscode);
 
-    if (value && index < 5) {
+    if (value && index < 3) {
       const nextInput = document.getElementById(`passcode-input-${index + 1}`);
       if (nextInput) {
         nextInput.focus();
@@ -211,19 +204,18 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     },
   });
 
-  const { ContextLogin, updatePasscodeStatus } = useAuth();
+  const { ContextLogin, updatePinStatus } = useAuth();
 
   const loginMutation = useMutation({
     mutationFn: () => login(getStartedFields),
     onSuccess: (response) => {
-      const isPasscodeSet =
-        response.data.isPassCodeSet === true ||
-        response.data.isPassCodeSet === "true";
+      const isPinSet =
+        response.data.isPinSet === true || response.data.isPinSet === "true";
 
-      ContextLogin(response.data.jwt, isPasscodeSet);
+      ContextLogin(response.data.jwt, isPinSet);
 
-      if (isPasscodeSet) {
-        console.log(isPasscodeSet);
+      if (isPinSet) {
+        console.log(isPinSet);
         navigate("/dashboard");
       } else {
         setShowSuccessModal(true);
@@ -244,11 +236,10 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     },
   });
 
-  const savePasscodeMutation = useMutation({
-    mutationFn: ({ email, passcode }: { email: string; passcode: string }) =>
-      createPasscode({ email, passcode }),
+  const savePin = useMutation({
+    mutationFn: (pin: string) => createPin(pin),
     onSuccess: () => {
-      updatePasscodeStatus();
+      updatePinStatus();
       navigate("/dashboard");
     },
     onError: (error: unknown) => {
@@ -266,7 +257,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     createAccountMutation.isPending ||
     verifyCodeMutation.isPending ||
     loginMutation.isPending ||
-    savePasscodeMutation.isPending;
+    savePin.isPending;
 
   const handleNextStep = () => {
     if (!isButtonEnabled) return;
@@ -286,10 +277,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       loginMutation.mutate();
     } else if (currentStep === Step.CREATE_PASSCODE) {
       if (confirmPasscode.join("") === passcode.join("")) {
-        savePasscodeMutation.mutate({
-          email: getStartedFields.email,
-          passcode: passcode.join(""),
-        });
+        savePin.mutate(passcode.join(""));
       } else {
         setPasscodeMatchError(true);
       }
