@@ -1,9 +1,39 @@
 import { useAuth } from "@/context/AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { getToken, getUserId } from "@/utils/AuthStorage";
 
 export function ProtectedRoute() {
-  const { isAuthenticated, isLoading, isPasscodeSet, isLoggingOut } = useAuth();
-  if (isLoading) return null; // todo: loader here
+  const { isAuthenticated, isLoading, isPinSet, isLoggingOut } = useAuth();
+
+  const token = getToken();
+  const userId = getUserId();
+
+  const {
+    data: user,
+    isPending: isUserLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["user", userId],
+    queryFn: async () => {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_URL
+        }/v1/user/wallet-service/profile/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return res.data.data;
+    },
+    enabled: isAuthenticated && isPinSet && !!token && !!userId,
+    staleTime: Infinity,
+  });
+
+  if (isLoading || isUserLoading) return <div>Loading...</div>; // Add fancy loader later
 
   if (isLoggingOut)
     return (
@@ -15,18 +45,19 @@ export function ProtectedRoute() {
       </div>
     );
 
-  if (isAuthenticated && isPasscodeSet) {
-    return <Outlet />;
+  if (isAuthenticated && isPinSet && user && !isError) {
+    return <Outlet context={{ user }} />;
   }
+
   return <Navigate to="/login" />;
 }
 
 export function PublicRoute() {
-  const { isAuthenticated, isPasscodeSet, isLoading } = useAuth();
+  const { isAuthenticated, isPinSet, isLoading } = useAuth();
 
   if (isLoading) return null; // todo: loader here
 
-  if (isAuthenticated && isPasscodeSet) {
+  if (isAuthenticated && isPinSet) {
     return <Navigate to="/dashboard" />;
   }
 

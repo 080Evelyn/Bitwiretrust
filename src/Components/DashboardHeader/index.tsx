@@ -9,7 +9,7 @@ import { dummyNotifications } from "@/constants/notification-detials";
 import NotificationPopover from "../NotificationModal/Notification";
 import { User } from "@/types/user";
 
-const DashboardHeader = ({ user }: { user: User | null }) => {
+const DashboardHeader = ({ user }: { user: User }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [hasNotifications] = useState(true);
   const [hasProfileNotifications] = useState(true);
@@ -91,8 +91,8 @@ const DashboardHeader = ({ user }: { user: User | null }) => {
         isOpen={isProfileModalOpen}
         onClose={toggleProfileModal}
         profileImage={ellipse_user}
-        username="Jacob Jones"
-        email="Jacobbyjones@email.com"
+        fullName={fullName}
+        user={user}
       />
     </div>
   );

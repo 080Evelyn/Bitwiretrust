@@ -262,7 +262,7 @@ const HomeDashboard = (_props: Props) => {
             </div>
           </div>
 
-          <div className="transaction-list max-h-[calc(100vh-150px)] overflow-y-auto">
+          <div className="transaction-list max-h-[60vh] md:max-h-[calc(100vh-150px)] overflow-y-auto">
             {transactionsData
               ?.filter(
                 (tx) =>

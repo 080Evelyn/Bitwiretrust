@@ -1,3 +1,5 @@
+// This is being used for pin code creation rather than passcode.
+
 import { full_logo, passcode_lock } from "@/assets";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
@@ -41,7 +43,7 @@ const CreatePasscode = ({
     setConfirmPasscode(newPasscode);
     setPasscodeMatchError(false);
 
-    if (value && index < 5) {
+    if (value && index < 3) {
       const nextInput = document.getElementById(
         `confirm-passcode-input-${index + 1}`
       );
@@ -101,27 +103,33 @@ const CreatePasscode = ({
         <div className="app-logo">
           <img src={full_logo} alt="Bitwire" />
         </div>
-        <h2>{isConfirming ? "Confirm Your Passcode" : "Create a Passcode"}</h2>
-        <p>
+        <h2>
           {isConfirming
-            ? "Please re-enter your 6-digit passcode to confirm."
-            : "Set up your 6-digit security passcode."}
+            ? "Confirm Your Transaction Pin"
+            : "Create a Transaction Pin"}
+        </h2>
+        <p className="text-center">
+          {isConfirming
+            ? "Please re-enter your 4-digit pin to confirm."
+            : "Set up your 4-digit transaction pin."}
           <br />
-          Please, do not share this code with anyone.
+          <span className="text-center text-sm">
+            Please, do not share this pin with anyone.
+          </span>
         </p>
         <form>
           <input type="hidden" name="email" value={getStartedFields.email} />
           <div className="form-group passcode-form-group">
             <div className="passcode-lock">
               <img src={passcode_lock} alt="lock" />
-              <p>{isConfirming ? "Confirm Passcode" : "Enter Passcode"}</p>
+              <p>{isConfirming ? "Confirm Pin" : "Enter Pin"}</p>
             </div>
             {isConfirming
               ? renderConfirmPasscodeInputs()
               : renderPasscodeInputs()}
             {passcodeMatchError && (
               <p className="error-message !text-red-500">
-                Passcodes do not match. Please try again.
+                Pins do not match. Please try again.
               </p>
             )}
           </div>
@@ -145,13 +153,13 @@ const CreatePasscode = ({
                 className="text-[#6c0aa1] text-sm flex gap-2 justify-center items-center cursor-pointer mt-4"
                 onClick={() => {
                   setIsConfirming(false);
-                  setPasscode(["", "", "", "", "", ""]);
-                  setConfirmPasscode(["", "", "", "", "", ""]);
+                  setPasscode(["", "", "", ""]);
+                  setConfirmPasscode(["", "", "", ""]);
                   setPasscodeMatchError(false);
                 }}
               >
                 <ArrowLeft className="size-5" />
-                <span>Re-enter passcode</span>
+                <span>Re-enter pin</span>
               </button>
             )}
           </div>
