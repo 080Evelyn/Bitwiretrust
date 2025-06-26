@@ -45,7 +45,7 @@ const GetStarted = ({
       handleGetStartedInputChange(fakeEvent("email", savedEmail));
       setRememberMe(true);
     }
-  }, [handleGetStartedInputChange]);
+  }, []);
 
   const handleCheckboxChange = () => {
     setRememberMe((prev) => !prev);
