@@ -103,8 +103,12 @@ import swapCrypto from "./swap.svg";
 import QrCode from "./qrcode.svg";
 import DoneIcon from "./Done.svg";
 import WithrawalImage from "./withdrawal_image.jpg";
+import MoneyIn from "./money-in.svg";
+import MoneyOut from "./money-out.svg";
 
 export {
+  MoneyIn,
+  MoneyOut,
   WithrawalImage,
   DoneIcon,
   QrCode,

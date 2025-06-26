@@ -12,7 +12,7 @@ import {
   menu,
   payment_svg,
   red_arrow,
-  setting,
+  // setting,
   user,
   wallet_done,
   white_logo,
@@ -198,11 +198,11 @@ export const navLinks = [
     icon: bitcoin,
     text: "Crypto Trading",
   },
-  {
-    to: "/settings",
-    icon: setting,
-    text: "Settings",
-  },
+  // {
+  //   to: "/settings",
+  //   icon: setting,
+  //   text: "Settings",
+  // },
 ];
 
 export const bottomLinks = [

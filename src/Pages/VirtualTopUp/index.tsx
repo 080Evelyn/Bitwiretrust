@@ -1,11 +1,15 @@
 import BalanceOverview from "@/Components/HomeDashboard/BalanceOverview";
+import { Skeleton } from "@/Components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
 import Airtime from "@/Components/VirtualTopUp/Airtime";
 import Beneficiary from "@/Components/VirtualTopUp/Beneficiary";
 import Data from "@/Components/VirtualTopUp/Data";
 import PhoneNumberProvider from "@/Components/VirtualTopUp/PhoneNumberContext";
+import { useServiceIdentifiers } from "@/hooks/utility-payments/useServiceIdentifiers";
 
 const VirtualTopUp = () => {
+  const { isPending } = useServiceIdentifiers("data");
+
   return (
     <PhoneNumberProvider>
       <div className="h-screen">
@@ -13,9 +17,19 @@ const VirtualTopUp = () => {
           <BalanceOverview pathName="Virtual Top Up" />
         </div>
         <div className="hidden md:grid grid-cols-3 gap-5 w-full">
-          <Beneficiary />
-          <Airtime />
-          <Data />
+          {isPending ? (
+            <>
+              <Skeleton className="h-[300px] w-full" />
+              <Skeleton className="h-[300px] w-full" />
+              <Skeleton className="h-[300px] w-full" />
+            </>
+          ) : (
+            <>
+              <Beneficiary />
+              <Airtime />
+              <Data />
+            </>
+          )}
         </div>
 
         <div className="md:hidden w-full">
@@ -44,12 +58,18 @@ const VirtualTopUp = () => {
               </TabsTrigger>
             </TabsList>
             <div className="mt-2">
-              <TabsContent value="airtime">
-                <Airtime />
-              </TabsContent>
-              <TabsContent value="data">
-                <Data />
-              </TabsContent>
+              {isPending ? (
+                <Skeleton className="h-[300px] w-full" />
+              ) : (
+                <>
+                  <TabsContent value="airtime">
+                    <Airtime />
+                  </TabsContent>
+                  <TabsContent value="data">
+                    <Data />
+                  </TabsContent>
+                </>
+              )}
             </div>
           </Tabs>
         </div>

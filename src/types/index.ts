@@ -163,6 +163,29 @@ export interface NotificationItem {
   message: string;
   category: string;
   date: Date;
-  status: "Successful" | "Failed";
+  status: "successful" | "failed" | "pending";
   icon?: "wallet" | "send" | "bell";
+}
+
+export interface NotificationMessage {
+  tittle: boolean;
+  subtittle: string;
+}
+export interface TransactionData {
+  id: string;
+  userId: string;
+  title: string;
+  message: string;
+  type: string;
+  isRead: boolean;
+  createdAt: Date;
+  amount: number;
+  status: string;
+  transactionType: "CREDIT" | "DEBIT" | "Announcement";
+}
+
+export interface TransactionListResponse {
+  responseCode: string;
+  responseMsg: string;
+  data: TransactionData[];
 }

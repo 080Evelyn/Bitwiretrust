@@ -3,6 +3,8 @@ import {
   DialogOverlay,
   DialogContent,
   DialogClose,
+  DialogHeader,
+  DialogTitle,
 } from "@/Components/ui/dialog";
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft } from "lucide-react";
@@ -10,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { WithrawalImage } from "@/assets";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { bankList, verifyBankAccount } from "@/api/auth";
 import { BankList, BankListInfo } from "@/types/dashboard";
 import { toast } from "sonner";
@@ -48,6 +50,7 @@ export default function WithdrawalDialog({
   const [isVerifying, setIsVerifying] = useState(false);
   const [accountName, setAccountName] = useState<string | null>(null);
   const { openPinModal } = usePinModal();
+  const queryClient = useQueryClient();
 
   const step1Form = useForm<Step1Values>({
     resolver: zodResolver(step1Schema),
@@ -204,16 +207,13 @@ export default function WithdrawalDialog({
           },
           {
             onSuccess: () => {
-              toast.success("Transfer successful", {
-                duration: 8000,
-              });
-              setIsWithdrawalOpen(false);
-              setStep(1);
+              setStep(4);
               setAccountDetails(null);
               setSelectedBank(null);
               setPayload(null);
               step1Form.reset();
               step2Form.reset();
+              queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
             },
           }
         );
@@ -223,23 +223,31 @@ export default function WithdrawalDialog({
     });
   };
 
+  const closeDialog = () => {
+    setIsWithdrawalOpen(false);
+    setStep(1);
+    setAccountDetails(null);
+    setSelectedBank(null);
+    setPayload(null);
+    step1Form.reset();
+    step2Form.reset();
+  };
+
   return (
     <Dialog
       open={isWithdrawalOpen}
       onOpenChange={(open) => {
         setIsWithdrawalOpen(open);
         if (!open) {
-          setStep(1);
-          setAccountDetails(null);
-          setSelectedBank(null);
-          setPayload(null);
-          step1Form.reset();
-          step2Form.reset();
+          closeDialog();
         }
       }}
     >
       <DialogOverlay>
         <DialogContent className="m-0 p-0 max-sm:top-0 transform max-sm:translate-y-0 sm:px-0 sm:pb-[5px] sm:pt-2 max-sm:rounded-none max-sm:h-screen max-sm:max-w-screen z-50 [&>button.absolute]:hidden">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Trnasfer Modal</DialogTitle>
+          </DialogHeader>
           <div
             className="relative bg-[#F9F9F9] pb-8"
             style={{ fontFamily: "Poppins, sans-serif" }}
@@ -261,7 +269,8 @@ export default function WithdrawalDialog({
                 <button
                   className="absolute left-4 cursor-pointer"
                   onClick={() => {
-                    if (step === 3) setStep(2);
+                    if (step === 4) setStep(3);
+                    else if (step === 3) setStep(2);
                     else if (step === 2) setStep(1);
                   }}
                 >
@@ -325,9 +334,7 @@ export default function WithdrawalDialog({
               />
             )}
             {/* step 4: display success message */}
-            {step === 4 && (
-              <TransferSuccess onClose={() => setIsWithdrawalOpen(false)} />
-            )}
+            {step === 4 && <TransferSuccess onClose={closeDialog} />}
           </div>
         </DialogContent>
       </DialogOverlay>

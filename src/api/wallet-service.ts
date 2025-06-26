@@ -43,26 +43,12 @@ export const initiateTransaction = async (data: {
   return response.data;
 };
 
-export const transactions = async () => {
-  const email = getEmail();
-  const token = getToken();
-
-  const response = await axios.get(
-    `${url}/v1/user/wallet-service/transactions/${email}`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-
-  return response.data;
-};
-
-export const pollDeposit = async () => {
-  const response = await axios.post(
-    `${url}/v1/user/wallet-service/poll-deposits`
-  );
-  return response.data;
-};
+// export const pollDeposit = async () => {
+//   const response = await axios.post(
+//     `${url}/v1/user/wallet-service/poll-deposits`
+//   );
+//   return response.data;
+// };
 
 export const createRecipient = async (data: {
   name: string;

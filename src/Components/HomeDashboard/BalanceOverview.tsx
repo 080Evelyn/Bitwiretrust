@@ -4,6 +4,7 @@ import { help_circle, password } from "../../assets";
 import { FaEye } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { dvaInfo } from "@/api/wallet-service";
+import { Skeleton } from "../ui/skeleton";
 
 const BalanceOverview = ({ pathName }: { pathName?: string }) => {
   const [hideBalance, setHideBalance] = useState(false);
@@ -43,7 +44,7 @@ const BalanceOverview = ({ pathName }: { pathName?: string }) => {
                 </>
               ) : (
                 <>
-                  0.<span className="decimal">00</span>
+                  <Skeleton className="inline-block ml-1 h-5 w-16" />
                 </>
               )}
             </h2>

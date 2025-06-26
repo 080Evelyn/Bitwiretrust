@@ -9,35 +9,40 @@ import {
 } from "../ui/select";
 import { ScrollArea } from "../ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { NotificationItem } from "@/types";
+import { TransactionData } from "@/types";
 import { format } from "date-fns";
-import { ArrowLeft, Bell, Send, Wallet, X } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import NotificationModal from "./NotificationModal";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { useResponsivePopover } from "@/hooks/viewportResize";
+import { logo, MoneyIn, MoneyOut } from "@/assets";
+import { Skeleton } from "../ui/skeleton";
 
 interface NotificationPopoverProps {
   trigger: React.ReactNode;
-  notifications: NotificationItem[];
+  isPending: boolean;
+  notifications: TransactionData[];
 }
 
 const iconMap = {
-  wallet: <Wallet className="text-white size-5.5" />,
-  send: <Send className="text-white size-5.5" />,
-  bell: <Bell className="text-white size-5.5" />,
+  CREDIT: <img src={MoneyIn} className="text-white size-5.5" />,
+  DEBIT: <img src={MoneyOut} className="text-white size-5.5" />,
+  Announcement: <img src={logo} className="text-white size-5.5" />,
 };
 
 const statusColorMap = {
-  Successful: "text-green-500",
-  Failed: "text-red-500",
+  success: "text-green-500",
+  failed: "text-red-500",
+  pending: "text-yellow-500",
 };
 
 const NotificationPopover = ({
   trigger,
   notifications,
+  isPending,
 }: NotificationPopoverProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedNotif, setSelectedNotif] = useState<NotificationItem | null>(
+  const [selectedNotif, setSelectedNotif] = useState<TransactionData | null>(
     null
   );
 
@@ -45,7 +50,14 @@ const NotificationPopover = ({
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
 
-  const handleNotificationClick = (notif: NotificationItem) => {
+  type StatusKey = "success" | "failed" | "pending";
+
+  function getStatusColor(status: string) {
+    const key = status.toLowerCase() as StatusKey;
+    return statusColorMap[key] || "text-gray-400";
+  }
+
+  const handleNotificationClick = (notif: TransactionData) => {
     if (selectedNotif?.id !== notif.id) {
       setSelectedNotif(notif);
     }
@@ -53,12 +65,12 @@ const NotificationPopover = ({
 
   const filteredNotifications = useMemo(() => {
     return notifications.filter((notif) => {
-      const notifMonth = format(notif.date, "MMM");
+      const notifMonth = format(notif.createdAt, "MMM");
       const matchesMonth = monthFilter === "All" || notifMonth === monthFilter;
       const matchesCategory =
-        categoryFilter === "All" || notif.category === categoryFilter;
+        categoryFilter === "All" || notif.type === categoryFilter;
       const matchesStatus =
-        statusFilter === "All" || notif.status === statusFilter;
+        statusFilter === "All" || notif.status.toLowerCase() === statusFilter;
 
       return matchesMonth && matchesCategory && matchesStatus;
     });
@@ -129,9 +141,10 @@ const NotificationPopover = ({
                 </SelectTrigger>
                 <SelectContent className="z-[60]">
                   <SelectItem value="All">All</SelectItem>
-                  <SelectItem value="Payments">Payments</SelectItem>
-                  <SelectItem value="Transfers">Transfers</SelectItem>
-                  <SelectItem value="Alerts">Alerts</SelectItem>
+                  <SelectItem value="ELECTRICITY">Electricity</SelectItem>
+                  <SelectItem value="TRANSFER">Transfers</SelectItem>
+                  <SelectItem value="AIRTIME">Airtime</SelectItem>
+                  <SelectItem value="DATA">Data</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -141,8 +154,9 @@ const NotificationPopover = ({
                 </SelectTrigger>
                 <SelectContent className="z-[60]">
                   <SelectItem value="All">All</SelectItem>
-                  <SelectItem value="Successful">Successful</SelectItem>
-                  <SelectItem value="Failed">Failed</SelectItem>
+                  <SelectItem value="success">Successful</SelectItem>
+                  <SelectItem value="pending">pending</SelectItem>
+                  <SelectItem value="failed">Failed</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -150,54 +164,64 @@ const NotificationPopover = ({
 
           <ScrollArea className="h-[80vh] md:h-[65vh] lg:h-[75vh] p-3">
             <div className="flex flex-col gap-4.5 tracking-[-0.15px]">
-              {filteredNotifications.map((notif) => (
-                <button
-                  key={notif.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleNotificationClick(notif);
-                  }}
-                  className="flex justify-between items-start text-left hover:bg-accent/40 rounded-md px-2 py-1 transition"
-                >
-                  <div className="flex gap-2 w-[70%]">
-                    <div
-                      className={cn(
-                        "size-9 flex items-center justify-center rounded-md",
-                        notif.icon === "wallet" && "bg-[#16D005]",
-                        notif.icon === "send" && "bg-[#2EBAC6]",
-                        notif.icon === "bell" && "bg-[#7910B1]"
-                      )}
+              {isPending ? (
+                <div className="flex flex-col gap-4">
+                  {Array.from({ length: 8 }).map((_, i) => (
+                    <Skeleton key={i} className="h-10 w-full" />
+                  ))}
+                </div>
+              ) : (
+                <>
+                  {filteredNotifications.map((notif) => (
+                    <button
+                      key={notif.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleNotificationClick(notif);
+                      }}
+                      className="flex justify-between items-start text-left hover:bg-accent/40 rounded-md px-2 py-1 transition"
                     >
-                      {iconMap[notif.icon || "bell"]}
-                    </div>
-                    <div className="flex flex-1 flex-col">
-                      <h4 className="font-medium text-sm md:text-xs">
-                        {notif.title}
-                      </h4>
-                      <p className="text-muted-foreground font-medium text-xs md:text-[10px] leading-snug">
-                        {notif.message}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-xs md:text-[10px] flex flex-col items-end">
-                    <div className="text-muted-foreground font-light">
-                      {format(notif.date, "MMM do, HH:mm")}
-                    </div>
-                    <div
-                      className={cn(
-                        "font-semibold",
-                        statusColorMap[notif.status]
-                      )}
-                    >
-                      {notif.status}
-                    </div>
-                  </div>
-                </button>
-              ))}
-              {filteredNotifications.length === 0 && (
-                <p className="text-sm text-muted-foreground text-center mt-6">
-                  No notifications found.
-                </p>
+                      <div className="flex gap-2 w-[70%]">
+                        <div
+                          className={cn(
+                            "size-9 flex items-center justify-center rounded-md bg-[#7910B1]",
+                            notif.transactionType === "CREDIT" &&
+                              "bg-[#16D005]",
+                            notif.transactionType === "DEBIT" && "bg-[#2EBAC6]"
+                          )}
+                        >
+                          {iconMap[notif.transactionType || "announcement"]}
+                        </div>
+                        <div className="flex flex-1 flex-col">
+                          <h4 className="font-medium text-sm md:text-xs">
+                            {notif.title}
+                          </h4>
+                          <p className="text-muted-foreground font-medium text-xs md:text-[10px] leading-snug">
+                            {notif.message}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-xs md:text-[10px] flex flex-col items-end">
+                        <div className="text-muted-foreground font-light">
+                          {format(notif.createdAt, "MMM do, HH:mm")}
+                        </div>
+                        <div
+                          className={cn(
+                            "font-semibold capitalize",
+                            getStatusColor(notif.status)
+                          )}
+                        >
+                          {notif.status.toLowerCase()}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                  {filteredNotifications.length === 0 && (
+                    <p className="text-sm text-muted-foreground text-center mt-6">
+                      No notifications found.
+                    </p>
+                  )}
+                </>
               )}
             </div>
           </ScrollArea>

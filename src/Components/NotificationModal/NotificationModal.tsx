@@ -5,12 +5,12 @@ import {
   DialogOverlay,
 } from "../ui/dialog";
 import { format } from "date-fns";
-import { NotificationItem } from "@/types";
+import { TransactionData } from "@/types";
 import { naira } from "@/assets";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 interface NotificationModalProps {
-  notification: NotificationItem | null;
+  notification: TransactionData | null;
   onClose: () => void;
 }
 
@@ -23,13 +23,13 @@ const NotificationModal = ({
       <DialogOverlay className="z-58">
         <DialogContent className="z-60 w-full md:w-[398px] md:left-[48%] py-6.5 bg-[#FCF6FF]">
           <DialogHeader className="flex items-center">
-            {notification?.status === "Successful" ? (
+            {notification?.status.toLowerCase() === "success" ? (
               <div className="bg-[#11C600]/50 rounded-full size-19 flex items-center justify-center">
                 <div className="bg-[#0FA301] size-15.5 rounded-full flex items-center justify-center">
                   <img src={naira} alt="naira" className="h-[25.54px]" />
                 </div>
               </div>
-            ) : notification?.status === "Failed" ? (
+            ) : notification?.status.toLowerCase() === "failed" ? (
               <div className="bg-[#FF0000]/50 rounded-full size-19 flex items-center justify-center">
                 <div className="bg-[#FF0000] size-15.5 rounded-full flex items-center justify-center">
                   <X className="size-[42px] text-white" />
@@ -37,44 +37,50 @@ const NotificationModal = ({
               </div>
             ) : null}
             <div className="font-medium">
-              Airtime Recharge {notification?.status}
+              {notification?.title}{" "}
+              {notification?.status.toLowerCase() === "success"
+                ? "Successful"
+                : notification?.status.toLowerCase() === "failed"
+                ? "Failed"
+                : "Pending"}
             </div>
-            <h3 className="font-bold text-2xl">NGN 78,000</h3>
+            <h3 className="font-bold text-2xl">NGN 8,000</h3>
           </DialogHeader>
           <span className="border-2 border-[#7910B1] rounded-xs px-3 my-1.5" />
           <div className="flex flex-col gap-2 text-sm font-medium">
             <div className="flex justify-between">
               <span>Transaction ID</span>
-              <span>BW-TRSF-WY4RY</span>
+              <span>{notification?.id}</span>
             </div>
             <div className="flex justify-between">
               <span>Date</span>
               <span className="text-xs mt-2 text-right">
-                {notification && format(notification.date, "MM-dd-yyyy")}
+                {notification && format(notification.createdAt, "MM-dd-yyyy")}
               </span>
             </div>
             <div className="flex justify-between">
               <span>Time</span>
-              <span>{notification && format(notification.date, "p")}</span>
+              <span>{notification && format(notification.createdAt, "p")}</span>
             </div>
             <div className="flex justify-between">
               <span>Method</span>
-              <span>Airtime Recharge</span>
+              <span>{notification?.type}</span>
             </div>
             <div className="flex justify-between">
-              <span>Network</span>
-              <span>MTN</span>
+              <span>Transaction Type</span>
+              <span>{notification?.transactionType}</span>
             </div>
             <div className="flex justify-between">
               <span>Status</span>
               <span
                 className={cn(
-                  notification?.status === "Successful"
+                  "capitalize",
+                  notification?.status.toLowerCase() === "success"
                     ? "text-[#0FA301]"
                     : "text-[#FF0000]"
                 )}
               >
-                {notification?.status}
+                {notification?.status.toLowerCase()}
               </span>
             </div>
           </div>

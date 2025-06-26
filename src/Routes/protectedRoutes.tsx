@@ -3,6 +3,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { getToken, getUserId } from "@/utils/AuthStorage";
+import MainLoader from "@/Components/seketon-loader/MainLoader";
 
 export function ProtectedRoute() {
   const { isAuthenticated, isLoading, isPinSet, isLoggingOut } = useAuth();
@@ -33,7 +34,7 @@ export function ProtectedRoute() {
     staleTime: Infinity,
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <MainLoader />;
 
   if (isLoggingOut)
     return (
@@ -53,7 +54,7 @@ export function ProtectedRoute() {
     return <Outlet context={{ user }} />;
   }
 
-  return <div>Loading...</div>;
+  return <MainLoader />;
 }
 
 export function PublicRoute() {

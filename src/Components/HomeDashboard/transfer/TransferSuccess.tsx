@@ -24,7 +24,7 @@ const TransferSuccess = ({ onClose }: { onClose: () => void }) => {
         </div>
 
         <button
-          className="btn-primary w-1/2 mt-auto max-md:mb-20"
+          className="btn-primary w-1/2 mt-[10%] sm:mt-[5%] max-sm:mb-20"
           onClick={onClose}
         >
           Done

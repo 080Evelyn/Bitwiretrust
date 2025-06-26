@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { RateData } from "../../types";
+import {
+  RateData,
+  TransactionData,
+  TransactionListResponse,
+} from "../../types";
 import { coinRates, giftcardRates } from "../../constants";
 import "./styles.css";
 import {
@@ -7,44 +11,26 @@ import {
   circle_arrow_left,
   export_png,
   gala_add,
+  logo,
+  MoneyIn,
+  MoneyOut,
   wallet,
-  wallet_done,
 } from "../../assets";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import BalanceOverview from "./BalanceOverview";
 import TransferModal from "./TransferModal";
 import FundAccountModal from "./FundAccountModal";
 import { useQuery } from "@tanstack/react-query";
-import { dvaInfo, transactions } from "@/api/wallet-service";
+import { dvaInfo } from "@/api/wallet-service";
 import { DvaAccountInfo } from "@/types/dashboard";
+import { transactions } from "@/api/user-notification";
+import { Skeleton } from "../ui/skeleton";
 
 type Props = object;
 interface DvaApiResponse {
   responseCode: string;
   responseMsg: string;
   data: DvaAccountInfo;
-}
-
-export interface TransactionData {
-  reference: string;
-  paystack_transaction_id: string;
-  email: string;
-  status: string;
-  channel: string;
-  amount: number;
-  customerCode: string;
-  currency: string;
-  paidAt: string;
-  payloadRes: string;
-  transactionType: string;
-  recipientAccountNo: string;
-  recipientAccountName: string;
-}
-
-export interface TransactionListResponse {
-  responseCode: string;
-  responseMsg: string;
-  data: TransactionData[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -70,9 +56,11 @@ const HomeDashboard = (_props: Props) => {
         return "#ddd";
     }
   };
-  const getStatusColorTransaction = (status: string) => {
-    switch (status) {
-      case "green":
+  const getStatusColorTransaction = (transactionType: string) => {
+    switch (transactionType) {
+      case "CREDIT":
+        return "green";
+      case "DEBIT":
         return "green";
       case "orange":
         return "orange";
@@ -87,9 +75,9 @@ const HomeDashboard = (_props: Props) => {
       case "DEBIT":
         return "#2EBAC6";
       case "updated":
-        return "#7910B1";
+        return "#e0e0e0";
       default:
-        return "#E0E0E0";
+        return "#7910B1";
     }
   };
   const renderRatesTable = (rates: RateData[]) => (
@@ -133,12 +121,16 @@ const HomeDashboard = (_props: Props) => {
 
   const dvaData = apiResponse?.data;
 
-  const { data: transactionsList } = useQuery<TransactionListResponse>({
-    queryKey: ["transactions"],
-    queryFn: transactions,
-  });
+  const { isFetching, data: transactionsList } =
+    useQuery<TransactionListResponse>({
+      queryKey: ["transactions"],
+      queryFn: transactions,
+    });
 
-  const transactionsData = transactionsList?.data;
+  const notifications = transactionsList?.data;
+
+  // const { notifications } = useNotifications();
+  // console.log("Notifications:", notifications);
 
   return (
     <>
@@ -203,7 +195,7 @@ const HomeDashboard = (_props: Props) => {
               {renderRatesTable(coinRates)}
             </div>
           </div>
-          <div className="md:hidden border-[1.75px] border-[#F1F1F1] shadow-xs rounded-sm w-full p-4">
+          <div className="hidden border-[1.75px] border-[#F1F1F1] shadow-xs rounded-sm w-full p-4">
             <Tabs defaultValue="gift-card">
               <TabsList className="flex gap-5 w-full">
                 <TabsTrigger
@@ -234,7 +226,7 @@ const HomeDashboard = (_props: Props) => {
           <div className="all-view">
             <div className="all-tab" onClick={() => setActiveTab("All")}>
               <p>All</p>
-              <span className="all-count">17</span>
+              <span className="all-count">{notifications?.length}</span>
             </div>
 
             <div
@@ -242,7 +234,7 @@ const HomeDashboard = (_props: Props) => {
               onClick={() => setActiveTab("Transaction")}
             >
               <p>Transaction</p>
-              <span className="status-dot red"></span>
+              <span className="status-dot green"></span>
             </div>
 
             <div
@@ -250,7 +242,7 @@ const HomeDashboard = (_props: Props) => {
               onClick={() => setActiveTab("Announcement")}
             >
               <p>Announcement</p>
-              <span className="status-dot green"></span>
+              <span className="status-dot red"></span>
             </div>
 
             <div
@@ -263,62 +255,58 @@ const HomeDashboard = (_props: Props) => {
           </div>
 
           <div className="transaction-list max-h-[60vh] md:max-h-[calc(100vh-150px)] overflow-y-auto">
-            {transactionsData
-              ?.filter(
-                (tx) =>
-                  (tx.transactionType === "CREDIT" && tx.amount) ||
-                  (tx.transactionType === "DEBIT" &&
-                    tx.amount &&
-                    tx.recipientAccountName)
-              )
-              .map((transactionData) => (
-                <div
-                  key={transactionData.paystack_transaction_id}
-                  className="transaction-item"
-                >
-                  <div
-                    className="transaction-icon-wrapper"
-                    style={{
-                      backgroundColor: getBackgroundColorTransaction(
-                        transactionData.transactionType
-                      ),
-                    }}
-                  >
-                    <img
-                      src={
-                        transactionData.transactionType === "CREDIT" ||
-                        transactionData.transactionType === "DEBIT"
-                          ? wallet_done
-                          : wallet
-                      }
-                      alt="Transaction icon"
-                      className="transaction-icon"
-                    />
-                  </div>
+            {isFetching ? (
+              <div className="flex flex-col gap-4">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <Skeleton key={i} className="h-10 w-full" />
+                ))}
+              </div>
+            ) : (
+              <>
+                {notifications ? (
+                  notifications.map((notif: TransactionData) => (
+                    <div key={notif.id} className="transaction-item">
+                      <div
+                        className="transaction-icon-wrapper !rounded-[3.5px]"
+                        style={{
+                          backgroundColor: getBackgroundColorTransaction(
+                            notif.transactionType
+                          ),
+                        }}
+                      >
+                        <img
+                          src={
+                            notif.transactionType === "CREDIT"
+                              ? MoneyIn
+                              : notif.transactionType === "DEBIT"
+                              ? MoneyOut
+                              : logo
+                          }
+                          alt="Transaction icon"
+                          className="transaction-icon"
+                        />
+                      </div>
 
-                  <div className="transaction-details">
-                    <p className="transaction-title">
-                      {transactionData.transactionType === "CREDIT"
-                        ? `You have received ₦${transactionData.amount}`
-                        : `You transferred ₦${transactionData.amount}`}
-                    </p>
-                    <p className="transaction-subtitle">
-                      {transactionData.transactionType === "CREDIT"
-                        ? `Your NGN wallet has been credited with ₦${transactionData.amount}`
-                        : `₦${transactionData.amount} was sent to ${transactionData.recipientAccountName}`}
-                    </p>
-                  </div>
+                      <div className="transaction-details">
+                        <p className="transaction-title">{notif.title}</p>
+                        <p className="transaction-subtitle">{notif.message}</p>
+                      </div>
 
-                  <div
-                    className="transaction-status"
-                    style={{
-                      backgroundColor: getStatusColorTransaction(
-                        transactionData.status
-                      ),
-                    }}
-                  ></div>
-                </div>
-              ))}
+                      <div
+                        className="transaction-status"
+                        style={{
+                          backgroundColor: getStatusColorTransaction(
+                            notif.transactionType
+                          ),
+                        }}
+                      ></div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center">No Notification</div>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>

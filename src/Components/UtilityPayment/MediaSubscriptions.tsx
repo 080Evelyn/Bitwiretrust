@@ -4,12 +4,10 @@ import {
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "../ui/select";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
-import { useState } from "react";
-import { billers } from "@/constants/billers-option";
+import { useEffect, useState } from "react";
 import { usePinModal } from "@/context/PinModalContext";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -22,6 +20,20 @@ import {
   FormControl,
   FormMessage,
 } from "../ui/form";
+import {
+  Biller,
+  CableSubscriptionProps,
+  variations,
+} from "@/types/utility-payment";
+import {
+  useBillerVerificationCode,
+  useServiceIdentifiers,
+} from "@/hooks/utility-payments/useServiceIdentifiers";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { cableSubscription } from "@/api/micro-transaction";
+import { toast } from "sonner";
+import { FaSpinner } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   phone: z
@@ -29,15 +41,29 @@ const formSchema = z.object({
     .min(1, "Phone number is required")
     .regex(/^\+?\d{10,13}$/, "Enter a valid phone number"),
   package: z.string().min(1, "Please select a package"),
+  serviceID: z.string().min(1, "Service ID is required"),
   saveBeneficiary: z.boolean().optional(),
 });
 
 const MediaSubscriptions = () => {
-  const [selectedBiller, setSelectedBiller] = useState(billers[1]);
+  const [selectedBiller, setSelectedBiller] = useState<Biller | null>(null);
+  const { data: billers = [] } = useServiceIdentifiers("tv-subscription");
   const { openPinModal } = usePinModal();
+  const [selectedVariation, setSelectedVariation] = useState<variations | null>(
+    null
+  );
+  const { data: tvSubscriptionDetails } = useBillerVerificationCode(
+    selectedBiller?.serviceID
+  );
+
+  const cableSubscriptionMutation = useMutation({
+    mutationFn: (data: CableSubscriptionProps) => cableSubscription(data),
+  });
+  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+
     defaultValues: {
       phone: "",
       package: "",
@@ -45,13 +71,58 @@ const MediaSubscriptions = () => {
     },
   });
 
+  useEffect(() => {
+    if (billers.length && !selectedBiller) {
+      const first = billers[0];
+      setSelectedBiller(first);
+      form.setValue("serviceID", first.serviceID);
+    }
+  }, [billers, selectedBiller, form]);
+
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    openPinModal((pin) => {
-      console.log("PIN entered:", pin);
-      console.log("Form data:", data);
-      // Call API here
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const randomNumber = Array(3)
+      .fill("")
+      .map(() =>
+        characters.charAt(Math.floor(Math.random() * characters.length))
+      )
+      .join("");
+
+    if (!data.package) {
+      return;
+    }
+    openPinModal(() => {
+      cableSubscriptionMutation.mutate(
+        {
+          requestId: "202506241343b012a" + randomNumber,
+          serviceID: data.serviceID,
+          billersCode: data.phone,
+          variation_code: data.package,
+          amount: Number(selectedVariation?.variation_amount || 0),
+          phone: "08012345678",
+          identifier:
+            selectedBiller?.serviceID === "dstv" ||
+            selectedBiller?.serviceID === "gotv"
+              ? "renew-bouquet"
+              : selectedBiller?.serviceID || "",
+        },
+        {
+          onSuccess: (response) => {
+            toast.success("Subscription successful:", response);
+            queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
+            // Handle success, e.g., show a success message or redirect
+          },
+          onError: (error) => {
+            console.error("Subscription failed:", error);
+            // Handle error, e.g., show an error message
+          },
+        }
+      );
     });
   };
+
+  const isLoading = cableSubscriptionMutation.isPending;
 
   return (
     <Form {...form}>
@@ -61,31 +132,36 @@ const MediaSubscriptions = () => {
       >
         <Select
           onValueChange={(value) => {
-            const found = billers.find((b) => b.id === value);
+            const found = billers.find(
+              (biller: Biller) => biller.serviceID === value
+            );
             if (found) setSelectedBiller(found);
+            form.setValue("serviceID", found.serviceID);
+            form.setValue("package", "");
+            setSelectedVariation(null);
           }}
         >
           <SelectTrigger className="!text-white bg-[#7910B1] w-full rounded-[4.91px] py-5">
             <div className="flex items-center gap-2">
               <img
-                src={selectedBiller.image}
-                alt={selectedBiller.title}
+                src={selectedBiller?.image}
+                alt={selectedBiller?.name}
                 className="size-7 rounded-[3px]"
               />
-              <span>{selectedBiller.title}</span>
+              <span>{selectedBiller?.name}</span>
             </div>
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {billers.map((biller) => (
-                <SelectItem key={biller.id} value={biller.id}>
+              {billers.map((biller: Biller) => (
+                <SelectItem key={biller.serviceID} value={biller.serviceID}>
                   <div className="flex items-center gap-2">
                     <img
                       src={biller.image}
-                      alt={biller.title}
+                      alt={biller.name}
                       className="size-7 rounded-[3px]"
                     />
-                    <span>{biller.title}</span>
+                    <span>{biller.name}</span>
                   </div>
                 </SelectItem>
               ))}
@@ -95,8 +171,12 @@ const MediaSubscriptions = () => {
 
         <div className="flex w-full gap-2">
           <div className="flex bg-[#ECC6FF] items-center text-[#7910B1] rounded-sm font-semibold text-[13.31px] h-11.25 justify-between w-full px-2">
-            <span>Subscription Period</span>
-            <span className="text-wrap">30 days - N12,000</span>
+            {/* <span>Subscription Period</span> */}
+            {selectedVariation?.name ? (
+              <span className="text-wrap">{selectedVariation?.name}</span>
+            ) : (
+              <span>Subscription Package</span>
+            )}
           </div>
         </div>
 
@@ -108,7 +188,8 @@ const MediaSubscriptions = () => {
               <FormControl>
                 <Input
                   type="tel"
-                  placeholder="Enter Mobile Number"
+                  className="md:placeholder:!text-xs tracking-tight"
+                  placeholder="Enter phone number or cable number"
                   {...field}
                 />
               </FormControl>
@@ -124,18 +205,47 @@ const MediaSubscriptions = () => {
             <FormItem>
               <FormControl>
                 <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  onValueChange={(value) => {
+                    const found =
+                      tvSubscriptionDetails?.content.variations.find(
+                        (variation: variations) =>
+                          variation.variation_code === value
+                      );
+                    if (found) {
+                      setSelectedVariation(found);
+                      form.setValue("package", value);
+                    }
+                  }}
+                  value={field.value}
                 >
-                  <SelectTrigger className="text-[#000] bg-[#F9EDFF] w-full !h-11.5 rounded-[4.91px]">
-                    <SelectValue placeholder="Select Package" />
+                  <SelectTrigger className="text-[#000] text-base md:text-xs lg:text-sm md:tracking-[-0.60px] lg:tracking-normal bg-[#F9EDFF] w-full !h-11.5 rounded-[4.91px]">
+                    <div className="flex items-center max-w-full">
+                      {selectedVariation ? (
+                        <span className="w-full text-wrap max-md:tracking-[-0.13px] max-md:text-xs font-medium">
+                          {selectedVariation.name}
+                        </span>
+                      ) : (
+                        <span>Select Package</span>
+                      )}
+                    </div>
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="apple">Apple</SelectItem>
-                      <SelectItem value="banana">Banana</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
+
+                  {tvSubscriptionDetails?.content?.variations && (
+                    <SelectContent>
+                      <SelectGroup>
+                        {tvSubscriptionDetails.content.variations.map(
+                          (variation: variations) => (
+                            <SelectItem
+                              key={variation.variation_code}
+                              value={variation.variation_code}
+                            >
+                              {variation.name}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
+                  )}
                 </Select>
               </FormControl>
               <FormMessage />
@@ -162,8 +272,21 @@ const MediaSubscriptions = () => {
           )}
         />
 
-        <button type="submit" className="btn-primary w-full">
-          Pay Bill
+        <button
+          className={cn("btn-primary w-full", {
+            "opacity-50 cursor-not-allowed": isLoading,
+          })}
+          type="submit"
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <span className="inline-flex items-center">
+              Processing...
+              <FaSpinner className="animate-spin ml-1" />
+            </span>
+          ) : (
+            "Pay Bill"
+          )}
         </button>
       </form>
     </Form>

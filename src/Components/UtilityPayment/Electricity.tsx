@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { z } from "zod";
+import { useEffect, useState, useMemo } from "react";
+import { z, ZodType } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import {
   Form,
   FormControl,
@@ -19,90 +20,291 @@ import {
   SelectGroup,
   SelectItem,
 } from "../ui/select";
-import { billers } from "@/constants/billers-option";
-import { usePinModal } from "@/context/PinModalContext";
-import { amountSchema } from "@/lib/validationSchema";
 
-const formSchema = z.object({
-  meterNumber: z
-    .string()
-    .length(11, "Meter number must be exactly 11 digits")
-    .regex(/^\d+$/, "Meter number must contain only digits"),
-  amount: amountSchema,
-  billerId: z.string().min(1, "Select a biller"),
-  saveAccount: z.boolean().optional(),
-});
+import { usePinModal } from "@/context/PinModalContext";
+import { useServiceIdentifiers } from "@/hooks/utility-payments/useServiceIdentifiers";
+import { ikejaDisco } from "@/assets";
+import { Biller } from "@/types/utility-payment";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  prepaidElectricityPurchase,
+  postpaidElectricityPurchase,
+  verifyMeterNumber,
+} from "@/api/micro-transaction";
+import { FaSpinner } from "react-icons/fa";
+import { toast } from "sonner";
+import { useDebounce } from "use-debounce";
+import { cn } from "@/lib/utils";
+
+type FormData = {
+  meterNumber: string;
+  amount: string | number;
+  serviceID: string;
+  saveAccount?: boolean;
+};
 
 const Electricity = () => {
   const [selected, setSelected] = useState<"Prepaid" | "Postpaid">("Prepaid");
-  const [selectedBiller, setSelectedBiller] = useState(billers[0]);
   const { openPinModal } = usePinModal();
+  const [selectedBiller, setSelectedBiller] = useState<Biller | null>(null);
+  const { data: billers = [] } = useServiceIdentifiers("electricity-bill");
+  const [isMeterVerifying, setIsMeterVerifying] = useState(false);
+  const [meterName, setMeterName] = useState("");
+  const [meterError, setMeterError] = useState("");
+  const [meterNumber, setMeterNumber] = useState("");
+  const [debouncedMeterNumber] = useDebounce(meterNumber, 700);
+  const queryClient = useQueryClient();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const VerifyMeterNumberMutation = useMutation({
+    mutationFn: (data: {
+      billersCode: string;
+      serviceID: string;
+      type: string;
+    }) => {
+      return verifyMeterNumber(data);
+    },
+  });
+
+  const BuyPrepaidMutation = useMutation({
+    mutationFn: (data: {
+      requestId: string;
+      serviceID: string;
+      variation_code: string;
+      billersCode: string;
+      phone: string;
+      amount: number;
+      type: string;
+    }) => {
+      return prepaidElectricityPurchase(data);
+    },
+  });
+
+  const BuyPostpaidMutation = useMutation({
+    mutationFn: (data: {
+      requestId: string;
+      serviceID: string;
+      variation_code: string;
+      billersCode: string;
+      phone: string;
+      amount: number;
+      type: string;
+    }) => {
+      return postpaidElectricityPurchase(data);
+    },
+  });
+
+  const formSchema = useMemo(() => {
+    const min = Number(selectedBiller?.minimium_amount) || 100;
+    const max = Number(selectedBiller?.maximum_amount) || 100000;
+
+    return z.object({
+      meterNumber: z
+        .string()
+        .min(11, "Meter number must not less than 11 digits")
+        .max(13, "Meter number must not be more than 13 digits")
+        .regex(/^\d+$/, "Must be digits"),
+      amount: z.preprocess(
+        (val) => (val === "" ? undefined : Number(val)),
+        z
+          .number({
+            required_error: "Amount is required",
+            invalid_type_error: "Amount must be a number",
+          })
+          .min(min, `Amount must be at least ${min}`)
+          .max(max, `Amount must be at most ${max}`)
+      ),
+      serviceID: z.string().min(1, "Select a provider"),
+      saveAccount: z.boolean().optional(),
+    }) as ZodType<FormData>;
+  }, [selectedBiller]);
+
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       meterNumber: "",
-      amount: "",
-      billerId: selectedBiller.id,
+      amount: undefined,
+      serviceID: "",
       saveAccount: false,
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    openPinModal((pin) => {
-      console.log("PIN entered:", pin);
-      console.log("Form Data:", { ...values, type: selected });
-      // API call goes here
+  // set meter number
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      setMeterNumber(value.meterNumber || "");
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
+
+  // check if meter number is valid and display name
+  useEffect(() => {
+    if (
+      !selectedBiller ||
+      !debouncedMeterNumber ||
+      (debouncedMeterNumber.length !== 11 && debouncedMeterNumber.length !== 13)
+    ) {
+      return;
+    }
+
+    setIsMeterVerifying(true);
+    setMeterError("");
+    setMeterName("");
+
+    VerifyMeterNumberMutation.mutate(
+      {
+        billersCode: debouncedMeterNumber,
+        serviceID: selectedBiller.serviceID,
+        type: selected,
+      },
+      {
+        onSuccess: (data) => {
+          setIsMeterVerifying(false);
+          setMeterError("");
+          setMeterName(data.data.content.Customer_Name);
+        },
+        onError: () => {
+          setIsMeterVerifying(false);
+          setMeterName("");
+          setMeterError("Account does not exist. Please check and re-enter");
+        },
+      }
+    );
+  }, [debouncedMeterNumber, selectedBiller?.serviceID, selected]);
+
+  // set initial biller
+  useEffect(() => {
+    if (billers.length && !selectedBiller) {
+      const first = billers[0];
+      setSelectedBiller(first);
+      form.setValue("serviceID", first.serviceID);
+    }
+  }, [billers, selectedBiller, form]);
+
+  const onSubmit = (values: FormData) => {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const randomNumber = Array(3)
+      .fill("")
+      .map(() =>
+        characters.charAt(Math.floor(Math.random() * characters.length))
+      )
+      .join("");
+
+    if (!meterName) {
+      console.error("No user found for the provided meter number");
+      return;
+    }
+    openPinModal(() => {
+      if (selected === "Prepaid") {
+        BuyPrepaidMutation.mutate(
+          {
+            requestId: "202506241343b012a" + randomNumber,
+            serviceID: values.serviceID,
+            variation_code: "prepaid",
+            billersCode: values.meterNumber,
+            phone: "08171981099",
+            amount: Number(values.amount),
+            type: selected,
+          },
+          {
+            onSuccess: () => {
+              toast.success("Purchase successful");
+              form.setValue("amount", "");
+              form.setValue("meterNumber", "");
+              setMeterName("");
+              setMeterError("");
+              queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
+            },
+            onError: (error) => {
+              toast.error("Purchase failed:" + error.message);
+            },
+          }
+        );
+      } else {
+        BuyPostpaidMutation.mutate(
+          {
+            requestId: "202506241343b012a" + randomNumber,
+            serviceID: values.serviceID,
+            variation_code: "postpaid",
+            billersCode: values.meterNumber,
+            phone: values.meterNumber,
+            amount: Number(values.amount),
+            type: selected,
+          },
+          {
+            onSuccess: () => {
+              toast.success("Purchase successful");
+              form.reset();
+              setMeterName("");
+              setMeterError("");
+              queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
+            },
+            onError: (error) => {
+              toast.error("Purchase failed:" + error.message);
+            },
+          }
+        );
+      }
     });
   };
 
+  const isLoading =
+    isMeterVerifying ||
+    !!meterError ||
+    BuyPostpaidMutation.isPending ||
+    BuyPrepaidMutation.isPending ||
+    !meterName;
+
+  const providerOptions = useMemo(() => {
+    return billers.map((biller: Biller) => (
+      <SelectItem key={biller.serviceID} value={biller.serviceID}>
+        <div className="flex items-center gap-2">
+          <img src={biller.image} alt={biller.name} className="size-7" />
+          <span>{biller.name}</span>
+        </div>
+      </SelectItem>
+    ));
+  }, [billers]);
+
   return (
-    <div className="flex flex-col gap-3">
+    <div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-3"
         >
+          {/* ServiceID */}
           <FormField
             control={form.control}
-            name="billerId"
+            name="serviceID"
             render={({ field }) => (
               <FormItem>
                 <Select
                   onValueChange={(value) => {
-                    const found = billers.find((b) => b.id === value);
-                    if (found) setSelectedBiller(found);
+                    const biller = billers.find(
+                      (biller: Biller) => biller.serviceID === value
+                    );
+                    setSelectedBiller(biller || null);
                     field.onChange(value);
                   }}
-                  defaultValue={field.value}
+                  value={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger className="!text-white bg-[#7910B1] w-full rounded-[4.91px] py-5">
-                      <div className="flex items-center gap-2">
+                    <SelectTrigger className="!text-white bg-[#7910B1] w-full rounded-[4.91px] py-5 px-1">
+                      <div className="flex items-center gap-2.5 md:gap-1.5 lg:gap-2">
                         <img
-                          src={selectedBiller.image}
-                          alt={selectedBiller.title}
+                          src={selectedBiller?.image || ikejaDisco}
+                          alt={selectedBiller?.name || ""}
                           className="size-7 rounded-[3px]"
                         />
-                        <span>{selectedBiller.title}</span>
+                        <span className="w-full text-wrap max-md:tracking-[-0.13px] text-sm sm:text-xs lg:text-sm font-medium">
+                          {selectedBiller?.name || "Select Provider"}
+                        </span>
                       </div>
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectGroup>
-                      {billers.map((biller) => (
-                        <SelectItem key={biller.id} value={biller.id}>
-                          <div className="flex items-center gap-2 rounded-[3px]">
-                            <img
-                              src={biller.image}
-                              alt={biller.title}
-                              className="size-7"
-                            />
-                            <span>{biller.title}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
+                    <SelectGroup>{providerOptions}</SelectGroup>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -110,6 +312,7 @@ const Electricity = () => {
             )}
           />
 
+          {/* Prepaid/Postpaid */}
           <div className="flex w-full gap-2">
             {["Prepaid", "Postpaid"].map((type) => (
               <button
@@ -127,32 +330,61 @@ const Electricity = () => {
             ))}
           </div>
 
+          {/* Meter Number */}
           <FormField
             control={form.control}
             name="meterNumber"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input placeholder="Enter Meter Number" {...field} />
+                  <Input
+                    placeholder="Enter Meter Number"
+                    maxLength={13}
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          {isMeterVerifying && (
+            <div className="flex items-center gap-2">
+              <p className="text-xs ">verifying meter number...</p>
+              <FaSpinner className="size-4 text-[#7901b1] animate-spin" />
+            </div>
+          )}
+          {meterError && (
+            <p className="text-xs text-red-500">
+              <span className="font-semibold">{meterError}</span>
+            </p>
+          )}
+          {meterName && !meterError && (
+            <p className="text-sm text-[#1B1C1E]">
+              <span className="font-semibold">{meterName}</span>
+            </p>
+          )}
 
+          {/* Amount */}
           <FormField
             control={form.control}
             name="amount"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <Input type="tel" placeholder="Enter Amount" {...field} />
+                  <Input
+                    type="tel"
+                    placeholder="Enter Amount"
+                    {...field}
+                    min={selectedBiller?.minimium_amount}
+                    max={selectedBiller?.maximum_amount}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
+          {/* Save Account */}
           <FormField
             control={form.control}
             name="saveAccount"
@@ -172,8 +404,21 @@ const Electricity = () => {
             )}
           />
 
-          <button className="btn-primary w-full" type="submit">
-            Pay Now
+          <button
+            className={cn("btn-primary w-full", {
+              "opacity-50 cursor-not-allowed": isLoading,
+            })}
+            type="submit"
+            disabled={isLoading}
+          >
+            {BuyPostpaidMutation.isPending || BuyPrepaidMutation.isPending ? (
+              <span className="inline-flex items-center">
+                Buying...
+                <FaSpinner className="animate-spin ml-1" />
+              </span>
+            ) : (
+              "Buy Now"
+            )}
           </button>
         </form>
       </Form>

@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ChevronRight, Menu } from "lucide-react";
 import { navLinks } from "../../constants";
 import { exchange, full_logo, login_png } from "../../assets";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
 import "./styles.css";
 import { format } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
@@ -182,14 +182,17 @@ const SideNavbar = () => {
             <img src={calendar_svg} alt="Calendar" />
             <p className="text-xs sm:text-sm">{currentDate}</p>
           </div>
-
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <button className="text-[#7910B1]">
                 <Menu className="h-6 w-6" />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-50 sm:w-45 p-0 text-white">
+            <SheetContent
+              side="right"
+              className="lg:hidden w-50 sm:w-45 p-0 text-white"
+            >
+              <SheetTitle className="sr-only">Side navbar</SheetTitle>
               <SidebarContent onClick={closeSidebar} />
             </SheetContent>
           </Sheet>
