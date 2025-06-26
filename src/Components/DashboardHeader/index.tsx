@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { calendar_svg, ellipse_user } from "../../assets";
 import { HiOutlineBell } from "react-icons/hi2";
 import ProfileModal from "../ProfileModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import NotificationPopover from "../NotificationModal/Notification";
 import { User } from "@/types/user";
@@ -21,12 +21,16 @@ const DashboardHeader = ({ user }: { user: User }) => {
       queryFn: transactions,
     });
 
-  if (
-    transactionsList?.data.length === 0 ||
-    transactionsList?.data.every((transaction) => transaction.isRead === true)
-  ) {
-    setHasNotifications(false);
-  }
+  useEffect(() => {
+    if (
+      transactionsList?.data.length === 0 ||
+      transactionsList?.data.every((transaction) => transaction.isRead === true)
+    ) {
+      setHasNotifications(false);
+    } else {
+      setHasNotifications(true);
+    }
+  }, [transactionsList]);
 
   const fullName = user?.firstName + " " + user?.lastName;
 
