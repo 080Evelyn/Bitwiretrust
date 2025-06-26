@@ -3,6 +3,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "../ui/form";
 import {
@@ -11,19 +12,27 @@ import {
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "../ui/select";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { useEffect, useState } from "react";
-import { dataPlans, networkProviders } from "@/constants/billers-option";
-import { NetworkProviderKey } from "@/types";
 import { usePhoneNumber } from "./PhoneNumber-context";
 import { usePinModal } from "@/context/PinModalContext";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { phoneNumberSchema } from "@/lib/validationSchema";
+import { Biller, variations } from "@/types/utility-payment";
+import {
+  useBillerVerificationCode,
+  useServiceIdentifiers,
+} from "@/hooks/utility-payments/useServiceIdentifiers";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { purchaseData } from "@/api/micro-transaction";
+import { toast } from "sonner";
+import axios from "axios";
+import { FaSpinner } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 
 const schema = z.object({
   phone: phoneNumberSchema,
@@ -36,12 +45,13 @@ type FormData = z.infer<typeof schema>;
 const Data = () => {
   const { beneficiaryNumber } = usePhoneNumber();
   const { openPinModal } = usePinModal();
-
-  const [selectedProvider, setSelectedProvider] = useState<{
-    id: NetworkProviderKey;
-    name: string;
-    image: string;
-  }>(networkProviders[0]);
+  const [selectedBiller, setSelectedBiller] = useState<Biller | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<variations | null>(null);
+  const { data: dataProviders = [] } = useServiceIdentifiers("data");
+  const { isPending, data: dataPlans } = useBillerVerificationCode(
+    selectedBiller?.serviceID
+  );
+  const queryClient = useQueryClient();
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -52,23 +62,77 @@ const Data = () => {
     },
   });
 
-  const [selectedPlan, setSelectedPlan] = useState<null | {
-    id: number;
-    label: string;
-    price: number;
-  }>(null);
+  const buyDataMutation = useMutation({
+    mutationFn: (data: {
+      requestId: string;
+      serviceID: string;
+      billersCode: string;
+      variation_code: string;
+      amount: number;
+      phone: string;
+    }) => purchaseData(data),
+  });
 
   useEffect(() => {
     form.setValue("phone", beneficiaryNumber);
   }, [beneficiaryNumber, form]);
 
+  // Set default biller on mount
+  useEffect(() => {
+    if (dataProviders.length && !selectedBiller) {
+      const first = dataProviders[0];
+      setSelectedBiller(first);
+    }
+  }, [dataProviders, selectedBiller]);
+
+  // Reset planId and selectedPlan when biller changes
+  useEffect(() => {
+    form.setValue("planId", "");
+    setSelectedPlan(null);
+  }, [selectedBiller, form]);
+
   const onSubmit = (data: FormData) => {
-    openPinModal((pin) => {
-      console.log("PIN entered:", pin);
-      console.log("Form Data:", data);
-      // trigger your API here
+    if (!data.planId) return;
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const randomNumber = Array(3)
+      .fill("")
+      .map(() =>
+        characters.charAt(Math.floor(Math.random() * characters.length))
+      )
+      .join("");
+
+    const numberAmount = Number(selectedPlan?.variation_amount || 0);
+
+    const requestData = {
+      requestId: "202506241343b012a" + randomNumber,
+      serviceID: selectedBiller?.serviceID || "",
+      amount: numberAmount,
+      billersCode: data.phone,
+      variation_code: data.planId,
+      phone: data.phone,
+    };
+
+    openPinModal(() => {
+      buyDataMutation.mutate(requestData, {
+        onSuccess: (response) => {
+          toast.success(response.data.response_description);
+          queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
+        },
+        onError: (error: unknown) => {
+          if (axios.isAxiosError(error)) {
+            const responseDesc =
+              error.response?.data?.responseDesc || "Something went wrong";
+            toast.error(responseDesc);
+          } else {
+            toast.error("Unexpected error occurred");
+          }
+        },
+      });
     });
   };
+
+  const isLoading = buyDataMutation.isPending;
 
   return (
     <div className="flex flex-col gap-3">
@@ -79,78 +143,99 @@ const Data = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col card-container gap-2 p-4 rounded-md"
+          className="flex flex-col card-container gap-2 py-4 px-2 rounded-md"
         >
           <Select
             onValueChange={(value) => {
-              const found = networkProviders.find((p) => p.id === value)!;
-              setSelectedProvider(found);
-              setSelectedPlan(null);
-              form.setValue("planId", "");
+              const found = dataProviders.find(
+                (provider: Biller) => provider.serviceID === value
+              );
+              if (found) setSelectedBiller(found);
             }}
+            value={selectedBiller?.serviceID}
           >
             <SelectTrigger className="!text-white bg-[#7910B1] w-full rounded-[4.91px] py-5">
               <div className="flex items-center gap-2">
                 <img
-                  src={selectedProvider.image}
-                  alt={selectedProvider.name}
+                  src={selectedBiller?.image}
+                  alt={selectedBiller?.name}
                   className="size-7 rounded-[3px]"
                 />
-                <span>{selectedProvider.name}</span>
+                <span>{selectedBiller?.name || "Select Provider"}</span>
               </div>
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                {networkProviders.map((provider) => (
-                  <SelectItem
-                    key={provider.id}
-                    value={provider.id}
-                    className="w-full rounded-sm bg-[#E9A9FF] text-white"
-                  >
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={provider.image}
-                        alt={provider.name}
-                        className="size-7 rounded-[3px]"
-                      />
-                      <span>{provider.name}</span>
-                    </div>
-                  </SelectItem>
-                ))}
+                <div className="flex flex-col gap-1.5 mt-1">
+                  {dataProviders.map((provider: Biller) => (
+                    <SelectItem
+                      key={provider.serviceID}
+                      value={provider.serviceID}
+                      className="w-full rounded-sm bg-[#E9A9FF] text-white"
+                    >
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={provider.image}
+                          alt={provider.name}
+                          className="size-7 rounded-[3px]"
+                        />
+                        <span>{provider.name}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </div>
               </SelectGroup>
             </SelectContent>
           </Select>
-
           <FormField
             control={form.control}
             name="planId"
             render={({ field }) => (
               <FormItem>
-                <Select
-                  value={field.value}
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    const foundPlan = dataPlans[selectedProvider.id].find(
-                      (p) => String(p.id) === value
-                    );
-                    if (foundPlan) setSelectedPlan(foundPlan);
-                  }}
-                >
-                  <FormControl>
-                    <SelectTrigger className="text-[#000] bg-[#F9EDFF] w-full !h-11 rounded-[4.91px]">
-                      <SelectValue placeholder="Select Data Plan" />
+                <FormControl>
+                  <Select
+                    value={field.value}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      const found =
+                        dataPlans?.content.variations.find(
+                          (plan: variations) => plan.variation_code === value
+                        ) || null;
+                      setSelectedPlan(found);
+                    }}
+                  >
+                    <SelectTrigger className="text-foreground bg-[#F9EDFF] px-1 max-w-full w-full !h-11 rounded-[4.91px]">
+                      <div className="flex items-center max-w-full">
+                        {selectedPlan ? (
+                          <span className="w-full text-wrap max-md:tracking-[-0.13px] text-xs lg:text-sm font-medium">
+                            {selectedPlan.name}
+                          </span>
+                        ) : (
+                          <span>Select a plan</span>
+                        )}
+                      </div>
                     </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectGroup>
-                      {dataPlans[selectedProvider.id].map((plan) => (
-                        <SelectItem key={plan.id} value={String(plan.id)}>
-                          {plan.label}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                    <SelectContent className="text-xs max-sm:max-w-[300px]">
+                      {isPending ? (
+                        <div className="p-5">Loading data plans...</div>
+                      ) : (
+                        <SelectGroup className="max-sm:max-w-[290px]">
+                          {dataPlans?.content.variations.map(
+                            (plan: variations) => (
+                              <SelectItem
+                                key={plan.variation_code}
+                                value={String(plan.variation_code)}
+                                className="pe-2"
+                              >
+                                {plan.name}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectGroup>
+                      )}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -159,7 +244,7 @@ const Data = () => {
           <Input
             type="tel"
             placeholder="Amount"
-            value={selectedPlan?.price ?? ""}
+            value={selectedPlan?.variation_amount ?? ""}
             className="font-semibold tracking-[-0.13px]"
             readOnly
           />
@@ -187,7 +272,10 @@ const Data = () => {
             control={form.control}
             name="saveBeneficiary"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between">
+              <FormItem className="flex justify-between items-center">
+                <FormLabel className="text-[13px] font-medium">
+                  Save as beneficiary
+                </FormLabel>
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -199,8 +287,21 @@ const Data = () => {
             )}
           />
 
-          <button type="submit" className="btn-primary w-full">
-            Pay Now
+          <button
+            className={cn("btn-primary w-full", {
+              "opacity-50 cursor-not-allowed": isLoading,
+            })}
+            type="submit"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <span className="inline-flex items-center">
+                Processing...
+                <FaSpinner className="animate-spin ml-1" />
+              </span>
+            ) : (
+              "Buy Now"
+            )}
           </button>
         </form>
       </Form>

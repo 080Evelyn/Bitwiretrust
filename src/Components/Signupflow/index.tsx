@@ -215,7 +215,6 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       ContextLogin(response.data.jwt, isPinSet);
 
       if (isPinSet) {
-        console.log(isPinSet);
         navigate("/dashboard");
       } else {
         setShowSuccessModal(true);

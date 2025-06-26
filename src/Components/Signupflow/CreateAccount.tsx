@@ -52,7 +52,7 @@ const CreateAccount = ({
     <div className="flex w-full justify-center items-center">
       <div
         className={cn(
-          "items-center justify-center hidden sm:flex w-[55%]",
+          "items-center justify-center !hidden sm:!flex w-[55%]",
           getLeftSideClass()
         )}
         style={{ backgroundImage: `url(${getStepBackground()})` }}

@@ -15,7 +15,6 @@ import {
 } from "../ui/select";
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
-import { billers } from "@/constants/billers-option";
 import { usePinModal } from "@/context/PinModalContext";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +22,8 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import useAmount from "@/hooks/amountUpdate";
 import { amountSchema, phoneNumberSchema } from "@/lib/validationSchema";
+import { useServiceIdentifiers } from "@/hooks/utility-payments/useServiceIdentifiers";
+import { Biller } from "@/types/utility-payment";
 
 const formSchema = z.object({
   phone: phoneNumberSchema,
@@ -33,8 +34,9 @@ const formSchema = z.object({
 const Betting = () => {
   const { openPinModal } = usePinModal();
   const { amount, setAmount } = useAmount();
-  const [selectedBiller, setSelectedBiller] = useState(billers[2]);
+  const [selectedBiller, setSelectedBiller] = useState<Biller | null>(null);
   const amounts: number[] = [50, 100, 200, 500, 1000];
+  const { data: billers = [] } = useServiceIdentifiers("other-services");
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,31 +68,33 @@ const Betting = () => {
       >
         <Select
           onValueChange={(value) => {
-            const found = billers.find((b) => b.id === value);
+            const found = billers.find(
+              (biller: Biller) => biller.serviceID === value
+            );
             if (found) setSelectedBiller(found);
           }}
         >
           <SelectTrigger className="!text-white bg-[#7910B1] w-full rounded-[4.91px] py-5">
             <div className="flex items-center gap-2">
               <img
-                src={selectedBiller.image}
-                alt={selectedBiller.title}
+                src={selectedBiller?.image}
+                alt={selectedBiller?.name}
                 className="size-7 rounded-[3px]"
               />
-              <span>{selectedBiller.title}</span>
+              <span>{selectedBiller?.name}</span>
             </div>
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {billers.map((biller) => (
-                <SelectItem key={biller.id} value={biller.id}>
+              {billers.map((biller: Biller) => (
+                <SelectItem key={biller.serviceID} value={biller.serviceID}>
                   <div className="flex items-center gap-2">
                     <img
                       src={biller.image}
-                      alt={biller.title}
+                      alt={biller.name}
                       className="size-7 rounded-[3px]"
                     />
-                    <span>{biller.title}</span>
+                    <span>{biller.name}</span>
                   </div>
                 </SelectItem>
               ))}

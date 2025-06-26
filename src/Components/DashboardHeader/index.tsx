@@ -5,25 +5,39 @@ import { HiOutlineBell } from "react-icons/hi2";
 import ProfileModal from "../ProfileModal";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import { dummyNotifications } from "@/constants/notification-detials";
 import NotificationPopover from "../NotificationModal/Notification";
 import { User } from "@/types/user";
+import { useQuery } from "@tanstack/react-query";
+import { TransactionListResponse } from "@/types";
+import { transactions } from "@/api/user-notification";
 
 const DashboardHeader = ({ user }: { user: User }) => {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [hasNotifications] = useState(true);
   const [hasProfileNotifications] = useState(true);
+  const [hasNotifications, setHasNotifications] = useState(true);
+  const { isPending, data: transactionsList } =
+    useQuery<TransactionListResponse>({
+      queryKey: ["transactions"],
+      queryFn: transactions,
+    });
+
+  if (
+    transactionsList?.data.length === 0 ||
+    transactionsList?.data.every((transaction) => transaction.isRead === true)
+  ) {
+    setHasNotifications(false);
+  }
 
   const fullName = user?.firstName + " " + user?.lastName;
 
   const HeaderContent = () => (
     <div className="dashboard-header flex items-center justify-between">
       <div className="flex gap-4 items-center">
-        <div onClick={toggleProfileModal} className="md:hidden">
+        <div onClick={toggleProfileModal} className="md:hidden cursor-pointer">
           <img
             src={ellipse_user}
             alt="profile"
-            className="h-9 w-9 rounded-full"
+            className="size-12 sm:size-10 lg:size-12 rounded-full"
           />
         </div>
 
@@ -40,7 +54,8 @@ const DashboardHeader = ({ user }: { user: User }) => {
         </div>
 
         <NotificationPopover
-          notifications={dummyNotifications}
+          notifications={transactionsList?.data || []}
+          isPending={isPending}
           trigger={
             <div className="relative cursor-pointer">
               <HiOutlineBell className="h-7.5 w-7.5 bell-animation" />
