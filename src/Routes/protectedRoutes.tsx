@@ -2,13 +2,13 @@ import { useAuth } from "@/context/AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { getToken, getUserId } from "@/utils/AuthStorage";
+import { getUserId } from "@/utils/AuthStorage";
 import MainLoader from "@/Components/seketon-loader/MainLoader";
 
 export function ProtectedRoute() {
-  const { isAuthenticated, isLoading, isPinSet, isLoggingOut } = useAuth();
+  const { isAuthenticated, isLoading, isPinSet, isLoggingOut, token } =
+    useAuth();
 
-  const token = getToken();
   const userId = getUserId();
 
   const {

@@ -1,7 +1,7 @@
-import { clearAuth, getToken } from "@/utils/AuthStorage";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { setMemoryToken } from "@/utils/AuthStorage";
 
 interface AuthContextValue {
   isAuthenticated: boolean;
@@ -11,42 +11,95 @@ interface AuthContextValue {
   isLoading: boolean;
   updatePinStatus: () => void;
   isLoggingOut: boolean;
+  token: string | null;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [isPinSet, setIsPinSet] = useState(false);
-  const logoutTimeout = useRef<NodeJS.Timeout | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const url = import.meta.env.VITE_API_URL;
+  const refreshTimer = useRef<NodeJS.Timeout | null>(null);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  // Try to refresh token on page load
   useEffect(() => {
-    const savedToken = getToken();
-    const savedPasscode = localStorage.getItem("isPinSet") === "true";
+    const passcodeStatus = localStorage.getItem("isPinSet") === "true";
+    setIsPinSet(passcodeStatus);
 
-    if (savedToken) {
-      const isExpired = isTokenExpired(savedToken);
-      if (isExpired) {
-        clearAuth();
-      } else {
-        setToken(savedToken);
-        setIsPinSet(savedPasscode);
-        setLogoutTimer(savedToken);
-      }
-    }
+    refreshToken().finally(() => {
+      setIsLoading(false);
+    });
 
-    setIsLoading(false);
+    return () => {
+      if (refreshTimer.current) clearTimeout(refreshTimer.current);
+    };
   }, []);
 
+  useEffect(() => {
+    setMemoryToken(token);
+  }, [token]);
+
+  // Login — manually called on login form success
   const ContextLogin = (newToken: string, passcodeStatus: boolean) => {
-    localStorage.setItem("token", newToken);
-    localStorage.setItem("isPinSet", String(passcodeStatus));
     setToken(newToken);
     setIsPinSet(passcodeStatus);
-    setLogoutTimer(newToken);
+    localStorage.setItem("isPinSet", String(passcodeStatus));
+    scheduleRefresh(newToken);
+  };
+
+  // Auto-refresh 30s before token expiry
+  const scheduleRefresh = (token: string) => {
+    try {
+      const { exp } = jwtDecode<{ exp: number }>(token);
+      const delay = exp * 1000 - Date.now() - 30_000;
+      if (delay > 0) {
+        if (refreshTimer.current) clearTimeout(refreshTimer.current);
+        refreshTimer.current = setTimeout(refreshToken, delay);
+      }
+    } catch (err) {
+      console.error("Failed to decode token:", err);
+    }
+  };
+
+  // Refresh token from backend cookie
+  const refreshToken = async () => {
+    try {
+      const res = await axios.post(
+        `${API_URL}/v1/auth/refresh-token`,
+        {},
+        { withCredentials: true }
+      );
+      const newToken = res.data.jwt;
+      setToken(newToken);
+      scheduleRefresh(newToken);
+    } catch (err) {
+      console.error("Token refresh failed:", err);
+      logout();
+    }
+  };
+
+  // Logout
+  const logout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await axios.post(
+        `${API_URL}/v1/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.warn("Logout failed, proceeding anyway:", error);
+    } finally {
+      setToken(null);
+      setIsPinSet(false);
+      localStorage.removeItem("isPinSet");
+      if (refreshTimer.current) clearTimeout(refreshTimer.current);
+      setIsLoggingOut(false);
+    }
   };
 
   const updatePinStatus = () => {
@@ -54,59 +107,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsPinSet(true);
   };
 
-  const logout = async () => {
-    setIsLoggingOut(true);
-
-    const token = getToken();
-
-    try {
-      if (token) {
-        await axios.post(
-          `${url}/v1/auth/logout`,
-          {},
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-      }
-    } catch (error) {
-      console.error("Logout API error:", error);
-    } finally {
-      clearAuth();
-      setToken(null);
-      localStorage.removeItem("isPinSet");
-      setIsPinSet(false);
-      setIsLoggingOut(false);
-    }
-  };
-
   const isAuthenticated = !!token;
-
-  function setLogoutTimer(token: string) {
-    const decoded: { exp: number } = jwtDecode(token);
-    const expiryTime = decoded.exp * 1000;
-    const now = Date.now();
-    const timeUntilExpiry = expiryTime - now;
-
-    if (timeUntilExpiry > 0) {
-      logoutTimeout.current = setTimeout(() => {
-        logout();
-        console.warn("Token expired — logged out automatically.");
-      }, timeUntilExpiry);
-    } else {
-      logout();
-    }
-  }
-
-  function isTokenExpired(token: string): boolean {
-    try {
-      const decoded: { exp: number } = jwtDecode(token);
-      return decoded.exp * 1000 < Date.now();
-    } catch (error) {
-      console.error(error);
-      return true;
-    }
-  }
 
   return (
     <AuthContext.Provider
@@ -118,6 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isLoading,
         updatePinStatus,
         isLoggingOut,
+        token,
       }}
     >
       {children}
