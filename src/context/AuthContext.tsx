@@ -68,13 +68,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Refresh token from backend cookie
   const refreshToken = async () => {
     try {
-      const res = await axios.post(
-        `${API_URL}/v1/auth/refresh-token`,
-        {},
-        { withCredentials: true }
-      );
+      const res = await axios.post(`${API_URL}/v1/auth/refresh-token`, {
+        withCredentials: true,
+      });
       const newToken = res.data.jwt;
       setToken(newToken);
+      setMemoryToken(newToken);
       scheduleRefresh(newToken);
     } catch (err) {
       console.error("Token refresh failed:", err);

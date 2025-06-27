@@ -37,11 +37,9 @@ axios.interceptors.response.use(
     ) {
       originalRequest._retry = true;
       try {
-        const refreshResponse = await axios.post(
-          "/v1/auth/refresh-token",
-          {},
-          { withCredentials: true }
-        );
+        const refreshResponse = await axios.post("/v1/auth/refresh-token", {
+          withCredentials: true,
+        });
 
         const newToken = refreshResponse.data.jwt;
         setMemoryToken(newToken);
