@@ -15,6 +15,11 @@ import SellGiftCards from "@/Pages/GiftCards/SellGiftCards";
 import CryptoTrading from "@/Pages/CryptoTrading";
 import { ProtectedRoute, PublicRoute } from "./protectedRoutes";
 import ForgotPassword from "@/Pages/Forget-Password/ForgetPassword";
+import AdminLayout from "@/admin/components/layout/AdminLayout";
+import AdminDashboard from "@/admin/pages/AdminDashboard";
+import Transactions from "@/admin/pages/Transactions";
+import KycManagement from "@/admin/pages/KycManagement";
+import UserManagement from "@/admin/pages/UserManagement";
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +53,7 @@ export const router = createBrowserRouter([
     ],
   },
 
+  //user route
   {
     element: <ProtectedRoute />,
     children: [
@@ -60,6 +66,23 @@ export const router = createBrowserRouter([
           { path: "gift-cards/buy", element: <BuyGiftCard /> },
           { path: "gift-cards/sell", element: <SellGiftCards /> },
           { path: "crypto-trading", element: <CryptoTrading /> },
+        ],
+      },
+    ],
+  },
+
+  //Admin route
+  {
+    // element: <ProtectedRoute />,
+    path: "admin/",
+    children: [
+      {
+        element: <AdminLayout />,
+        children: [
+          { path: "dashboard", element: <AdminDashboard /> },
+          { path: "transactions", element: <Transactions /> },
+          { path: "kyc-management", element: <KycManagement /> },
+          { path: "users-management", element: <UserManagement /> },
         ],
       },
     ],
