@@ -105,8 +105,34 @@ import DoneIcon from "./Done.svg";
 import WithrawalImage from "./withdrawal_image.jpg";
 import MoneyIn from "./money-in.svg";
 import MoneyOut from "./money-out.svg";
+import SearchFilther from "./Filter.svg";
+import AdminNotificationIcon from "./admin-notification.svg";
+import AdminTrendingUp from "./Trending-up.svg";
+import DoubleTick from "./tick-double.svg";
+import AdminTotalUsers from "./admin-total-user.svg";
+import AdminThumbdown from "./thumbs-down-ellipse.svg";
+import AdminCheckMark from "./checkmark-badge-01.svg";
+import MultipleUser from "./user-multiple.svg";
+import UserVerified from "./id-verified.svg";
+import UserNotVerified from "./id-not-verified.svg";
+import AdminShareIcon from "./share.svg";
+import ServiceStatsIcon from "./service-stats.svg";
+import KycPablock from "./kyc-padlock.svg";
 
 export {
+  KycPablock,
+  ServiceStatsIcon,
+  AdminShareIcon,
+  UserVerified,
+  UserNotVerified,
+  AdminCheckMark,
+  AdminThumbdown,
+  MultipleUser,
+  AdminTrendingUp,
+  DoubleTick,
+  AdminTotalUsers,
+  AdminNotificationIcon,
+  SearchFilther,
   MoneyIn,
   MoneyOut,
   WithrawalImage,
