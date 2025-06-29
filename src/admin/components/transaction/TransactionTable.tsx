@@ -51,6 +51,7 @@ const TransactionTable = () => {
       status: "Successful",
     },
     {
+      id: 8,
       user: {
         name: "John Doe",
       },

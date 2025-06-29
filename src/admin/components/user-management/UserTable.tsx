@@ -132,7 +132,7 @@ const UserTable = () => {
                         </div>
                         <div className="flex w-full text-foreground justify-between items-start">
                           <h3 className="text-xs font-semibold">
-                            Resedential Address
+                            Residential Address
                           </h3>
                           <p className="text-xs text-end w-[60%] font-light">
                             {content.address}

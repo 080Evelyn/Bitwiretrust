@@ -6,7 +6,7 @@ const kycData = [
   { label: "Phone Number", value: "08012345678" },
   { label: "Residential Address", value: "112, street, Lekki, Lagos" },
   { label: "Gender", value: "Male" },
-  { label: "Date of Birth", value: "John Doe" },
+  { label: "Date of Birth", value: "1990-01-01" },
   { label: "Source of Income", value: "Teacher" },
 ];
 

@@ -33,7 +33,7 @@ const Filter = () => {
 
   const dates = [
     {
-      name: "Lasr 3 days",
+      name: "Last 3 days",
     },
     {
       name: "This Month",
