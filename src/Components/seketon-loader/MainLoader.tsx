@@ -19,10 +19,10 @@ const MainLoader = () => {
         <div className="flex flex-col md:flex-row gap-3 h-full">
           <div className="flex flex-col w-full md:w-[40%] gap-2">
             <div className="flex justify-between">
-              <Skeleton className="size-22 md:size-16 lg:size-21 " />
-              <Skeleton className="size-22 md:size-16 lg:size-21" />
-              <Skeleton className="size-22 md:size-16 lg:size-21" />
-              <Skeleton className="size-22 md:size-16 lg:size-21" />
+              <Skeleton className="size-20 md:size-16 lg:size-21 " />
+              <Skeleton className="size-20 md:size-16 lg:size-21" />
+              <Skeleton className="size-20 md:size-16 lg:size-21" />
+              <Skeleton className="size-20 md:size-16 lg:size-21" />
             </div>
             <div className="hidden md:flex gap-4 h-full">
               <Skeleton className="w-1/2 h-full" />

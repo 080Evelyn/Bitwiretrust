@@ -1,22 +1,13 @@
-import { getEmail, getToken, getUserId } from "@/utils/AuthStorage";
-import axios from "axios";
+import { getEmail, getUserId } from "@/utils/AuthStorage";
+import axios from "./axiosConfig";
 
 const url = import.meta.env.VITE_API_URL;
 
 export const dvaInfo = async () => {
   const email = getEmail();
-  const token = getToken();
 
-  if (!token) {
-    throw new Error("No auth token found");
-  }
   const response = await axios.get(
-    `${url}/v1/user/wallet-service/dva-info/${email}`,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    `${url}/v1/user/wallet-service/dva-info/${email}`
   );
 
   return response.data;
@@ -28,16 +19,10 @@ export const initiateTransaction = async (data: {
   reason?: string;
 }) => {
   const userId = getUserId();
-  const token = getToken();
-
-  if (!token || !userId) throw new Error("Missing token or userId");
 
   const response = await axios.post(
     `${url}/v1/user/wallet-service/${userId}/initiate`,
-    data,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
+    data
   );
 
   return response.data;
@@ -57,14 +42,9 @@ export const createRecipient = async (data: {
   bank_code: string;
   currency: string;
 }) => {
-  const token = getToken();
-
   const response = await axios.post(
     `${url}/v1/user/wallet-service/create-recipient?userId=${data.userId}`,
-    data,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
+    data
   );
   return response.data;
 };
