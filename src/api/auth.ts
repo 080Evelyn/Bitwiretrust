@@ -22,8 +22,9 @@ export const verifyEmailCode = async (data: { otp: string; email: string }) => {
 
 export const login = async (data: { email: string; password: string }) => {
   localStorage.setItem("email", data.email);
-  const response = await axios.post(`${url}/v1/auth/login`, data);
-  localStorage.setItem("token", response.data.data.jwt);
+  const response = await axios.post(`${url}/v1/auth/login`, data, {
+    withCredentials: true,
+  });
   localStorage.setItem("userId", response.data.data.userId);
   return response.data;
 };

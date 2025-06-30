@@ -263,47 +263,48 @@ const HomeDashboard = (_props: Props) => {
               </div>
             ) : (
               <>
-                {notifications ? (
-                  notifications.map((notif: TransactionData) => (
-                    <div key={notif.id} className="transaction-item">
-                      <div
-                        className="transaction-icon-wrapper !rounded-[3.5px]"
-                        style={{
-                          backgroundColor: getBackgroundColorTransaction(
-                            notif.transactionType
-                          ),
-                        }}
-                      >
-                        <img
-                          src={
-                            notif.transactionType === "CREDIT"
-                              ? MoneyIn
-                              : notif.transactionType === "DEBIT"
-                              ? MoneyOut
-                              : logo
-                          }
-                          alt="Transaction icon"
-                          className="transaction-icon"
-                        />
-                      </div>
-
-                      <div className="transaction-details">
-                        <p className="transaction-title">{notif.title}</p>
-                        <p className="transaction-subtitle">{notif.message}</p>
-                      </div>
-
-                      <div
-                        className="transaction-status"
-                        style={{
-                          backgroundColor: getStatusColorTransaction(
-                            notif.transactionType
-                          ),
-                        }}
-                      ></div>
+                {notifications?.map((notif: TransactionData) => (
+                  <div key={notif.id} className="transaction-item">
+                    <div
+                      className="transaction-icon-wrapper !rounded-[3.5px]"
+                      style={{
+                        backgroundColor: getBackgroundColorTransaction(
+                          notif.transactionType
+                        ),
+                      }}
+                    >
+                      <img
+                        src={
+                          notif.transactionType === "CREDIT"
+                            ? MoneyIn
+                            : notif.transactionType === "DEBIT"
+                            ? MoneyOut
+                            : logo
+                        }
+                        alt="Transaction icon"
+                        className="transaction-icon"
+                      />
                     </div>
-                  ))
-                ) : (
-                  <div className="text-center">No Notification</div>
+
+                    <div className="transaction-details">
+                      <p className="transaction-title">{notif.title}</p>
+                      <p className="transaction-subtitle">{notif.message}</p>
+                    </div>
+
+                    <div
+                      className="transaction-status"
+                      style={{
+                        backgroundColor: getStatusColorTransaction(
+                          notif.transactionType
+                        ),
+                      }}
+                    ></div>
+                  </div>
+                ))}
+                {notifications?.length === 0 && (
+                  <div className="pt-4 text-center text-sm text-[#7901b1]">
+                    No Notifications found
+                  </div>
                 )}
               </>
             )}

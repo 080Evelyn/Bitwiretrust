@@ -53,7 +53,7 @@ const NotificationPopover = ({
   type StatusKey = "success" | "failed" | "pending";
 
   function getStatusColor(status: string) {
-    const key = status.toLowerCase() as StatusKey;
+    const key = (status ?? "").toLowerCase() as StatusKey;
     return statusColorMap[key] || "text-gray-400";
   }
 
@@ -70,7 +70,8 @@ const NotificationPopover = ({
       const matchesCategory =
         categoryFilter === "All" || notif.type === categoryFilter;
       const matchesStatus =
-        statusFilter === "All" || notif.status.toLowerCase() === statusFilter;
+        statusFilter === "All" ||
+        (notif.status !== null && notif.status.toLowerCase() === statusFilter);
 
       return matchesMonth && matchesCategory && matchesStatus;
     });
@@ -211,7 +212,7 @@ const NotificationPopover = ({
                             getStatusColor(notif.status)
                           )}
                         >
-                          {notif.status.toLowerCase()}
+                          {notif?.status && notif.status.toLowerCase()}
                         </div>
                       </div>
                     </button>
