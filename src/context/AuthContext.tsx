@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setMemoryToken(token);
   }, [token]);
 
-  // Login — manually called on login form success
+  // Passing the token from login to the context login here
   const ContextLogin = (newToken: string, passcodeStatus: boolean) => {
     setToken(newToken);
     setIsPinSet(passcodeStatus);
@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const res = await axios.post(`${API_URL}/v1/auth/refresh-token`, {
         withCredentials: true,
       });
-      const newToken = res.data.jwt;
+      const newToken = res.data.data.jwt;
       setToken(newToken);
       setMemoryToken(newToken);
       scheduleRefresh(newToken);
