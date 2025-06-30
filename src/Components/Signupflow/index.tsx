@@ -68,6 +68,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     "",
   ]);
   const [passcodeMatchError, setPasscodeMatchError] = useState<boolean>(false);
+  const [otpError, setOtpError] = useState<string>("");
 
   const navigate = useNavigate();
 
@@ -197,6 +198,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       if (axios.isAxiosError(error)) {
         const responseDesc =
           error.response?.data?.responseDesc || "Something went wrong";
+        setOtpError(responseDesc);
         console.error(responseDesc);
       } else {
         toast.error("Unexpected error occurred");
@@ -212,10 +214,12 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       const isPinSet =
         response.data.isPinSet === true || response.data.isPinSet === "true";
 
-      ContextLogin(response.data.jwt, isPinSet);
+      ContextLogin(response.data.jwt, isPinSet, response.data.role);
 
-      if (isPinSet) {
+      if (isPinSet && response.data.role === "user") {
         navigate("/dashboard");
+      } else if (response.data.role === "admin") {
+        navigate("/admin/dashboard");
       } else {
         setShowSuccessModal(true);
         setTimeout(() => {
@@ -358,6 +362,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
             formData={formData}
             renderCodeInputs={renderCodeInputs}
             codeError={codeError}
+            otpError={otpError}
           />
         );
       case Step.GET_STARTED:

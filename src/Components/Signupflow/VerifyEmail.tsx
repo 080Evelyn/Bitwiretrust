@@ -10,6 +10,7 @@ interface VerifyEmailProps {
   renderCodeInputs: () => React.ReactNode;
   codeError: boolean;
   isLoading: boolean;
+  otpError: string;
 }
 
 const VerifyEmail = ({
@@ -21,6 +22,7 @@ const VerifyEmail = ({
   isButtonEnabled,
   codeError,
   isLoading,
+  otpError,
 }: VerifyEmailProps) => {
   return (
     <div className="step-content">
@@ -46,7 +48,7 @@ const VerifyEmail = ({
         </p>
         <form>
           {renderCodeInputs()}
-          {codeError && <div className="error-message">Incorrect code</div>}
+          {codeError && <div className="error-message">{otpError}</div>}
           <input type="hidden" name="email" value={formData.email} />
           <div className="button-container">
             <button

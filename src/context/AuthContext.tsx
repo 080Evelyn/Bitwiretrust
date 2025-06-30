@@ -1,17 +1,18 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import { setMemoryToken } from "@/utils/AuthStorage";
+import { clearAuth, setMemoryToken } from "@/utils/AuthStorage";
 
 interface AuthContextValue {
   isAuthenticated: boolean;
   isPinSet: boolean;
-  ContextLogin: (token: string, isPinSet: boolean) => void;
+  ContextLogin: (token: string, isPinSet: boolean, role: string) => void;
   logout: () => void;
   isLoading: boolean;
   updatePinStatus: () => void;
   isLoggingOut: boolean;
   token: string | null;
+  userRole: string | null;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -21,6 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isPinSet, setIsPinSet] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const refreshTimer = useRef<NodeJS.Timeout | null>(null);
 
   const API_URL = import.meta.env.VITE_API_URL;
@@ -44,7 +46,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [token]);
 
   // Passing the token from login to the context login here
-  const ContextLogin = (newToken: string, passcodeStatus: boolean) => {
+  const ContextLogin = (
+    newToken: string,
+    passcodeStatus: boolean,
+    role: string
+  ) => {
+    setUserRole(role);
     setToken(newToken);
     setIsPinSet(passcodeStatus);
     localStorage.setItem("isPinSet", String(passcodeStatus));
@@ -77,7 +84,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       scheduleRefresh(newToken);
     } catch (err) {
       console.error("Token refresh failed:", err);
-      logout();
+      refreshTokenLogout();
+    }
+  };
+
+  const refreshTokenLogout = async () => {
+    try {
+      await axios.post(
+        `${API_URL}/v1/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+    } catch (error) {
+      console.warn("Logout failed, proceeding anyway:", error);
+    } finally {
+      setToken(null);
+      clearAuth();
+      if (refreshTimer.current) clearTimeout(refreshTimer.current);
     }
   };
 
@@ -119,6 +142,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         updatePinStatus,
         isLoggingOut,
         token,
+        userRole,
       }}
     >
       {children}

@@ -13,7 +13,11 @@ import VirtualTopUp from "@/Pages/VirtualTopUp";
 import BuyGiftCard from "@/Pages/GiftCards/BuyGiftCard";
 import SellGiftCards from "@/Pages/GiftCards/SellGiftCards";
 import CryptoTrading from "@/Pages/CryptoTrading";
-import { ProtectedRoute, PublicRoute } from "./protectedRoutes";
+import {
+  AdminProtectedRoute,
+  PublicRoute,
+  UserProtectedRoute,
+} from "./protectedRoutes";
 import ForgotPassword from "@/Pages/Forget-Password/ForgetPassword";
 import AdminLayout from "@/admin/components/layout/AdminLayout";
 import AdminDashboard from "@/admin/pages/AdminDashboard";
@@ -55,7 +59,7 @@ export const router = createBrowserRouter([
 
   //user route
   {
-    element: <ProtectedRoute />,
+    element: <UserProtectedRoute />,
     children: [
       {
         element: <DashboardLayout />,
@@ -73,7 +77,7 @@ export const router = createBrowserRouter([
 
   //Admin route
   {
-    // element: <ProtectedRoute />,
+    element: <AdminProtectedRoute />,
     path: "admin/",
     children: [
       {

@@ -9,6 +9,7 @@ import { TransactionData } from "@/types";
 import { naira } from "@/assets";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DialogTitle } from "@radix-ui/react-dialog";
 interface NotificationModalProps {
   notification: TransactionData | null;
   onClose: () => void;
@@ -22,14 +23,17 @@ const NotificationModal = ({
     <Dialog open={!!notification} onOpenChange={onClose}>
       <DialogOverlay className="z-58">
         <DialogContent className="z-60 w-full md:w-[398px] md:left-[48%] py-6.5 bg-[#FCF6FF]">
+          <DialogTitle className="sr-only">Notification</DialogTitle>
           <DialogHeader className="flex items-center">
-            {notification?.status.toLowerCase() === "success" ? (
+            {notification?.status &&
+            notification?.status.toLowerCase() === "success" ? (
               <div className="bg-[#11C600]/50 rounded-full size-19 flex items-center justify-center">
                 <div className="bg-[#0FA301] size-15.5 rounded-full flex items-center justify-center">
                   <img src={naira} alt="naira" className="h-[25.54px]" />
                 </div>
               </div>
-            ) : notification?.status.toLowerCase() === "failed" ? (
+            ) : notification?.status &&
+              notification?.status.toLowerCase() === "failed" ? (
               <div className="bg-[#FF0000]/50 rounded-full size-19 flex items-center justify-center">
                 <div className="bg-[#FF0000] size-15.5 rounded-full flex items-center justify-center">
                   <X className="size-[42px] text-white" />
@@ -38,9 +42,11 @@ const NotificationModal = ({
             ) : null}
             <div className="font-medium">
               {notification?.title}{" "}
-              {notification?.status.toLowerCase() === "success"
+              {notification?.status &&
+              notification?.status.toLowerCase() === "success"
                 ? "Successful"
-                : notification?.status.toLowerCase() === "failed"
+                : notification?.status &&
+                  notification?.status.toLowerCase() === "failed"
                 ? "Failed"
                 : "Pending"}
             </div>
@@ -75,12 +81,16 @@ const NotificationModal = ({
               <span
                 className={cn(
                   "capitalize",
-                  notification?.status.toLowerCase() === "success"
+                  notification?.status &&
+                    notification.status.toLowerCase() === "success"
                     ? "text-[#0FA301]"
-                    : "text-[#FF0000]"
+                    : notification?.status &&
+                      notification.status.toLowerCase() === "failed"
+                    ? "text-[#FF0000]"
+                    : "text-yellow-500"
                 )}
               >
-                {notification?.status.toLowerCase()}
+                {notification?.status && notification.status.toLowerCase()}
               </span>
             </div>
           </div>
