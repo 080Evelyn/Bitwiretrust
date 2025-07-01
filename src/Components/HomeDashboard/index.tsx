@@ -129,9 +129,6 @@ const HomeDashboard = (_props: Props) => {
 
   const notifications = transactionsList?.data;
 
-  // const { notifications } = useNotifications();
-  // console.log("Notifications:", notifications);
-
   return (
     <>
       <BalanceOverview />

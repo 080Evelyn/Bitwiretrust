@@ -6,13 +6,12 @@ import { clearAuth, setMemoryToken } from "@/utils/AuthStorage";
 interface AuthContextValue {
   isAuthenticated: boolean;
   isPinSet: boolean;
-  ContextLogin: (token: string, isPinSet: boolean, role: string) => void;
+  ContextLogin: (token: string, isPinSet: boolean) => void;
   logout: () => void;
   isLoading: boolean;
   updatePinStatus: () => void;
   isLoggingOut: boolean;
   token: string | null;
-  userRole: string | null;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -22,7 +21,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isPinSet, setIsPinSet] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const [userRole, setUserRole] = useState<string | null>(null);
   const refreshTimer = useRef<NodeJS.Timeout | null>(null);
 
   const API_URL = import.meta.env.VITE_API_URL;
@@ -46,12 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [token]);
 
   // Passing the token from login to the context login here
-  const ContextLogin = (
-    newToken: string,
-    passcodeStatus: boolean,
-    role: string
-  ) => {
-    setUserRole(role);
+  const ContextLogin = (newToken: string, passcodeStatus: boolean) => {
     setToken(newToken);
     setIsPinSet(passcodeStatus);
     localStorage.setItem("isPinSet", String(passcodeStatus));
@@ -75,9 +68,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Refresh token from backend cookie
   const refreshToken = async () => {
     try {
-      const res = await axios.post(`${API_URL}/v1/auth/refresh-token`, {
-        withCredentials: true,
-      });
+      const res = await axios.post(
+        `${API_URL}/v1/auth/refresh-token`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+
       const newToken = res.data.data.jwt;
       setToken(newToken);
       setMemoryToken(newToken);
@@ -89,19 +87,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const refreshTokenLogout = async () => {
-    try {
-      await axios.post(
-        `${API_URL}/v1/auth/logout`,
-        {},
-        { withCredentials: true }
-      );
-    } catch (error) {
-      console.warn("Logout failed, proceeding anyway:", error);
-    } finally {
-      setToken(null);
-      clearAuth();
-      if (refreshTimer.current) clearTimeout(refreshTimer.current);
+    const isOffline = !window.navigator.onLine;
+
+    if (isOffline) {
+      console.warn("Offline — Waiting for reconnection.");
+    } else {
+      try {
+        await axios.post(
+          `${API_URL}/v1/auth/logout`,
+          {},
+          { withCredentials: true }
+        );
+      } catch (error) {
+        console.warn("Logout failed, proceeding anyway:", error);
+      }
     }
+
+    setToken(null);
+    if (refreshTimer.current) clearTimeout(refreshTimer.current);
   };
 
   // Logout
@@ -117,6 +120,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.warn("Logout failed, proceeding anyway:", error);
     } finally {
       setToken(null);
+      clearAuth();
       setIsPinSet(false);
       localStorage.removeItem("isPinSet");
       if (refreshTimer.current) clearTimeout(refreshTimer.current);
@@ -142,7 +146,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         updatePinStatus,
         isLoggingOut,
         token,
-        userRole,
       }}
     >
       {children}
