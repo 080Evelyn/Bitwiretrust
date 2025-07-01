@@ -26,6 +26,7 @@ export const login = async (data: { email: string; password: string }) => {
     withCredentials: true,
   });
   localStorage.setItem("userId", response.data.data.userId);
+  localStorage.setItem("userRole", response.data.data.userRole);
   return response.data;
 };
 

@@ -2,21 +2,15 @@ import { useAuth } from "@/context/AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "@/api/axiosConfig";
-import { getUserId } from "@/utils/AuthStorage";
+import { getToken, getUserId, getUserRole } from "@/utils/AuthStorage";
 import MainLoader from "@/Components/seketon-loader/MainLoader";
 // import { logo } from "@/assets";
 
 export function UserProtectedRoute() {
-  const {
-    isAuthenticated,
-    isLoading,
-    isPinSet,
-    isLoggingOut,
-    token,
-    userRole,
-  } = useAuth();
-
+  const { isLoading, isPinSet, isLoggingOut } = useAuth();
+  const token = getToken();
   const userId = getUserId();
+  const userRole = getUserRole();
 
   const {
     data: user,
@@ -35,7 +29,7 @@ export function UserProtectedRoute() {
       );
       return res.data.data;
     },
-    enabled: !!token && !!userId && isAuthenticated && isPinSet,
+    enabled: !!token && !!userId && isPinSet,
     staleTime: Infinity,
   });
 
@@ -50,19 +44,19 @@ export function UserProtectedRoute() {
     );
   }
 
-  if (!isAuthenticated || !token || !userId) {
-    return <Navigate to="/login" replace />;
-  }
-
   if (isLoading || isPending) {
     return <MainLoader />;
+  }
+
+  if (!token || !userId) {
+    return <Navigate to="/login" replace />;
   }
 
   if (isError) {
     return <Navigate to="/login" replace />;
   }
 
-  if (userRole === "admin") {
+  if (userRole === "ADMIN") {
     return <Navigate to="/admin/dashboard" replace />;
   }
 
@@ -70,43 +64,28 @@ export function UserProtectedRoute() {
 }
 
 export function AdminProtectedRoute() {
-  const { isAuthenticated, isLoading, isPinSet, token, userRole } = useAuth();
+  const { isLoading } = useAuth();
   const userId = getUserId();
+  const token = getToken();
+  const userRole = getUserRole();
 
-  const {
-    data: user,
-    isPending,
-    isError,
-  } = useQuery({
-    queryKey: ["admin-user", userId],
-    queryFn: async () => {
-      const res = await axios.get(
-        `${
-          import.meta.env.VITE_API_URL
-        }/v1/user/wallet-service/profile/${userId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      return res.data.data;
-    },
-    enabled: !!token && !!userId && isAuthenticated && isPinSet,
-    staleTime: Infinity,
-  });
+  if (isLoading) return <MainLoader />;
 
-  if (!isAuthenticated || !token || !userId || isError) {
+  if (!token || !userId) {
     return <Navigate to="/login" replace />;
   }
 
-  if (isLoading || isPending) return <MainLoader />;
-
-  if (userRole !== "admin") {
+  if (userRole !== "ADMIN") {
     return <Navigate to="/dashboard" replace />;
   }
 
-  return <Outlet context={{ user }} />;
+  return <Outlet />;
 }
 
 export function PublicRoute() {
-  const { isAuthenticated, isPinSet, isLoading, userRole } = useAuth();
+  const { isPinSet, isLoading } = useAuth();
+  const userRole = getUserRole();
+  const token = getToken();
 
   if (isLoading)
     return (
@@ -120,8 +99,8 @@ export function PublicRoute() {
       // </div>
     );
 
-  if (isAuthenticated && isPinSet) {
-    if (userRole === "admin") {
+  if (!!token && isPinSet) {
+    if (userRole === "ADMIN") {
       return <Navigate to="/admin/dashboard" replace />;
     }
     return <Navigate to="/dashboard" replace />;

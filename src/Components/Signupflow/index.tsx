@@ -213,12 +213,13 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     onSuccess: (response) => {
       const isPinSet =
         response.data.isPinSet === true || response.data.isPinSet === "true";
+      const userRole = response.data.userRole.toLowerCase();
 
-      ContextLogin(response.data.jwt, isPinSet, response.data.role);
+      ContextLogin(response.data.jwt, isPinSet);
 
-      if (isPinSet && response.data.role === "user") {
+      if (isPinSet && userRole === "user") {
         navigate("/dashboard");
-      } else if (response.data.role === "admin") {
+      } else if (userRole === "admin") {
         navigate("/admin/dashboard");
       } else {
         setShowSuccessModal(true);
