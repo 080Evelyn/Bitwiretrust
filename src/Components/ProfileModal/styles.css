@@ -258,6 +258,7 @@ input:checked + .slider:before {
   background: transparent;
   color: #7910b1;
   font-size: 16px;
+  cursor: pointer;
   font-weight: 500;
 }
 

@@ -125,7 +125,7 @@ const Profile = ({
           <IoIosArrowForward />
         </div>
 
-        <div className="option">
+        <div className="option" onClick={() => toggleModal("kyc")}>
           <div className="option-left">
             <img src={kyc} alt="kyc" className="option-icon account-icon" />
             <span>Account Limitations (KYC)</span>

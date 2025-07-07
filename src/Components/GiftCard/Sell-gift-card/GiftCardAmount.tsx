@@ -192,7 +192,7 @@ const GiftCardAmount = ({ selectedCard, amount }: GiftCardAmountProps) => {
             htmlFor="upload-photo"
             className="flex flex-col items-center justify-center rounded-2xl px-4 py-8 cursor-pointer border-[1.5px] border-[#7910B1] hover:bg-[#f7f7f7]"
           >
-            <img src={Gallery} alt="gallery img" />
+            <img src={Gallery} alt="gallery icon" />
             <span className=" !text-[#7910B1]">
               Upload a photo of your card
             </span>
