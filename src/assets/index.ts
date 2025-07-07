@@ -118,8 +118,10 @@ import UserNotVerified from "./id-not-verified.svg";
 import AdminShareIcon from "./share.svg";
 import ServiceStatsIcon from "./service-stats.svg";
 import KycPablock from "./kyc-padlock.svg";
+import GalleryAdd from "./gallery-add.svg";
 
 export {
+  GalleryAdd,
   KycPablock,
   ServiceStatsIcon,
   AdminShareIcon,

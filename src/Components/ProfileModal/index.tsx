@@ -12,6 +12,7 @@ import PrivacyPolicy from "./profile-component/PrivacyPolicy";
 import Profile from "./profile-component/Profile";
 import Settings from "./profile-component/Settings";
 import Contact from "./profile-component/Contact";
+import UserKyc from "./profile-component/Kyc";
 
 const ProfileModal: React.FC<ProfileModalProps> = ({
   isOpen,
@@ -183,6 +184,8 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
       {activeModal === "policies" && (
         <PrivacyPolicy toggleModal={toggleModal} />
       )}
+
+      {activeModal === "kyc" && <UserKyc toggleModal={toggleModal} />}
     </div>
   );
 };

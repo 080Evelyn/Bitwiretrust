@@ -128,6 +128,7 @@ export type ModalType =
   | "legal"
   | "terms-and-conditions"
   | "policies"
+  | "kyc"
   | null;
 
 export type NetworkProviderKey = "mtn" | "airtel" | "nineMobile" | "glo";
