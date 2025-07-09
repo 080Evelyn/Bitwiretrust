@@ -48,7 +48,11 @@ const Filter = () => {
       <div className="flex flex-col">
         <h2 className="text-sm px-4 text-[#7901b1] font-semibold">Filter</h2>
         <span className="border-[0.5px] mx-3 border-[#D9D9D9]" />
-        <Accordion type="multiple" defaultValue={["services"]} className="px-2">
+        <Accordion
+          type="multiple"
+          defaultValue={["services"]}
+          className="px-2 max-md:flex max-md:justify-between max-md:items-start"
+        >
           <AccordionItem value="services" className="border-b-0 mt-2">
             <AccordionTrigger className="font-semibold px-1.5 py-1.5 bg-[#FAFAFA] rounded-sm border border-[#f1f1f1]">
               Services
@@ -56,7 +60,7 @@ const Filter = () => {
             <AccordionContent className="mt-2.5 pb-1">
               {services.map((service) => (
                 <div className="flex flex-col my-1">
-                  <div className="flex justify-between items-center text-sm text-[#8C8C8C]">
+                  <div className="flex max-md:gap-2 justify-between items-center text-sm text-[#8C8C8C]">
                     <span>{service.name}</span>
                     <Checkbox />
                   </div>
@@ -72,7 +76,7 @@ const Filter = () => {
             <AccordionContent className="mt-2.5 pb-1">
               {status.map((item) => (
                 <div className="flex flex-col my-1">
-                  <div className="flex justify-between items-center text-sm text-[#8C8C8C]">
+                  <div className="flex max-md:gap-2 justify-between items-center text-sm text-[#8C8C8C]">
                     <span>{item.name}</span>
                     <Checkbox />
                   </div>
@@ -88,7 +92,7 @@ const Filter = () => {
             <AccordionContent className="mt-2.5 pb-1">
               {dates.map((date) => (
                 <div className="flex flex-col my-1">
-                  <div className="flex justify-between items-center text-sm text-[#8C8C8C]">
+                  <div className="flex max-md:gap-2 justify-between items-center text-sm text-[#8C8C8C]">
                     <span>{date.name}</span>
                     <Checkbox />
                   </div>

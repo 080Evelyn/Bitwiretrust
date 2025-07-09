@@ -48,7 +48,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardAmountProps) => {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="text-center font-medium hidden md:block desktop-card-container rounded-[4px] py-1.75">
+      <div className="text-center font-medium hidden md:block card-container rounded-[4px] py-1.75">
         Enter Amount
       </div>
       <div className="md:hidden absolute top-3 left-1/2 transform -translate-x-1/2 pt-6.5 flex font-semibold">
@@ -58,7 +58,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardAmountProps) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="flex flex-col gap-5 md:gap-2 desktop-card-container rounded-md p-2 py-2"
+          className="flex flex-col gap-5 md:gap-2 card-container rounded-md p-2 py-2"
         >
           <FormField
             control={form.control}

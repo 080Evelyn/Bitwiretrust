@@ -3,7 +3,7 @@ import { AdminTrendingUp, DoubleTick } from "@/assets";
 const Overview = () => {
   return (
     <div className="py-2">
-      <div className="grid grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         <div className="bg-white rounded-lg py-4 px-2.5">
           <div className="flex items-center gap-2">
             <img src={AdminTrendingUp} alt="icon" className="size-[30px]" />

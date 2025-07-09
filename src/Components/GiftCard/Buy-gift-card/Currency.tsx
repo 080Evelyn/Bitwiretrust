@@ -17,14 +17,14 @@ const Currency = ({ onProceed }: CurrencyProps) => {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="text-center font-medium hidden md:block desktop-card-container rounded-[4px] py-1.75">
+      <div className="text-center font-medium hidden md:block card-container rounded-[4px] py-1.75">
         Select Currency
       </div>
       <div className="md:hidden absolute top-3 left-1/2 transform -translate-x-1/2 pt-6.5 flex font-semibold">
         Sell Gift Card
       </div>
 
-      <div className="desktop-card-container rounded-md p-2 lg:max-h-74">
+      <div className="card-container rounded-md p-2 lg:max-h-74">
         <div className="flex flex-col gap-4 md:gap-2 w-full">
           {Currency.map((currency) => (
             <div
