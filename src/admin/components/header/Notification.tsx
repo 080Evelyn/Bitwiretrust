@@ -66,14 +66,14 @@ const AdminNotification = ({
         <PopoverTrigger asChild>{trigger}</PopoverTrigger>
         {isOpen && (
           <div
-            className="fixed inset-y-0 mt-16 right-0 w-full lg:w-[calc(100%-var(--sidebar-width))] bg-black/30 backdrop-blur-[2px] md:z-50 z-49"
+            className="fixed inset-y-0 mt-27.5 lg:mt-16 right-0 w-full lg:w-[calc(100%-var(--sidebar-width))] bg-black/30 backdrop-blur-[2px] md:z-50 z-49"
             onClick={() => setIsOpen(false)}
           />
         )}
 
         <PopoverContent
           sideOffset={5}
-          className="z-55 w-screen max-md:h-[94vh] h-[85vh] md:pb-4 max-md:-mt-14 md:w-[340px] md:mr-4 mt-2 p-0 border border-[#F1F1F1] rounded-none md:rounded-lg bg-white"
+          className="z-55 max-lg:h-[80vh] h-[85vh] md:pb-4 md:w-[340px] md:mr-4 lg:mt-2 p-0 border border-[#F1F1F1] rounded-lg bg-white"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           {/* <button

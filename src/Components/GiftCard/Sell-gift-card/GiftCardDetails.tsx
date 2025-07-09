@@ -80,13 +80,13 @@ const GiftCardDetails = ({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="text-center font-medium hidden md:block desktop-card-container rounded-[4px] py-1.75">
+      <div className="text-center font-medium hidden md:block card-container rounded-[4px] py-1.75">
         Details
       </div>
       <div className="md:hidden absolute top-3 left-1/2 transform -translate-x-1/2 pt-6.5 flex font-semibold ">
         {selectedCard?.tittle}
       </div>
-      <div className="flex flex-col gap-2 desktop-card-container rounded-md md:p-2 py-2">
+      <div className="flex flex-col gap-2 card-container rounded-md md:p-2 py-2">
         <div className="flex flex-col gap-1">
           <span className="font-medium text-sm md:text-xs tracking-[-0.13px]">
             Select Currency

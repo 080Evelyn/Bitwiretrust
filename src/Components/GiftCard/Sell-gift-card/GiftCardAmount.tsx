@@ -101,11 +101,11 @@ const GiftCardAmount = ({ selectedCard, amount }: GiftCardAmountProps) => {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="text-center font-medium hidden md:block desktop-card-container rounded-[4px] py-1.75">
+      <div className="text-center font-medium hidden md:block card-container rounded-[4px] py-1.75">
         Enter Amount
       </div>
 
-      <div className="flex flex-col gap-2 desktop-card-container rounded-md p-2 py-2">
+      <div className="flex flex-col gap-2 card-container rounded-md p-2 py-2">
         <div className="flex flex-col gap-1.5 relative">
           <span className="font-medium text-xs tracking-[-0.13px]">
             Enter E-code (Optional)

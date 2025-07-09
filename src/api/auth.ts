@@ -1,5 +1,5 @@
 import { getEmail, getToken } from "@/utils/AuthStorage";
-import axios from "axios";
+import axios from "./axiosConfig";
 
 const url = import.meta.env.VITE_API_URL;
 
