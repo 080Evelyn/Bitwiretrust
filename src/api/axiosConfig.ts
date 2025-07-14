@@ -1,19 +1,16 @@
-import axios from "axios";
-import { getToken, clearAuth } from "@/utils/AuthStorage";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
+import { getToken, setMemoryToken, clearAuth } from "@/utils/AuthStorage";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 axios.defaults.baseURL = API_URL;
 axios.defaults.withCredentials = true;
 
-// Attach Bearer token to all requests
 axios.interceptors.request.use(
   (config) => {
     const token = getToken();
     if (token) {
-      if (!config.headers) {
-        config.headers = new axios.AxiosHeaders();
-      }
+      config.headers = config.headers || {};
       config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
@@ -21,18 +18,42 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-//Interceptor to Handle 401 errors and also avoid infinite loop
 axios.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (
+    error: AxiosError & { config?: AxiosRequestConfig & { _retry?: boolean } }
+  ) => {
+    const originalRequest = error.config!;
+    const status = error.response?.status;
+
+    //  intercept 401/403, skip refresh-token endpoint itself, and only once per request
     if (
-      error.response?.status === 401 &&
-      !error.config._retry &&
-      !error.config.url.includes("/auth/refresh-token")
+      (status === 401 || status === 403) &&
+      !originalRequest._retry &&
+      !originalRequest.url?.includes("/auth/refresh-token")
     ) {
-      clearAuth();
-      window.location.href = "/login";
+      originalRequest._retry = true;
+
+      try {
+        const refreshRes = await axios.post<{ data: { jwt: string } }>(
+          "/v1/auth/refresh-token",
+          {},
+          { withCredentials: true }
+        );
+        const newToken = refreshRes.data.data.jwt;
+
+        setMemoryToken(newToken);
+
+        originalRequest.headers!["Authorization"] = `Bearer ${newToken}`;
+
+        return axios(originalRequest);
+      } catch (refreshErr) {
+        clearAuth();
+        window.location.href = "/login";
+        return Promise.reject(refreshErr);
+      }
     }
+
     return Promise.reject(error);
   }
 );

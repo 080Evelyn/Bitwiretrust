@@ -214,8 +214,8 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       const isPinSet =
         response.data.isPinSet === true || response.data.isPinSet === "true";
       const userRole = response.data.userRole.toLowerCase();
-
-      ContextLogin(response.data.jwt, isPinSet);
+      updatePinStatus();
+      ContextLogin(response.data.jwt);
 
       if (isPinSet && userRole === "user") {
         navigate("/dashboard");
