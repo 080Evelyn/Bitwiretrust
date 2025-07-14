@@ -76,20 +76,13 @@ const AdminNotification = ({
           className="z-55 max-lg:h-[80vh] h-[85vh] md:pb-4 md:w-[340px] md:mr-4 lg:mt-2 p-0 border border-[#F1F1F1] rounded-lg bg-white"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
-          {/* <button
-            className="hidden md:block absolute top-4 left-[-36px] z-50 bg-white/80 hover:bg-white p-1 rounded-full cursor-pointer"
-            onClick={() => setIsOpen(false)}
-          >
-            <X className="size-4" />
-          </button> */}
-
           <div className="flex justify-between items-center py-3 px-4">
             <span className="text-sm font-semibold text-[#7901b1]">
               Notifications(22)
             </span>
-            <span className="text-[10px] font-light text-muted-foreground">
+            <button className="text-[10px] cursor-pointer font-light text-muted-foreground">
               Mark as read
-            </span>
+            </button>
           </div>
 
           <Tabs defaultValue="all">

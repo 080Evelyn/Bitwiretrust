@@ -1,4 +1,6 @@
+import { serviceStatsFn } from "@/admin/api/dashboard";
 import { ServiceStatsIcon } from "@/assets";
+import { useQuery } from "@tanstack/react-query";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
 const data = [
@@ -9,6 +11,14 @@ const data = [
 ];
 
 const ServicePieChart = () => {
+  const { data: serviceStatResponse } = useQuery({
+    queryKey: ["serviceStats"],
+    queryFn: () => serviceStatsFn({ month: 6, year: 2025 }),
+  });
+
+  const serviceStat = serviceStatResponse?.data ?? [];
+  console.log(serviceStat);
+
   return (
     <div className="p-4 rounded-2xl bg-white w-full">
       <div className="flex items-center gap-2 py-2">
