@@ -1,6 +1,14 @@
+import { transactionStatusCount } from "@/admin/api/transactions";
 import { AdminTrendingUp, DoubleTick } from "@/assets";
+import { useQuery } from "@tanstack/react-query";
 
 const Overview = () => {
+  const { data: totalTransactionStatusResponse } = useQuery({
+    queryKey: ["totalTransactionStatusCount"],
+    queryFn: transactionStatusCount,
+  });
+  const totalTransactionStatus = totalTransactionStatusResponse?.data ?? [];
+
   return (
     <div className="py-2">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -33,7 +41,9 @@ const Overview = () => {
             </div>
           </div>
           <div className="flex font-semibold items-baseline">
-            <span className="text-2xl"> 4,000</span>
+            <span className="text-2xl">
+              {totalTransactionStatus.successful}
+            </span>
           </div>
         </div>
         <div className="bg-white rounded-lg py-4 px-2.5">
@@ -47,7 +57,7 @@ const Overview = () => {
             </div>
           </div>
           <div className="flex font-semibold items-baseline">
-            <span className="text-2xl"> 12300</span>
+            <span className="text-2xl"> {totalTransactionStatus.failed}</span>
           </div>
         </div>
       </div>

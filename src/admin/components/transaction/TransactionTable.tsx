@@ -19,13 +19,14 @@ import { useQuery } from "@tanstack/react-query";
 import { transactionLog } from "@/admin/api/transactions";
 import { TransactionLogProps } from "@/admin/type";
 import { Skeleton } from "@/Components/ui/skeleton";
+import { formatDate } from "date-fns";
 
 const TransactionTable = () => {
   const { isFetching, data: transactionLogResponse } = useQuery({
     queryKey: ["transactionLog"],
     queryFn: transactionLog,
   });
-  const contents = transactionLogResponse ?? [];
+  const contents = transactionLogResponse?.data ?? [];
 
   return (
     <div className="bg-white rounded-md px-3 py-2">
@@ -79,13 +80,13 @@ const TransactionTable = () => {
                   </div>
                 </TableCell>
                 <TableCell>{content.transactionType}</TableCell>
-                <TableCell>{content.transactionId}</TableCell>
-                <TableCell>
-                  {typeof content.date === "string"
-                    ? content.date
-                    : content.date?.toLocaleString?.()}
+                <TableCell className="font-medium">
+                  {content.transactionId}
                 </TableCell>
-                <TableCell>
+                <TableCell className="font-medium">
+                  {formatDate(content.date, "dd MMM, yyyy, hh:mm:ss")}
+                </TableCell>
+                <TableCell className="font-medium">
                   <div className="flex items-center gap-2">
                     {content.status === "success" ? (
                       <span className="size-[10px] rounded-full bg-[#11C600] mr-1" />
@@ -119,27 +120,27 @@ const TransactionTable = () => {
                         </div>
                         <div className="flex flex-col gap-2">
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-sm font-semibold">Name</h3>
+                            <span className="text-sm font-semibold">Name</span>
                             <p className="text-xs font-light">{content.name}</p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-sm font-semibold">
+                            <span className="text-sm font-semibold">
                               Transaction Type
-                            </h3>
+                            </span>
                             <p className="text-xs font-light">
                               {content.transactionType}
                             </p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-sm font-semibold">
+                            <span className="text-sm font-semibold">
                               Transaction ID
-                            </h3>
+                            </span>
                             <p className="text-xs font-light">
                               {content.transactionId}
                             </p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-sm font-semibold">Date</h3>
+                            <span className="text-sm font-semibold">Date</span>
                             <p className="text-xs font-light">
                               {" "}
                               {typeof content.date === "string"
@@ -148,7 +149,9 @@ const TransactionTable = () => {
                             </p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-sm font-semibold">Status</h3>
+                            <span className="text-sm font-semibold">
+                              Status
+                            </span>
                             <p className="text-xs font-light">
                               {content.status}
                             </p>

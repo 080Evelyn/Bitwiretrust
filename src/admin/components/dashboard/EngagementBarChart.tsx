@@ -8,25 +8,38 @@ import {
   Cell,
 } from "recharts";
 import { useState } from "react";
-import { ChevronDown, UserPlus } from "lucide-react";
-
-const data = [
-  { name: "Jan", value: 60, color: "#DADADA" },
-  { name: "Feb", value: 74, color: "#DADADA" },
-  { name: "Mar", value: 11, color: "#DADADA" },
-  { name: "Apr", value: 34, color: "#DADADA" },
-  { name: "May", value: 98, color: "#DADADA" },
-  { name: "Jun", value: 60, color: "#DADADA" },
-  { name: "Jul", value: 44, color: "#DADADA" },
-  { name: "Aug", value: 9, color: "#DADADA" },
-  { name: "Sep", value: 88, color: "#DADADA" },
-  { name: "Oct", value: 68, color: "#DADADA" },
-  { name: "Nov", value: 25, color: "#DADADA" },
-  { name: "Dec", value: 52, color: "#DADADA" },
-];
+import { UserPlus } from "lucide-react";
+import { userEngagement } from "@/admin/api/dashboard";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+} from "@/Components/ui/select";
+import { MONTHS } from "@/admin/constant";
 
 const EngagementBarChart = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const currentYear = new Date().getFullYear();
+  const { data: userEngagementResponse } = useQuery({
+    queryKey: ["userEngagement"],
+    queryFn: () => userEngagement({ year: currentYear }),
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+  });
+  const chartData = userEngagementResponse?.data.monthlyEngagement ?? [];
+
+  const formattedChartData = MONTHS.map((month, index) => ({
+    name: month,
+    value: Number(chartData[index + 1] || 0),
+    color: "#DADADA",
+  }));
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const CustomTooltip = ({ active, payload }: any) => {
@@ -60,15 +73,24 @@ const EngagementBarChart = () => {
           <UserPlus className="size-4 fill-[#7901b1]" />
           <span>Users Engagement</span>
         </div>
-        <div className="flex text-xs font-semibold items-center text-[#7901b1] gap-2">
-          <span>Jan-Dec 2025</span>
-          <ChevronDown className="size-4.5" />
-        </div>
+        <Select>
+          <SelectTrigger className="self-end border-none outline-none !text-[#7901b1] !h-auto m-0 p-[1.5px] shadow-none">
+            <span className="text-xs font-semibold">Jan-Dec {currentYear}</span>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <div className="flex flex-col gap-1.5 mt-1">
+                <SelectLabel>Year</SelectLabel>
+                <SelectItem value="2025">2025</SelectItem>
+              </div>
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       <ResponsiveContainer width="100%" height={200} className="mt-3">
         <BarChart
-          data={data}
+          data={formattedChartData}
           margin={{
             top: 20,
             right: 15,
@@ -101,7 +123,7 @@ const EngagementBarChart = () => {
             radius={[8, 8, 0, 0]}
             onMouseOver={(_, index) => setActiveIndex(index)}
           >
-            {data.map((entry, index) => (
+            {formattedChartData.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={
