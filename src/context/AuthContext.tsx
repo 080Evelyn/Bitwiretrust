@@ -6,7 +6,7 @@ import { clearAuth, setMemoryToken } from "@/utils/AuthStorage";
 interface AuthContextValue {
   isAuthenticated: boolean;
   isPinSet: boolean;
-  ContextLogin: (token: string, isPinSet: boolean) => void;
+  ContextLogin: (token: string) => void;
   logout: () => void;
   isLoading: boolean;
   updatePinStatus: () => void;
@@ -27,9 +27,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Try to refresh token on page load
   useEffect(() => {
-    const passcodeStatus = localStorage.getItem("isPinSet") === "true";
-    setIsPinSet(passcodeStatus);
-
     refreshToken().finally(() => {
       setIsLoading(false);
     });
@@ -44,10 +41,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [token]);
 
   // Passing the token from login to the context login here
-  const ContextLogin = (newToken: string, passcodeStatus: boolean) => {
+  const ContextLogin = (newToken: string) => {
     setToken(newToken);
-    setIsPinSet(passcodeStatus);
-    localStorage.setItem("isPinSet", String(passcodeStatus));
     scheduleRefresh(newToken);
   };
 
