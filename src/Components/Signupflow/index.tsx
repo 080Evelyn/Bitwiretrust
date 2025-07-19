@@ -363,6 +363,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
             formData={formData}
             renderCodeInputs={renderCodeInputs}
             codeError={codeError}
+            setCodeError={setCodeError}
             otpError={otpError}
           />
         );

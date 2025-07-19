@@ -1,5 +1,10 @@
+import { resendOtp } from "@/api/auth";
 import { full_logo } from "@/assets";
 import { FormData } from "@/types";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface VerifyEmailProps {
   formData: FormData;
@@ -11,6 +16,7 @@ interface VerifyEmailProps {
   codeError: boolean;
   isLoading: boolean;
   otpError: string;
+  setCodeError: (arg0: boolean) => void;
 }
 
 const VerifyEmail = ({
@@ -23,7 +29,45 @@ const VerifyEmail = ({
   codeError,
   isLoading,
   otpError,
+  setCodeError,
 }: VerifyEmailProps) => {
+  const [timer, setTimer] = useState(120);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimer((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const mutateResendOtp = useMutation({
+    mutationFn: (data: { email: string }) => resendOtp(data),
+  });
+
+  const handleResendOtp = () => {
+    if (timer > 0) return;
+    mutateResendOtp.mutate(
+      { email: formData.email },
+      {
+        onSuccess: () => {
+          toast.success("OTP sent successfully");
+          setCodeError(false);
+          setTimer(120);
+        },
+        onError: (error: unknown) => {
+          if (axios.isAxiosError(error)) {
+            const responseDesc =
+              error.response?.data?.responseDesc || "Something went wrong";
+            toast.error(responseDesc);
+          } else {
+            toast.error("Unexpected error occurred");
+          }
+        },
+      }
+    );
+  };
+
   return (
     <div className="step-content">
       <div
@@ -63,9 +107,19 @@ const VerifyEmail = ({
             </button>
           </div>
           <div className="resend-link">
-            <p>
-              Didn't get code? <span className="resend">Resend</span>
-            </p>
+            {timer > 0 ? (
+              <p>
+                Resend available in {Math.floor(timer / 60)}:
+                {String(timer % 60).padStart(2, "0")}
+              </p>
+            ) : (
+              <p>
+                Didn't get code?{" "}
+                <span className="resend" onClick={handleResendOtp}>
+                  Resend
+                </span>
+              </p>
+            )}
           </div>
         </form>
       </div>

@@ -96,6 +96,11 @@ export const resetPassword = async (data: {
   return response.data;
 };
 
+export const resendOtp = async (data: { email: string }) => {
+  const response = await axios.post(`${url}/v1/auth/resend-otp`, data);
+  return response.data;
+};
+
 export const bankList = async () => {
   const response = await axios.get(`${url}/v1/auth/banks-list`);
   return response.data;
