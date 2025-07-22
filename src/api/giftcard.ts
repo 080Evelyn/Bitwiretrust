@@ -1,15 +1,19 @@
-import { getToken } from "@/utils/AuthStorage";
 import axios from "./axiosConfig";
 
 const url = import.meta.env.VITE_API_URL;
 
 export const giftcard = async () => {
-  //   const userId = getUserId();
-  const token = getToken();
+  const response = await axios.get(`${url}/v1/user/giftcard`);
+  return response.data;
+};
 
-  const response = await axios.get(`${url}/v1/user/giftcard`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-
+export const giftcardCountries = async () => {
+  const response = await axios.get(
+    `${url}/v1/user/giftcard/giftcard-countries`
+  );
+  return response.data;
+};
+export const allGiftcards = async () => {
+  const response = await axios.get(`${url}/v1/user/giftcard/products`);
   return response.data;
 };

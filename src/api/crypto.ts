@@ -2,9 +2,6 @@ import { getUserId } from "@/utils/AuthStorage";
 import axios from "./axiosConfig";
 
 const url = import.meta.env.VITE_API_URL;
-
-// crypto api calls
-
 export const cryptoMarkets = async () => {
   const response = await axios.get(`${url}/v1/user/crypto/markets`);
   return response.data;
