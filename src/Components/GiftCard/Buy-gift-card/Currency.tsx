@@ -26,16 +26,18 @@ const Currency = ({ onProceed }: CurrencyProps) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    if (giftCardsCountriesList.length > 0 && !checked) {
+    if (giftCardsCountriesList?.length > 0 && !checked) {
       setChecked(giftCardsCountriesList[0].isoName);
     }
   }, [giftCardsCountriesList, checked]);
 
-  const filteredCountries = giftCardsCountriesList.filter(
-    (country: GiftCardCountriesProps) =>
-      country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      country.currencyCode.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredCountries = giftCardsCountriesList
+    ? giftCardsCountriesList.filter(
+        (country: GiftCardCountriesProps) =>
+          country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          country.currencyCode.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   return (
     <div className="flex flex-col gap-3">
@@ -72,7 +74,7 @@ const Currency = ({ onProceed }: CurrencyProps) => {
               <div
                 key={currency.isoName}
                 onClick={() => setChecked(currency.isoName)}
-                className="rounded-[9.5px] px-4 py-5.5 text-sm md:text-[11px] font-medium text-[#7910B1] shadow-xs border border-[#7910B1] md:border-[#f1f1f1] flex justify-between items-center cursor-pointer" // ✅ Add cursor-pointer for UX
+                className="rounded-[9.5px] px-4 py-5.5 text-sm md:text-[11px] font-medium text-[#7910B1] shadow-xs border border-[#7910B1] md:border-[#f1f1f1] flex justify-between items-center cursor-pointer"
               >
                 {currency.name} ({currency.currencyCode})
                 <Checkbox
