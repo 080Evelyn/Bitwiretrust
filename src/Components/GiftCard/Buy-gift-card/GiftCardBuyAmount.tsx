@@ -10,13 +10,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePinModal } from "@/context/PinModalContext";
-import { GiftCardAmountProps } from "@/types";
 import {
   amountSchema,
   emailSchema,
   quantitySchema,
 } from "@/lib/validationSchema";
 import { Label } from "@/Components/ui/label";
+import { CountryGiftCardListProps } from "@/types/gift-card";
 
 const schema = z.object({
   email: emailSchema,
@@ -26,8 +26,13 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-const GiftCardBuyAmount = ({ selectedCard }: GiftCardAmountProps) => {
+interface GiftCardBuyAmountProps {
+  selectedCard?: CountryGiftCardListProps;
+}
+
+const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
   const { openPinModal } = usePinModal();
+  console.log("Selected Card:", selectedCard);
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -52,7 +57,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardAmountProps) => {
         Enter Amount
       </div>
       <div className="md:hidden absolute top-3 left-1/2 transform -translate-x-1/2 pt-6.5 flex font-semibold">
-        Buy {selectedCard.tittle} Gift Card
+        Buy {selectedCard?.productName} Gift Card
       </div>
 
       <Form {...form}>

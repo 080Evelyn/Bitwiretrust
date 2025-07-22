@@ -17,3 +17,10 @@ export const allGiftcards = async () => {
   const response = await axios.get(`${url}/v1/user/giftcard/products`);
   return response.data;
 };
+
+export const countriesGiftCard = async (countryCode: string) => {
+  const response = await axios.get(
+    `${url}/v1/user/giftcard/countries/${countryCode}`
+  );
+  return response.data;
+};
