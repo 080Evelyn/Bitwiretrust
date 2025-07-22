@@ -1,19 +1,32 @@
 import { useState } from "react";
 import { SearchIcon } from "@/assets";
-import { giftCards } from "@/constants/giftcards";
-import { ChevronRightIcon } from "lucide-react";
 import { Input } from "../ui/input";
+import { CountryGiftCardListProps } from "@/types/gift-card";
 
 type SelectGiftCardsProps = {
-  onSelect: (card: (typeof giftCards)[0]) => void;
+  onSelect: (card: CountryGiftCardListProps) => void;
   title: string;
+  CountriesCardList: CountryGiftCardListProps[];
+  cardListIsLoading: boolean;
 };
 
-const SelectGiftCards = ({ onSelect, title }: SelectGiftCardsProps) => {
+const SelectGiftCards = ({
+  onSelect,
+  title,
+  CountriesCardList,
+  cardListIsLoading,
+}: SelectGiftCardsProps) => {
   const [selectedCard, setSelectedCard] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState("");
 
-  const handleSelect = (card: (typeof giftCards)[0]) => {
-    setSelectedCard(card.tittle);
+  const filteredCountries = CountriesCardList
+    ? CountriesCardList.filter((card: CountryGiftCardListProps) =>
+        card.productName?.toLowerCase().includes(searchTerm?.toLowerCase())
+      )
+    : [];
+
+  const handleSelect = (card: CountryGiftCardListProps) => {
+    setSelectedCard(card.productName);
     onSelect(card);
   };
 
@@ -27,24 +40,27 @@ const SelectGiftCards = ({ onSelect, title }: SelectGiftCardsProps) => {
       </div>
 
       <div className="flex flex-col gap-2 card-container rounded-md p-2 md:max-h-74">
-        <div className="flex gap-2 w-full">
+        <div className="w-full">
           <div className="relative flex-1">
             <Input
               type="search"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="h-9 w-full !pl-9 !rounded-[4.7px]"
             />
             <img src={SearchIcon} className="absolute size-4 top-3 left-3" />
           </div>
-          <button className="btn-primary w-2/6 text-xs">Filter</button>
         </div>
 
         <div className="flex flex-col gap-2 overflow-y-auto">
-          {giftCards.map((card) => (
+          {cardListIsLoading && <div>Loading...</div>}
+          {filteredCountries?.map((card: CountryGiftCardListProps) => (
             <div
-              key={card.image}
+              key={card.productId}
               onClick={() => handleSelect(card)}
-              className={`flex font-medium justify-between py-4 md:py-3 px-1 md:px-2.5 rounded-sm cursor-pointer ${
-                selectedCard === card.tittle
+              className={`font-medium py-4 md:py-3 px-1 md:px-2.5 rounded-sm cursor-pointer ${
+                selectedCard === card.productName
                   ? "bg-[#28003E] text-white"
                   : "bg-[#FCF6FF] "
               }`}
@@ -52,16 +68,12 @@ const SelectGiftCards = ({ onSelect, title }: SelectGiftCardsProps) => {
               <div className="flex gap-2 items-center">
                 <div className="size-8.25 flex justify-center items-center rounded-xs bg-white">
                   <img
-                    src={card.image}
-                    alt={card.tittle}
+                    src={card.logoUrls[0]}
+                    alt={card.productName}
                     className="size-6.75  rounded-[3px]"
                   />
                 </div>
-                <span className="text-sm">{card.tittle}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span>₦{card.rate}</span>
-                <ChevronRightIcon className="size-4" />
+                <span className="text-sm">{card.productName}</span>
               </div>
             </div>
           ))}

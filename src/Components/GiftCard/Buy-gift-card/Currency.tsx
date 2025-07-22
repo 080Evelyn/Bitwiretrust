@@ -1,41 +1,35 @@
-import { giftcardCountries } from "@/api/giftcard";
 import { SearchIcon } from "@/assets";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Input } from "@/Components/ui/input";
 import { GiftCardCountriesProps } from "@/types/gift-card";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface CurrencyProps {
   onProceed?: () => void;
+  isPending?: boolean;
+  isError?: boolean;
+  giftCardsCountriesList?: GiftCardCountriesProps[];
+  checked: string | undefined;
+  setChecked: (value: string | undefined) => void;
 }
 
-const Currency = ({ onProceed }: CurrencyProps) => {
-  const {
-    isError,
-    isPending,
-    data: giftCardCountriesResponse,
-  } = useQuery({
-    queryKey: ["giftCardCountries"],
-    queryFn: () => giftcardCountries(),
-  });
-
-  const giftCardsCountriesList = giftCardCountriesResponse?.data;
-
-  const [checked, setChecked] = useState<string | undefined>(undefined);
+const Currency = ({
+  onProceed,
+  isPending,
+  isError,
+  giftCardsCountriesList,
+  checked,
+  setChecked,
+}: CurrencyProps) => {
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    if (giftCardsCountriesList?.length > 0 && !checked) {
-      setChecked(giftCardsCountriesList[0].isoName);
-    }
-  }, [giftCardsCountriesList, checked]);
 
   const filteredCountries = giftCardsCountriesList
     ? giftCardsCountriesList.filter(
         (country: GiftCardCountriesProps) =>
-          country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          country.currencyCode.toLowerCase().includes(searchTerm.toLowerCase())
+          country.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+          country.currencyCode
+            ?.toLowerCase()
+            .includes(searchTerm?.toLowerCase())
       )
     : [];
 
@@ -48,8 +42,8 @@ const Currency = ({ onProceed }: CurrencyProps) => {
         Sell Gift Card
       </div>
 
-      <div className="flex flex-col gap-2 card-container rounded-md p-2 md:max-h-74 h-[80vh]">
-        <div className="flex gap-2 w-full">
+      <div className="flex flex-col gap-2 card-container rounded-md px-2 py-3 md:py-2 md:max-h-74 h-[80vh]">
+        <div className="w-full">
           <div className="relative flex-1">
             <Input
               type="search"
