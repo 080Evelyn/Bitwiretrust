@@ -79,7 +79,7 @@ const Data = () => {
 
   // Set default biller on mount
   useEffect(() => {
-    if (dataProviders.length && !selectedBiller) {
+    if (dataProviders?.length && !selectedBiller) {
       const first = dataProviders[0];
       setSelectedBiller(first);
     }

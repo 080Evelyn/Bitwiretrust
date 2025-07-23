@@ -131,13 +131,36 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
             )}
           />
 
+          <div className="flex w-full gap-2.5">
+            {selectedCard?.fixedRecipientDenominations.map((a) => {
+              const isSelected = Number(form.watch("amount")) === a;
+
+              return (
+                <button
+                  type="button"
+                  key={a}
+                  // onClick={() => handleAmountClick(a)}
+                  className={`w-1/2 size-11.25 cursor-pointer rounded-[4.75px] border text-sm font-medium transition-colors ${
+                    isSelected
+                      ? "bg-[#28003E] text-white"
+                      : "bg-[#F9EDFF] text-black/45 border-[#F9EDFF]"
+                  }`}
+                >
+                  {a}
+                </button>
+              );
+            })}
+          </div>
+
           {/* Display Summary */}
           <div className="flex flex-col py-2.5 md:py-1 shadow-xs gap-[3px] bg-[#FCF6FF] items-center justify-center rounded-2xl font-medium text-sm md:text-[11px]">
             <span className="tracking-[-0.13px]">You are paying</span>
             <h2 className="text-3xl md:text-xl text-[#7910B1] font-semibold">
               ₦70,000
             </h2>
-            <span className="tracking-[-0.13px]">rate = ₦700</span>
+            <span className="tracking-[-0.13px]">
+              rate = ₦{selectedCard?.senderFee}
+            </span>
           </div>
 
           <button type="submit" className="btn-primary w-full max-md:mt-20">
