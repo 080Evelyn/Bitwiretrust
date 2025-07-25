@@ -148,7 +148,7 @@ select {
     @apply shadow-sm border border-[#f1f1f1] bg-white w-full;
   }
   .desktop-card-container {
-    @apply lg:shadow-sm lg:border lg:border-[#f1f1f1] lg:bg-white lg:w-full;
+    @apply md:shadow-sm md:border md:border-[#f1f1f1] md:bg-white md:w-full;
   }
   .custom-input {
     @apply w-full h-12.5 !text-base !bg-[#D9D9D933] !rounded-sm placeholder:text-xs placeholder:text-black !border-0;

@@ -8,32 +8,24 @@ export interface GiftCardCountriesProps {
 export interface CountryGiftCardListProps {
   productId: number;
   productName: string;
-  global: true;
+  global: boolean;
   status: string;
-  supportsPreOrder: true;
+  supportsPreOrder: boolean;
   senderFee: number;
   senderFeePercentage: number;
   discountPercentage: number;
   denominationType: string;
   recipientCurrencyCode: string;
-  minRecipientDenomination: number;
-  maxRecipientDenomination: number;
+  minRecipientDenomination: number | null;
+  maxRecipientDenomination: number | null;
   senderCurrencyCode: string;
-  minSenderDenomination: number;
-  maxSenderDenomination: number;
-  fixedRecipientDenominations: [number];
-  fixedSenderDenominations: [number];
-  fixedRecipientToSenderDenominationsMap: {
-    additionalProp1: number;
-    additionalProp2: number;
-    additionalProp3: number;
-  };
-  metadata: {
-    additionalProp1: string;
-    additionalProp2: string;
-    additionalProp3: string;
-  };
-  logoUrls: [string];
+  minSenderDenomination: number | null;
+  maxSenderDenomination: number | null;
+  fixedRecipientDenominations: string[];
+  fixedSenderDenominations: number[] | null;
+  fixedRecipientToSenderDenominationsMap: Record<string, string> | null;
+  metadata: Record<string, string> | null;
+  logoUrls: string[];
   brand: {
     brandId: number;
     brandName: string;
@@ -52,6 +44,23 @@ export interface CountryGiftCardListProps {
     verbose: string;
   };
   additionalRequirements: {
-    userIdRequired: true;
+    userIdRequired: boolean;
   };
+}
+
+export interface OrderGiftCardProps {
+  customIdentifier: string;
+  preOrder: boolean;
+  productAdditionalRequirements: {
+    userId: string;
+  };
+  productId: number;
+  quantity: string;
+  recipientEmail: string;
+  recipientPhoneDetails: {
+    countryCode: string;
+    number: string;
+  };
+  senderName: string;
+  unitPrice: string;
 }

@@ -39,7 +39,7 @@ const SelectGiftCards = ({
         {title}
       </div>
 
-      <div className="flex flex-col gap-2 card-container rounded-md p-2 md:max-h-74 h-[80vh]">
+      <div className="flex flex-col gap-2 desktop-card-container rounded-md p-2 md:max-h-86 h-[80vh]">
         <div className="w-full">
           <div className="relative flex-1">
             <Input

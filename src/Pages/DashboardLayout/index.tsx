@@ -16,7 +16,7 @@ const DashboardLayout = () => {
       <div className="flex flex-col lg:ml-[var(--sidebar-width)] w-full lg:w-[calc(100vw-var(--sidebar-width))] max-lg:mt-10">
         <DashboardHeader user={user} />
         <div className="mx-[4vw] bg-[#FEFBFB] md:mx-[3vw] lg:mx-4 lg:pe-4">
-          <Outlet />
+          <Outlet context={{ user }} />
         </div>
       </div>
     </div>
