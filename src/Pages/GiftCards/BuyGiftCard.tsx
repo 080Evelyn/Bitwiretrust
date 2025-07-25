@@ -37,6 +37,12 @@ const BuyGiftCard = () => {
     }
   }, [giftCardsCountriesList, checked]);
 
+  useEffect(() => {
+    if (checked) {
+      setSelectedCard(undefined);
+    }
+  }, [checked]);
+
   return (
     <div>
       <div className="hidden md:block">

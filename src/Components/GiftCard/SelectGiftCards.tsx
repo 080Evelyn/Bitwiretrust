@@ -39,7 +39,7 @@ const SelectGiftCards = ({
         {title}
       </div>
 
-      <div className="flex flex-col gap-2 card-container rounded-md p-2 md:max-h-74">
+      <div className="flex flex-col gap-2 desktop-card-container rounded-md p-2 md:max-h-86 h-[80vh]">
         <div className="w-full">
           <div className="relative flex-1">
             <Input
@@ -55,28 +55,34 @@ const SelectGiftCards = ({
 
         <div className="flex flex-col gap-2 overflow-y-auto">
           {cardListIsLoading && <div>Loading...</div>}
-          {filteredCountries?.map((card: CountryGiftCardListProps) => (
-            <div
-              key={card.productId}
-              onClick={() => handleSelect(card)}
-              className={`font-medium py-4 md:py-3 px-1 md:px-2.5 rounded-sm cursor-pointer ${
-                selectedCard === card.productName
-                  ? "bg-[#28003E] text-white"
-                  : "bg-[#FCF6FF] "
-              }`}
-            >
-              <div className="flex gap-2 items-center">
-                <div className="size-8.25 flex justify-center items-center rounded-xs bg-white">
-                  <img
-                    src={card.logoUrls[0]}
-                    alt={card.productName}
-                    className="size-6.75  rounded-[3px]"
-                  />
-                </div>
-                <span className="text-sm">{card.productName}</span>
-              </div>
+          {filteredCountries.length === 0 && !cardListIsLoading ? (
+            <div className="text-center font-medium text-sm pt-5">
+              No Card Found
             </div>
-          ))}
+          ) : (
+            filteredCountries?.map((card: CountryGiftCardListProps) => (
+              <div
+                key={card.productId}
+                onClick={() => handleSelect(card)}
+                className={`font-medium py-4 md:py-3 px-1 md:px-2.5 rounded-sm cursor-pointer ${
+                  selectedCard === card.productName
+                    ? "bg-[#28003E] text-white"
+                    : "bg-[#FCF6FF] "
+                }`}
+              >
+                <div className="flex gap-2 items-center">
+                  <div className="size-8.25 flex justify-center items-center rounded-xs bg-white">
+                    <img
+                      src={card.logoUrls[0]}
+                      alt={card.productName}
+                      className="size-6.75  rounded-[3px]"
+                    />
+                  </div>
+                  <span className="text-sm">{card.productName}</span>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
