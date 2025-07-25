@@ -29,7 +29,7 @@ import { cn } from "@/lib/utils";
 
 interface FormValues {
   email: string;
-  amount: string; // unified field
+  amount: string;
   quantity: string;
 }
 
@@ -154,7 +154,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
       </div>
 
       <Form {...form}>
-        <ScrollArea className="desktop-card-container p-2 rounded-md md:max-h-86 h-[90vh] overflow-y-auto">
+        <ScrollArea className="desktop-card-container p-2 rounded-md md:max-h-86 h-full overflow-y-auto">
           <form onSubmit={onSubmit} className="flex flex-col gap-5 w-full p-2">
             {/* Email */}
             <FormField
@@ -214,7 +214,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
                         key={opt}
                         type="button"
                         onClick={() => handleFixedClick(opt)}
-                        className={`p-2 rounded border text-sm font-medium transition-colors ${
+                        className={`px-2 py-1 rounded border md:text-sm font-medium transition-colors ${
                           sel
                             ? "bg-[#28003E] text-white"
                             : "bg-[#F9EDFF] text-black/45 border-[#F9EDFF]"
