@@ -1,21 +1,25 @@
 import { useState } from "react";
 import { SearchIcon } from "@/assets";
-import { Plus } from "lucide-react";
 import { Input } from "../ui/input";
 import { coinAssets } from "@/constants/coins";
 import { Coin, SelectWalletProps } from "@/types";
+import { UserContext } from "@/types/user";
+import { useOutletContext } from "react-router-dom";
 
 const SelectWallet = ({
   title = "Select Wallet",
   onSelect,
 }: SelectWalletProps) => {
+  const { user } = useOutletContext<UserContext>();
+
+  console.log("user wallets", user.wallets);
+
   const [selectedCardId, setSelectedCardId] = useState<string>(
     coinAssets[0].id
   );
 
   const handleSelect = (coin: Coin) => {
     setSelectedCardId(coin.id);
-
     if (onSelect) {
       onSelect(coin);
     }
@@ -31,19 +35,13 @@ const SelectWallet = ({
       </div>
 
       <div className="flex flex-col gap-2 desktop-card-container rounded-md p-2 md:max-h-[14.4rem]">
-        <div className="flex gap-2 w-full">
-          <div className="relative flex-1">
-            <Input
-              type="search"
-              className="h-9 w-full !pl-9 !rounded-[4.7px]"
-              placeholder="Search"
-            />
-            <img src={SearchIcon} className="absolute size-4 top-3 left-3" />
-          </div>
-          <button className="btn-primary w-2/6 text-xs md:text-[10.5px] font-medium flex items-center gap-1">
-            <Plus className="size-3.75" />
-            <span className="tracking-[-0.12px]">Add Wallet</span>
-          </button>
+        <div className="w-full relative">
+          <Input
+            type="search"
+            placeholder="Search..."
+            className="h-9 w-full !pl-9 !rounded-[4.7px]"
+          />
+          <img src={SearchIcon} className="absolute size-4 top-3 left-3" />
         </div>
 
         <div className="flex flex-col gap-2 overflow-y-auto">

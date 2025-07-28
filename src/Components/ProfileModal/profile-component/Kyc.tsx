@@ -32,10 +32,13 @@ const formSchema = z.object({
   phone_number: z.string().min(1, { message: "Phone number is required" }),
   address: z.string().min(1, { message: "Address is required" }),
   income: z.string().min(1, { message: "Income is required" }),
+  identificationNumber: z
+    .string()
+    .min(1, { message: "Identification number is required" }),
   identificationType: z.enum(["nin_card", "license", "passport", "nin_slip"], {
     message: "Identification type is required",
   }),
-  identification: z
+  utilityBill: z
     .any()
     .refine((files) => files instanceof FileList && files.length === 1, {
       message: "You must upload exactly one file.",
@@ -49,20 +52,20 @@ const formSchema = z.object({
         message: "Only image files are allowed.",
       }
     ),
-  faceVerification: z
-    .any()
-    .refine((files) => files instanceof FileList && files.length === 1, {
-      message: "You must upload exactly one file.",
-    })
-    .refine(
-      (files) => {
-        const file = files?.[0];
-        return file && file.type.startsWith("image/");
-      },
-      {
-        message: "Only image files are allowed.",
-      }
-    ),
+  // faceVerification: z
+  //   .any()
+  //   .refine((files) => files instanceof FileList && files.length === 1, {
+  //     message: "You must upload exactly one file.",
+  //   })
+  //   .refine(
+  //     (files) => {
+  //       const file = files?.[0];
+  //       return file && file.type.startsWith("image/");
+  //     },
+  //     {
+  //       message: "Only image files are allowed.",
+  //     }
+  //   ),
 });
 
 const UserKyc = ({
@@ -71,7 +74,7 @@ const UserKyc = ({
   toggleModal: (modal: ModalType) => void;
 }) => {
   const [IdPreview, setIdPreview] = useState<string | null>(null);
-  const [facePreview, setFacePreview] = useState<string | null>(null);
+  // const [facePreview, setFacePreview] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -84,14 +87,15 @@ const UserKyc = ({
       address: "",
       income: "",
       identificationType: "nin_slip",
-      identification: undefined,
-      faceVerification: undefined,
+      identificationNumber: "",
+      utilityBill: undefined,
+      // faceVerification: undefined,
     },
   });
 
   const handleIdUpload = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps<z.infer<typeof formSchema>, "identification">
+    field: ControllerRenderProps<z.infer<typeof formSchema>, "utilityBill">
   ) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -99,22 +103,22 @@ const UserKyc = ({
       field.onChange(e.target.files);
     }
   };
-  const handleFaceUpload = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: ControllerRenderProps<z.infer<typeof formSchema>, "faceVerification">
-  ) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFacePreview(URL.createObjectURL(file));
-      field.onChange(e.target.files);
-    }
-  };
+  // const handleFaceUpload = (
+  //   e: React.ChangeEvent<HTMLInputElement>,
+  //   field: ControllerRenderProps<z.infer<typeof formSchema>, "faceVerification">
+  // ) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     setFacePreview(URL.createObjectURL(file));
+  //     field.onChange(e.target.files);
+  //   }
+  // };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const file = values.identification?.[0];
+    const file = values.utilityBill?.[0];
     console.log({
       ...values,
-      identification: file?.name,
+      utilityBill: file?.name,
     });
   }
 
@@ -251,10 +255,10 @@ const UserKyc = ({
           {/* ID Upload */}
           <FormField
             control={form.control}
-            name="identification"
+            name="utilityBill"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Upload ID</FormLabel>
+                <FormLabel>Upload Utility Bill</FormLabel>
                 <FormControl>
                   <>
                     {IdPreview && (
@@ -277,7 +281,7 @@ const UserKyc = ({
                         alt="Upload Icon"
                       />
                       <span className="!text-sm text-center w-full font-medium tracking-[-0.17px]">
-                        Upload a valid Government Issued ID
+                        Upload a picture of your Utility Bill
                       </span>
                       <input
                         id="upload-id"
@@ -321,8 +325,23 @@ const UserKyc = ({
             )}
           />
 
-          {/* Face Upload */}
+          {/* ID number  */}
           <FormField
+            control={form.control}
+            name="identificationNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>ID Number</FormLabel>
+                <FormControl>
+                  <Input type="tel" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Face Upload */}
+          {/* <FormField
             control={form.control}
             name="faceVerification"
             render={({ field }) => (
@@ -365,7 +384,7 @@ const UserKyc = ({
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <button type="submit" className="btn-primary mt-7 w-full">
             Submit
