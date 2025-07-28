@@ -80,22 +80,13 @@ const MediaSubscriptions = () => {
   }, [billers, selectedBiller, form]);
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const randomNumber = Array(3)
-      .fill("")
-      .map(() =>
-        characters.charAt(Math.floor(Math.random() * characters.length))
-      )
-      .join("");
-
     if (!data.package) {
       return;
     }
     openPinModal(() => {
       cableSubscriptionMutation.mutate(
         {
-          requestId: "202506241343b012a" + randomNumber,
+          requestId: "",
           serviceID: data.serviceID,
           billersCode: data.phone,
           variation_code: data.package,

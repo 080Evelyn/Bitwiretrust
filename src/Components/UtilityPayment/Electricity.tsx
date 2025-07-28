@@ -181,15 +181,6 @@ const Electricity = () => {
   }, [billers, selectedBiller, form]);
 
   const onSubmit = (values: FormData) => {
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const randomNumber = Array(3)
-      .fill("")
-      .map(() =>
-        characters.charAt(Math.floor(Math.random() * characters.length))
-      )
-      .join("");
-
     if (!meterName) {
       console.error("No user found for the provided meter number");
       return;
@@ -198,7 +189,7 @@ const Electricity = () => {
       if (selected === "Prepaid") {
         BuyPrepaidMutation.mutate(
           {
-            requestId: "202506241343b012a" + randomNumber,
+            requestId: "",
             serviceID: values.serviceID,
             variation_code: "prepaid",
             billersCode: values.meterNumber,
@@ -223,7 +214,7 @@ const Electricity = () => {
       } else {
         BuyPostpaidMutation.mutate(
           {
-            requestId: "202506241343b012a" + randomNumber,
+            requestId: "",
             serviceID: values.serviceID,
             variation_code: "postpaid",
             billersCode: values.meterNumber,

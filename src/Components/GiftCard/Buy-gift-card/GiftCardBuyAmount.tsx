@@ -22,7 +22,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { orderGiftCard } from "@/api/giftcard";
 import { getUserId } from "@/utils/AuthStorage";
 import { useOutletContext } from "react-router-dom";
-import { User } from "@/types/user";
+import { UserContext } from "@/types/user";
 import { toast } from "sonner";
 import axios from "axios";
 import { cn } from "@/lib/utils";
@@ -32,8 +32,6 @@ interface FormValues {
   amount: string;
   quantity: string;
 }
-
-type UserContext = { user: User };
 
 interface GiftCardBuyAmountProps {
   selectedCard?: CountryGiftCardListProps;
