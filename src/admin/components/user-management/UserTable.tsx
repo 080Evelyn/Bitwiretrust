@@ -60,9 +60,9 @@ const UserTable = () => {
     <div className="bg-white rounded-md px-3 py-2">
       <div className="flex flex-col gap-3">
         <h3 className="text-sm py-2 font-semibold text-[#7901b1]">
-          KYC Verification
+          Users Management
         </h3>
-        <span className="border-b-[0.5px] w-full border-[#D9D9D9]" />
+        <hr className="border-[#D9D9D9]" />
       </div>
       <Table>
         <TableHeader>

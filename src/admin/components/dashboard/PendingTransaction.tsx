@@ -39,6 +39,15 @@ const PendingTransaction = () => {
       transactionId: "BW-TRSF-WTAZW",
       status: "Successful",
     },
+    {
+      id: 4,
+      user: {
+        name: "John Doe",
+      },
+      transactionType: "Airtime Purchase",
+      transactionId: "BW-TRSF-WTAZW",
+      status: "Successful",
+    },
   ];
 
   return (
@@ -48,7 +57,7 @@ const PendingTransaction = () => {
           <h3 className="py-2 font-semibold text-[#7901b1]">
             Pending Transactions
           </h3>
-          <span>Today</span>
+          <h3 className="ml-1">Today</h3>
         </div>
         <span className="border-b-[0.5px] w-full border-[#D9D9D9]" />
       </div>
