@@ -29,8 +29,8 @@ import { purchaseAirtime } from "@/api/micro-transaction";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
-import { FaSpinner } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
+import ButtonLoading from "../common/ButtonLoading";
 
 interface FormData {
   phone: string;
@@ -122,6 +122,7 @@ const Airtime = () => {
         onSuccess: (response) => {
           toast.success(response.data.response_description);
           queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
+          form.reset();
         },
 
         onError: (error: unknown) => {
@@ -277,14 +278,7 @@ const Airtime = () => {
             type="submit"
             disabled={isLoading}
           >
-            {isLoading ? (
-              <span className="inline-flex items-center">
-                Processing...
-                <FaSpinner className="animate-spin ml-1" />
-              </span>
-            ) : (
-              "Buy Now"
-            )}
+            {isLoading ? <ButtonLoading /> : "Buy Now"}
           </button>
         </div>
       </form>

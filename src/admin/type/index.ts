@@ -6,3 +6,19 @@ export interface TransactionLogProps {
   status: string;
   date: Date;
 }
+
+export interface KycData {
+  dateOfBirth: string;
+  documentType: string;
+  email: string;
+  fullName: string;
+  gender: string;
+  idNumber: string;
+  phoneNumber: string;
+  residentialAddress: string;
+  sourceOfIncome: string;
+  status: string;
+  submittedAt: string;
+  userId: string;
+  utilityBillImageUrl: string;
+}

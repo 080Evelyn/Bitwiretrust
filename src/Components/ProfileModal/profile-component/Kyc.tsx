@@ -21,10 +21,36 @@ import { z } from "zod";
 import { useState } from "react";
 import { GalleryAdd } from "@/assets";
 import { ControllerRenderProps } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { kycSubmission } from "@/api/kyc";
+import { KycSubmitProps } from "@/types";
+import { getUserId } from "@/utils/AuthStorage";
+import { toast } from "sonner";
+import axios from "axios";
+import ButtonLoading from "@/Components/common/ButtonLoading";
 
 const formSchema = z.object({
   fullName: z.string().min(1, { message: "Full Name is required." }),
-  dob: z.string().min(1, { message: "Date of Birth is required" }),
+  dob: z
+    .string()
+    .min(1, { message: "Date of birth is required" })
+    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Invalid date format" })
+    .refine(
+      (date) => {
+        const dobDate = new Date(date);
+        const today = new Date(); // Current date
+        const age = today.getFullYear() - dobDate.getFullYear();
+        const monthDiff = today.getMonth() - dobDate.getMonth();
+        const dayDiff = today.getDate() - dobDate.getDate();
+
+        // Adjust age if birthday hasn't occurred this year
+        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+          return age - 1 >= 18;
+        }
+        return age >= 18;
+      },
+      { message: "You must be 18 years of age or older" }
+    ),
   gender: z.enum(["male", "female", "other"], {
     message: "Gender is required",
   }),
@@ -35,7 +61,7 @@ const formSchema = z.object({
   identificationNumber: z
     .string()
     .min(1, { message: "Identification number is required" }),
-  identificationType: z.enum(["nin_card", "license", "passport", "nin_slip"], {
+  identificationType: z.enum(["nin", "license", "passport", "bvn"], {
     message: "Identification type is required",
   }),
   utilityBill: z
@@ -86,7 +112,7 @@ const UserKyc = ({
       phone_number: "",
       address: "",
       income: "",
-      identificationType: "nin_slip",
+      identificationType: "bvn",
       identificationNumber: "",
       utilityBill: undefined,
       // faceVerification: undefined,
@@ -114,13 +140,43 @@ const UserKyc = ({
   //   }
   // };
 
+  const submitKycMutation = useMutation({
+    mutationFn: (data: KycSubmitProps) => kycSubmission(data),
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    const file = values.utilityBill?.[0];
-    console.log({
-      ...values,
-      utilityBill: file?.name,
+    const requestData = {
+      userId: getUserId() || "0",
+      idNumber: values.identificationNumber,
+      email: values.email,
+      phoneNumber: values.phone_number,
+      residentialAddress: values.address,
+      gender: values.gender,
+      dateOfBirth: values.dob,
+      sourceOfIncome: values.income,
+      documentType: values.identificationType,
+      utilityBillImageUrl: values.utilityBill?.[0]?.name,
+    };
+
+    submitKycMutation.mutate(requestData, {
+      onSuccess: (response) => {
+        toast.success(response.data);
+        form.reset();
+      },
+
+      onError: (error: unknown) => {
+        if (axios.isAxiosError(error)) {
+          const responseDesc =
+            error.response?.data?.responseDesc || "Something went wrong";
+          toast.error(responseDesc);
+        } else {
+          toast.error("Unexpected error occurred");
+        }
+      },
     });
   }
+
+  const isSubmitLoading = submitKycMutation.isPending;
 
   return (
     <div className="modal terms-conditions-modal">
@@ -252,7 +308,7 @@ const UserKyc = ({
             )}
           />
 
-          {/* ID Upload */}
+          {/* Utility Bill Upload */}
           <FormField
             control={form.control}
             name="utilityBill"
@@ -312,8 +368,8 @@ const UserKyc = ({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="z-1000">
-                    <SelectItem value="nin_slip">NIN Slip</SelectItem>
-                    <SelectItem value="nin_card">NIN Card</SelectItem>
+                    <SelectItem value="bvn">BVN</SelectItem>
+                    <SelectItem value="nin">NIN </SelectItem>
                     <SelectItem value="passport">
                       International Passport
                     </SelectItem>
@@ -386,8 +442,12 @@ const UserKyc = ({
             )}
           /> */}
 
-          <button type="submit" className="btn-primary mt-7 w-full">
-            Submit
+          <button
+            type="submit"
+            disabled={isSubmitLoading}
+            className="btn-primary mt-7 w-full"
+          >
+            {isSubmitLoading ? <ButtonLoading /> : "Submit"}
           </button>
         </form>
       </Form>
