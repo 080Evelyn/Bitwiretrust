@@ -185,6 +185,21 @@ export interface TransactionData {
   transactionType: "CREDIT" | "DEBIT" | "Announcement";
 }
 
+export interface KycSubmitProps {
+  userId: string;
+  idNumber: string;
+  email: string;
+  phoneNumber: string;
+  residentialAddress: string;
+  gender: string;
+  dateOfBirth: string;
+  sourceOfIncome: string;
+  documentType: string;
+  utilityBillImageUrl: string;
+  //   documentImageUrl: string;
+  //   selfieImageUrl: string;
+}
+
 export interface TransactionListResponse {
   responseCode: string;
   responseMsg: string;
