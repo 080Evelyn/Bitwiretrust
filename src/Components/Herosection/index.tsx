@@ -40,7 +40,7 @@ const Herosection = (_props: Props) => {
             <span>Bitwire Trust</span>
           </h1>
           <p>
-            The revolutionary app that brings simplicity and convenienceto your
+            The revolutionary app that brings simplicity and convenience to your
             financial life like never before.
           </p>
           <div className="button-group">

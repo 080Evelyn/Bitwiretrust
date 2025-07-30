@@ -25,7 +25,7 @@ const ComingSoon = () => {
         </DialogHeader>
         <button
           onClick={() => navigate("/dashboard")}
-          className="mt-4 px-4 py-2 bg-[#7910B1] hover:scale-105 hover:bg-[#7910B1]/80 cursor-pointer text-white rounded-sm shadow-md"
+          className="mt-4 px-4 py-2 bg-[#7910B1] hover:scale-105 ease-in-out duration-200 hover:bg-[#7910B1]/80 cursor-pointer text-white rounded-sm shadow-md"
         >
           Go to Dashboard
         </button>
