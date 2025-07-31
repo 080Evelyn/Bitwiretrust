@@ -1,15 +1,19 @@
 export const servicesConstant = [
   {
     name: "Card Transfers",
+    id: "cardTransfer",
   },
   {
     name: "Utility Payment",
+    id: "utilityPayment",
   },
   {
     name: "Gift Cards",
+    id: "giftCard",
   },
   {
     name: "Coins",
+    id: "coin",
   },
 ];
 
