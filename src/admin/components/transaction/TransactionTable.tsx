@@ -35,7 +35,6 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
 
   const contents: TransactionLogProps[] =
     filteredTransactionResponse?.data.content ?? [];
-  console.log(contents);
 
   return (
     <div className="bg-white rounded-md px-3 py-2">
