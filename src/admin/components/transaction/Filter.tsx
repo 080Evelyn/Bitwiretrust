@@ -48,8 +48,11 @@ const Filter = ({ searchParams, setSearchParams }: FilterProps) => {
       let fromDate: Date | null = null;
 
       if (preset === "Last 3 days") {
-        fromDate = new Date();
-        fromDate.setDate(now.getDate() - 3);
+        fromDate = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate() - 3
+        );
       } else if (preset === "This Month") {
         fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
       } else if (preset === "Last 3 months") {
@@ -61,8 +64,9 @@ const Filter = ({ searchParams, setSearchParams }: FilterProps) => {
       }
 
       if (fromDate) {
-        searchParams.set("fromDate", fromDate.toISOString());
-        searchParams.set("toDate", now.toISOString());
+        const formatDate = (date: Date) => date.toISOString().split("T")[0];
+        searchParams.set("fromDate", formatDate(fromDate));
+        searchParams.set("toDate", formatDate(now));
         searchParams.set("datePreset", preset);
       }
     }
