@@ -22,3 +22,12 @@ export interface KycData {
   userId: string;
   utilityBillImageUrl: string;
 }
+
+export interface FilteredTransactionProps {
+  transactionTypes?: string[];
+  status?: string;
+  fromDate?: string;
+  toDate?: string;
+  page?: string;
+  size?: string;
+}

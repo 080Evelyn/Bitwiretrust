@@ -7,26 +7,34 @@ import {
   TableRow,
 } from "@/Components/ui/table";
 import { ChevronRightCircle, User2 } from "lucide-react";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
+import { Dialog, DialogTrigger } from "../ui/dialog";
 import { useQuery } from "@tanstack/react-query";
-import { transactionLog } from "@/admin/api/transactions";
-import { TransactionLogProps } from "@/admin/type";
 import { Skeleton } from "@/Components/ui/skeleton";
-import { formatDate } from "date-fns";
+import UsersDialog from "./users-dialog";
+import { TransactionLogProps } from "@/admin/type";
+import { format } from "date-fns";
+import { filteredTransaction } from "@/admin/api/transactions";
 
-const TransactionTable = () => {
-  const { isFetching, data: transactionLogResponse } = useQuery({
-    queryKey: ["transactionLog"],
-    queryFn: transactionLog,
+interface TransactionTableProps {
+  searchParams: URLSearchParams;
+}
+
+const TransactionTable = ({ searchParams }: TransactionTableProps) => {
+  const { isFetching, data: filteredTransactionResponse } = useQuery({
+    queryKey: ["transactionLogFiltered", searchParams.toString()],
+    queryFn: () =>
+      filteredTransaction({
+        transactionTypes: searchParams.getAll("transactionTypes") || [],
+        status: searchParams.get("status")!,
+        fromDate: searchParams.get("fromDate")!,
+        toDate: searchParams.get("toDate")!,
+        page: searchParams.get("page") || "0",
+        size: searchParams.get("size") || "20",
+      }),
   });
-  const contents = transactionLogResponse?.data ?? [];
+
+  const contents: TransactionLogProps[] =
+    filteredTransactionResponse?.data.content ?? [];
 
   return (
     <div className="bg-white rounded-md px-3 py-2">
@@ -59,7 +67,7 @@ const TransactionTable = () => {
           </TableBody>
         ) : (
           <TableBody>
-            {contents.map((content: TransactionLogProps) => (
+            {contents?.map((content) => (
               <TableRow
                 key={content.transactionId}
                 className="font-semibold text-xs"
@@ -84,7 +92,7 @@ const TransactionTable = () => {
                   {content.transactionId}
                 </TableCell>
                 <TableCell className="font-medium">
-                  {formatDate(content.date, "dd MMM, yyyy, hh:mm:ss")}
+                  {format(new Date(content.date), "dd MMM, yyyy, hh:mm:ss")}
                 </TableCell>
                 <TableCell className="font-medium">
                   <div className="flex items-center gap-2">
@@ -101,67 +109,7 @@ const TransactionTable = () => {
                     <DialogTrigger>
                       <ChevronRightCircle className="size-5 cursor-pointer text-[#141B34]" />
                     </DialogTrigger>
-                    <DialogContent className="w-[402px]">
-                      <DialogTitle className="sr-only">
-                        User Details
-                      </DialogTitle>
-                      <DialogDescription>
-                        <div className="flex justify-center pt-2 pb-4">
-                          {content.avatar ? (
-                            <img
-                              src={content.avatar}
-                              className="size-[108px] rounded-full object-contain"
-                            />
-                          ) : (
-                            <div className="p-2 items-center justify-center max-h-22 max-w-22 rounded-full bg-[#28003E]">
-                              <User2 className="fill-[#B71FFF]/40 size-18" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          <div className="flex text-foreground justify-between items-center">
-                            <span className="text-sm font-semibold">Name</span>
-                            <p className="text-xs font-light">{content.name}</p>
-                          </div>
-                          <div className="flex text-foreground justify-between items-center">
-                            <span className="text-sm font-semibold">
-                              Transaction Type
-                            </span>
-                            <p className="text-xs font-light">
-                              {content.transactionType}
-                            </p>
-                          </div>
-                          <div className="flex text-foreground justify-between items-center">
-                            <span className="text-sm font-semibold">
-                              Transaction ID
-                            </span>
-                            <p className="text-xs font-light">
-                              {content.transactionId}
-                            </p>
-                          </div>
-                          <div className="flex text-foreground justify-between items-center">
-                            <span className="text-sm font-semibold">Date</span>
-                            <p className="text-xs font-light">
-                              {" "}
-                              {typeof content.date === "string"
-                                ? content.date
-                                : content.date?.toLocaleString?.()}
-                            </p>
-                          </div>
-                          <div className="flex text-foreground justify-between items-center">
-                            <span className="text-sm font-semibold">
-                              Status
-                            </span>
-                            <p className="text-xs font-light">
-                              {content.status}
-                            </p>
-                          </div>
-                        </div>
-                      </DialogDescription>
-                      <DialogClose className="btn-primary mt-1 mx-auto w-2/3">
-                        Done
-                      </DialogClose>
-                    </DialogContent>
+                    <UsersDialog {...content} />
                   </Dialog>
                 </TableCell>
               </TableRow>
