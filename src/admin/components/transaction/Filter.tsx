@@ -39,25 +39,32 @@ const Filter = ({ searchParams, setSearchParams }: FilterProps) => {
 
   const toggleDate = (preset: string) => {
     const now = new Date();
-    let fromDate: Date | null = null;
 
-    if (preset === "Last 3 days") {
-      fromDate = new Date();
-      fromDate.setDate(now.getDate() - 3);
-    } else if (preset === "This Month") {
-      fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
-    } else if (preset === "Last 3 months") {
-      fromDate = new Date(now.getFullYear(), now.getMonth() - 3, now.getDate());
-    }
-
-    if (fromDate) {
-      searchParams.set("fromDate", fromDate.toISOString());
-      searchParams.set("toDate", now.toISOString());
-      searchParams.set("datePreset", preset);
-    } else {
+    if (searchParams.get("datePreset") === preset) {
       searchParams.delete("fromDate");
       searchParams.delete("toDate");
       searchParams.delete("datePreset");
+    } else {
+      let fromDate: Date | null = null;
+
+      if (preset === "Last 3 days") {
+        fromDate = new Date();
+        fromDate.setDate(now.getDate() - 3);
+      } else if (preset === "This Month") {
+        fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      } else if (preset === "Last 3 months") {
+        fromDate = new Date(
+          now.getFullYear(),
+          now.getMonth() - 3,
+          now.getDate()
+        );
+      }
+
+      if (fromDate) {
+        searchParams.set("fromDate", fromDate.toISOString());
+        searchParams.set("toDate", now.toISOString());
+        searchParams.set("datePreset", preset);
+      }
     }
 
     setSearchParams(searchParams);
