@@ -1,4 +1,7 @@
-import { transactionStatusCount } from "@/admin/api/transactions";
+import {
+  totalTransactionCount,
+  transactionStatusCount,
+} from "@/admin/api/transactions";
 import { AdminTrendingUp, DoubleTick } from "@/assets";
 import { useQuery } from "@tanstack/react-query";
 
@@ -8,6 +11,13 @@ const Overview = () => {
     queryFn: transactionStatusCount,
   });
   const totalTransactionStatus = totalTransactionStatusResponse?.data ?? [];
+
+  const { data: totalTransactionCountResponse } = useQuery({
+    queryKey: ["totalTransactionCount"],
+    queryFn: totalTransactionCount,
+  });
+  const totalTransactions =
+    totalTransactionCountResponse?.data.transactionTotal ?? "";
 
   return (
     <div className="py-2">
@@ -25,7 +35,7 @@ const Overview = () => {
             </div>
           </div>
           <div className="flex font-semibold items-baseline">
-            <span className="text-2xl"> 120,000,000</span>
+            <span className="text-2xl">{totalTransactions} </span>
           </div>
         </div>
         <div className="bg-white rounded-lg py-4 px-2.5">

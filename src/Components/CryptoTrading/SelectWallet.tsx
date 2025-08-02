@@ -1,22 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SearchIcon } from "@/assets";
 import { Input } from "../ui/input";
 import { coinAssets } from "@/constants/coins";
 import { Coin, SelectWalletProps } from "@/types";
-import { UserContext } from "@/types/user";
-import { useOutletContext } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { fetchWallets } from "@/api/crypto";
 
 const SelectWallet = ({
   title = "Select Wallet",
   onSelect,
 }: SelectWalletProps) => {
-  const { user } = useOutletContext<UserContext>();
-
-  console.log("user wallets", user.wallets);
-
   const [selectedCardId, setSelectedCardId] = useState<string>(
     coinAssets[0].id
   );
+
+  const mutateWallets = useMutation({
+    mutationFn: fetchWallets,
+  });
+
+  useEffect(() => {
+    mutateWallets.mutate();
+    console.log(mutateWallets.data);
+  }, []);
 
   const handleSelect = (coin: Coin) => {
     setSelectedCardId(coin.id);
