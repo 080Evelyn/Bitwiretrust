@@ -1,5 +1,4 @@
 import hexToRgba from "@/lib/hexToRgba";
-import { Coin } from "@/types";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { actions } from "@/constants/coins";
@@ -7,12 +6,13 @@ import BuyModal from "./modalContents/BuyModal";
 import SendModal from "./modalContents/SendModal";
 import DepositModal from "./modalContents/DepositModal";
 import SwapModal from "./modalContents/SwapModal";
+import { WalletProps } from "@/types/crypto";
 
-interface WalletProps {
-  coin: Coin | null;
+interface CoinWalletProps {
+  coin: WalletProps | null;
 }
 
-const Wallet = ({ coin }: WalletProps) => {
+const Wallet = ({ coin }: CoinWalletProps) => {
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const handleActionClick = (actionTitle: string) => {
@@ -55,17 +55,17 @@ const Wallet = ({ coin }: WalletProps) => {
 
       <div
         className="flex flex-col items-center text-white gap-6 md:gap-4 rounded-md max-md:rounded-none px-3 pt-11 pb-8 md:py-7.5"
-        style={{ backgroundColor: coin?.bgColor }}
+        style={{ backgroundColor: "black" }}
       >
         {coin ? (
           <>
-            <h3 className="font-semibold text-xl md:text-[15px]">
-              {coin.symbol} Wallet
+            <h3 className="font-semibold capitalize text-xl md:text-[15px]">
+              {coin.currency} Wallet
             </h3>
             <div className="flex flex-col items-center">
               <span className="md:text-xs">Balance</span>
               <h1 className="font-bold text-[34px] md:text-[1.6rem] tracking-[-0.13px]">
-                N{coin.value}
+                N{coin.convertedBalance}
               </h1>
             </div>
           </>
@@ -83,9 +83,7 @@ const Wallet = ({ coin }: WalletProps) => {
               <div
                 className="size-13 md:size-9.75 rounded-[4.5px] drop-shadow-lg flex items-center justify-center"
                 style={{
-                  backgroundColor: coin
-                    ? hexToRgba(coin.bgColor, 0.5)
-                    : undefined,
+                  backgroundColor: coin ? hexToRgba("#7910B1", 0.5) : undefined,
                   mixBlendMode: "screen",
                 }}
               >
@@ -113,9 +111,9 @@ const Wallet = ({ coin }: WalletProps) => {
               Back
             </span>
 
-            <DialogTitle className="text-center font-semibold max-md:mt-4">
+            <DialogTitle className="text-center font-semibold max-md:mt-4 capitalize">
               {(selectedAction === "Buy" || selectedAction === "Send") && coin
-                ? `${selectedAction} ${coin.symbol}`
+                ? `${selectedAction} ${coin.currency}`
                 : selectedAction}
             </DialogTitle>
           </DialogHeader>
