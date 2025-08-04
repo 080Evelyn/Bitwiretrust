@@ -15,6 +15,13 @@ export const transactionStatusCount = async () => {
   return response.data;
 };
 
+export const totalTransactionCount = async () => {
+  const response = await axios.get(
+    `${url}/v1/admin/overview/transactions/total`
+  );
+  return response.data;
+};
+
 export const filteredTransaction = async (params: FilteredTransactionProps) => {
   const response = await axios.get(`${url}/v1/admin/transactions/filter`, {
     params,

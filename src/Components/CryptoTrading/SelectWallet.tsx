@@ -1,29 +1,33 @@
 import { useState } from "react";
 import { SearchIcon } from "@/assets";
 import { Input } from "../ui/input";
-import { coinAssets } from "@/constants/coins";
-import { Coin, SelectWalletProps } from "@/types";
-import { UserContext } from "@/types/user";
-import { useOutletContext } from "react-router-dom";
+import { SelectWalletProps, WalletProps } from "@/types/crypto";
 
 const SelectWallet = ({
   title = "Select Wallet",
   onSelect,
+  wallets,
+  isPending,
+  error,
 }: SelectWalletProps) => {
-  const { user } = useOutletContext<UserContext>();
-
-  console.log("user wallets", user.wallets);
-
   const [selectedCardId, setSelectedCardId] = useState<string>(
-    coinAssets[0].id
+    wallets[0]?.name
   );
 
-  const handleSelect = (coin: Coin) => {
-    setSelectedCardId(coin.id);
-    if (onSelect) {
-      onSelect(coin);
-    }
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSelect = (wallet: WalletProps) => {
+    setSelectedCardId(wallet?.name);
+    onSelect?.(wallet);
   };
+
+  const filteredWallets = wallets
+    ? wallets.filter(
+        (wallet: WalletProps) =>
+          wallet.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
+          wallet.currency?.toLowerCase().includes(searchTerm?.toLowerCase())
+      )
+    : [];
 
   return (
     <div className="flex flex-col gap-3">
@@ -39,37 +43,52 @@ const SelectWallet = ({
           <Input
             type="search"
             placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             className="h-9 w-full !pl-9 !rounded-[4.7px]"
           />
-          <img src={SearchIcon} className="absolute size-4 top-3 left-3" />
+          <img
+            src={SearchIcon}
+            className="absolute size-4 top-3 left-3"
+            alt="Search"
+          />
         </div>
 
         <div className="flex flex-col gap-2 overflow-y-auto">
-          {coinAssets.map((coin) => (
-            <div
-              key={coin.id}
-              onClick={() => handleSelect(coin)}
-              className={`flex font-medium justify-between py-4 md:py-1.5 px-1.5 md:px-2.5 rounded-sm cursor-pointer ${
-                selectedCardId === coin.id
-                  ? "md:bg-[#28003E] md:text-white bg-[#F8F8F8]"
-                  : "bg-[#F8F8F8] "
-              }`}
-            >
-              <div className="flex gap-2 items-center">
-                <img src={coin.image} alt={coin.name} className="size-8" />
-                <span className="text-sm">{coin.name}</span>
-              </div>
+          {isPending ? (
+            <span className="text-sm text-center">Loading...</span>
+          ) : error ? (
+            <span className="text-sm text-center text-red-500">
+              Error loading wallets
+            </span>
+          ) : filteredWallets.length > 0 ? (
+            filteredWallets.map((wallet: WalletProps) => (
               <div
-                className="flex flex-col items-end gap-1 tracking-[-0.12px]"
-                style={{ fontFamily: "Poppins, sans-serif" }}
+                key={wallet.name}
+                onClick={() => handleSelect(wallet)}
+                className={`flex font-medium justify-between py-4 md:py-1.5 px-1.5 md:px-2.5 rounded-sm cursor-pointer ${
+                  selectedCardId === wallet.name
+                    ? "md:bg-[#28003E] md:text-white bg-[#F8F8F8]"
+                    : "bg-[#F8F8F8]"
+                }`}
               >
-                <span className="text-xs font-medium ">
-                  {coin.amount} {coin.symbol}
-                </span>
-                <span className="text-[10px]">{coin.value} NGN</span>
+                <div className="flex gap-2 items-center">
+                  <span className="text-sm">{wallet.name}</span>
+                </div>
+                <div
+                  className="flex flex-col items-end gap-1 tracking-[-0.12px]"
+                  style={{ fontFamily: "Poppins, sans-serif" }}
+                >
+                  <span className="text-xs font-medium">{wallet.balance}</span>
+                  <span className="text-[10px]">
+                    {wallet.convertedBalance} NGN
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <span className="text-sm text-center">No Wallets Found</span>
+          )}
         </div>
       </div>
     </div>

@@ -52,7 +52,11 @@ const Currency = ({
               onChange={(e) => setSearchTerm(e.target.value)}
               className="h-9 w-full !pl-9 !rounded-[4.7px]"
             />
-            <img src={SearchIcon} className="absolute size-4 top-3 left-3" />
+            <img
+              src={SearchIcon}
+              alt="search"
+              className="absolute size-4 top-3 left-3"
+            />
           </div>
         </div>
 

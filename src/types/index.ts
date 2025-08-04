@@ -143,21 +143,6 @@ export interface GiftCardAmountProps {
   selectedCard: { tittle: string; image: string; rate: number };
 }
 
-export interface Coin {
-  id: string;
-  name: string;
-  image: string;
-  amount: string;
-  value?: string;
-  symbol: string;
-  bgColor: string;
-}
-
-export interface SelectWalletProps {
-  title?: string;
-  onSelect?: (coin: Coin) => void;
-}
-
 export interface NotificationItem {
   id: string;
   title: string;

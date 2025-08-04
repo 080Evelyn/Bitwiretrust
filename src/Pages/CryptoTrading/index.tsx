@@ -3,16 +3,29 @@ import TransactionHistory from "@/Components/CryptoTrading/TransactionHistory";
 import Wallet from "@/Components/CryptoTrading/Wallet";
 import BalanceOverview from "@/Components/HomeDashboard/BalanceOverview";
 import { useState } from "react";
-import { Coin } from "@/types";
-import { coinAssets } from "@/constants/coins";
+
 import BackArrowButton from "@/Components/ui/back-arrow-button";
+import { useQuery } from "@tanstack/react-query";
+import { fetchWallets } from "@/api/crypto";
+import { WalletProps } from "@/types/crypto";
 
 const CryptoTrading = () => {
   const [mobileStep, setMobileStep] = useState<1 | 2>(1);
-  const [selectedCoin, setSelectedCoin] = useState<Coin>(coinAssets[0]);
 
-  const handleSelectCoin = (coin: Coin) => {
-    setSelectedCoin(coin);
+  const {
+    isPending: selectedWalletsPending,
+    data: walletsResponse,
+    error: selectedWalletsError,
+  } = useQuery({
+    queryFn: fetchWallets,
+    queryKey: ["all-wallets"],
+  });
+
+  const wallets = walletsResponse?.data ?? [];
+
+  const [selectedCoin, setSelectedCoin] = useState<WalletProps>(wallets[0]);
+  const handleSelectCoin = (wallet: WalletProps) => {
+    setSelectedCoin(wallet);
     setMobileStep(2);
   };
 
@@ -24,7 +37,13 @@ const CryptoTrading = () => {
 
       {/* Desktop View */}
       <div className="hidden md:grid grid-cols-3 gap-3 w-full">
-        <SelectWallet title="Select Wallet" onSelect={handleSelectCoin} />
+        <SelectWallet
+          title="Select Wallet"
+          onSelect={handleSelectCoin}
+          wallets={wallets}
+          isPending={selectedWalletsPending}
+          error={selectedWalletsError}
+        />
         <Wallet coin={selectedCoin} />
         <TransactionHistory coin={selectedCoin} />
       </div>
@@ -34,7 +53,13 @@ const CryptoTrading = () => {
         {mobileStep === 1 && (
           <>
             <BackArrowButton pathName="/dashboard" />
-            <SelectWallet title="Select Wallet" onSelect={handleSelectCoin} />
+            <SelectWallet
+              title="Select Wallet"
+              onSelect={handleSelectCoin}
+              wallets={wallets}
+              isPending={selectedWalletsPending}
+              error={selectedWalletsError}
+            />
           </>
         )}
         {mobileStep === 2 && (
