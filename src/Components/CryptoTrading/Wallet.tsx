@@ -6,11 +6,7 @@ import BuyModal from "./modalContents/BuyModal";
 import SendModal from "./modalContents/SendModal";
 import DepositModal from "./modalContents/DepositModal";
 import SwapModal from "./modalContents/SwapModal";
-import { WalletProps } from "@/types/crypto";
-
-interface CoinWalletProps {
-  coin: WalletProps | null;
-}
+import { CoinWalletProps } from "@/types/crypto";
 
 const Wallet = ({ coin }: CoinWalletProps) => {
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
@@ -32,7 +28,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
       case "Send":
         return <SendModal closeModal={closeModal} />;
       case "Deposit":
-        return <DepositModal />;
+        return <DepositModal coin={coin} />;
       case "Swap":
         return <SwapModal closeModal={closeModal} coin={coin} />;
       default:
