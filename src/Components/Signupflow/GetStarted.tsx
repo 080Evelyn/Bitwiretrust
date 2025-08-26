@@ -60,6 +60,10 @@ const GetStarted = ({
     handleNextStep();
   };
 
+  console.log(
+    "Login console log added to debug recent change pushed to github"
+  );
+
   return (
     <div className="flex w-full">
       <div
