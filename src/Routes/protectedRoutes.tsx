@@ -24,7 +24,6 @@ export function UserProtectedRoute() {
   const { isLoggingOut, isAuthLoading, isAuthenticated, userRole, userId } =
     useAuthCheck();
   const token = getToken();
-  console.log("this is working");
 
   const {
     data: user,
