@@ -104,14 +104,14 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
                     <span className="capitalize">{content.status}</span>
                   </div>
                 </TableCell>
-                <TableCell className="text-right">
-                  <Dialog>
+                <Dialog>
+                  <TableCell className="text-right">
                     <DialogTrigger>
                       <ChevronRightCircle className="size-5 cursor-pointer text-[#141B34]" />
                     </DialogTrigger>
                     <UsersDialog {...content} />
-                  </Dialog>
-                </TableCell>
+                  </TableCell>
+                </Dialog>
               </TableRow>
             ))}
           </TableBody>

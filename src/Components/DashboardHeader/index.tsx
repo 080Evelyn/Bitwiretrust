@@ -32,7 +32,8 @@ const DashboardHeader = ({ user }: { user: User }) => {
     }
   }, [transactionsList]);
 
-  const fullName = user?.firstName + " " + user?.lastName;
+  const fullName = user?.first_name + " " + user?.last_name;
+  console.log(user);
 
   const HeaderContent = () => (
     <div className="dashboard-header flex items-center justify-between">

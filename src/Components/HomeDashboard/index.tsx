@@ -19,26 +19,17 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import BalanceOverview from "./BalanceOverview";
 import TransferModal from "./TransferModal";
-import FundAccountModal from "./FundAccountModal";
 import { useQuery } from "@tanstack/react-query";
-import { dvaInfo } from "@/api/wallet-service";
-import { DvaAccountInfo } from "@/types/dashboard";
 import { transactions } from "@/api/user-notification";
 import { Skeleton } from "../ui/skeleton";
 
 type Props = object;
-interface DvaApiResponse {
-  responseCode: string;
-  responseMsg: string;
-  data: DvaAccountInfo;
-}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const HomeDashboard = (_props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_activeTab, setActiveTab] = useState("All");
   const [isWithdrawalOpen, setIsWithdrawalOpen] = useState(false);
-  const [isFundAccountOpen, setIsFundAccountOpen] = useState(false);
 
   const getBackgroundColor = (name: string) => {
     switch (name.toLowerCase()) {
@@ -114,13 +105,6 @@ const HomeDashboard = (_props: Props) => {
     </div>
   );
 
-  const { data: apiResponse } = useQuery<DvaApiResponse>({
-    queryKey: ["dvaInfo"],
-    queryFn: dvaInfo,
-  });
-
-  const dvaData = apiResponse?.data;
-
   const { isFetching, data: transactionsList } =
     useQuery<TransactionListResponse>({
       queryKey: ["transactions"],
@@ -138,7 +122,7 @@ const HomeDashboard = (_props: Props) => {
           <div className="action-buttons">
             <div
               className="action-button"
-              onClick={() => setIsFundAccountOpen(true)}
+              onClick={() => console.log("Fund account clicked")}
             >
               <img src={gala_add} alt="" />
               <span>Fund</span>
@@ -312,13 +296,6 @@ const HomeDashboard = (_props: Props) => {
       <TransferModal
         isWithdrawalOpen={isWithdrawalOpen}
         setIsWithdrawalOpen={() => setIsWithdrawalOpen(!isWithdrawalOpen)}
-      />
-      <FundAccountModal
-        isFundAccountOpen={isFundAccountOpen}
-        setIsFundAccountOpen={() => {
-          setIsFundAccountOpen(!isFundAccountOpen);
-        }}
-        dvaData={dvaData}
       />
     </>
   );

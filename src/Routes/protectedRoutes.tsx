@@ -25,7 +25,6 @@ export function UserProtectedRoute() {
     useAuthCheck();
   const token = getToken();
 
-  // we fetch user data here only when properly authenticated as user
   const {
     data: user,
     isPending,
@@ -34,9 +33,7 @@ export function UserProtectedRoute() {
     queryKey: ["user", userId],
     queryFn: async () => {
       const res = await axios.get(
-        `${
-          import.meta.env.VITE_API_URL
-        }/v1/user/wallet-service/profile/${userId}`,
+        `${import.meta.env.VITE_API_URL}/v1/users/profile/${userId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       return res.data.data;

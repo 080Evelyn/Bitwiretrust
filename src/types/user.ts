@@ -12,9 +12,9 @@ interface WalletProps {
 }
 
 export interface User {
-  firstName: string;
-  lastName: string;
-  kycVerified: boolean;
+  first_name: string;
+  last_name: string;
+  isKycVerified: boolean;
   email: string;
   wallets: WalletProps[];
 }
