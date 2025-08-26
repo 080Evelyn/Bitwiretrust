@@ -25,6 +25,10 @@ export interface SelectWalletProps {
   error: unknown | null;
 }
 
+export interface CoinWalletProps {
+  coin: WalletProps | null;
+}
+
 export interface Coin {
   id: string;
   name: string;

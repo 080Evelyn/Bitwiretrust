@@ -2,16 +2,11 @@ import { useState } from "react";
 import "./styles.css";
 import { help_circle, password } from "../../assets";
 import { FaEye } from "react-icons/fa";
-import { useQuery } from "@tanstack/react-query";
-import { dvaInfo } from "@/api/wallet-service";
 import { Skeleton } from "../ui/skeleton";
 
 const BalanceOverview = ({ pathName }: { pathName?: string }) => {
   const [hideBalance, setHideBalance] = useState(false);
-  const { data: dvaData } = useQuery({
-    queryKey: ["dvaInfo"],
-    queryFn: dvaInfo,
-  });
+  const isLoading = false;
 
   return (
     <div>
@@ -26,18 +21,13 @@ const BalanceOverview = ({ pathName }: { pathName?: string }) => {
               ₦
               {hideBalance ? (
                 "******"
-              ) : dvaData ? (
+              ) : !isLoading ? (
                 <>
                   {(() => {
-                    const balance = Number(dvaData.data.walletBalance).toFixed(
-                      2
-                    );
-                    const [intPart, decPart] = balance.split(".");
-                    const formattedInt = Number(intPart).toLocaleString();
                     return (
                       <>
-                        {formattedInt}.
-                        <span className="decimal">{decPart}</span>
+                        500.
+                        <span className="decimal">00</span>
                       </>
                     );
                   })()}

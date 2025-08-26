@@ -1,9 +1,10 @@
 import { QrCode, solar_copy } from "@/assets";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
+import { WalletProps } from "@/types/crypto";
 import { Check } from "lucide-react";
 import { useState } from "react";
 
-const Deposit = () => {
+const Deposit = ({ coinWalletAddress }: { coinWalletAddress: string }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
@@ -48,7 +49,7 @@ const Deposit = () => {
         id="wallet-address"
         className="bg-[#F9EDFF] w-full py-4 rounded-md text-[15px] text-center font-medium tracking-[-0.17px]"
       >
-        123h4nyjkmtyvrthbnjdfvsdnklw8wqhodv67456b7n8
+        {coinWalletAddress}
       </div>
     </div>
   );
@@ -58,7 +59,9 @@ const Withdraw = () => {
   return <div>Comming soon</div>;
 };
 
-const DepositModal = () => {
+const DepositModal = ({ coin }: { coin: WalletProps | null }) => {
+  const coinWalletAddress = coin?.address || "";
+
   return (
     <div>
       <Tabs defaultValue="deposit">
@@ -78,7 +81,7 @@ const DepositModal = () => {
         </TabsList>
         <div className="mt-2">
           <TabsContent value="deposit">
-            <Deposit />
+            <Deposit coinWalletAddress={coinWalletAddress} />
           </TabsContent>
           <TabsContent value="withdraw">
             <Withdraw />

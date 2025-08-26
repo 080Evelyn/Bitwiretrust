@@ -46,16 +46,16 @@ const Profile = ({
         <span
           className={cn(
             "text-sm",
-            user?.kycVerified === true
+            user?.isKycVerified === true
               ? "text-green-600"
-              : user?.kycVerified === false
+              : user?.isKycVerified === false
               ? "text-red-600"
               : "text-yellow-500"
           )}
         >
-          {user?.kycVerified === true
+          {user?.isKycVerified === true
             ? "Verified"
-            : user?.kycVerified === false
+            : user?.isKycVerified === false
             ? "Not Verified"
             : "Processing"}
         </span>
