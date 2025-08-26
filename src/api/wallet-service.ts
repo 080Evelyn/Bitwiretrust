@@ -1,17 +1,7 @@
-import { getEmail, getUserId } from "@/utils/AuthStorage";
+import { getUserId } from "@/utils/AuthStorage";
 import axios from "./axiosConfig";
 
 const url = import.meta.env.VITE_API_URL;
-
-export const dvaInfo = async () => {
-  const email = getEmail();
-
-  const response = await axios.get(
-    `${url}/v1/user/wallet-service/dva-info/${email}`
-  );
-
-  return response.data;
-};
 
 export const initiateTransaction = async (data: {
   source: string;
