@@ -30,7 +30,7 @@ const getInitialWallet = (wallets: WalletProps[]): WalletProps | null => {
 };
 
 const SwapModal = ({ coin }: CoinWalletProps) => {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   const [marketPair, setMarketPair] = useState("");
 
   const { data: walletsResponse } = useQuery({
