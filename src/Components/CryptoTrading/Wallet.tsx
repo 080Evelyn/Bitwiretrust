@@ -30,7 +30,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
       case "Deposit":
         return <DepositModal coin={coin} />;
       case "Swap":
-        return <SwapModal closeModal={closeModal} coin={coin} />;
+        return <SwapModal coin={coin} />;
       default:
         return null;
     }

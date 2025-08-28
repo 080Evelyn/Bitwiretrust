@@ -1,17 +1,12 @@
-import { Input } from "@/Components/ui/input";
-import { Coin } from "@/types";
-import { Repeat } from "lucide-react";
-import { coinAssets } from "@/constants/coins";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import SwapDone from "../SwapDone";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-interface SwapModalProps {
-  coin: Coin | null;
-  closeModal: () => void;
-}
+import { CoinWalletProps, TickersProps, WalletProps } from "@/types/crypto";
+import { fetchWallets, tickers, ticker } from "@/api/crypto";
+import { useQuery } from "@tanstack/react-query";
+import SwapForm from "./SwapForm";
 
 // Validation schema
 const formSchema = z.object({
@@ -24,12 +19,38 @@ const formSchema = z.object({
     }),
 });
 
-const SwapModal = ({ coin }: SwapModalProps) => {
-  const defaultFrom = coin || coinAssets[0];
-  const defaultTo = coinAssets.find((c) => c.symbol === "NGN") ?? coinAssets[0];
+const getInitialWallet = (wallets: WalletProps[]): WalletProps | null => {
+  return wallets.length > 0 ? wallets[1] : null;
+};
+
+const SwapModal = ({ coin }: CoinWalletProps) => {
   const [showDone, setShowDone] = useState(false);
-  const [fromCoin, setFromCoin] = useState<Coin>(defaultFrom);
-  const [toCoin, setToCoin] = useState<Coin>(defaultTo);
+  const [marketPair, setMarketPair] = useState("");
+
+  const { data: walletsResponse } = useQuery({
+    queryKey: ["all-wallets"],
+    queryFn: fetchWallets,
+    staleTime: 5 * 60 * 1000,
+  });
+  const wallets = walletsResponse?.data ?? [];
+
+  const { data: tickersPrice } = useQuery({
+    queryKey: ["tickers"],
+    queryFn: tickers,
+  });
+
+  // Fetch specific ticker data when marketPair changes
+  const { data: specificTicker } = useQuery({
+    queryKey: ["ticker", marketPair],
+    queryFn: () => ticker(marketPair),
+    enabled: !!marketPair,
+  });
+
+  const AllMarketPrice = tickersPrice?.data;
+  console.log("AllMarketPrice", AllMarketPrice);
+  const [selectedWallet, setSelectedWallet] = useState<WalletProps | null>(() =>
+    getInitialWallet(wallets)
+  );
 
   const form = useForm<{ amount: string }>({
     resolver: zodResolver(formSchema),
@@ -39,107 +60,92 @@ const SwapModal = ({ coin }: SwapModalProps) => {
   });
 
   const amount = form.watch("amount");
-  const parsedAmount = parseFloat(amount);
-  const fromRate = parseFloat(fromCoin?.value?.replace(/,/g, "") || "0");
-  const toRate = parseFloat(toCoin?.value?.replace(/,/g, "") || "0");
 
-  const converted =
-    fromRate && toRate && !isNaN(parsedAmount)
-      ? parsedAmount * (fromRate / toRate)
-      : 0;
+  // Determine market pair when wallet selection changes
+  useEffect(() => {
+    if (selectedWallet && coin) {
+      const pair = `${coin.currency}${selectedWallet.currency}`.toLowerCase();
+      setMarketPair(pair);
+    }
+  }, [selectedWallet, coin]);
+
+  // Calculate conversion when amount or ticker data changes
+  const convertedAmount = useMemo(() => {
+    if (!amount || !selectedWallet) return 0;
+
+    let rate = 0;
+
+    // Try specific ticker first
+    if (specificTicker?.data?.ticker?.last) {
+      rate = parseFloat(specificTicker.data.ticker.last);
+    }
+    // Fallback to tickers list
+    else if (AllMarketPrice) {
+      const marketData = AllMarketPrice.find(
+        (m: TickersProps) => m.market === marketPair
+      );
+      if (marketData) {
+        rate = parseFloat(marketData.last);
+      } else {
+        // Try inverse pair
+        const inversePair =
+          `${selectedWallet.currency}${coin?.currency}`.toLowerCase();
+        const inverseMarketData = AllMarketPrice.find(
+          (m: TickersProps) => m.market === inversePair
+        );
+        if (inverseMarketData) {
+          const invRate = parseFloat(inverseMarketData.last);
+          if (invRate > 0) rate = 1 / invRate;
+        }
+      }
+    }
+
+    if (rate > 0) {
+      const amountNum = parseFloat(amount);
+      return amountNum * rate;
+    }
+
+    return 0;
+  }, [
+    amount,
+    selectedWallet,
+    specificTicker,
+    AllMarketPrice,
+    marketPair,
+    coin,
+  ]);
 
   const handleSubmit = form.handleSubmit((values) => {
     const numericAmount = parseFloat(values.amount);
-    console.log(
-      `Swapping ${numericAmount} ${fromCoin.symbol} → ${converted.toFixed(6)} ${
-        toCoin.symbol
-      }`
-    );
+    console.log("Amount:", numericAmount);
     setShowDone(true);
   });
 
+  // Format the converted amount based on currency type
+  const formattedConvertedAmount = useMemo(() => {
+    if (!selectedWallet || convertedAmount <= 0) return "0.00";
+
+    // For fiat currencies, show 2 decimal places, for crypto show more
+    const isFiat = ["USD", "NGN", "USDT"].includes(
+      selectedWallet.currency.toUpperCase()
+    );
+
+    return isFiat ? convertedAmount.toFixed(2) : convertedAmount.toFixed(6);
+  }, [convertedAmount, selectedWallet]);
+
   return (
     <div className="pt-3">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="flex bg-[#f9edff] items-stretch border rounded-md overflow-hidden">
-          <select
-            value={fromCoin.id}
-            onChange={(e) => {
-              const sel = coinAssets.find((c) => c.id === e.target.value);
-              if (sel) setFromCoin(sel);
-            }}
-            className="px-2 font-semibold text-[#7910B1] bg-[#F9EDFF] outline-none"
-          >
-            {coinAssets.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.symbol}
-              </option>
-            ))}
-          </select>
-          <span className="px-1 border-r border-[#7910B1]"></span>
-          <Input
-            type="text"
-            placeholder="0.00"
-            value={amount}
-            onChange={(e) =>
-              form.setValue("amount", e.target.value, { shouldValidate: true })
-            }
-            className="flex-1"
-          />
-        </div>
-        {form.formState.errors.amount && (
-          <p className="text-red-500 text-xs -mt-2 ml-auto">
-            {form.formState.errors.amount.message}
-          </p>
-        )}
-
-        <div className="flex self-center items-center justify-center w-12.5 h-12 rounded-md shadow-md">
-          <Repeat className="size-6 text-[#7910B1]" />
-        </div>
-
-        <div className="flex items-stretch border bg-[#F9EDFF] rounded-md overflow-hidden">
-          <select
-            value={toCoin.id}
-            onChange={(e) => {
-              const sel = coinAssets.find((c) => c.id === e.target.value);
-              if (sel) setToCoin(sel);
-            }}
-            className="px-2 font-semibold text-[#7910B1] bg-[#F9EDFF] outline-none "
-          >
-            {coinAssets
-              .filter((c) => c.id !== fromCoin.id)
-              .map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.symbol}
-                </option>
-              ))}
-          </select>
-          <span className="px-1 border-r border-[#7910B1]"></span>
-          <Input
-            type="text"
-            readOnly
-            value={
-              toCoin.symbol === "NGN"
-                ? converted.toFixed(2)
-                : converted.toFixed(6)
-            }
-            placeholder="0.00"
-            className="flex-1"
-          />
-        </div>
-
-        <div className="text-right text-sm text-[#7910B1] font-medium">
-          {amount} {fromCoin.symbol} ≈{" "}
-          {toCoin.symbol === "NGN"
-            ? converted.toFixed(2)
-            : converted.toFixed(6)}{" "}
-          {toCoin.symbol}
-        </div>
-
-        <button type="submit" className="btn-primary w-full">
-          Proceed
-        </button>
-      </form>
+      <SwapForm
+        wallets={wallets}
+        selectedWallet={selectedWallet}
+        formattedConvertedAmount={formattedConvertedAmount}
+        setSelectedWallet={setSelectedWallet}
+        coin={coin}
+        amount={amount}
+        form={form}
+        handleSubmit={handleSubmit}
+        convertedAmount={convertedAmount}
+      />
       {showDone && <SwapDone onClose={() => setShowDone(false)} />}
     </div>
   );

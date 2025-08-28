@@ -38,3 +38,11 @@ export interface Coin {
   symbol: string;
   bgColor: string;
 }
+
+export interface TickersProps {
+  market: string;
+  buy: string;
+  sell: string;
+  last: string;
+  volume: string;
+}

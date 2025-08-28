@@ -3,10 +3,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/Components/ui/input";
 import { usePinModal } from "@/context/PinModalContext";
-import { Coin } from "@/types";
+import { WalletProps } from "@/types/crypto";
 
 interface BuyModalProps {
-  coin: Coin | null;
+  coin: WalletProps | null;
   closeModal: () => void;
 }
 
@@ -35,11 +35,11 @@ const BuyModal = ({ closeModal, coin }: BuyModalProps) => {
   });
 
   const amountStr = form.watch("amount");
-  const ngnValue = parseFloat(coin?.value?.replace(/,/g, "") || "0");
-  const converted =
-    ngnValue && !isNaN(parseFloat(amountStr))
-      ? parseFloat(amountStr) / ngnValue
-      : 0;
+  // const ngnValue = parseFloat(coin?.value?.replace(/,/g, "") || "0");
+  // const converted =
+  //   ngnValue && !isNaN(parseFloat(amountStr))
+  //     ? parseFloat(amountStr) / ngnValue
+  //     : 0;
 
   const handleSubmit = form.handleSubmit((values) => {
     const parsedAmount = parseFloat(values.amount);
@@ -53,9 +53,9 @@ const BuyModal = ({ closeModal, coin }: BuyModalProps) => {
 
   return (
     <div className="pt-3">
-      <span className="flex py-2 justify-center font-medium tracking-[-0.17px]">
-        {coin?.amount} {coin?.symbol} = {coin?.value} NGN
-      </span>
+      {/* <span className="flex py-2 justify-center font-medium tracking-[-0.17px]">
+        {coin?.} {coin?.currency} = {coin?.value} NGN
+      </span> */}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <div className="relative">
@@ -79,12 +79,12 @@ const BuyModal = ({ closeModal, coin }: BuyModalProps) => {
 
         <div className="relative">
           <span className="absolute top-3 left-3 font-semibold text-[#7910B1] tracking-[-0.17px]">
-            {coin?.symbol}
+            {coin?.currency}
           </span>
           <Input
             type="text"
             readOnly
-            value={converted ? converted.toFixed(6) : ""}
+            // value={converted ? converted.toFixed(6) : ""}
             className="!pl-15 bg-[#F9F9F9]"
           />
         </div>
