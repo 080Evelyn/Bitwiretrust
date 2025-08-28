@@ -1,6 +1,6 @@
 import { QrCode, solar_copy } from "@/assets";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/Components/ui/tabs";
-import { WalletProps } from "@/types/crypto";
+import { CoinWalletProps } from "@/types/crypto";
 import { Check } from "lucide-react";
 import { useState } from "react";
 
@@ -59,7 +59,7 @@ const Withdraw = () => {
   return <div>Comming soon</div>;
 };
 
-const DepositModal = ({ coin }: { coin: WalletProps | null }) => {
+const DepositModal = ({ coin }: CoinWalletProps) => {
   const coinWalletAddress = coin?.address || "";
 
   return (

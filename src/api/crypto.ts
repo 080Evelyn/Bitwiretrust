@@ -25,6 +25,12 @@ export const tickers = async () => {
   const response = await axios.get(`${url}/v1/user/crypto/tickers`);
   return response.data;
 };
+export const ticker = async (currency: string) => {
+  const response = await axios.get(`${url}/v1/user/crypto/ticker`, {
+    params: { currency },
+  });
+  return response.data;
+};
 
 export const validateAddress = async (data: {
   address: string;
