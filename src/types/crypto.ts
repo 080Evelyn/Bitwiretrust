@@ -46,3 +46,12 @@ export interface TickersProps {
   last: string;
   volume: string;
 }
+
+export interface SwapQuotationProps {
+  from_currency?: string;
+  to_currency?: string;
+  from_amount?: string;
+  to_amount?: string;
+  dbUserId: string | null;
+  requestId: string;
+}

@@ -39,7 +39,7 @@ const Currency = ({
         Select Currency
       </div>
       <div className="md:hidden absolute top-3 left-1/2 transform -translate-x-1/2 pt-6.5 flex font-semibold">
-        Sell Gift Card
+        Buy Gift Card
       </div>
 
       <div className="flex flex-col gap-2 card-container rounded-md px-2 py-3 md:py-2 md:max-h-86 h-[80vh]">

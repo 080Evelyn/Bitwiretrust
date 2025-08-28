@@ -1,5 +1,6 @@
 import { getUserId } from "@/utils/AuthStorage";
 import axios from "./axiosConfig";
+import { SwapQuotationProps } from "@/types/crypto";
 
 const url = import.meta.env.VITE_API_URL;
 export const cryptoMarkets = async () => {
@@ -45,6 +46,16 @@ export const validateAddress = async (data: {
 export const walletAddress = async (quidaxUserId: string, currency: string) => {
   const response = await axios.get(
     `${url}/v1/user/crypto/wallet-address/${quidaxUserId}/${currency}`
+  );
+  return response;
+};
+export const swapQuotation = async (data: SwapQuotationProps) => {
+  const userId = getUserId();
+  const response = await axios.post(
+    `${url}/v1/user/crypto/${userId}/swap-quotation`,
+    {
+      ...data,
+    }
   );
   return response;
 };

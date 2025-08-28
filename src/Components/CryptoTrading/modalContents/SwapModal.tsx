@@ -1,12 +1,18 @@
 import { useState, useEffect, useMemo } from "react";
-import SwapDone from "../SwapDone";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CoinWalletProps, TickersProps, WalletProps } from "@/types/crypto";
-import { fetchWallets, tickers, ticker } from "@/api/crypto";
-import { useQuery } from "@tanstack/react-query";
+import {
+  CoinWalletProps,
+  SwapQuotationProps,
+  TickersProps,
+  WalletProps,
+} from "@/types/crypto";
+import { fetchWallets, tickers, ticker, swapQuotation } from "@/api/crypto";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import SwapForm from "./SwapForm";
+import SwapConfirmation from "./SwapConfirmation";
+import { getUserId } from "@/utils/AuthStorage";
 
 // Validation schema
 const formSchema = z.object({
@@ -24,7 +30,7 @@ const getInitialWallet = (wallets: WalletProps[]): WalletProps | null => {
 };
 
 const SwapModal = ({ coin }: CoinWalletProps) => {
-  const [showDone, setShowDone] = useState(false);
+  const [step, setStep] = useState(2);
   const [marketPair, setMarketPair] = useState("");
 
   const { data: walletsResponse } = useQuery({
@@ -46,8 +52,11 @@ const SwapModal = ({ coin }: CoinWalletProps) => {
     enabled: !!marketPair,
   });
 
+  const GetQuotationMutation = useMutation({
+    mutationFn: (data: SwapQuotationProps) => swapQuotation(data),
+  });
+
   const AllMarketPrice = tickersPrice?.data;
-  console.log("AllMarketPrice", AllMarketPrice);
   const [selectedWallet, setSelectedWallet] = useState<WalletProps | null>(() =>
     getInitialWallet(wallets)
   );
@@ -116,9 +125,21 @@ const SwapModal = ({ coin }: CoinWalletProps) => {
   ]);
 
   const handleSubmit = form.handleSubmit((values) => {
-    const numericAmount = parseFloat(values.amount);
-    console.log("Amount:", numericAmount);
-    setShowDone(true);
+    GetQuotationMutation.mutate(
+      {
+        from_currency: coin?.currency,
+        to_currency: selectedWallet?.currency,
+        from_amount: values.amount,
+        to_amount: String(convertedAmount),
+        dbUserId: getUserId(),
+        requestId: "",
+      },
+      {
+        onSuccess: () => {
+          setStep(2);
+        },
+      }
+    );
   });
 
   // Format the converted amount based on currency type
@@ -135,18 +156,21 @@ const SwapModal = ({ coin }: CoinWalletProps) => {
 
   return (
     <div className="pt-3">
-      <SwapForm
-        wallets={wallets}
-        selectedWallet={selectedWallet}
-        formattedConvertedAmount={formattedConvertedAmount}
-        setSelectedWallet={setSelectedWallet}
-        coin={coin}
-        amount={amount}
-        form={form}
-        handleSubmit={handleSubmit}
-        convertedAmount={convertedAmount}
-      />
-      {showDone && <SwapDone onClose={() => setShowDone(false)} />}
+      {step === 1 && (
+        <SwapForm
+          wallets={wallets}
+          selectedWallet={selectedWallet}
+          formattedConvertedAmount={formattedConvertedAmount}
+          setSelectedWallet={setSelectedWallet}
+          coin={coin}
+          amount={amount}
+          form={form}
+          handleSubmit={handleSubmit}
+          convertedAmount={convertedAmount}
+        />
+      )}
+
+      {step === 2 && <SwapConfirmation />}
     </div>
   );
 };

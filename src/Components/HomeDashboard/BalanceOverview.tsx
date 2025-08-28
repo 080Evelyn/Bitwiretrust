@@ -26,7 +26,7 @@ const BalanceOverview = ({ pathName }: { pathName?: string }) => {
                   {(() => {
                     return (
                       <>
-                        500.
+                        0.
                         <span className="decimal">00</span>
                       </>
                     );

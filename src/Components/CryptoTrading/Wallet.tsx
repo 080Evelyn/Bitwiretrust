@@ -36,6 +36,32 @@ const Wallet = ({ coin }: CoinWalletProps) => {
     }
   };
 
+  let bgColor;
+
+  switch (coin?.currency?.toLowerCase()) {
+    case "btc":
+      bgColor = "#F7AE02";
+      break;
+    case "eth":
+      bgColor = "#3C3C3D";
+      break;
+    case "usdt":
+      bgColor = "#26A17B";
+      break;
+    case "aave":
+      bgColor = "#2EBAC6";
+      break;
+    case "busd":
+      bgColor = "#F7AE02";
+      break;
+    case "ngn":
+      bgColor = "#0FA301";
+      break;
+    default:
+      bgColor = "#2EBAC6";
+      break;
+  }
+
   return (
     <div
       className="
@@ -51,7 +77,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
 
       <div
         className="flex flex-col items-center text-white gap-6 md:gap-4 rounded-md max-md:rounded-none px-3 pt-11 pb-8 md:py-7.5"
-        style={{ backgroundColor: "black" }}
+        style={{ backgroundColor: bgColor }}
       >
         {coin ? (
           <>
@@ -79,7 +105,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
               <div
                 className="size-13 md:size-9.75 rounded-[4.5px] drop-shadow-lg flex items-center justify-center"
                 style={{
-                  backgroundColor: coin ? hexToRgba("#7910B1", 0.5) : undefined,
+                  backgroundColor: coin ? hexToRgba(bgColor, 0.5) : undefined,
                   mixBlendMode: "screen",
                 }}
               >
@@ -98,7 +124,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="flex flex-col h-full max-w-full md:h-auto md:max-w-[28.7rem] max-md:rounded-t-none [&>button.absolute]:hidden">
+        <DialogContent className="flex flex-col max-md:min-w-full max-w-full md:h-auto md:max-w-[28.7rem] max-md:rounded-t-none [&>button.absolute]:hidden">
           <DialogHeader className="relative">
             <span
               onClick={() => setIsDialogOpen(false)}
