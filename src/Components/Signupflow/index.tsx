@@ -209,26 +209,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
   const { ContextLogin, updatePinStatus } = useAuth();
 
   const loginMutation = useMutation({
-    mutationFn: () => login(getStartedFields),
-    onSuccess: (response) => {
-      const isPinSet =
-        response.data.isPinSet === true || response.data.isPinSet === "true";
-      const userRole = response.data.userRole.toLowerCase();
-      updatePinStatus();
-      ContextLogin(response.data.jwt);
-
-      if (isPinSet && userRole === "user") {
-        navigate("/dashboard");
-      } else if (userRole === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        setShowSuccessModal(true);
-        setTimeout(() => {
-          setShowSuccessModal(false);
-          setCurrentStep(Step.CREATE_PASSCODE);
-        }, 2000);
-      }
-    },
+    mutationFn: (data: { email: string; password: string }) => login(data),
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
         const responseDesc =
@@ -278,7 +259,28 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     } else if (currentStep === Step.VERIFY_EMAIL) {
       verifyCodeMutation.mutate();
     } else if (currentStep === Step.GET_STARTED) {
-      loginMutation.mutate();
+      loginMutation.mutate(getStartedFields, {
+        onSuccess: (response) => {
+          const isPinSet =
+            response.data.isPinSet === true ||
+            response.data.isPinSet === "true";
+          const userRole = response.data.userRole.toLowerCase();
+          updatePinStatus();
+          ContextLogin(response.data.jwt);
+
+          if (isPinSet && userRole === "user") {
+            navigate("/dashboard");
+          } else if (userRole === "admin") {
+            navigate("/admin/dashboard");
+          } else {
+            setShowSuccessModal(true);
+            setTimeout(() => {
+              setShowSuccessModal(false);
+              setCurrentStep(Step.CREATE_PASSCODE);
+            }, 2000);
+          }
+        },
+      });
     } else if (currentStep === Step.CREATE_PASSCODE) {
       if (confirmPasscode.join("") === passcode.join("")) {
         savePin.mutate(passcode.join(""));
