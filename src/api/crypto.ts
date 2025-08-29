@@ -13,10 +13,18 @@ export const currencyTickers = async (currency: string) => {
   return response.data;
 };
 
-export const fetchWallets = async () => {
+export const fetchPersistWallet = async () => {
   const userId = getUserId()!;
   const response = await axios.get(
     `${url}/v1/user/crypto/${userId}/fetch-persist-wallets`,
+    { params: { userId } }
+  );
+  return response.data;
+};
+export const fetchWallets = async () => {
+  const userId = getUserId()!;
+  const response = await axios.get(
+    `${url}/v1/user/crypto/${userId}/wallets/generated`,
     { params: { userId } }
   );
   return response.data;
