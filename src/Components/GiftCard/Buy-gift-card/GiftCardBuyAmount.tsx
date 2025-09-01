@@ -101,7 +101,10 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
       ? selectedCard.minSenderDenomination /
         selectedCard.minRecipientDenomination
       : 0;
-  const displayAmount = amt in map ? map[amt] : Number(amt) * rate || 0;
+  const rateAmount =
+    amt in map ? parseFloat(map[amt]) : Number(amt) * rate || 0;
+  const quantity = parseFloat(form.watch("quantity"));
+  const totalAmount = rateAmount * quantity || 0;
 
   // Mutation
   const orderMutation = useMutation({
@@ -112,15 +115,16 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
   const onSubmit = form.handleSubmit((data) => {
     openPinModal(() => {
       const payload: OrderGiftCardProps = {
-        customIdentifier: getUserId() || "",
-        preOrder: true,
-        productId: selectedCard?.productId || 0,
-        quantity: data.quantity,
+        customIdentifier: "",
+        preOrder: selectedCard?.supportsPreOrder ?? true,
+        productId: selectedCard?.productId ?? 0,
+        quantity: parseFloat(data.quantity),
         recipientEmail: data.email,
-        recipientPhoneDetails: { countryCode: "+234", number: "8111111111" },
-        senderName: `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim(),
-        unitPrice: data.amount,
+        senderName: `${user.first_name ?? ""} ${user.last_name ?? ""}`.trim(),
+        unitPrice: parseFloat(data.amount),
         productAdditionalRequirements: { userId: getUserId()! },
+        totalPrice: totalAmount,
+        requestId: "",
       };
 
       orderMutation.mutate(payload, {
@@ -263,7 +267,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
             <div className="flex flex-col items-center py-2.5 bg-[#FCF6FF] shadow-xs rounded-2xl gap-[3px] text-sm">
               <span>You are paying</span>
               <h2 className="text-3xl md:text-xl text-[#7910B1] font-semibold">
-                ₦{displayAmount.toLocaleString()}
+                ₦{totalAmount.toLocaleString()}
               </h2>
               <span>
                 Fee = ₦{selectedCard?.senderFee.toLocaleString() || "0"}

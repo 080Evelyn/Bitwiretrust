@@ -61,9 +61,7 @@ export const swapQuotation = async (data: SwapQuotationProps) => {
   const userId = getUserId();
   const response = await axios.post(
     `${url}/v1/user/crypto/${userId}/swap-quotation`,
-    {
-      ...data,
-    }
+    data
   );
   return response;
 };

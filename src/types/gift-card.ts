@@ -55,12 +55,10 @@ export interface OrderGiftCardProps {
     userId: string;
   };
   productId: number;
-  quantity: string;
+  quantity: number;
   recipientEmail: string;
-  recipientPhoneDetails: {
-    countryCode: string;
-    number: string;
-  };
   senderName: string;
-  unitPrice: string;
+  unitPrice: number;
+  totalPrice: number;
+  requestId: string;
 }

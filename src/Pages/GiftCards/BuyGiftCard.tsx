@@ -28,6 +28,7 @@ const BuyGiftCard = () => {
       queryKey: ["countriesGiftCard", checked],
       queryFn: () => countriesGiftCard(checked!),
       enabled: !!checked,
+      staleTime: Infinity,
     });
   const CountriesCardList = CountriesCardResponse?.data;
 
