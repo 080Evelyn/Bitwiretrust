@@ -20,6 +20,7 @@ const BuyGiftCard = () => {
   } = useQuery({
     queryKey: ["giftCardCountries"],
     queryFn: () => giftcardCountries(),
+    staleTime: 5 * 60 * 1000,
   });
   const giftCardsCountriesList = giftCardCountriesResponse?.data;
 

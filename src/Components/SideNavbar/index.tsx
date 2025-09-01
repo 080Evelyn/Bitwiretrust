@@ -146,7 +146,7 @@ const SideNavbar = () => {
     {
       "shadow-sm": scrolled && !isGiftCardSellPage,
       "bg-white": !isGiftCardSellPage,
-      "bg-transparent": isGiftCardSellPage,
+      "bg-transparent md:bg-white": isGiftCardSellPage,
     }
   );
 
@@ -167,7 +167,7 @@ const SideNavbar = () => {
           <Link
             to="/dashboard"
             className={cn("flex items-center gap-2", {
-              invisible: isGiftCardSellPage,
+              "invisible md:visible": isGiftCardSellPage,
             })}
           >
             <img src={full_logo} alt="Bitwire Logo" className="h-6" />
@@ -175,8 +175,7 @@ const SideNavbar = () => {
 
           <div
             className={cn("flex items-center gap-2 cursor-pointer", {
-              "lg:hidden": !isGiftCardSellPage,
-              invisible: isGiftCardSellPage,
+              "invisible md:visible": isGiftCardSellPage,
             })}
           >
             <img src={calendar_svg} alt="Calendar" />
