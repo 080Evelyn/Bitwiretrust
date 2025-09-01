@@ -38,7 +38,7 @@ const SwapModal = ({ coin }: CoinWalletProps) => {
     queryFn: fetchWallets,
     staleTime: 5 * 60 * 1000,
   });
-  const wallets = walletsResponse?.data ?? [];
+  const wallets = walletsResponse?.data.data ?? [];
 
   const { data: tickersPrice } = useQuery({
     queryKey: ["tickers"],

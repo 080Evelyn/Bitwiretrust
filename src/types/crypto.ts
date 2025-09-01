@@ -1,20 +1,26 @@
 export interface WalletProps {
   id: string;
-  currency: string;
-  address: string;
-  balance: number;
-  convertedBalance: number;
-  destination_tag: string;
-  total_payments: number;
-  generatedAt: Date;
   name: string;
-  referenceCurrency: string;
-  lockedBalance: number;
-  stakedBalance: number;
-  blockchainEnabled: boolean;
-  defaultNetwork: string;
-  networksJson: string;
-  generated: boolean;
+  currency: string;
+  balance: number;
+  locked: number;
+  staked: number;
+  converted_balance: number;
+  reference_currency: string;
+  is_crypto: boolean;
+  created_at: string;
+  updated_at: string;
+  blockchain_enabled: boolean;
+  default_network: string;
+  deposit_address: string;
+  destination_tag: string;
+  networks: networks[];
+}
+interface networks {
+  id: string;
+  name: string;
+  deposits_enabled: boolean;
+  withdraws_enabled: boolean;
 }
 
 export interface SelectWalletProps {
