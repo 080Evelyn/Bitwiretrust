@@ -87,7 +87,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
             <div className="flex flex-col items-center">
               <span className="md:text-xs">Balance</span>
               <h1 className="font-bold text-[34px] md:text-[1.6rem] tracking-[-0.13px]">
-                N{coin.convertedBalance}
+                N{coin?.converted_balance}
               </h1>
             </div>
           </>

@@ -60,7 +60,7 @@ const Withdraw = () => {
 };
 
 const DepositModal = ({ coin }: CoinWalletProps) => {
-  const coinWalletAddress = coin?.address || "";
+  const coinWalletAddress = coin?.deposit_address || "";
 
   return (
     <div>

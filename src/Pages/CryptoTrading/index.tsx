@@ -19,9 +19,10 @@ const CryptoTrading = () => {
   } = useQuery({
     queryFn: fetchWallets,
     queryKey: ["all-wallets"],
+    staleTime: 5 * 60 * 1000,
   });
 
-  const wallets = walletsResponse?.data ?? [];
+  const wallets = walletsResponse?.data.data ?? [];
 
   const [selectedCoin, setSelectedCoin] = useState<WalletProps>(wallets[0]);
   const handleSelectCoin = (wallet: WalletProps) => {

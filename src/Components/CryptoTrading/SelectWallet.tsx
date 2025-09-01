@@ -67,21 +67,21 @@ const SelectWallet = ({
                 key={wallet.name}
                 onClick={() => handleSelect(wallet)}
                 className={`flex font-medium justify-between py-4 md:py-1.5 px-1.5 md:px-2.5 rounded-sm cursor-pointer ${
-                  selectedCardId === wallet.name
+                  selectedCardId === wallet?.name
                     ? "md:bg-[#28003E] md:text-white bg-[#F8F8F8]"
                     : "bg-[#F8F8F8]"
                 }`}
               >
                 <div className="flex gap-2 items-center">
-                  <span className="text-sm">{wallet.name}</span>
+                  <span className="text-sm">{wallet?.name}</span>
                 </div>
                 <div
                   className="flex flex-col items-end gap-1 tracking-[-0.12px]"
                   style={{ fontFamily: "Poppins, sans-serif" }}
                 >
-                  <span className="text-xs font-medium">{wallet.balance}</span>
+                  <span className="text-xs font-medium">{wallet?.balance}</span>
                   <span className="text-[10px]">
-                    {wallet.convertedBalance} NGN
+                    {wallet?.converted_balance} NGN
                   </span>
                 </div>
               </div>

@@ -22,10 +22,10 @@ export const fetchPersistWallet = async () => {
   return response.data;
 };
 export const fetchWallets = async () => {
-  const userId = getUserId()!;
+  const dbUserId = getUserId()!;
   const response = await axios.get(
-    `${url}/v1/user/crypto/${userId}/wallets/generated`,
-    { params: { userId } }
+    `${url}/v1/user/crypto/${dbUserId}/get-crypto/wallets`,
+    { params: { dbUserId } }
   );
   return response.data;
 };
