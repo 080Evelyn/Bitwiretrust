@@ -24,6 +24,7 @@ import AdminDashboard from "@/admin/pages/AdminDashboard";
 import Transactions from "@/admin/pages/Transactions";
 import KycManagement from "@/admin/pages/KycManagement";
 import UserManagement from "@/admin/pages/UserManagement";
+import PageNotFound from "@/Pages/404/PageNotFound";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,7 @@ export const router = createBrowserRouter([
       { path: "contact", element: <Contact /> },
     ],
   },
+  { path: "*", element: <PageNotFound /> },
 
   {
     element: <PublicRoute />,
