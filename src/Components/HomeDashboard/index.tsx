@@ -22,6 +22,7 @@ import TransferModal from "./TransferModal";
 import { useQuery } from "@tanstack/react-query";
 import { transactions } from "@/api/user-notification";
 import { Skeleton } from "../ui/skeleton";
+import { Link } from "react-router-dom";
 
 type Props = object;
 
@@ -134,14 +135,14 @@ const HomeDashboard = (_props: Props) => {
               <img src={export_png} alt="" />
               <span>Withdraw</span>
             </div>
-            <div className="action-button">
+            <Link to="/crypto-trading" className="action-button">
               <img src={arrow_reload} alt="" />
               <span>Swap</span>
-            </div>
-            <div className="action-button">
+            </Link>
+            <Link to="/crypto-trading" className="action-button">
               <img src={wallet} alt="" />
               <span>Wallet</span>
-            </div>
+            </Link>
           </div>
 
           <div className="quick-action">

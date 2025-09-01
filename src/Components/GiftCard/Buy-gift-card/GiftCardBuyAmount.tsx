@@ -151,7 +151,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
       <div className="hidden md:block text-center font-medium card-container rounded-[4px] py-1.75">
         Enter Amount
       </div>
-      <div className="md:hidden absolute top-3 left-1/2 transform -translate-x-1/2 pt-6.5 font-semibold">
+      <div className="md:hidden absolute text-center top-3 left-1/2 transform -translate-x-1/2 pt-6.5 font-semibold">
         Buy {selectedCard?.productName} Gift Card
       </div>
 
