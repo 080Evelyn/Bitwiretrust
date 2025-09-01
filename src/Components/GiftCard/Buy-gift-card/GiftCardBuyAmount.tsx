@@ -128,8 +128,8 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
       };
 
       orderMutation.mutate(payload, {
-        onSuccess: (res) => {
-          toast.success(res.data.response_description);
+        onSuccess: () => {
+          toast.success("Purchase successful");
           queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
           form.reset({ email: "", amount: "", quantity: "" });
         },
