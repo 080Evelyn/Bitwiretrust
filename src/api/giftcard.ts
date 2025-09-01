@@ -1,5 +1,6 @@
 import { OrderGiftCardProps } from "@/types/gift-card";
 import axios from "./axiosConfig";
+import { getUserId } from "@/utils/AuthStorage";
 
 const url = import.meta.env.VITE_API_URL;
 
@@ -27,6 +28,10 @@ export const countriesGiftCard = async (countryCode: string) => {
 };
 
 export const orderGiftCard = async (data: OrderGiftCardProps) => {
-  const response = await axios.post(`${url}/v1/user/giftcard/order`, data);
+  const userId = getUserId()!;
+  const response = await axios.post(
+    `${url}/v1/user/giftcard/order?userId=${userId}`,
+    data
+  );
   return response.data;
 };
