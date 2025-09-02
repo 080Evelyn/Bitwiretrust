@@ -2,6 +2,8 @@ import { useState } from "react";
 import { SearchIcon } from "@/assets";
 import { Input } from "../ui/input";
 import { SelectWalletProps, WalletProps } from "@/types/crypto";
+import { useQuery } from "@tanstack/react-query";
+import { fetchWalletAddressByNetwork } from "@/api/crypto";
 
 const SelectWallet = ({
   title = "Select Wallet",
@@ -13,11 +15,22 @@ const SelectWallet = ({
   const [selectedCardId, setSelectedCardId] = useState<string>(
     wallets[0]?.name
   );
+  const [selectedWallet, setSelectedWallet] = useState<WalletProps | null>(
+    null
+  );
 
   const [searchTerm, setSearchTerm] = useState("");
 
+  useQuery({
+    queryKey: ["network-wallets", selectedWallet?.currency],
+    queryFn: () => fetchWalletAddressByNetwork(selectedWallet?.currency ?? ""),
+    enabled: !!selectedWallet?.currency,
+    staleTime: Infinity,
+  });
+
   const handleSelect = (wallet: WalletProps) => {
     setSelectedCardId(wallet?.name);
+    setSelectedWallet(wallet);
     onSelect?.(wallet);
   };
 

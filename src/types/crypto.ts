@@ -16,12 +16,12 @@ export interface WalletProps {
   destination_tag: string;
   networks: networks[];
 }
-interface networks {
+type networks = {
   id: string;
   name: string;
   deposits_enabled: boolean;
   withdraws_enabled: boolean;
-}
+};
 
 export interface SelectWalletProps {
   title?: string;
@@ -60,4 +60,34 @@ export interface SwapQuotationProps {
   to_amount?: string;
   dbUserId: string | null;
   requestId: string;
+}
+
+export interface WalletAddressProps {
+  currency: string;
+  network: string;
+}
+
+export interface NetworkWalletsProps {
+  data: {
+    responseCode: string;
+    responseMsg: string;
+    responseDesc: string;
+    data: {
+      status: string;
+      message: string;
+      data: IndividualNetworkWalletPops[];
+    };
+  };
+}
+
+export interface IndividualNetworkWalletPops {
+  id: string;
+  reference: string;
+  currency: string;
+  address: string;
+  network: string;
+  destination_tag: string;
+  total_payments: string;
+  created_at: Date;
+  updated_at: Date;
 }
