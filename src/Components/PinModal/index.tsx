@@ -26,32 +26,7 @@ const PinModal = ({ isOpen, onClose, onConfirm }: PinModalProps) => {
   };
 
   const verifyPinMutation = useMutation({
-    mutationFn: async (pin: string) => {
-      return verifyPin(pin);
-    },
-    onSuccess: () => {
-      resetState();
-      onConfirm(enteredPin);
-      handleClose();
-    },
-    onError: (error: unknown) => {
-      if (axios.isAxiosError(error)) {
-        const responseDesc =
-          error.response?.data?.responseDesc ||
-          "Incorrect PIN. Please try again.";
-        setError(responseDesc);
-      } else {
-        setError("Unexpected error occurred");
-      }
-      triggerShake();
-
-      setPin(["", "", "", ""]);
-
-      setActiveIndex(0);
-      setTimeout(() => {
-        inputsRef.current[0]?.focus();
-      }, 0);
-    },
+    mutationFn: async (pin: string) => verifyPin(pin),
   });
 
   useEffect(() => {
@@ -131,7 +106,31 @@ const PinModal = ({ isOpen, onClose, onConfirm }: PinModalProps) => {
       return;
     }
 
-    verifyPinMutation.mutate(enteredPin);
+    verifyPinMutation.mutate(enteredPin, {
+      onSuccess: () => {
+        resetState();
+        onConfirm(enteredPin);
+        handleClose();
+      },
+      onError: (error: unknown) => {
+        if (axios.isAxiosError(error)) {
+          const responseDesc =
+            error.response?.data?.responseDesc ||
+            "Incorrect PIN. Please try again.";
+          setError(responseDesc);
+        } else {
+          setError("Unexpected error occurred");
+        }
+        triggerShake();
+
+        setPin(["", "", "", ""]);
+
+        setActiveIndex(0);
+        setTimeout(() => {
+          inputsRef.current[0]?.focus();
+        }, 0);
+      },
+    });
   };
 
   const isVerifying = verifyPinMutation.isPending;

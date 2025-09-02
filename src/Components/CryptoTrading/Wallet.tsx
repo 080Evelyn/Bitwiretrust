@@ -7,7 +7,6 @@ import SendModal from "./modalContents/SendModal";
 import DepositModal from "./modalContents/DepositModal";
 import SwapModal from "./modalContents/SwapModal";
 import { CoinWalletProps } from "@/types/crypto";
-
 const Wallet = ({ coin }: CoinWalletProps) => {
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -124,7 +123,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="flex flex-col max-md:min-w-full max-w-full md:h-auto md:max-w-[28.7rem] max-md:rounded-t-none [&>button.absolute]:hidden">
+        <DialogContent className="flex flex-col max-md:min-w-full max-w-full h-full md:h-auto md:max-w-[28.7rem] max-md:rounded-none [&>button.absolute]:hidden">
           <DialogHeader className="relative">
             <span
               onClick={() => setIsDialogOpen(false)}
