@@ -26,7 +26,7 @@ const BackArrowButton = ({
 
   return (
     <button
-      className={`absolute cursor-pointer pt-7 px-5 top-3 left-3 text-sm z-50 ${className}`}
+      className={`absolute cursor-pointer pt-7 px-5 top-1 left-3 text-sm z-50 ${className}`}
       onClick={handleClick}
     >
       <ArrowLeft className="size-5" />
