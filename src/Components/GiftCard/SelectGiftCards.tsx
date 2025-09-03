@@ -35,7 +35,7 @@ const SelectGiftCards = ({
       <div className="text-center font-medium hidden md:block card-container rounded-[4px] py-1.75">
         Select Card
       </div>
-      <div className="md:hidden absolute top-3 left-1/2 transform -translate-x-1/2 pt-6.5 flex font-semibold ">
+      <div className="md:hidden absolute top-1 left-1/2 transform -translate-x-1/2 pt-6.5 flex font-semibold ">
         {title}
       </div>
 
