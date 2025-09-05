@@ -64,7 +64,7 @@ const GetStarted = ({
     <div className="flex w-full">
       <div
         className={cn(
-          "items-center justify-center hidden sm:flex w-[55%]",
+          "items-center justify-center hidden flex-1 sm:flex w-[55%]",
           getLeftSideClass()
         )}
         style={{ backgroundImage: `url(${getStepBackground()})` }}

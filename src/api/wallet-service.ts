@@ -1,5 +1,6 @@
 import { getUserId } from "@/utils/AuthStorage";
 import axios from "./axiosConfig";
+import { AddBankProps } from "@/types";
 
 const url = import.meta.env.VITE_API_URL;
 
@@ -18,13 +19,6 @@ export const initiateTransaction = async (data: {
   return response.data;
 };
 
-// export const pollDeposit = async () => {
-//   const response = await axios.post(
-//     `${url}/v1/user/wallet-service/poll-deposits`
-//   );
-//   return response.data;
-// };
-
 export const createRecipient = async (data: {
   name: string;
   userId: string;
@@ -34,6 +28,32 @@ export const createRecipient = async (data: {
 }) => {
   const response = await axios.post(
     `${url}/v1/user/wallet-service/create-recipient?userId=${data.userId}`,
+    data
+  );
+  return response.data;
+};
+
+export const bankList = async () => {
+  const response = await axios.get(`${url}/v1/user/wallet-service/banks-list`);
+  return response.data;
+};
+
+export const verifyBankAccount = async (data: {
+  accountNumber: string;
+  bankCode: string;
+}) => {
+  const response = await axios.get(
+    `${url}/v1/user/wallet-service/verify-bank-account`,
+    { params: data }
+  );
+
+  return response.data;
+};
+
+export const addBankAccount = async (data: AddBankProps) => {
+  const userId = getUserId();
+  const response = await axios.post(
+    `${url}/v1/user/wallet-service/${userId}/bank-details?userId=${userId}`,
     data
   );
   return response.data;

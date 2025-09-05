@@ -13,11 +13,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { WithrawalImage } from "@/assets";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { bankList, verifyBankAccount } from "@/api/auth";
 import { BankList, BankListInfo } from "@/types/dashboard";
 import { toast } from "sonner";
 import { Step1Form, Step1Values } from "./transfer/Step1";
-import { createRecipient, initiateTransaction } from "@/api/wallet-service";
+import {
+  bankList,
+  createRecipient,
+  initiateTransaction,
+  verifyBankAccount,
+} from "@/api/wallet-service";
 import { getUserId } from "@/utils/AuthStorage";
 import { Step2Form, Step2Values } from "./transfer/Step2";
 import axios from "axios";
@@ -77,7 +81,7 @@ export default function WithdrawalDialog({
 
   // Mutation to verify account
   const verifyBankAccountMutation = useMutation({
-    mutationFn: (data: { accountNumber: string; bankName: string }) =>
+    mutationFn: (data: { accountNumber: string; bankCode: string }) =>
       verifyBankAccount(data),
   });
 
@@ -112,7 +116,7 @@ export default function WithdrawalDialog({
       verifyBankAccountMutation.mutate(
         {
           accountNumber: watchedAccountNumber,
-          bankName: selectedBank.code,
+          bankCode: selectedBank.code,
         },
         {
           onSuccess: (data) => {

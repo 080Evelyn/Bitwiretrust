@@ -64,8 +64,8 @@ const CreateAccount = ({
           <div className="progress-dot"></div>
         </div>
       </div>
-      <div className="flex flex-1 flex-col">
-        <ScrollArea className="h-[96vh]">
+      <ScrollArea className="h-[96dvh] w-full">
+        <div className="flex flex-1 flex-col">
           <div className="app-logo flex justify-center ">
             <Link to="/">
               <img src={full_logo} alt="Bitwire" />
@@ -236,8 +236,8 @@ const CreateAccount = ({
               {isLoading ? "Processing..." : "Next"}
             </button>
           </form>
-        </ScrollArea>
-      </div>
+        </div>
+      </ScrollArea>
     </div>
   );
 };

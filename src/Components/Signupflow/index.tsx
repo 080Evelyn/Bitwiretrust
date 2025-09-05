@@ -17,6 +17,7 @@ import { createAccount, createPin, login, verifyEmailCode } from "@/api/auth";
 import { toast } from "sonner";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
+import AddBankAccount from "./AddBankAccount";
 
 type Props = {
   initialStep?: Step;
@@ -225,7 +226,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     mutationFn: (pin: string) => createPin(pin),
     onSuccess: () => {
       updatePinStatus();
-      navigate("/dashboard");
+      setCurrentStep(Step.ADD_BANK_ACCOUNT);
     },
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
@@ -336,6 +337,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       [Step.VERIFY_EMAIL]: verify_email_png,
       [Step.GET_STARTED]: get_started_png,
       [Step.CREATE_PASSCODE]: get_started_png,
+      [Step.ADD_BANK_ACCOUNT]: get_started_png,
     }[currentStep];
   };
 
@@ -392,6 +394,9 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
             setPasscodeMatchError={setPasscodeMatchError}
           />
         );
+
+      case Step.ADD_BANK_ACCOUNT:
+        return <AddBankAccount {...sharedProps} />;
       default:
         return null;
     }

@@ -119,8 +119,10 @@ import AdminShareIcon from "./share.svg";
 import ServiceStatsIcon from "./service-stats.svg";
 import KycPablock from "./kyc-padlock.svg";
 import GalleryAdd from "./gallery-add.svg";
+import NotificationArrowDown from "./notification-arrown-down.svg";
 
 export {
+  NotificationArrowDown,
   GalleryAdd,
   KycPablock,
   ServiceStatsIcon,
