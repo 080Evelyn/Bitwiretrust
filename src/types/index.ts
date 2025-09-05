@@ -52,6 +52,7 @@ export enum Step {
   VERIFY_EMAIL = 1,
   GET_STARTED = 2,
   CREATE_PASSCODE = 3,
+  ADD_BANK_ACCOUNT = 4,
 }
 
 export interface HeaderProps {
@@ -189,4 +190,10 @@ export interface TransactionListResponse {
   responseCode: string;
   responseMsg: string;
   data: TransactionData[];
+}
+
+export interface AddBankProps {
+  accountNumber: string;
+  bankCode: string;
+  accountName: string;
 }

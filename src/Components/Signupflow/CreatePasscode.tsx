@@ -1,8 +1,6 @@
-// This is being used for pin code creation rather than passcode.
+// This is being used for withdrawal pin code creation rather than passcode.
 
-import { fetchPersistWallet } from "@/api/crypto";
 import { full_logo, passcode_lock } from "@/assets";
-import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
 
@@ -38,10 +36,6 @@ const CreatePasscode = ({
   setPasscodeMatchError,
 }: CreatePasscodeProps) => {
   const [isConfirming, setIsConfirming] = useState(false);
-  useQuery({
-    queryKey: ["fetch-persist-wallet"],
-    queryFn: fetchPersistWallet,
-  });
 
   const handleConfirmPasscodeChange = (index: number, value: string) => {
     const newPasscode = [...confirmPasscode];

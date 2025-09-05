@@ -100,24 +100,3 @@ export const resendOtp = async (data: { email: string }) => {
   const response = await axios.post(`${url}/v1/auth/resend-otp`, data);
   return response.data;
 };
-
-export const bankList = async () => {
-  const response = await axios.get(`${url}/v1/auth/banks-list`);
-  return response.data;
-};
-
-export const verifyBankAccount = async (data: {
-  accountNumber: string;
-  bankName: string;
-}) => {
-  const token = getToken();
-
-  const response = await axios.get(`${url}/v1/auth/verify-bank-account`, {
-    params: data,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return response.data;
-};

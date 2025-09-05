@@ -15,7 +15,7 @@ import { ArrowLeft, X } from "lucide-react";
 import NotificationModal from "./NotificationModal";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { useResponsivePopover } from "@/hooks/viewportResize";
-import { logo, MoneyIn, MoneyOut } from "@/assets";
+import { logo, MoneyIn, MoneyOut, NotificationArrowDown } from "@/assets";
 import { Skeleton } from "../ui/skeleton";
 
 interface NotificationPopoverProps {
@@ -104,9 +104,9 @@ const NotificationPopover = ({
             <X className="size-4" />
           </button>
 
-          <div className="flex flex-1 gap-4.5 justify-between items-center p-4 border-b text-sm font-semibold mx-0.5">
+          <div className="flex flex-1 gap-4.5 justify-between items-center px-2 py-4 border-b text-sm font-semibold mx-0.5">
             <button
-              className="md:hidden -ms-1.5 bg-white rounded-sm border-1 p-1 cursor-pointer shadow-md"
+              className="md:hidden -ms-1.5 bg-white rounded-sm border-1 p-1 cursor-pointer "
               onClick={() => setIsOpen(false)}
             >
               <span className="sr-only">Back</span>
@@ -114,10 +114,11 @@ const NotificationPopover = ({
             </button>
             <div className="flex justify-between w-full gap-3">
               <Select onValueChange={setMonthFilter}>
-                <SelectTrigger className="text-muted-foreground bg-transparent h-8">
+                <SelectTrigger className="font-semibold text-base hover:text-primary border-0 flex cursor-pointer gap-1 shadow-none bg-transparent h-8 [&_svg]:hidden">
                   <SelectValue placeholder="Month">
                     {monthFilter !== "All" ? monthFilter : "Month"}
                   </SelectValue>
+                  <img src={NotificationArrowDown} alt="arrow-icon" />
                 </SelectTrigger>
                 <SelectContent className="z-[60]">
                   <SelectItem value="All">All</SelectItem>
@@ -136,30 +137,34 @@ const NotificationPopover = ({
                 </SelectContent>
               </Select>
 
-              <Select onValueChange={setCategoryFilter}>
-                <SelectTrigger className=" text-muted-foreground bg-transparent h-8">
-                  <SelectValue placeholder="Categories" />
-                </SelectTrigger>
-                <SelectContent className="z-[60]">
-                  <SelectItem value="All">All</SelectItem>
-                  <SelectItem value="ELECTRICITY">Electricity</SelectItem>
-                  <SelectItem value="TRANSFER">Transfers</SelectItem>
-                  <SelectItem value="AIRTIME">Airtime</SelectItem>
-                  <SelectItem value="DATA">Data</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex gap-1">
+                <Select onValueChange={setCategoryFilter}>
+                  <SelectTrigger className="font-semibold text-base hover:text-primary border-0 flex cursor-pointer gap-1 shadow-none  h-8 [&_svg]:hidden">
+                    <SelectValue placeholder="Categories" />
+                    <img src={NotificationArrowDown} alt="arrow-icon" />
+                  </SelectTrigger>
+                  <SelectContent className="z-[60]">
+                    <SelectItem value="All">All</SelectItem>
+                    <SelectItem value="ELECTRICITY">Electricity</SelectItem>
+                    <SelectItem value="TRANSFER">Transfers</SelectItem>
+                    <SelectItem value="AIRTIME">Airtime</SelectItem>
+                    <SelectItem value="DATA">Data</SelectItem>
+                  </SelectContent>
+                </Select>
 
-              <Select onValueChange={setStatusFilter}>
-                <SelectTrigger className=" text-muted-foreground bg-transparent h-8">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent className="z-[60]">
-                  <SelectItem value="All">All</SelectItem>
-                  <SelectItem value="success">Successful</SelectItem>
-                  <SelectItem value="pending">pending</SelectItem>
-                  <SelectItem value="failed">Failed</SelectItem>
-                </SelectContent>
-              </Select>
+                <Select onValueChange={setStatusFilter}>
+                  <SelectTrigger className="font-semibold text-base hover:text-primary border-0 flex cursor-pointer gap-1 shadow-none  h-8 [&_svg]:hidden">
+                    <SelectValue placeholder="Status" />
+                    <img src={NotificationArrowDown} alt="arrow-icon" />
+                  </SelectTrigger>
+                  <SelectContent className="z-[60]">
+                    <SelectItem value="All">All</SelectItem>
+                    <SelectItem value="success">Successful</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="failed">Failed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
 
