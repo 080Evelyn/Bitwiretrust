@@ -29,11 +29,12 @@ import {
   useBillerVerificationCode,
   useServiceIdentifiers,
 } from "@/hooks/utility-payments/useServiceIdentifiers";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { cableSubscription } from "@/api/micro-transaction";
 import { toast } from "sonner";
 import { FaSpinner } from "react-icons/fa";
 import { cn } from "@/lib/utils";
+import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
 
 const formSchema = z.object({
   phone: z
@@ -56,10 +57,11 @@ const MediaSubscriptions = () => {
     selectedBiller?.serviceID
   );
 
+  const { invalidateAfterTransaction } = useQueryInvalidation();
+
   const cableSubscriptionMutation = useMutation({
     mutationFn: (data: CableSubscriptionProps) => cableSubscription(data),
   });
-  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -101,12 +103,10 @@ const MediaSubscriptions = () => {
         {
           onSuccess: (response) => {
             toast.success("Subscription successful:", response);
-            queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
-            // Handle success, e.g., show a success message or redirect
+            invalidateAfterTransaction();
           },
           onError: (error) => {
             console.error("Subscription failed:", error);
-            // Handle error, e.g., show an error message
           },
         }
       );

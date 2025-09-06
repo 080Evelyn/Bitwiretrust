@@ -23,7 +23,6 @@ function useAuthCheck() {
 export function UserProtectedRoute() {
   const { isLoggingOut, isAuthLoading, isAuthenticated, userRole, userId } =
     useAuthCheck();
-  const token = getToken();
 
   const {
     data: user,
@@ -33,14 +32,12 @@ export function UserProtectedRoute() {
     queryKey: ["user", userId],
     queryFn: async () => {
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/v1/users/profile/${userId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        `${import.meta.env.VITE_API_URL}/v1/users/profile/${userId}`
       );
       return res.data.data;
     },
     enabled: isAuthenticated && userRole !== "ADMIN",
-    staleTime: Infinity,
-    retry: false,
+    staleTime: 5 * 60 * 1000,
   });
 
   if (isLoggingOut) {

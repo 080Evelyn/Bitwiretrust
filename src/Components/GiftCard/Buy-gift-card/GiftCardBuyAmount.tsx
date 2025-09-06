@@ -18,7 +18,7 @@ import {
 } from "@/types/gift-card";
 import { ScrollArea } from "@/Components/ui/scroll-area";
 import { useEffect, useMemo } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { orderGiftCard } from "@/api/giftcard";
 import { getUserId } from "@/utils/AuthStorage";
 import { useOutletContext } from "react-router-dom";
@@ -26,6 +26,7 @@ import { UserContext } from "@/types/user";
 import { toast } from "sonner";
 import axios from "axios";
 import { cn } from "@/lib/utils";
+import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
 
 interface FormValues {
   email: string;
@@ -40,7 +41,8 @@ interface GiftCardBuyAmountProps {
 const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
   const { openPinModal } = usePinModal();
   const { user } = useOutletContext<UserContext>();
-  const queryClient = useQueryClient();
+
+  const { invalidateAfterTransaction } = useQueryInvalidation();
 
   // Prepare fixed options. with type of strings
   const fixedOptions = useMemo(() => {
@@ -130,7 +132,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
       orderMutation.mutate(payload, {
         onSuccess: () => {
           toast.success("Purchase successful");
-          queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
+          invalidateAfterTransaction();
           form.reset({ email: "", amount: "", quantity: "" });
         },
         onError: (err) => {

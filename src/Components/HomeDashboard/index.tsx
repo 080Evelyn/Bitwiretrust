@@ -48,11 +48,11 @@ const HomeDashboard = (_props: Props) => {
         return "#ddd";
     }
   };
-  const getStatusColorTransaction = (transactionType: string) => {
-    switch (transactionType) {
-      case "CREDIT":
+  const getStatusColorTransaction = (type: string) => {
+    switch (type) {
+      case "CREDITED":
         return "green";
-      case "DEBIT":
+      case "DEBITED":
         return "green";
       case "orange":
         return "orange";
@@ -60,8 +60,8 @@ const HomeDashboard = (_props: Props) => {
         return "gray";
     }
   };
-  const getBackgroundColorTransaction = (transactionType: string) => {
-    switch (transactionType) {
+  const getBackgroundColorTransaction = (type: string) => {
+    switch (type) {
       case "CREDIT":
         return "#16D005";
       case "DEBIT":
@@ -251,15 +251,15 @@ const HomeDashboard = (_props: Props) => {
                       className="transaction-icon-wrapper !rounded-[3.5px]"
                       style={{
                         backgroundColor: getBackgroundColorTransaction(
-                          notif.transactionType
+                          notif.type
                         ),
                       }}
                     >
                       <img
                         src={
-                          notif.transactionType === "CREDITED"
+                          notif.type === "CREDITED"
                             ? MoneyIn
-                            : notif.transactionType === "DEBITED"
+                            : notif.type === "DEBITED"
                             ? MoneyOut
                             : LogoWhite
                         }
@@ -276,9 +276,7 @@ const HomeDashboard = (_props: Props) => {
                     <div
                       className="transaction-status"
                       style={{
-                        backgroundColor: getStatusColorTransaction(
-                          notif.transactionType
-                        ),
+                        backgroundColor: getStatusColorTransaction(notif.type),
                       }}
                     ></div>
                   </div>
