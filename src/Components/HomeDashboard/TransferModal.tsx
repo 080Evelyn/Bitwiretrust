@@ -45,7 +45,7 @@ export default function WithdrawalDialog({
   isWithdrawalOpen: boolean;
   setIsWithdrawalOpen: (open: boolean) => void;
 }) {
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState<number>(2);
   const [accountDetails, setAccountDetails] = useState<Step1Values | null>(
     null
   );
@@ -64,7 +64,7 @@ export default function WithdrawalDialog({
 
   const step2Form = useForm<Step2Values>({
     resolver: zodResolver(step2Schema),
-    defaultValues: { amount: undefined, remark: "" },
+    defaultValues: { amount: undefined },
   });
 
   // Fetch bank list
@@ -170,7 +170,6 @@ export default function WithdrawalDialog({
     if (accountDetails && selectedBank && accountName) {
       setPayload({
         amount: values.amount,
-        remark: values.remark,
         accountDetails,
         selectedBank,
         accountName,
@@ -263,7 +262,7 @@ export default function WithdrawalDialog({
                 className="size-[85px] rounded-full absolute top-12 left-20 transform -translate-x-1/2 -translate-y-1/2"
                 alt="withdrawal icon"
               />
-              <h4 className="font-medium text-[#221D7A]">Transfer Page</h4>
+              <h4 className="font-medium text-[#221D7A]">Withdraw</h4>
               <span className="size-[17px] bg-[#221d7a] rounded-full text-end" />
             </div>
 
@@ -317,7 +316,6 @@ export default function WithdrawalDialog({
                 form={step2Form}
                 accountDetails={accountDetails}
                 onSubmit={handleStep2Submit}
-                onBack={() => setStep(1)}
                 accountName={accountName}
                 selectedBank={selectedBank}
               />

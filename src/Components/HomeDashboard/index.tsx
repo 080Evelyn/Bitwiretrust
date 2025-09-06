@@ -62,12 +62,10 @@ const HomeDashboard = (_props: Props) => {
   };
   const getBackgroundColorTransaction = (type: string) => {
     switch (type) {
-      case "CREDIT":
+      case "CREDITED":
         return "#16D005";
-      case "DEBIT":
+      case "DEBITED":
         return "#2EBAC6";
-      case "updated":
-        return "#e0e0e0";
       default:
         return "#7910B1";
     }
@@ -110,6 +108,7 @@ const HomeDashboard = (_props: Props) => {
     useQuery<TransactionListResponse>({
       queryKey: ["transactions"],
       queryFn: transactions,
+      staleTime: 10 * 60 * 1000,
     });
 
   const notifications = transactionsList?.data;
@@ -121,26 +120,23 @@ const HomeDashboard = (_props: Props) => {
       <div className="rate-container overflow-x-auto">
         <div className="rate-container-left">
           <div className="action-buttons">
-            <div
-              className="action-button"
-              onClick={() => console.log("Fund account clicked")}
-            >
-              <img src={gala_add} alt="" />
+            <Link to="/crypto-trading" className="action-button">
+              <img src={gala_add} alt="add icon" />
               <span>Fund</span>
-            </div>
+            </Link>
             <div
               className="action-button"
               onClick={() => setIsWithdrawalOpen(true)}
             >
-              <img src={export_png} alt="" />
+              <img src={export_png} alt="export icon" />
               <span>Withdraw</span>
             </div>
             <Link to="/crypto-trading" className="action-button">
-              <img src={arrow_reload} alt="" />
+              <img src={arrow_reload} alt="swap icon" />
               <span>Swap</span>
             </Link>
             <Link to="/crypto-trading" className="action-button">
-              <img src={wallet} alt="" />
+              <img src={wallet} alt="wallet icon" />
               <span>Wallet</span>
             </Link>
           </div>
