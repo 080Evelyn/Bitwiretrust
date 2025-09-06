@@ -12,20 +12,17 @@ interface Step2FormProps {
   selectedBank: { name?: string } | null;
   accountDetails: { account: string } | null;
   onSubmit: (values: Step2Values) => void;
-  onBack: () => void;
   accountName: string | null;
 }
 
 export type Step2Values = {
   amount: number;
-  remark?: string;
 };
 export function Step2Form({
   form,
   selectedBank,
   accountDetails,
   onSubmit,
-  onBack,
   accountName,
 }: Step2FormProps) {
   return (
@@ -67,34 +64,8 @@ export function Step2Form({
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="remark"
-            render={({ field }) => (
-              <FormItem className="relative w-full">
-                <span className="left-4 text-xs">Remark</span>
-                <FormControl>
-                  <input
-                    type="text"
-                    placeholder="Add a remark"
-                    className="w-full h-10 !bg-white !rounded-sm !border-0"
-                    {...field}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
           <button type="submit" className="btn-primary w-1/2 mx-auto mt-10">
-            Pay
-          </button>
-
-          <button
-            type="button"
-            onClick={onBack}
-            className="hidden sm:block rounded-sm cursor-pointer bg-white hover:bg-[#f7f7f7] py-1.5 border border-[#221D7A] w-1/2 mx-auto mt-2"
-          >
-            Back
+            Withdraw
           </button>
         </div>
       </form>
