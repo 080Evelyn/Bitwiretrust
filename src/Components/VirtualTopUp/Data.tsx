@@ -27,12 +27,13 @@ import {
   useBillerVerificationCode,
   useServiceIdentifiers,
 } from "@/hooks/utility-payments/useServiceIdentifiers";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { purchaseData } from "@/api/micro-transaction";
 import { toast } from "sonner";
 import axios from "axios";
 import { FaSpinner } from "react-icons/fa";
 import { cn } from "@/lib/utils";
+import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
 
 const schema = z.object({
   phone: phoneNumberSchema,
@@ -51,7 +52,7 @@ const Data = () => {
   const { isPending, data: dataPlans } = useBillerVerificationCode(
     selectedBiller?.serviceID
   );
-  const queryClient = useQueryClient();
+  const { invalidateAfterTransaction } = useQueryInvalidation();
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -117,7 +118,7 @@ const Data = () => {
       buyDataMutation.mutate(requestData, {
         onSuccess: (response) => {
           toast.success(response.data.response_description);
-          queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
+          invalidateAfterTransaction();
         },
         onError: (error: unknown) => {
           if (axios.isAxiosError(error)) {

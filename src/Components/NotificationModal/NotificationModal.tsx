@@ -7,7 +7,7 @@ import {
 import { format } from "date-fns";
 import { TransactionData } from "@/types";
 import { naira } from "@/assets";
-import { X } from "lucide-react";
+import { AlertTriangle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { DialogTitle } from "@radix-ui/react-dialog";
 interface NotificationModalProps {
@@ -26,20 +26,26 @@ const NotificationModal = ({
           <DialogTitle className="sr-only">Notification</DialogTitle>
           <DialogHeader className="flex items-center">
             {notification?.status &&
-            notification?.status.toLowerCase() === "success" ? (
+            notification?.status?.toLowerCase() === "success" ? (
               <div className="bg-[#11C600]/50 rounded-full size-19 flex items-center justify-center">
                 <div className="bg-[#0FA301] size-15.5 rounded-full flex items-center justify-center">
                   <img src={naira} alt="naira" className="h-[25.54px]" />
                 </div>
               </div>
             ) : notification?.status &&
-              notification?.status.toLowerCase() === "failed" ? (
+              notification?.status?.toLowerCase() === "failed" ? (
               <div className="bg-[#FF0000]/50 rounded-full size-19 flex items-center justify-center">
                 <div className="bg-[#FF0000] size-15.5 rounded-full flex items-center justify-center">
                   <X className="size-[42px] text-white" />
                 </div>
               </div>
-            ) : null}
+            ) : (
+              <div className="bg-yellow-400/50 rounded-full size-19 flex items-center justify-center">
+                <div className="bg-yellow-400 size-15.5 rounded-full flex items-center justify-center">
+                  <AlertTriangle className="size-[42px] text-white" />
+                </div>
+              </div>
+            )}
             <div className="font-medium">
               {notification?.title}{" "}
               {notification?.status &&
@@ -50,7 +56,14 @@ const NotificationModal = ({
                 ? "Failed"
                 : "Pending"}
             </div>
-            <h3 className="font-bold text-2xl">NGN 8,000</h3>
+            <h3 className="font-bold text-2xl">
+              {new Intl.NumberFormat("en-NG", {
+                style: "currency",
+                currency: "NGN",
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }).format(notification?.amount || 0)}
+            </h3>
           </DialogHeader>
           <span className="border-2 border-[#7910B1] rounded-xs px-3 my-1.5" />
           <div className="flex flex-col gap-2 text-sm font-medium">
@@ -70,11 +83,11 @@ const NotificationModal = ({
             </div>
             <div className="flex justify-between">
               <span>Method</span>
-              <span>{notification?.type}</span>
+              <span>{notification?.transactionCategory}</span>
             </div>
             <div className="flex justify-between">
               <span>Transaction Type</span>
-              <span>{notification?.transactionType}</span>
+              <span>{notification?.type}</span>
             </div>
             <div className="flex justify-between">
               <span>Status</span>

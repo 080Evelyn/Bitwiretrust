@@ -26,11 +26,12 @@ import { phoneNumberSchema } from "@/lib/validationSchema";
 import { Biller } from "@/types/utility-payment";
 import { useServiceIdentifiers } from "@/hooks/utility-payments/useServiceIdentifiers";
 import { purchaseAirtime } from "@/api/micro-transaction";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import axios from "axios";
 import { cn } from "@/lib/utils";
 import ButtonLoading from "../common/ButtonLoading";
+import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
 
 interface FormData {
   phone: string;
@@ -45,7 +46,8 @@ const Airtime = () => {
   const [selectedBiller, setSelectedBiller] = useState<Biller | null>(null);
   const amounts: number[] = [50, 100, 200, 500, 1000];
   const { data: networkProviders = [] } = useServiceIdentifiers("airtime");
-  const queryClient = useQueryClient();
+
+  const { invalidateAfterTransaction } = useQueryInvalidation();
 
   const formSchema = useMemo(() => {
     const min = Number(selectedBiller?.minimium_amount) || 100;
@@ -121,7 +123,7 @@ const Airtime = () => {
       buyAirtimeMutation.mutate(requestData, {
         onSuccess: (response) => {
           toast.success(response.data.response_description);
-          queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
+          invalidateAfterTransaction();
           form.reset();
         },
 

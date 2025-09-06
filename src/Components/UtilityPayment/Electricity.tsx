@@ -25,7 +25,7 @@ import { usePinModal } from "@/context/PinModalContext";
 import { useServiceIdentifiers } from "@/hooks/utility-payments/useServiceIdentifiers";
 import { ikejaDisco } from "@/assets";
 import { Biller } from "@/types/utility-payment";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import {
   prepaidElectricityPurchase,
   postpaidElectricityPurchase,
@@ -35,6 +35,7 @@ import { FaSpinner } from "react-icons/fa";
 import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 import { cn } from "@/lib/utils";
+import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
 
 type FormData = {
   meterNumber: string;
@@ -53,7 +54,8 @@ const Electricity = () => {
   const [meterError, setMeterError] = useState("");
   const [meterNumber, setMeterNumber] = useState("");
   const [debouncedMeterNumber] = useDebounce(meterNumber, 700);
-  const queryClient = useQueryClient();
+
+  const { invalidateAfterTransaction } = useQueryInvalidation();
 
   const VerifyMeterNumberMutation = useMutation({
     mutationFn: (data: {
@@ -204,7 +206,7 @@ const Electricity = () => {
               form.setValue("meterNumber", "");
               setMeterName("");
               setMeterError("");
-              queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
+              invalidateAfterTransaction();
             },
             onError: (error) => {
               toast.error("Purchase failed:" + error.message);
@@ -228,7 +230,7 @@ const Electricity = () => {
               form.reset();
               setMeterName("");
               setMeterError("");
-              queryClient.invalidateQueries({ queryKey: ["dvaInfo"] });
+              invalidateAfterTransaction();
             },
             onError: (error) => {
               toast.error("Purchase failed:" + error.message);

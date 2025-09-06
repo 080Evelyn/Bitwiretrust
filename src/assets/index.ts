@@ -120,8 +120,10 @@ import ServiceStatsIcon from "./service-stats.svg";
 import KycPablock from "./kyc-padlock.svg";
 import GalleryAdd from "./gallery-add.svg";
 import NotificationArrowDown from "./notification-arrown-down.svg";
+import LogoWhite from "./logo_white.png";
 
 export {
+  LogoWhite,
   NotificationArrowDown,
   GalleryAdd,
   KycPablock,

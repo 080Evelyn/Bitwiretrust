@@ -15,7 +15,7 @@ import { ArrowLeft, X } from "lucide-react";
 import NotificationModal from "./NotificationModal";
 import { useScrollLock } from "@/hooks/useScrollLock";
 import { useResponsivePopover } from "@/hooks/viewportResize";
-import { logo, MoneyIn, MoneyOut, NotificationArrowDown } from "@/assets";
+import { LogoWhite, MoneyIn, MoneyOut, NotificationArrowDown } from "@/assets";
 import { Skeleton } from "../ui/skeleton";
 
 interface NotificationPopoverProps {
@@ -23,12 +23,6 @@ interface NotificationPopoverProps {
   isPending: boolean;
   notifications: TransactionData[];
 }
-
-const iconMap = {
-  CREDIT: <img src={MoneyIn} className="text-white size-5.5" />,
-  DEBIT: <img src={MoneyOut} className="text-white size-5.5" />,
-  Announcement: <img src={logo} className="text-white size-5.5" />,
-};
 
 const statusColorMap = {
   success: "text-green-500",
@@ -190,13 +184,28 @@ const NotificationPopover = ({
                       <div className="flex gap-2 w-[70%]">
                         <div
                           className={cn(
-                            "size-9 flex items-center justify-center rounded-md bg-[#7910B1]",
-                            notif.transactionType === "CREDIT" &&
-                              "bg-[#16D005]",
-                            notif.transactionType === "DEBIT" && "bg-[#2EBAC6]"
+                            "size-9.5 flex items-center justify-center rounded-[3px] bg-[#7910B1]",
+                            notif.type === "CREDITED" && "bg-[#16D005]",
+                            notif.type === "DEBITED" && "bg-[#2EBAC6]"
                           )}
                         >
-                          {iconMap[notif.transactionType || "announcement"]}
+                          <img
+                            src={
+                              notif.type === "CREDITED"
+                                ? MoneyIn
+                                : notif.type === "DEBITED"
+                                ? MoneyOut
+                                : LogoWhite
+                            }
+                            className="size-5"
+                            alt={
+                              notif.type === "CREDITED"
+                                ? "money-in"
+                                : notif.type === "DEBITED"
+                                ? "money-out"
+                                : "logo"
+                            }
+                          />
                         </div>
                         <div className="flex flex-1 flex-col">
                           <h4 className="font-medium text-sm md:text-xs">

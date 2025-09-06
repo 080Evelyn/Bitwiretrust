@@ -3,10 +3,13 @@ import "./styles.css";
 import { help_circle, password } from "../../assets";
 import { FaEye } from "react-icons/fa";
 import { Skeleton } from "../ui/skeleton";
+import { useOutletContext } from "react-router-dom";
+import { UserContext } from "@/types/user";
 
 const BalanceOverview = ({ pathName }: { pathName?: string }) => {
   const [hideBalance, setHideBalance] = useState(false);
   const isLoading = false;
+  const { user } = useOutletContext<UserContext>();
 
   return (
     <div>
@@ -24,10 +27,13 @@ const BalanceOverview = ({ pathName }: { pathName?: string }) => {
               ) : !isLoading ? (
                 <>
                   {(() => {
+                    const balance = Number(user?.walletBalance).toFixed(2);
+                    const [intPart, decPart] = balance.split(".");
+                    const formattedInt = Number(intPart).toLocaleString();
                     return (
                       <>
-                        0.
-                        <span className="decimal">00</span>
+                        {formattedInt}.
+                        <span className="decimal">{decPart}</span>
                       </>
                     );
                   })()}
