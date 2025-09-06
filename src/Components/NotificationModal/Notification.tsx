@@ -185,25 +185,23 @@ const NotificationPopover = ({
                         <div
                           className={cn(
                             "size-9.5 flex items-center justify-center rounded-[3px] bg-[#7910B1]",
-                            notif.transactionType === "CREDITED" &&
-                              "bg-[#16D005]",
-                            notif.transactionType === "DEBITED" &&
-                              "bg-[#2EBAC6]"
+                            notif.type === "CREDITED" && "bg-[#16D005]",
+                            notif.type === "DEBITED" && "bg-[#2EBAC6]"
                           )}
                         >
                           <img
                             src={
-                              notif.transactionType === "CREDITED"
+                              notif.type === "CREDITED"
                                 ? MoneyIn
-                                : notif.transactionType === "DEBITED"
+                                : notif.type === "DEBITED"
                                 ? MoneyOut
                                 : LogoWhite
                             }
                             className="size-5"
                             alt={
-                              notif.transactionType === "CREDITED"
+                              notif.type === "CREDITED"
                                 ? "money-in"
-                                : notif.transactionType === "DEBITED"
+                                : notif.type === "DEBITED"
                                 ? "money-out"
                                 : "logo"
                             }
