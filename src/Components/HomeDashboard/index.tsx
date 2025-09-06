@@ -11,7 +11,7 @@ import {
   circle_arrow_left,
   export_png,
   gala_add,
-  logo,
+  LogoWhite,
   MoneyIn,
   MoneyOut,
   wallet,
@@ -257,11 +257,11 @@ const HomeDashboard = (_props: Props) => {
                     >
                       <img
                         src={
-                          notif.transactionType === "CREDIT"
+                          notif.transactionType === "CREDITED"
                             ? MoneyIn
-                            : notif.transactionType === "DEBIT"
+                            : notif.transactionType === "DEBITED"
                             ? MoneyOut
-                            : logo
+                            : LogoWhite
                         }
                         alt="Transaction icon"
                         className="transaction-icon"

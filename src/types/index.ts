@@ -168,7 +168,7 @@ export interface TransactionData {
   createdAt: Date;
   amount: number;
   status: string;
-  transactionType: "CREDIT" | "DEBIT" | "Announcement";
+  transactionType: string;
 }
 
 export interface KycSubmitProps {
