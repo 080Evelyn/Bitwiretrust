@@ -5,7 +5,7 @@ import {
   depositCrypto,
   NairaLogo,
   plusCircle,
-  sendCrypto,
+  // sendCrypto,
   swapCrypto,
 } from "@/assets";
 
@@ -179,10 +179,10 @@ export const actions = [
     title: "Buy",
     img: plusCircle,
   },
-  {
-    title: "Send",
-    img: sendCrypto,
-  },
+  // {
+  //   title: "Send",
+  //   img: sendCrypto,
+  // },
   {
     title: "Deposit",
     img: depositCrypto,
