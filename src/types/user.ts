@@ -24,6 +24,16 @@ export interface User {
   userRole: string;
   walletBalance: number;
   walletCurrency: string;
+  bankDetails: bankDetails;
+}
+
+interface bankDetails {
+  id: 0;
+  account_number: string;
+  account_name: string;
+  bank_code: string;
+  bank_name: string;
+  bankLinked: boolean;
 }
 
 export type UserContext = { user: User };
