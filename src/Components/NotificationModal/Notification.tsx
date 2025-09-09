@@ -17,6 +17,8 @@ import { useScrollLock } from "@/hooks/useScrollLock";
 import { useResponsivePopover } from "@/hooks/viewportResize";
 import { LogoWhite, MoneyIn, MoneyOut, NotificationArrowDown } from "@/assets";
 import { Skeleton } from "../ui/skeleton";
+import { useMutation } from "@tanstack/react-query";
+import { markAsRead } from "@/api/user-notification";
 
 interface NotificationPopoverProps {
   trigger: React.ReactNode;
@@ -39,10 +41,10 @@ const NotificationPopover = ({
   const [selectedNotif, setSelectedNotif] = useState<TransactionData | null>(
     null
   );
-
   const [monthFilter, setMonthFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [localReadIds, setLocalReadIds] = useState<Set<string>>(new Set());
 
   type StatusKey = "success" | "failed" | "pending";
 
@@ -51,9 +53,21 @@ const NotificationPopover = ({
     return statusColorMap[key] || "text-gray-400";
   }
 
+  const readMutation = useMutation({
+    mutationFn: (id: string) => {
+      return markAsRead(id);
+    },
+  });
+
   const handleNotificationClick = (notif: TransactionData) => {
     if (selectedNotif?.id !== notif.id) {
       setSelectedNotif(notif);
+
+      // instant UI feedback
+      if (!notif.isRead) {
+        setLocalReadIds((prev) => new Set(prev).add(notif.id));
+        readMutation.mutate(notif.id);
+      }
     }
   };
 
@@ -179,12 +193,17 @@ const NotificationPopover = ({
                         e.stopPropagation();
                         handleNotificationClick(notif);
                       }}
-                      className="flex justify-between items-start text-left hover:bg-accent/40 rounded-md px-2 py-1 transition"
+                      className={cn(
+                        !notif.isRead && !localReadIds.has(notif.id)
+                          ? "bg-blue-500/8"
+                          : "bg-background",
+                        "flex justify-between items-start text-left hover:opacity-90 cursor-pointer rounded-md px-2 mx-1 py-1 transition"
+                      )}
                     >
                       <div className="flex gap-2 w-[70%]">
                         <div
                           className={cn(
-                            "size-9.5 flex items-center justify-center rounded-[3px] bg-[#7910B1]",
+                            "size-9.5 flex items-center justify-center rounded-[3px] bg-primary",
                             notif.type === "CREDITED" && "bg-[#16D005]",
                             notif.type === "DEBITED" && "bg-[#2EBAC6]"
                           )}

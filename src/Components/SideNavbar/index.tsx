@@ -170,7 +170,7 @@ const SideNavbar = () => {
               "invisible md:visible": isGiftCardSellPage,
             })}
           >
-            <img src={full_logo} alt="Bitwire Logo" className="h-6" />
+            <img src={full_logo} alt="Bitwire Logo" className="h-7.5" />
           </Link>
 
           <div

@@ -10,3 +10,12 @@ export const useQueryInvalidation = () => {
 
   return { invalidateAfterTransaction };
 };
+export const useNotificationInvalidation = () => {
+  const queryClient = useQueryClient();
+
+  const invalidateAfterTransaction = () => {
+    queryClient.invalidateQueries({ queryKey: ["transactions"] });
+  };
+
+  return { invalidateAfterTransaction };
+};
