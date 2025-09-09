@@ -2,7 +2,6 @@ import { useEffect, useState, useMemo } from "react";
 import { z, ZodType } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
   Form,
   FormControl,
@@ -36,6 +35,9 @@ import { toast } from "sonner";
 import { useDebounce } from "use-debounce";
 import { cn } from "@/lib/utils";
 import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
+import SuccessModal from "../SuccessModal/SuccessModal";
+import { useOutletContext } from "react-router-dom";
+import { UserContext } from "@/types/user";
 
 type FormData = {
   meterNumber: string;
@@ -54,6 +56,15 @@ const Electricity = () => {
   const [meterError, setMeterError] = useState("");
   const [meterNumber, setMeterNumber] = useState("");
   const [debouncedMeterNumber] = useDebounce(meterNumber, 700);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [transactionData, setTransactionData] = useState({
+    title: "",
+    amount: 0,
+    meterNumber: "",
+    electricityToken: "",
+    electricityUnit: "",
+  });
+  const { user } = useOutletContext<UserContext>();
 
   const { invalidateAfterTransaction } = useQueryInvalidation();
 
@@ -195,15 +206,21 @@ const Electricity = () => {
             serviceID: values.serviceID,
             variation_code: "prepaid",
             billersCode: values.meterNumber,
-            phone: "08171981099",
+            phone: user.phone,
             amount: Number(values.amount),
             type: selected,
           },
           {
-            onSuccess: () => {
-              toast.success("Purchase successful");
-              form.setValue("amount", "");
-              form.setValue("meterNumber", "");
+            onSuccess: (response) => {
+              setTransactionData({
+                title: "Electricity Purchase Successful!",
+                amount: Number(values.amount),
+                electricityToken: response.data?.token,
+                electricityUnit: response.data?.units,
+                meterNumber: values.meterNumber,
+              });
+              setIsSuccessModalOpen(true);
+              form.reset();
               setMeterName("");
               setMeterError("");
               invalidateAfterTransaction();
@@ -220,13 +237,20 @@ const Electricity = () => {
             serviceID: values.serviceID,
             variation_code: "postpaid",
             billersCode: values.meterNumber,
-            phone: values.meterNumber,
+            phone: user.phone,
             amount: Number(values.amount),
             type: selected,
           },
           {
-            onSuccess: () => {
-              toast.success("Purchase successful");
+            onSuccess: (response) => {
+              setTransactionData({
+                title: "Electricity Purchase Successful!",
+                amount: Number(values.amount),
+                electricityToken: response.data?.token,
+                electricityUnit: response.data?.units,
+                meterNumber: values.meterNumber,
+              });
+              setIsSuccessModalOpen(true);
               form.reset();
               setMeterName("");
               setMeterError("");
@@ -415,6 +439,17 @@ const Electricity = () => {
           </button>
         </form>
       </Form>
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title={transactionData.title}
+        electricityMeterNumber={transactionData.meterNumber}
+        electricityUnit={transactionData.electricityUnit}
+        electricityToken={transactionData.electricityToken}
+        amount={transactionData.amount}
+        mobileMaxWidth="max-w-[calc(100%-2rem)]"
+      />
     </div>
   );
 };

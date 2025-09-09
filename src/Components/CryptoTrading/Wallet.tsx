@@ -23,7 +23,11 @@ const Wallet = ({ coin }: CoinWalletProps) => {
   const renderDialogContent = () => {
     switch (selectedAction) {
       case "Buy":
-        return <BuyModal closeModal={closeModal} coin={coin} />;
+        return (
+          <BuyModal
+          // closeModal={closeModal} coin={coin}
+          />
+        );
       case "Send":
         return <SendModal closeModal={closeModal} />;
       case "Deposit":
@@ -86,7 +90,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
             <div className="flex flex-col items-center">
               <span className="md:text-xs">Balance</span>
               <h1 className="font-bold text-[34px] md:text-[1.6rem] tracking-[-0.13px]">
-                N{coin?.converted_balance}
+                ₦{coin?.converted_balance}
               </h1>
             </div>
           </>

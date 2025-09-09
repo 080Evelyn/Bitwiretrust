@@ -34,6 +34,7 @@ import axios from "axios";
 import { FaSpinner } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
+import SuccessModal from "../SuccessModal/SuccessModal";
 
 const schema = z.object({
   phone: phoneNumberSchema,
@@ -53,6 +54,8 @@ const Data = () => {
     selectedBiller?.serviceID
   );
   const { invalidateAfterTransaction } = useQueryInvalidation();
+
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const form = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -116,8 +119,8 @@ const Data = () => {
 
     openPinModal(() => {
       buyDataMutation.mutate(requestData, {
-        onSuccess: (response) => {
-          toast.success(response.data.response_description);
+        onSuccess: () => {
+          setIsSuccessModalOpen(true);
           invalidateAfterTransaction();
         },
         onError: (error: unknown) => {
@@ -306,6 +309,12 @@ const Data = () => {
           </button>
         </form>
       </Form>
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title="Airtime Purchase Successful!"
+      />
     </div>
   );
 };

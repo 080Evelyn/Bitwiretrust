@@ -17,7 +17,7 @@ import {
   OrderGiftCardProps,
 } from "@/types/gift-card";
 import { ScrollArea } from "@/Components/ui/scroll-area";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { orderGiftCard } from "@/api/giftcard";
 import { getUserId } from "@/utils/AuthStorage";
@@ -27,6 +27,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { cn } from "@/lib/utils";
 import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
+import SuccessModal from "@/Components/SuccessModal/SuccessModal";
 
 interface FormValues {
   email: string;
@@ -40,6 +41,7 @@ interface GiftCardBuyAmountProps {
 
 const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
   const { openPinModal } = usePinModal();
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const { user } = useOutletContext<UserContext>();
 
   const { invalidateAfterTransaction } = useQueryInvalidation();
@@ -131,7 +133,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
 
       orderMutation.mutate(payload, {
         onSuccess: () => {
-          toast.success("Purchase successful");
+          setIsSuccessModalOpen(true);
           invalidateAfterTransaction();
           form.reset({ email: "", amount: "", quantity: "" });
         },
@@ -290,6 +292,12 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
           </form>
         </ScrollArea>
       </Form>
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title="Gitf Card Purchase Successful!"
+      />
     </div>
   );
 };
