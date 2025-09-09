@@ -16,3 +16,8 @@ export const transactions = async () => {
 
   return response.data;
 };
+
+export const markAsRead = async (id: string) => {
+  const response = await axios.patch(`${url}/v1/user/notification/${id}/read`);
+  return response.data;
+};

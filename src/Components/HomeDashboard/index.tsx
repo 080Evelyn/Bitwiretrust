@@ -54,7 +54,7 @@ const HomeDashboard = (_props: Props) => {
         return "green";
       case "DEBITED":
         return "green";
-      case "orange":
+      case "Announcement":
         return "orange";
       default:
         return "gray";

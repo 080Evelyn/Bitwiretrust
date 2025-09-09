@@ -34,7 +34,7 @@ export function Step2Form({
               {selectedBank?.name || ""}
             </span>
             <span className="text-sm">{accountDetails?.account || ""}</span>
-            <span className=" text-sm font-medium text-[#7910d7]">
+            <span className="text-sm font-medium text-primary">
               {accountName || ""}
             </span>
           </div>
