@@ -1,5 +1,3 @@
-import { FC } from "react";
-import { UseFormReturn } from "react-hook-form";
 import {
   Form,
   FormField,
@@ -7,160 +5,58 @@ import {
   FormControl,
   FormMessage,
 } from "@/Components/ui/form";
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "../../ui/command";
-import { BankList } from "@/types/dashboard";
-import { cn } from "@/lib/utils";
+import { UserContext } from "@/types/user";
+import { UseFormReturn } from "react-hook-form";
+import { useOutletContext } from "react-router-dom";
+import { Step1Values } from "../TransferModal";
 
-interface Step1FormProps {
+interface FormData {
   form: UseFormReturn<Step1Values>;
-  selectedBank: BankList | null;
-  setSelectedBank: (bank: BankList | null) => void;
-  bankListData?: BankList[];
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  isVerifying: boolean;
-  accountName: string | null;
-  verifyBankAccountMutationPending: boolean;
-  createRecipientMutationPending: boolean;
-  onSubmit: (values: Step1Values) => void;
-  watchedAccountNumber: string;
-  selectedBankCode?: string;
+  onSubmit: () => void;
 }
+export function Step1Form({ form, onSubmit }: FormData) {
+  const { user } = useOutletContext<UserContext>();
 
-export type Step1Values = {
-  account: string;
-};
-
-export const Step1Form: FC<Step1FormProps> = ({
-  form,
-  selectedBank,
-  setSelectedBank,
-  bankListData,
-  open,
-  setOpen,
-  isVerifying,
-  accountName,
-  verifyBankAccountMutationPending,
-  createRecipientMutationPending,
-  onSubmit,
-  watchedAccountNumber,
-  selectedBankCode,
-}) => {
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="pt-10 sm:pt-20">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="pt-5 sm:pt-20">
         <div className="flex flex-col gap-3 px-5">
-          <div className="relative w-full">
-            <span className="absolute left-4 text-xs top-1/2 transform -translate-y-1/2 z-10">
-              Recipient Bank:
+          <div className="flex flex-col max-sm:gap-2 w-full sm:-mt-5 text-center">
+            <span className="text-xs font-semibold">
+              {user?.bankDetails?.bank_name}
             </span>
-
-            <button
-              type="button"
-              onClick={() => setOpen(true)}
-              role="combobox"
-              aria-expanded={open}
-              className="w-full h-10 !bg-white !rounded-sm !border-0 text-right px-3 text-sm flex items-center justify-between z-50 relative"
-            >
-              {selectedBank?.name || "Select Bank"}
-            </button>
-
-            <CommandDialog
-              open={open}
-              onOpenChange={setOpen}
-              title="Select Bank"
-              description=""
-              className="pt-2.5 p max-h-[350px] max-w-[80%] sm:max-w-[38%]"
-            >
-              <CommandInput
-                placeholder="Search bank..."
-                className="!h-6 sm:!h-7.5 w-[80%]"
-              />
-              <CommandEmpty>No bank found.</CommandEmpty>
-              <CommandList>
-                <CommandGroup>
-                  {bankListData?.map((bank) => (
-                    <CommandItem
-                      key={bank.code}
-                      value={bank.name}
-                      onSelect={() => {
-                        setSelectedBank(bank);
-                        setOpen(false);
-                      }}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {bank.name}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </CommandDialog>
+            <span className="text-sm">{user?.bankDetails?.account_number}</span>
+            <span className="text-sm font-medium text-primary">
+              {user?.bankDetails?.account_name}
+            </span>
           </div>
 
-          {/* Account input */}
           <FormField
             control={form.control}
-            name="account"
+            name="amount"
             render={({ field }) => (
               <FormItem className="relative w-full">
-                <span className="absolute left-4 text-xs top-3 transform">
-                  Recipient Account:
-                </span>
+                <span className="left-4 text-xs">Amount</span>
                 <FormControl>
                   <input
-                    type="tel"
                     inputMode="numeric"
                     pattern="[0-9]*"
-                    maxLength={10}
-                    onInput={(e) => {
-                      e.currentTarget.value = e.currentTarget.value.replace(
-                        /\D/g,
-                        ""
-                      );
-                    }}
-                    className="w-full h-10 !bg-white !rounded-sm !border-0 text-right"
+                    placeholder="1,000,000"
+                    className="w-full h-10 !bg-white !rounded-sm !border-0"
                     {...field}
+                    value={field.value ?? ""}
                   />
                 </FormControl>
-
-                {watchedAccountNumber.length === 10 && selectedBankCode && (
-                  <div className="mt-1 text-sm text-center">
-                    {isVerifying ? (
-                      <span className="text-gray-500 animate-pulse">
-                        Verifying...
-                      </span>
-                    ) : accountName ? (
-                      <span className="text-[#7910B1] text-lg font-medium">
-                        {accountName}
-                      </span>
-                    ) : null}
-                  </div>
-                )}
-                <FormMessage className="text-red-500 text-xs mt-1" />
+                <FormMessage />
               </FormItem>
             )}
           />
 
-          <button
-            type="submit"
-            className={cn("btn-primary w-1/2 mx-auto mt-10", {
-              "cursor-not-allowed": verifyBankAccountMutationPending,
-            })}
-            disabled={
-              verifyBankAccountMutationPending || createRecipientMutationPending
-            }
-          >
-            {createRecipientMutationPending ? "Verifying..." : "Continue"}
+          <button type="submit" className="btn-primary w-1/2 mx-auto mt-10">
+            Withdraw
           </button>
         </div>
       </form>
     </Form>
   );
-};
+}
