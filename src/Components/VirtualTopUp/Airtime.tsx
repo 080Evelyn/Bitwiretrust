@@ -32,6 +32,7 @@ import axios from "axios";
 import { cn } from "@/lib/utils";
 import ButtonLoading from "../common/ButtonLoading";
 import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
+import SuccessModal from "../SuccessModal/SuccessModal";
 
 interface FormData {
   phone: string;
@@ -46,6 +47,7 @@ const Airtime = () => {
   const [selectedBiller, setSelectedBiller] = useState<Biller | null>(null);
   const amounts: number[] = [50, 100, 200, 500, 1000];
   const { data: networkProviders = [] } = useServiceIdentifiers("airtime");
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const { invalidateAfterTransaction } = useQueryInvalidation();
 
@@ -121,8 +123,8 @@ const Airtime = () => {
       };
 
       buyAirtimeMutation.mutate(requestData, {
-        onSuccess: (response) => {
-          toast.success(response.data.response_description);
+        onSuccess: () => {
+          setIsSuccessModalOpen(true);
           invalidateAfterTransaction();
           form.reset();
         },
@@ -143,148 +145,156 @@ const Airtime = () => {
   const isLoading = buyAirtimeMutation.isPending;
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-3"
-      >
-        <div className="text-center font-medium hidden md:block card-container rounded-[4px] py-1.75">
-          Airtime
-        </div>
-
-        <div className="flex flex-col gap-2 card-container rounded-md py-4 px-2">
-          <Select
-            onValueChange={(value) => {
-              const found = networkProviders.find(
-                (biller: Biller) => biller.serviceID === value
-              );
-              if (found) setSelectedBiller(found);
-            }}
-          >
-            <SelectTrigger className="!text-white bg-[#7910B1] w-full rounded-[4.91px] py-5">
-              <div className="flex items-center gap-2">
-                <img
-                  src={selectedBiller?.image}
-                  alt={selectedBiller?.name}
-                  className="size-7 rounded-[3px]"
-                />
-                <span>{selectedBiller?.name}</span>
-              </div>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <div className="flex flex-col gap-1.5 mt-1">
-                  {networkProviders.map((provider: Biller) => (
-                    <SelectItem
-                      key={provider.serviceID}
-                      value={provider.serviceID}
-                      className="w-full rounded-sm bg-[#E9A9FF] text-white"
-                    >
-                      <div className="flex items-center gap-2">
-                        <img
-                          src={provider.image}
-                          alt={provider.name}
-                          className="size-7 rounded-[3px]"
-                        />
-                        <span>{provider.name}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </div>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-
-          <div className="flex w-full gap-2.5">
-            {amounts.map((a) => {
-              const isSelected = Number(form.watch("amount")) === a;
-
-              return (
-                <button
-                  type="button"
-                  key={a}
-                  onClick={() => handleAmountClick(a)}
-                  className={`w-1/2 size-11.25 cursor-pointer rounded-[4.75px] border text-sm font-medium transition-colors ${
-                    isSelected
-                      ? "bg-[#28003E] text-white"
-                      : "bg-[#F9EDFF] text-black/45 border-[#F9EDFF]"
-                  }`}
-                >
-                  {a}
-                </button>
-              );
-            })}
+    <>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-3"
+        >
+          <div className="text-center font-medium hidden md:block card-container rounded-[4px] py-1.75">
+            Airtime
           </div>
 
-          <FormField
-            control={form.control}
-            name="amount"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    type="tel"
-                    placeholder="Enter Amount"
-                    min={selectedBiller?.minimium_amount || 10}
-                    max={selectedBiller?.maximum_amount || 1000000}
-                    {...field}
-                    className="font-semibold tracking-[-0.13px]"
+          <div className="flex flex-col gap-2 card-container rounded-md py-4 px-2">
+            <Select
+              onValueChange={(value) => {
+                const found = networkProviders.find(
+                  (biller: Biller) => biller.serviceID === value
+                );
+                if (found) setSelectedBiller(found);
+              }}
+            >
+              <SelectTrigger className="!text-white bg-[#7910B1] w-full rounded-[4.91px] py-5">
+                <div className="flex items-center gap-2">
+                  <img
+                    src={selectedBiller?.image}
+                    alt={selectedBiller?.name}
+                    className="size-7 rounded-[3px]"
                   />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <span>{selectedBiller?.name}</span>
+                </div>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <div className="flex flex-col gap-1.5 mt-1">
+                    {networkProviders.map((provider: Biller) => (
+                      <SelectItem
+                        key={provider.serviceID}
+                        value={provider.serviceID}
+                        className="w-full rounded-sm bg-[#E9A9FF] text-white"
+                      >
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={provider.image}
+                            alt={provider.name}
+                            className="size-7 rounded-[3px]"
+                          />
+                          <span>{provider.name}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </div>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
 
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    type="tel"
-                    placeholder="Enter Phone Number"
-                    {...field}
-                    className="font-semibold tracking-[-0.13px]"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+            <div className="flex w-full gap-2.5">
+              {amounts.map((a) => {
+                const isSelected = Number(form.watch("amount")) === a;
 
-          <FormField
-            control={form.control}
-            name="saveBeneficiary"
-            render={({ field }) => (
-              <FormItem className="flex justify-between items-center">
-                <FormLabel className="text-[13px] font-medium">
-                  Save as beneficiary
-                </FormLabel>
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                    className="border-[1.25px] border-[#1B1C1E]"
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+                return (
+                  <button
+                    type="button"
+                    key={a}
+                    onClick={() => handleAmountClick(a)}
+                    className={`w-1/2 size-11.25 cursor-pointer rounded-[4.75px] border text-sm font-medium transition-colors ${
+                      isSelected
+                        ? "bg-[#28003E] text-white"
+                        : "bg-[#F9EDFF] text-black/45 border-[#F9EDFF]"
+                    }`}
+                  >
+                    {a}
+                  </button>
+                );
+              })}
+            </div>
 
-          <button
-            className={cn("btn-primary w-full", {
-              "opacity-50 cursor-not-allowed": isLoading,
-            })}
-            type="submit"
-            disabled={isLoading}
-          >
-            {isLoading ? <ButtonLoading /> : "Buy Now"}
-          </button>
-        </div>
-      </form>
-    </Form>
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="tel"
+                      placeholder="Enter Amount"
+                      min={selectedBiller?.minimium_amount || 10}
+                      max={selectedBiller?.maximum_amount || 1000000}
+                      {...field}
+                      className="font-semibold tracking-[-0.13px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="tel"
+                      placeholder="Enter Phone Number"
+                      {...field}
+                      className="font-semibold tracking-[-0.13px]"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="saveBeneficiary"
+              render={({ field }) => (
+                <FormItem className="flex justify-between items-center">
+                  <FormLabel className="text-[13px] font-medium">
+                    Save as beneficiary
+                  </FormLabel>
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                      className="border-[1.25px] border-[#1B1C1E]"
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+
+            <button
+              className={cn("btn-primary w-full", {
+                "opacity-50 cursor-not-allowed": isLoading,
+              })}
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? <ButtonLoading /> : "Buy Now"}
+            </button>
+          </div>
+        </form>
+      </Form>
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title="Airtime Purchase Successful!"
+      />
+    </>
   );
 };
 
