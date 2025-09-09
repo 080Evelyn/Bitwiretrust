@@ -21,7 +21,13 @@ import TransferSuccess from "./transfer/TransferSuccess";
 import { Step1Form } from "./transfer/Step1";
 
 const step1Schema = z.object({
-  amount: z.number().min(1, "Please enter a valid amount"),
+  amount: z
+    .number({
+      invalid_type_error: "Please enter a valid number",
+      required_error: "Amount is required",
+    })
+    .min(50, "Minimum amount is ₦50")
+    .positive("Please enter a positive amount"),
 });
 export interface Step1Values {
   amount: number;
