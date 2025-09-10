@@ -110,29 +110,29 @@ export function AdminProtectedRoute() {
   return <Outlet />;
 }
 
-export function PublicRoute() {
-  const { isPinSet, isLoading } = useAuth();
-  const userRole = getUserRole();
-  const token = getToken();
+// export function PublicRoute() {
+//   const { isPinSet, isLoading } = useAuth();
+//   const userRole = getUserRole();
+//   const token = getToken();
 
-  if (isLoading)
-    return (
-      <MainLoader />
-      // <div className="flex gap-2 h-screen items-center justify-center">
-      //   <div className="flex animate-pulse items-center">
-      //     <img src={logo} alt="bitwire logo" className="h-5.5" />
-      //     <span className="text-xl font-semibold">itwire</span>
-      //   </div>
-      //   <div className="size-5 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
-      // </div>
-    );
+//   if (isLoading)
+//     return (
+//       <MainLoader />
+//       <div className="flex gap-2 h-screen items-center justify-center">
+//         <div className="flex animate-pulse items-center">
+//           <img src={logo} alt="bitwire logo" className="h-5.5" />
+//           <span className="text-xl font-semibold">itwire</span>
+//         </div>
+//         <div className="size-5 border-2 border-purple-500 border-t-transparent rounded-full animate-spin" />
+//       </div>
+//     );
 
-  if (!!token && isPinSet) {
-    if (userRole === "ADMIN") {
-      return <Navigate to="/admin/dashboard" replace />;
-    }
-    return <Navigate to="/dashboard" replace />;
-  }
+//   if (!!token && isPinSet) {
+//     if (userRole === "ADMIN") {
+//       return <Navigate to="/admin/dashboard" replace />;
+//     }
+//     return <Navigate to="/dashboard" replace />;
+//   }
 
-  return <Outlet />;
-}
+//   return <Outlet />;
+// }

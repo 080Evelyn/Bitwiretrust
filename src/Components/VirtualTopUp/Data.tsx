@@ -97,19 +97,11 @@ const Data = () => {
 
   const onSubmit = (data: FormData) => {
     if (!data.planId) return;
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    const randomNumber = Array(3)
-      .fill("")
-      .map(() =>
-        characters.charAt(Math.floor(Math.random() * characters.length))
-      )
-      .join("");
 
     const numberAmount = Number(selectedPlan?.variation_amount || 0);
 
     const requestData = {
-      requestId: "202506241343b012a" + randomNumber,
+      requestId: "",
       serviceID: selectedBiller?.serviceID || "",
       amount: numberAmount,
       billersCode: data.phone,
@@ -313,7 +305,7 @@ const Data = () => {
       <SuccessModal
         isOpen={isSuccessModalOpen}
         onClose={() => setIsSuccessModalOpen(false)}
-        title="Airtime Purchase Successful!"
+        title="Data Purchase Successful!"
       />
     </div>
   );
