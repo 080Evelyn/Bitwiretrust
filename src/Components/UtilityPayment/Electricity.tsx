@@ -389,9 +389,11 @@ const Electricity = () => {
               <FormItem>
                 <FormControl>
                   <Input
-                    type="tel"
+                    type="text"
+                    inputMode="numeric"
                     placeholder="Enter Amount"
                     {...field}
+                    value={field.value ?? ""}
                     min={selectedBiller?.minimium_amount}
                     max={selectedBiller?.maximum_amount}
                   />
