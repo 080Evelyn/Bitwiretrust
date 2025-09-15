@@ -18,9 +18,9 @@ const TransferSuccess = ({ onClose }: { onClose: () => void }) => {
               <img src={naira} alt="naira" className="h-[25.54px]" />
             </div>
           </motion.div>
-          <span className="text-center text-xl font-semibold">
+          <h2 className="text-center text-xl font-semibold">
             Transfer Successful
-          </span>
+          </h2>
         </div>
 
         <button

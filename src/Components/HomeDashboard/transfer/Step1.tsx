@@ -9,12 +9,15 @@ import { UserContext } from "@/types/user";
 import { UseFormReturn } from "react-hook-form";
 import { useOutletContext } from "react-router-dom";
 import { Step1Values } from "../TransferModal";
+import { Button } from "@/Components/ui/button";
+import ButtonLoading from "@/Components/common/ButtonLoading";
 
 interface FormData {
   form: UseFormReturn<Step1Values>;
   onSubmit: () => void;
+  isLoading: boolean;
 }
-export function Step1Form({ form, onSubmit }: FormData) {
+export function Step1Form({ form, onSubmit, isLoading }: FormData) {
   const { user } = useOutletContext<UserContext>();
 
   return (
@@ -52,9 +55,14 @@ export function Step1Form({ form, onSubmit }: FormData) {
             )}
           />
 
-          <button type="submit" className="btn-primary w-1/2 mx-auto mt-10">
-            Withdraw
-          </button>
+          <Button
+            type="submit"
+            size={"lg"}
+            className="btn-primary w-1/2 mx-auto mt-10"
+            disabled={isLoading}
+          >
+            {isLoading ? <ButtonLoading /> : "Withdraw"}
+          </Button>
         </div>
       </form>
     </Form>

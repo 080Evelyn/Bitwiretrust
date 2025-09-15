@@ -197,3 +197,11 @@ export interface AddBankProps {
   bankCode: string;
   accountName: string;
 }
+
+export interface WalletRequestProps {
+  userId: string;
+  currency: string;
+  amount: number;
+  narration: string;
+  commissionWithdrawal?: boolean;
+}
