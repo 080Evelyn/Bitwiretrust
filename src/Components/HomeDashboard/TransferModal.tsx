@@ -14,14 +14,16 @@ import * as z from "zod";
 import { WithrawalImage } from "@/assets";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { initiateTransaction } from "@/api/wallet-service";
+import { withdrawalRequest } from "@/api/wallet-service";
 import axios from "axios";
 import { usePinModal } from "@/context/PinModalContext";
 import TransferSuccess from "./transfer/TransferSuccess";
 import { Step1Form } from "./transfer/Step1";
+import { WalletRequestProps } from "@/types";
+import { getUserId } from "@/utils/AuthStorage";
 
 const step1Schema = z.object({
-  amount: z
+  amount: z.coerce
     .number({
       invalid_type_error: "Please enter a valid number",
       required_error: "Amount is required",
@@ -49,8 +51,7 @@ export default function WithdrawalDialog({
   });
 
   const initiateTransferMutation = useMutation({
-    mutationFn: (data: { amount: number; source: string }) =>
-      initiateTransaction(data),
+    mutationFn: (data: WalletRequestProps) => withdrawalRequest(data),
     onError: (error: unknown) => {
       if (axios.isAxiosError(error)) {
         const responseDesc =
@@ -77,8 +78,11 @@ export default function WithdrawalDialog({
 
       initiateTransferMutation.mutate(
         {
-          amount,
-          source: "",
+          userId: getUserId() ?? "",
+          currency: "NGN",
+          amount: amount,
+          narration: "Withdrawal",
+          commissionWithdrawal: true,
         },
         {
           onSuccess: () => {
@@ -89,6 +93,8 @@ export default function WithdrawalDialog({
       );
     });
   };
+
+  const isLoading = initiateTransferMutation.isPending;
 
   const closeDialog = () => {
     setIsWithdrawalOpen(false);
@@ -137,7 +143,11 @@ export default function WithdrawalDialog({
 
             {/* Main content: either form or success */}
             {!showSuccess ? (
-              <Step1Form form={form} onSubmit={handleConfirmationSubmit} />
+              <Step1Form
+                form={form}
+                isLoading={isLoading}
+                onSubmit={handleConfirmationSubmit}
+              />
             ) : (
               <TransferSuccess onClose={closeDialog} />
             )}
