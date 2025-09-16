@@ -1,4 +1,7 @@
 import React, { Component, ReactNode } from "react";
+import { Link } from "react-router-dom";
+import { buttonVariants } from "./Components/ui/button";
+import { cn } from "./lib/utils";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -35,6 +38,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             Oops! Something went wrong
           </h1>
           <span>Please contact support if the problem persists.</span>
+          <Link
+            className={cn(buttonVariants({ size: "lg" }), "my-3")}
+            to="/contact"
+          >
+            Contact Support
+          </Link>
           <p className="text-red-500">
             {this.state.error?.message ?? "Unknown error"}
           </p>
