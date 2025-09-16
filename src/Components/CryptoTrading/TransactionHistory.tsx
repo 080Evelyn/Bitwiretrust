@@ -1,10 +1,10 @@
 import { SearchIcon } from "@/assets";
 import { Input } from "../ui/input";
 import { coinTransactions } from "@/constants/coins";
-import { Coin } from "@/types";
+import { WalletProps } from "@/types/crypto";
 
 interface Transactions {
-  coin: Coin | null;
+  coin: WalletProps | null;
 }
 const TransactionHistory = ({ coin }: Transactions) => {
   const filteredTransactions = coinTransactions.filter(

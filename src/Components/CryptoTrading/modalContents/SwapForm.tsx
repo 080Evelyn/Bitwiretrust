@@ -83,11 +83,9 @@ export default function SwapForm({
                   value={wallet?.id}
                   className="hover:bg-[#7910B1]/10 rounded-md"
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold uppercase">
-                      {wallet?.currency}
-                    </span>
-                  </div>
+                  <span className="font-semibold uppercase">
+                    {wallet?.currency}
+                  </span>
                 </SelectItem>
               ))}
           </SelectContent>

@@ -21,6 +21,7 @@ import Transactions from "@/admin/pages/Transactions";
 import KycManagement from "@/admin/pages/KycManagement";
 import UserManagement from "@/admin/pages/UserManagement";
 import PageNotFound from "@/Pages/404/PageNotFound";
+import ErrorBoundary from "@/ErrorBoundary";
 
 export const router = createBrowserRouter([
   {
@@ -56,10 +57,18 @@ export const router = createBrowserRouter([
 
   //user route
   {
-    element: <UserProtectedRoute />,
+    element: (
+      <ErrorBoundary>
+        <UserProtectedRoute />
+      </ErrorBoundary>
+    ),
     children: [
       {
-        element: <DashboardLayout />,
+        element: (
+          <ErrorBoundary>
+            <DashboardLayout />
+          </ErrorBoundary>
+        ),
         children: [
           { path: "dashboard", element: <HomeDashboard /> },
           { path: "utility-payment", element: <Utilitypayment /> },
@@ -74,7 +83,11 @@ export const router = createBrowserRouter([
 
   //Admin route
   {
-    element: <AdminProtectedRoute />,
+    element: (
+      <ErrorBoundary>
+        <AdminProtectedRoute />
+      </ErrorBoundary>
+    ),
     path: "admin/",
     children: [
       {
