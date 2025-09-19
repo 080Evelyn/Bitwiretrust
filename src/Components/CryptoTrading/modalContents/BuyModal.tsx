@@ -56,7 +56,7 @@ const BuyModal = () =>
     return (
       <div className="pt-3">
         <div className="text-center px-2 font-semibold rounded-sm bg-accent text-lg py-4">
-          Sport betting feature is coming soon 🚀
+          Buy Crypto feature is coming soon 🚀
         </div>
         {/* <span className="flex py-2 justify-center font-medium tracking-[-0.17px]">
         {coin?.} {coin?.currency} = {coin?.value} NGN
