@@ -82,6 +82,7 @@ export default function WithdrawalDialog({
           currency: "NGN",
           amount: amount,
           narration: "Withdrawal",
+          commissionWithdrawal: true,
         },
         {
           onSuccess: () => {

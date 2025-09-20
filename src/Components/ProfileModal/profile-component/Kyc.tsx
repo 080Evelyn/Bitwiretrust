@@ -61,7 +61,7 @@ const formSchema = z.object({
   identificationNumber: z
     .string()
     .min(1, { message: "Identification number is required" }),
-  identificationType: z.enum(["nin", "license", "passport", "bvn"], {
+  identificationType: z.enum(["nin", "license", "passport"], {
     message: "Identification type is required",
   }),
   utilityBill: z
@@ -112,7 +112,7 @@ const UserKyc = ({
       phone_number: "",
       address: "",
       income: "",
-      identificationType: "bvn",
+      identificationType: "nin",
       identificationNumber: "",
       utilityBill: undefined,
       // faceVerification: undefined,
@@ -368,7 +368,6 @@ const UserKyc = ({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="z-1000">
-                    <SelectItem value="bvn">BVN</SelectItem>
                     <SelectItem value="nin">NIN </SelectItem>
                     <SelectItem value="passport">
                       International Passport
