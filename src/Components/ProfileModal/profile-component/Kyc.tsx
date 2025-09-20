@@ -61,7 +61,7 @@ const formSchema = z.object({
   identificationNumber: z
     .string()
     .min(1, { message: "Identification number is required" }),
-  identificationType: z.enum(["nin", "license", "passport"], {
+  identificationType: z.enum(["NIN", "Drivers_license", "Passport"], {
     message: "Identification type is required",
   }),
   utilityBill: z
@@ -112,7 +112,7 @@ const UserKyc = ({
       phone_number: "",
       address: "",
       income: "",
-      identificationType: "nin",
+      identificationType: "NIN",
       identificationNumber: "",
       utilityBill: undefined,
       // faceVerification: undefined,
@@ -146,6 +146,7 @@ const UserKyc = ({
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const requestData = {
+      fullName: values.fullName,
       userId: getUserId() || "0",
       idNumber: values.identificationNumber,
       email: values.email,
@@ -368,11 +369,13 @@ const UserKyc = ({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="z-1000">
-                    <SelectItem value="nin">NIN </SelectItem>
-                    <SelectItem value="passport">
+                    <SelectItem value="NIN">NIN </SelectItem>
+                    <SelectItem value="Passport">
                       International Passport
                     </SelectItem>
-                    <SelectItem value="license">Drivers License</SelectItem>
+                    <SelectItem value="Driver_license">
+                      Drivers License
+                    </SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
