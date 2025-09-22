@@ -1,6 +1,33 @@
+import { totalKycVerified, totalUserCount } from "@/admin/api/user-managment";
 import { MultipleUser, UserNotVerified, UserVerified } from "@/assets";
+import { Skeleton } from "@/Components/ui/skeleton";
+import { useQuery } from "@tanstack/react-query";
 
 const Overview = () => {
+  const {
+    data: totalUserCountResponse,
+    isPending: totalUserCountPending,
+    error: totalUserCountError,
+    isError: totalUserCountIsError,
+  } = useQuery({
+    queryKey: ["totalUserCount"],
+    queryFn: totalUserCount,
+    staleTime: Infinity,
+  });
+  const totalUsers = totalUserCountResponse?.data?.totalCount ?? 0;
+
+  const {
+    data: totalKycVerifiedResponse,
+    isPending: totalKycVerifiedPending,
+    error: totalKycVerifiedError,
+    isError: totalKycVerifiedIsError,
+  } = useQuery({
+    queryKey: ["totalKycVerified"],
+    queryFn: totalKycVerified,
+    staleTime: Infinity,
+  });
+  const totalKycVerifiedUsers = totalKycVerifiedResponse?.data?.count ?? 0;
+
   return (
     <div className="py-2">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -15,7 +42,15 @@ const Overview = () => {
             </div>
           </div>
           <div className="flex font-semibold items-baseline">
-            <span className="text-2xl"> 12300</span>
+            <span className="text-2xl">
+              {totalUserCountPending ? (
+                <Skeleton className="h-6 w-15 pt-1" />
+              ) : totalUserCountIsError ? (
+                totalUserCountError
+              ) : (
+                totalUsers
+              )}
+            </span>
           </div>
         </div>
         <div className="bg-white rounded-lg py-4 px-2.5">
@@ -29,7 +64,15 @@ const Overview = () => {
             </div>
           </div>
           <div className="flex font-semibold items-baseline">
-            <span className="text-2xl"> 12000</span>
+            <span className="text-2xl">
+              {totalKycVerifiedPending ? (
+                <Skeleton className="h-6 w-15 pt-1" />
+              ) : totalKycVerifiedIsError ? (
+                totalKycVerifiedError
+              ) : (
+                totalKycVerifiedUsers
+              )}
+            </span>
           </div>
         </div>
         <div className="bg-white rounded-lg py-4 px-2.5">

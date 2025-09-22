@@ -1,5 +1,5 @@
 import KycTable from "../components/kyc-management/KycTable";
-import Overview from "../components/kyc-management/Overview";
+import Overview from "../components/user-management/Overview";
 
 const KycManagement = () => {
   return (
