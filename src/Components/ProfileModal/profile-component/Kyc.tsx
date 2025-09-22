@@ -38,12 +38,11 @@ const formSchema = z.object({
     .refine(
       (date) => {
         const dobDate = new Date(date);
-        const today = new Date(); // Current date
+        const today = new Date();
         const age = today.getFullYear() - dobDate.getFullYear();
         const monthDiff = today.getMonth() - dobDate.getMonth();
         const dayDiff = today.getDate() - dobDate.getDate();
 
-        // Adjust age if birthday hasn't occurred this year
         if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
           return age - 1 >= 18;
         }
