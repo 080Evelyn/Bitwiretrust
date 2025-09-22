@@ -30,6 +30,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/Components/ui/pagination";
+import { Badge } from "@/Components/ui/badge";
+import { cn } from "@/lib/utils";
 
 const UserTable = () => {
   const [page, setPage] = useState(0);
@@ -117,7 +119,16 @@ const UserTable = () => {
                   No. 10, Oyin Street, Ibadan, Delta State
                 </TableCell>
                 <TableCell>
-                  {user?.isKycVerified === true ? "Verified" : "Unverified"}
+                  <Badge
+                    className={cn(
+                      user?.isKycVerified === true
+                        ? "bg-green-500 hover:bg-green-600"
+                        : "bg-red-400 hover:bg-red-500",
+                      "text-xs font-medium"
+                    )}
+                  >
+                    {user?.isKycVerified === true ? "Verified" : "Unverified"}
+                  </Badge>
                 </TableCell>
                 <TableCell className="text-right">
                   <Dialog>
@@ -156,11 +167,18 @@ const UserTable = () => {
                           </div>
                           <div className="flex text-foreground justify-between items-center">
                             <h3 className="text-xs font-semibold">Status</h3>
-                            <p className="text-xs font-light">
+                            <Badge
+                              className={cn(
+                                user?.isKycVerified === true
+                                  ? "bg-green-500 hover:bg-green-600"
+                                  : "bg-red-400 hover:bg-red-500",
+                                "text-xs font-medium"
+                              )}
+                            >
                               {user?.isKycVerified === true
                                 ? "Verified"
                                 : "Unverified"}
-                            </p>
+                            </Badge>
                           </div>
                         </div>
                       </DialogDescription>
