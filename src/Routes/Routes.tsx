@@ -22,6 +22,7 @@ import KycManagement from "@/admin/pages/KycManagement";
 import UserManagement from "@/admin/pages/UserManagement";
 import PageNotFound from "@/Pages/404/PageNotFound";
 import ErrorBoundary from "@/ErrorBoundary";
+import CryptoManagement from "@/admin/pages/CryptoManagement";
 
 export const router = createBrowserRouter([
   {
@@ -97,6 +98,7 @@ export const router = createBrowserRouter([
           { path: "transactions", element: <Transactions /> },
           { path: "kyc-management", element: <KycManagement /> },
           { path: "users-management", element: <UserManagement /> },
+          { path: "crypto-management", element: <CryptoManagement /> },
         ],
       },
     ],

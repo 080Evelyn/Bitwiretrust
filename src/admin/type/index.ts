@@ -31,3 +31,36 @@ export interface FilteredTransactionProps {
   page?: string;
   size?: string;
 }
+
+export interface AllUsersProps {
+  avatar?: string;
+  userId: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  userRole: string;
+  isKycVerified: boolean;
+  isPinSet: boolean;
+  bitWalletId: string;
+  walletBalance: string;
+  walletCurrency: string;
+  accountStatus: string;
+  isBankLinked: boolean;
+  bankDetails: bankDetails;
+  walletCreatedAt: Date;
+}
+interface bankDetails {
+  id: string;
+  account_number: string;
+  account_name: string;
+  bank_code: string;
+  bank_name: string;
+  bankLinked: boolean;
+}
+export interface AllUsersPage {
+  size: number;
+  number: number;
+  totalElements: number;
+  totalPages: number;
+}
