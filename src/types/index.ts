@@ -172,6 +172,7 @@ export interface TransactionData {
 }
 
 export interface KycSubmitProps {
+  fullName: string;
   userId: string;
   idNumber: string;
   email: string;
