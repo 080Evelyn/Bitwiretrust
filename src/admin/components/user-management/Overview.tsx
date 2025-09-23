@@ -1,3 +1,4 @@
+import { totalUnverifiedKyc } from "@/admin/api/kyc";
 import { totalKycVerified, totalUserCount } from "@/admin/api/user-managment";
 import { MultipleUser, UserNotVerified, UserVerified } from "@/assets";
 import { Skeleton } from "@/Components/ui/skeleton";
@@ -27,6 +28,18 @@ const Overview = () => {
     staleTime: Infinity,
   });
   const totalKycVerifiedUsers = totalKycVerifiedResponse?.data?.count ?? 0;
+
+  const {
+    data: totalKycUnverifiedResponse,
+    isPending: totalKycUnverifiedPending,
+    error: totalKycUnverifiedError,
+    isError: totalKycUnverifiedIsError,
+  } = useQuery({
+    queryKey: ["totalKycUnverified"],
+    queryFn: totalUnverifiedKyc,
+    staleTime: Infinity,
+  });
+  const totalKycUnverified = totalKycUnverifiedResponse?.data ?? 0;
 
   return (
     <div className="py-2">
@@ -86,7 +99,15 @@ const Overview = () => {
             </div>
           </div>
           <div className="flex font-semibold items-baseline">
-            <span className="text-2xl"> 12300</span>
+            <span className="text-2xl">
+              {totalKycUnverifiedPending ? (
+                <Skeleton className="h-6 w-15 pt-1" />
+              ) : totalKycUnverifiedIsError ? (
+                totalKycUnverifiedError
+              ) : (
+                totalKycUnverified
+              )}
+            </span>
           </div>
         </div>
       </div>

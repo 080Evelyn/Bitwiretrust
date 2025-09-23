@@ -15,3 +15,8 @@ export const rejectKyc = async (userId: string) => {
   const response = await axios.post(`${url}/v1/admin/kyc/reject/${userId}`);
   return response.data;
 };
+
+export const totalUnverifiedKyc = async () => {
+  const response = await axios.get(`${url}/v1/admin/kyc/unverified`);
+  return response.data;
+};
