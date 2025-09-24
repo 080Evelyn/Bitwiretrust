@@ -78,28 +78,36 @@ const SideNavbar = () => {
               to={sidebarItem.path}
               key={sidebarItem.path}
               onClick={onClick}
+              className="block"
             >
               <div
-                className={`flex items-center gap-2 mx-3 px-1.5 py-2.5 rounded-[4px] transition-all duration-300 text-sm font-semibold ${
+                className={`flex items-center gap-2 mx-3 px-1.5 py-2.5 rounded-[4px] transition-all duration-500 text-sm font-semibold group relative overflow-hidden ${
                   isActive
                     ? "bg-white text-[#7910b1]"
                     : "text-white hover:bg-white hover:text-[#7910b1]"
                 }`}
               >
-                <div>{sidebarItem.icon}</div>
-                <span>{sidebarItem.name}</span>
+                <span className="absolute inset-0 bg-background transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
+
+                <div className="flex items-center gap-2 relative z-10 transition-colors duration-300 delay-100">
+                  <div>{sidebarItem.icon}</div>
+                  <span>{sidebarItem.name}</span>
+                </div>
               </div>
             </Link>
           );
         })}
 
         <div
-          className="flex gap-2 flex-col justify-center w-ful cursor-pointer"
+          className="flex gap-2 flex-col justify-center w-full cursor-pointer"
           onClick={handleClick}
         >
-          <div className="flex items-center gap-2 mx-3 px-1.5 py-2.5 rounded-[4px] transition-all duration-300 text-sm font-semibold text-white hover:bg-white hover:text-[#7910b1]">
-            <LogOut className="size-4.5" />
-            <span>Logout</span>
+          <div className="flex items-center gap-2 mx-3 px-1.5 py-2.5 rounded-[4px] transition-all duration-500 text-sm font-semibold text-white hover:bg-white hover:text-[#7910b1] group relative overflow-hidden">
+            <span className="absolute inset-0 bg-background transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
+            <div className="flex items-center gap-2 relative z-10 transition-colors duration-300 delay-100">
+              <LogOut className="size-4.5" />
+              <span>Logout</span>
+            </div>
           </div>
         </div>
       </div>

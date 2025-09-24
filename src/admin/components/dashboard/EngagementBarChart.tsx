@@ -28,12 +28,9 @@ const EngagementBarChart = () => {
     queryKey: ["userEngagement"],
     queryFn: () => userEngagement({ year: currentYear }),
     staleTime: Infinity,
-    gcTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
   });
-  const chartData = userEngagementResponse?.data.monthlyEngagement ?? [];
+  const chartData = userEngagementResponse?.data ?? [];
+  console.log("chartData", chartData);
 
   const formattedChartData = MONTHS.map((month, index) => ({
     name: month,

@@ -3,21 +3,68 @@ import { ServiceStatsIcon } from "@/assets";
 import { useQuery } from "@tanstack/react-query";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
-const data = [
-  { name: "Gift Cards", value: 52.1, color: "red" },
-  { name: "Airtime/Data", value: 22.8, color: "#0038FF" },
-  { name: "Utility bills", value: 13.9, color: "#16D005" },
-  { name: "Coins", value: 11.2, color: "#FFBC03" },
+const serviceConfig = [
+  {
+    name: "Airtime",
+    serviceName: "AIRTIME",
+    color: "red",
+  },
+  {
+    name: "Data",
+    serviceName: "DATA",
+    color: "#0038FF",
+  },
+  {
+    name: "Utility bills",
+    serviceName: "CABLE_TV",
+    color: "#16D005",
+  },
+  {
+    name: "Electricity",
+    serviceName: "ELECTRICITY_PREPAID",
+    color: "#7910B1",
+  },
+  {
+    name: "Gift Cards",
+    serviceName: "GIFT_CARD",
+    color: "#FFBC03",
+  },
 ];
+
+interface ServiceItem {
+  serviceName: string;
+  engagedUsers: number;
+  engagementRate: number;
+}
+
+interface ChartDataItem {
+  name: string;
+  serviceName: string;
+  engagementRate: number;
+  color: string;
+  engagedUsers?: number;
+}
 
 const ServicePieChart = () => {
   const { data: serviceStatResponse } = useQuery({
     queryKey: ["serviceStats"],
-    queryFn: () => serviceStatsFn({ month: 6, year: 2025 }),
+    queryFn: () => serviceStatsFn({ year: 2025 }),
   });
 
   const serviceStat = serviceStatResponse?.data ?? [];
-  console.log(serviceStat);
+
+  // merge API data with config to make name & color available since API doesn't provide it
+  const mergedData = serviceStat.map((item: ServiceItem) => {
+    const config = serviceConfig.find(
+      (c) => c.serviceName === item.serviceName
+    );
+
+    return {
+      ...item,
+      name: config?.name || item.serviceName,
+      color: config?.color || "#ccc",
+    };
+  });
 
   return (
     <div className="p-4 rounded-2xl bg-white w-full">
@@ -43,8 +90,8 @@ const ServicePieChart = () => {
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
-                data={data}
-                dataKey="value"
+                data={mergedData}
+                dataKey="engagementRate"
                 nameKey="name"
                 cx="50%"
                 cy="50%"
@@ -56,30 +103,33 @@ const ServicePieChart = () => {
                 startAngle={90}
                 endAngle={480}
               >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color || "#ccc"} />
+                {mergedData.map((entry: ChartDataItem) => (
+                  <Cell key={`cell-${entry.serviceName}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value) => `${value}%`} />
+              <Tooltip
+                formatter={(engagementRate) =>
+                  `${Number(engagementRate).toFixed(2)}%`
+                }
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
 
         <div className="flex flex-col justify-center gap-1">
-          {data.map((item) => (
+          {mergedData.map((item: ChartDataItem) => (
             <div
               className="flex justify-between items-center text-[10px] font-semibold w-full lg:ml-2"
-              key={item.name}
+              key={item.serviceName}
             >
               <span className="flex items-center">
                 <span
                   className="inline-block w-2 h-2 mr-2 rounded-full"
-                  style={{ backgroundColor: item.color || "#ccc" }}
+                  style={{ backgroundColor: item.color }}
                 />
-
                 {item.name}
               </span>
-              <span>{item.value}%</span>
+              <span>{item.engagementRate.toFixed(2)}%</span>
             </div>
           ))}
         </div>

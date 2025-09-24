@@ -7,24 +7,32 @@ export const totalUsersCount = async () => {
   return response.data;
 };
 export const totalTransactionCount = async () => {
-  const response = await axios.get(`${url}/v1/admin/transaction-counts`);
+  const response =
+    await axios.get(`${url}/v1/admin/dashboard/wallet/transactions/count
+`);
   return response.data;
 };
 
 export const totalRevenue = async (params: { month: number; year: number }) => {
-  const response = await axios.get(`${url}/v1/admin/overview/revenue`, {
-    params,
-  });
+  const response = await axios.get(
+    `${url}/v1/admin/dashboard/wallet/transactions/revenue`,
+    {
+      params,
+    }
+  );
   return response.data;
 };
 
 export const serviceStatsFn = async (params: {
-  month: number;
+  month?: number;
   year: number;
 }) => {
-  const response = await axios.get(`${url}/v1/admin/overview/service-stats`, {
-    params,
-  });
+  const response = await axios.get(
+    `${url}/v1/admin/dashboard/users/engagement/services`,
+    {
+      params,
+    }
+  );
   return response.data;
 };
 
@@ -32,8 +40,11 @@ export const userEngagement = async (params: {
   month?: number;
   year: number;
 }) => {
-  const response = await axios.get(`${url}/v1/admin/overview/user-engagement`, {
-    params,
-  });
+  const response = await axios.get(
+    `${url}/v1/admin/dashboard/users/engagement`,
+    {
+      params,
+    }
+  );
   return response.data;
 };
