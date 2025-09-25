@@ -73,7 +73,12 @@ const Overview = () => {
 
   const totalUsers = totalUserCountResponse?.data?.totalCount ?? 0;
 
-  const { data: totalTransactionResponse } = useQuery({
+  const {
+    data: totalTransactionResponse,
+    isPending: totalTransactionPending,
+    error: totalTransactionError,
+    isError: totalTransactionIsError,
+  } = useQuery({
     queryKey: ["totalTransaction"],
     queryFn: totalTransactionCount,
     staleTime: Infinity,
@@ -82,12 +87,9 @@ const Overview = () => {
     refetchOnMount: false,
     refetchOnReconnect: false,
   });
-  const totalTransactionsSum =
-    totalTransactionResponse?.data?.counts?.SUCCESS +
-    totalTransactionResponse?.data?.counts?.PENDING +
-    totalTransactionResponse?.data?.counts?.FAILED;
-
-  const totalTransactions = totalTransactionsSum ?? 0;
+  const counts = totalTransactionResponse?.data?.counts ?? {};
+  const totalTransactions =
+    (counts.SUCCESS ?? 0) + (counts.PENDING ?? 0) + (counts.FAILED ?? 0);
 
   const { isFetching: revenueIsFetching, data: totalRevenueResponse } =
     useQuery({
@@ -103,7 +105,7 @@ const Overview = () => {
 
   return (
     <div className="py-2">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2">
         <div className="bg-white rounded-lg py-2 px-2.5">
           <div className="flex items-center gap-2">
             <img src={AdminTrendingUp} alt="icon" className="size-[30px]" />
@@ -194,14 +196,22 @@ const Overview = () => {
             </div>
           </div>
           <div className="flex font-semibold items-baseline">
-            <span className="text-2xl">{totalTransactions}</span>
+            <span className="text-2xl">
+              {totalTransactionPending ? (
+                <Skeleton className="h-6 w-15 pt-1" />
+              ) : totalTransactionIsError ? (
+                totalTransactionError
+              ) : (
+                totalTransactions
+              )}
+            </span>
           </div>
           <div className="flex justify-end items-baseline gap-1">
             <span className="text-[10px]">{selectedMonth.label}</span>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg py-2 px-2.5">
+        {/* <div className="bg-white rounded-lg py-2 px-2.5">
           <div className="flex items-center gap-2">
             <img src={AdminTrendingUp} alt="icon" className="size-[30px]" />
             <div className="flex flex-col">
@@ -217,7 +227,7 @@ const Overview = () => {
           <div className="flex justify-end items-baseline gap-1">
             <span className="text-[10px]">{selectedMonth.label}</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
