@@ -21,6 +21,13 @@ import {
 } from "@/Components/ui/select";
 import { MONTHS } from "@/admin/constant";
 
+interface ChartDataItem {
+  month: number;
+  totalUsers: number;
+  engagedUsers: number;
+  engagementRate: number;
+}
+
 const EngagementBarChart = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const currentYear = new Date().getFullYear();
@@ -30,13 +37,18 @@ const EngagementBarChart = () => {
     staleTime: Infinity,
   });
   const chartData = userEngagementResponse?.data ?? [];
-  console.log("chartData", chartData);
 
-  const formattedChartData = MONTHS.map((month, index) => ({
-    name: month,
-    value: Number(chartData[index + 1] || 0),
-    color: "#DADADA",
-  }));
+  const formattedChartData = MONTHS.map((month, index) => {
+    const apiMonthData = chartData.find(
+      (item: ChartDataItem) => item.month === index + 1
+    );
+
+    return {
+      name: month,
+      value: apiMonthData ? apiMonthData.engagementRate : 0,
+      color: "#DADADA",
+    };
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const CustomTooltip = ({ active, payload }: any) => {
@@ -55,7 +67,9 @@ const EngagementBarChart = () => {
           }}
         >
           <div>User Engagement</div>
-          <div style={{ fontWeight: 600, fontSize: "18px" }}>{value}%</div>
+          <div style={{ fontWeight: 600, fontSize: "18px" }}>
+            {value.toFixed(2)}%
+          </div>
         </div>
       );
     }
@@ -64,7 +78,7 @@ const EngagementBarChart = () => {
   };
 
   return (
-    <div className="p-4 rounded-2xl bg-white w-full">
+    <div className="p-4 rounded-2xl bg-white size-full">
       <div className="pb-5 pt-2 flex justify-between items-center">
         <div className="flex gap-1 font-semibold text-xs text-[#7901b1]">
           <UserPlus className="size-4 fill-[#7901b1]" />

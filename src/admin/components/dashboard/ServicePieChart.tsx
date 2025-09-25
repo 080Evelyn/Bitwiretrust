@@ -1,35 +1,8 @@
 import { serviceStatsFn } from "@/admin/api/dashboard";
+import { serviceConfig } from "@/admin/constant";
 import { ServiceStatsIcon } from "@/assets";
 import { useQuery } from "@tanstack/react-query";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-
-const serviceConfig = [
-  {
-    name: "Airtime",
-    serviceName: "AIRTIME",
-    color: "red",
-  },
-  {
-    name: "Data",
-    serviceName: "DATA",
-    color: "#0038FF",
-  },
-  {
-    name: "Utility bills",
-    serviceName: "CABLE_TV",
-    color: "#16D005",
-  },
-  {
-    name: "Electricity",
-    serviceName: "ELECTRICITY_PREPAID",
-    color: "#7910B1",
-  },
-  {
-    name: "Gift Cards",
-    serviceName: "GIFT_CARD",
-    color: "#FFBC03",
-  },
-];
 
 interface ServiceItem {
   serviceName: string;
@@ -67,7 +40,7 @@ const ServicePieChart = () => {
   });
 
   return (
-    <div className="p-4 rounded-2xl bg-white w-full">
+    <div className="p-4 rounded-2xl bg-white size-full">
       <div className="flex items-center gap-2 py-2">
         <span className="font-semibold text-xs text-[#7901b1]">
           Services Stats

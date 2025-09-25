@@ -51,7 +51,7 @@ const PendingTransaction = () => {
   ];
 
   return (
-    <div className="bg-white rounded-2xl px-3 py-3">
+    <div className="bg-white rounded-2xl px-3 py-3 size-full">
       <div className="flex flex-col gap-3">
         <div className="flex text-xs items-center">
           <h3 className="py-2 font-semibold text-[#7901b1]">
