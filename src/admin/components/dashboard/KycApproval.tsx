@@ -21,7 +21,7 @@ const KycApproval: FC = () => {
 
   const pendingKycUsers: KycData[] = getPendingKyc?.data || [];
 
-  // Track which KYC is in view now
+  // track which KYC is in view now
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const currentKyc = pendingKycUsers[currentIndex];
@@ -100,7 +100,7 @@ const KycApproval: FC = () => {
   const isRejectLoading = rejectMutation.isPending;
 
   return (
-    <div className="bg-white rounded-2xl pt-4 pb-3 px-2.5">
+    <div className="bg-white rounded-2xl pt-4 pb-3 px-2.5 size-full">
       <div className="flex items-center text-sm text-[#7901b1] font-medium gap-1.5">
         <h2>KYC Approval</h2>
         <img src={KycPablock} alt="padlock icon" />

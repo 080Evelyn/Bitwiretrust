@@ -1,5 +1,6 @@
 import { totalUnverifiedKyc } from "@/admin/api/kyc";
-import { totalKycVerified, totalUserCount } from "@/admin/api/user-managment";
+import { totalKycVerified } from "@/admin/api/user-managment";
+import { useTotalUserCount } from "@/admin/hooks/getAllUsers";
 import { MultipleUser, UserNotVerified, UserVerified } from "@/assets";
 import { Skeleton } from "@/Components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
@@ -10,11 +11,8 @@ const Overview = () => {
     isPending: totalUserCountPending,
     error: totalUserCountError,
     isError: totalUserCountIsError,
-  } = useQuery({
-    queryKey: ["totalUserCount"],
-    queryFn: totalUserCount,
-    staleTime: Infinity,
-  });
+  } = useTotalUserCount();
+
   const totalUsers = totalUserCountResponse?.data?.totalCount ?? 0;
 
   const {

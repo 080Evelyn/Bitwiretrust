@@ -1,9 +1,5 @@
-import React, { useState, useMemo } from "react";
-import {
-  totalRevenue,
-  totalTransactionCount,
-  totalUsersCount,
-} from "@/admin/api/dashboard";
+import { useState, useMemo } from "react";
+import { totalRevenue, totalTransactionCount } from "@/admin/api/dashboard";
 import { AdminTotalUsers, AdminTrendingUp } from "@/assets";
 import {
   Select,
@@ -15,6 +11,7 @@ import {
 } from "@/Components/ui/select";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/Components/ui/skeleton";
+import { useTotalUserCount } from "@/admin/hooks/getAllUsers";
 
 type MonthOption = {
   label: string;
@@ -27,7 +24,7 @@ const Overview = () => {
   const currentMonth = now.getMonth() + 1;
   const currentYear = now.getFullYear();
 
-  // this create options for only past & current months
+  // this create options for only past & current month, no future month
   const monthOptions: MonthOption[] = useMemo(() => {
     const options: MonthOption[] = [];
     for (let m = 1; m <= currentMonth; m++) {
@@ -67,18 +64,21 @@ const Overview = () => {
     monthOptions[0]
   );
 
-  const { data: totalUsersResponse } = useQuery({
-    queryKey: ["totalUsersCount"],
-    queryFn: totalUsersCount,
-    staleTime: Infinity,
-    gcTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-  });
-  const totalNumberOfUsers = totalUsersResponse?.data.userTotalcount;
+  const {
+    data: totalUserCountResponse,
+    isPending: totalUserCountPending,
+    error: totalUserCountError,
+    isError: totalUserCountIsError,
+  } = useTotalUserCount();
 
-  const { data: totalTransactionResponse } = useQuery({
+  const totalUsers = totalUserCountResponse?.data?.totalCount ?? 0;
+
+  const {
+    data: totalTransactionResponse,
+    isPending: totalTransactionPending,
+    error: totalTransactionError,
+    isError: totalTransactionIsError,
+  } = useQuery({
     queryKey: ["totalTransaction"],
     queryFn: totalTransactionCount,
     staleTime: Infinity,
@@ -87,7 +87,9 @@ const Overview = () => {
     refetchOnMount: false,
     refetchOnReconnect: false,
   });
-  const totalTransactions = totalTransactionResponse?.data.CREDIT;
+  const counts = totalTransactionResponse?.data?.counts ?? {};
+  const totalTransactions =
+    (counts.SUCCESS ?? 0) + (counts.PENDING ?? 0) + (counts.FAILED ?? 0);
 
   const { isFetching: revenueIsFetching, data: totalRevenueResponse } =
     useQuery({
@@ -97,13 +99,13 @@ const Overview = () => {
           month: selectedMonth.month ?? currentMonth,
           year: selectedMonth.year ?? currentYear,
         }),
+      staleTime: Infinity,
     });
-  const totalRevenueGenerated =
-    totalRevenueResponse?.data ?? totalRevenueResponse;
+  const totalRevenueGenerated = totalRevenueResponse?.data?.totalRevenue ?? 0;
 
   return (
     <div className="py-2">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2">
         <div className="bg-white rounded-lg py-2 px-2.5">
           <div className="flex items-center gap-2">
             <img src={AdminTrendingUp} alt="icon" className="size-[30px]" />
@@ -119,9 +121,12 @@ const Overview = () => {
               <Skeleton className="w-10 h-6 ml-1" />
             ) : (
               <>
-                <span className="text-sm">N</span>
+                <span className="text-sm mr-1">N</span>
                 <span className="text-2xl">
-                  {totalRevenueGenerated.revenue}
+                  {new Intl.NumberFormat("en-NG", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(totalRevenueGenerated)}
                 </span>
               </>
             )}
@@ -168,11 +173,45 @@ const Overview = () => {
             </div>
           </div>
           <div className="flex font-semibold items-baseline">
-            <span className="text-2xl">{totalNumberOfUsers}</span>
+            <span className="text-2xl">
+              {totalUserCountPending ? (
+                <Skeleton className="h-6 w-15 pt-1" />
+              ) : totalUserCountIsError ? (
+                totalUserCountError
+              ) : (
+                totalUsers
+              )}
+            </span>
           </div>
         </div>
 
         <div className="bg-white rounded-lg py-2 px-2.5">
+          <div className="flex items-center gap-2">
+            <img src={AdminTrendingUp} alt="icon" className="size-[30px]" />
+            <div className="flex flex-col">
+              <span className="font-semibold text-sm">Total Transaction</span>
+              <span className="font-light text-[10px]">
+                Total transaction made
+              </span>
+            </div>
+          </div>
+          <div className="flex font-semibold items-baseline">
+            <span className="text-2xl">
+              {totalTransactionPending ? (
+                <Skeleton className="h-6 w-15 pt-1" />
+              ) : totalTransactionIsError ? (
+                totalTransactionError
+              ) : (
+                totalTransactions
+              )}
+            </span>
+          </div>
+          <div className="flex justify-end items-baseline gap-1">
+            <span className="text-[10px]">{selectedMonth.label}</span>
+          </div>
+        </div>
+
+        {/* <div className="bg-white rounded-lg py-2 px-2.5">
           <div className="flex items-center gap-2">
             <img src={AdminTrendingUp} alt="icon" className="size-[30px]" />
             <div className="flex flex-col">
@@ -188,7 +227,7 @@ const Overview = () => {
           <div className="flex justify-end items-baseline gap-1">
             <span className="text-[10px]">{selectedMonth.label}</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
