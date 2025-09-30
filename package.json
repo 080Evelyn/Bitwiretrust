@@ -33,7 +33,6 @@
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.12.1",
-    "global": "^4.4.0",
     "input-otp": "^1.4.2",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.507.0",
