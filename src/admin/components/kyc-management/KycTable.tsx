@@ -43,7 +43,7 @@ const KycTable = () => {
   const queryClient = useQueryClient();
 
   const { data, isPending, isError, error, isFetching } = useQuery({
-    queryKey: ["all-users", page],
+    queryKey: ["all-kyc-users", page],
     queryFn: () => allKycUsers(page),
     placeholderData: keepPreviousData,
     staleTime: Infinity,
@@ -56,7 +56,7 @@ const KycTable = () => {
     if (!pageProperty?.totalPages) return;
     if (page < pageProperty?.totalPages - 1) {
       queryClient.prefetchQuery({
-        queryKey: ["all-users", page + 1],
+        queryKey: ["all-kyc-users", page + 1],
         queryFn: () => allKycUsers(page + 1),
         staleTime: Infinity,
       });
