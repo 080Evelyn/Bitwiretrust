@@ -50,6 +50,23 @@ export interface AllUsersProps {
   bankDetails: bankDetails;
   walletCreatedAt: Date;
 }
+export interface AllKycUsersProps {
+  avatar?: string;
+  userId: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  userRole: string;
+  status: string;
+  isPinSet: boolean;
+  sourceOfIncome: string;
+  walletBalance: string;
+  residentialAddress: string;
+  walletCurrency: string;
+  accountStatus: string;
+  dateOfBirth: Date;
+  gender: string;
+}
 interface bankDetails {
   id: string;
   account_number: string;

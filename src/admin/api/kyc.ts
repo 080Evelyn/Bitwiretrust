@@ -20,3 +20,12 @@ export const totalUnverifiedKyc = async () => {
   const response = await axios.get(`${url}/v1/admin/kyc/unverified`);
   return response.data;
 };
+export const allKycUsers = async (page: number, size?: number) => {
+  const response = await axios.get(`${url}/v1/admin/kyc/view/all`, {
+    params: {
+      page,
+      size,
+    },
+  });
+  return response.data;
+};
