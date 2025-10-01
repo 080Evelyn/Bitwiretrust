@@ -60,7 +60,7 @@ const formSchema = z.object({
   identificationNumber: z
     .string()
     .min(1, { message: "Identification number is required" }),
-  identificationType: z.enum(["NIN", "Drivers_license", "Passport"], {
+  documentType: z.enum(["nin", "Drivers_license", "Passport"], {
     message: "Identification type is required",
   }),
   utilityBill: z
@@ -111,7 +111,7 @@ const UserKyc = ({
       phone_number: "",
       address: "",
       income: "",
-      identificationType: "NIN",
+      documentType: "nin",
       identificationNumber: "",
       utilityBill: undefined,
       // faceVerification: undefined,
@@ -154,7 +154,7 @@ const UserKyc = ({
       gender: values.gender,
       dateOfBirth: values.dob,
       sourceOfIncome: values.income,
-      documentType: values.identificationType,
+      documentType: values.documentType,
       utilityBillImageUrl: values.utilityBill?.[0]?.name,
     };
 
@@ -357,7 +357,7 @@ const UserKyc = ({
           {/* ID Type */}
           <FormField
             control={form.control}
-            name="identificationType"
+            name="documentType"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>ID Type</FormLabel>
@@ -368,13 +368,13 @@ const UserKyc = ({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent className="z-1000">
-                    <SelectItem value="NIN">NIN </SelectItem>
-                    <SelectItem value="Passport">
+                    <SelectItem value="nin">NIN </SelectItem>
+                    {/* <SelectItem value="Passport">
                       International Passport
                     </SelectItem>
                     <SelectItem value="Driver_license">
                       Drivers License
-                    </SelectItem>
+                    </SelectItem> */}
                   </SelectContent>
                 </Select>
                 <FormMessage />
