@@ -95,3 +95,26 @@ export interface AllCryptoTransactions {
   type: string;
   walletId: number;
 }
+
+export interface WithdrawalRequestProps {
+  accountName: string;
+  accountNumber: string;
+  amount: number;
+  bankCode: string;
+  bankName: string;
+  commissionWithdrawal: boolean;
+  createdAt: string;
+  currency: string;
+  fee: number;
+  id: number;
+  narration: string;
+  requestId: string;
+  status: string;
+  total: number;
+  updatedAt: Date;
+  userId: number;
+}
+
+export interface WithdrawalTableProps {
+  compact?: boolean;
+}
