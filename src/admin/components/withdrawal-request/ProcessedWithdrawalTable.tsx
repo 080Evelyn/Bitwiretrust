@@ -38,16 +38,18 @@ import { cn } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import { DialogClose } from "@/Components/ui/dialog";
 import { Button, buttonVariants } from "@/Components/ui/button";
-import { fiatWithdrawalRequest } from "@/admin/api/withdrawal-request";
+import { processedFiatWithdrawalRequest } from "@/admin/api/withdrawal-request";
 
-const WithdrawalTable = ({ compact = false }: WithdrawalTableProps) => {
+const ProcessedWithdrawalTable = ({
+  compact = false,
+}: WithdrawalTableProps) => {
   const [page, setPage] = useState(0);
 
   const queryClient = useQueryClient();
 
   const { data, isPending, isError, error, isFetching } = useQuery({
-    queryKey: ["withdrawal-request", page],
-    queryFn: () => fiatWithdrawalRequest(page),
+    queryKey: ["processed-withdrawal-request", page],
+    queryFn: () => processedFiatWithdrawalRequest(page),
     placeholderData: keepPreviousData,
     staleTime: Infinity,
   });
@@ -63,8 +65,8 @@ const WithdrawalTable = ({ compact = false }: WithdrawalTableProps) => {
       page < pageProperty?.totalPages - 1
     ) {
       queryClient.prefetchQuery({
-        queryKey: ["withdrawal-request", page + 1],
-        queryFn: () => fiatWithdrawalRequest(page + 1),
+        queryKey: ["processed-withdrawal-request", page + 1],
+        queryFn: () => processedFiatWithdrawalRequest(page + 1),
         staleTime: Infinity,
       });
     }
@@ -105,6 +107,15 @@ const WithdrawalTable = ({ compact = false }: WithdrawalTableProps) => {
             <TableRow>
               <TableCell colSpan={6} className="text-center text-red-500">
                 {error.message}
+              </TableCell>
+            </TableRow>
+          ) : transactions.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={6}
+                className="text-center text-primary font-medium py-2"
+              >
+                No data found
               </TableCell>
             </TableRow>
           ) : (
@@ -311,4 +322,4 @@ const WithdrawalTable = ({ compact = false }: WithdrawalTableProps) => {
   );
 };
 
-export default WithdrawalTable;
+export default ProcessedWithdrawalTable;

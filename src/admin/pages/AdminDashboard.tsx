@@ -2,7 +2,7 @@ import EngagementBarChart from "../components/dashboard/EngagementBarChart";
 import KycApproval from "../components/dashboard/KycApproval";
 import Overview from "../components/dashboard/Overview";
 import ServicePieChart from "../components/dashboard/ServicePieChart";
-import WithdrawalTable from "../components/withdrawal-request/WithdrawalTable";
+import WithdrawalTable from "../components/withdrawal-request/PendingWithdrawalTable";
 
 const AdminDashboard = () => {
   return (
