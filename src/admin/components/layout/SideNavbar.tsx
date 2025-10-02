@@ -269,6 +269,22 @@ const SideNavbar: React.FC = () => {
           setExpanded={setExpanded}
           locationPath={locationPath}
         />
+        <div className="mx-3 mt-6">
+          <div
+            role="button"
+            onClick={() => {
+              handleLogoutClick();
+              setIsOpen(false);
+            }}
+            className="flex items-center gap-2 px-1.5 py-2.5 rounded-[4px] transition-all duration-500 text-sm font-semibold text-white hover:bg-white hover:text-[#7910b1] group relative overflow-hidden"
+          >
+            <span className="absolute inset-0 bg-background transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
+            <div className="flex items-center gap-2 relative z-10 transition-colors duration-300 delay-100">
+              <LogOut className="size-4.5" />
+              <span>Logout</span>
+            </div>
+          </div>
+        </div>
       </aside>
 
       {/* mobile view */}
