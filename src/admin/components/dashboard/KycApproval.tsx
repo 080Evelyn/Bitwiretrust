@@ -1,13 +1,12 @@
-import { approveKyc, pendingKyc, rejectKyc } from "@/admin/api/kyc";
+import { pendingKyc } from "@/admin/api/kyc";
+import { useKycActions } from "@/admin/hooks/useKycActions";
 import { KycData } from "@/admin/type";
 import { KycPablock } from "@/assets";
 import ButtonLoading from "@/Components/common/ButtonLoading";
 import { cn } from "@/lib/utils";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
 import { formatDate } from "date-fns";
 import { FC, useState } from "react";
-import { toast } from "sonner";
 
 const KycApproval: FC = () => {
   const {
@@ -51,52 +50,16 @@ const KycApproval: FC = () => {
     }
   };
 
-  const approveMutation = useMutation({
-    mutationFn: (userId: string) => approveKyc(userId),
-  });
-  const rejectMutation = useMutation({
-    mutationFn: (userId: string) => rejectKyc(userId),
-  });
+  const { approveMutation, rejectMutation } = useKycActions(handleNext);
 
   const handleApprove = () => {
-    approveMutation.mutate(currentKyc.userId, {
-      onSuccess: (response) => {
-        toast.success(response.data.responseDesc);
-        handleNext();
-      },
-
-      onError: (error: unknown) => {
-        if (axios.isAxiosError(error)) {
-          const responseDesc =
-            error.response?.data?.responseDesc || "Something went wrong";
-          toast.error(responseDesc);
-        } else {
-          toast.error("Unexpected error occurred");
-        }
-      },
-    });
+    approveMutation.mutate(currentKyc.userId);
   };
-  const isApproveLoading = approveMutation.isPending;
 
   const handleReject = () => {
-    rejectMutation.mutate(currentKyc.userId, {
-      onSuccess: (response) => {
-        toast.success(response.data);
-        handleNext();
-      },
-
-      onError: (error: unknown) => {
-        if (axios.isAxiosError(error)) {
-          const responseDesc =
-            error.response?.data?.responseDesc || "Something went wrong";
-          toast.error(responseDesc);
-        } else {
-          toast.error("Unexpected error occurred");
-        }
-      },
-    });
+    rejectMutation.mutate(currentKyc.userId);
   };
-
+  const isApproveLoading = approveMutation.isPending;
   const isRejectLoading = rejectMutation.isPending;
 
   return (
