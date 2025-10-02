@@ -16,9 +16,9 @@ export const transactionStatusCount = async () => {
 };
 
 export const totalTransactionCount = async () => {
-  const response = await axios.get(
-    `${url}/v1/admin/overview/transactions/total`
-  );
+  const response =
+    await axios.get(`${url}/v1/admin/dashboard/wallet/transactions/count
+`);
   return response.data;
 };
 

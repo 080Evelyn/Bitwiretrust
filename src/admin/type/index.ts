@@ -24,7 +24,7 @@ export interface KycData {
 }
 
 export interface FilteredTransactionProps {
-  transactionTypes?: string[];
+  category?: string[];
   status?: string;
   fromDate?: string;
   toDate?: string;
@@ -94,4 +94,27 @@ export interface AllCryptoTransactions {
   status: string;
   type: string;
   walletId: number;
+}
+
+export interface WithdrawalRequestProps {
+  accountName: string;
+  accountNumber: string;
+  amount: number;
+  bankCode: string;
+  bankName: string;
+  commissionWithdrawal: boolean;
+  createdAt: string;
+  currency: string;
+  fee: number;
+  id: number;
+  narration: string;
+  requestId: string;
+  status: string;
+  total: number;
+  updatedAt: Date;
+  userId: number;
+}
+
+export interface WithdrawalTableProps {
+  compact?: boolean;
 }

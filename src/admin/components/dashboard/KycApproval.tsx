@@ -9,16 +9,18 @@ import { formatDate } from "date-fns";
 import { FC, useState } from "react";
 
 const KycApproval: FC = () => {
+  const page = 0;
+
   const {
     data: getPendingKyc,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["pendingKyc"],
-    queryFn: pendingKyc,
+    queryKey: ["pendingKyc", page],
+    queryFn: () => pendingKyc(page, 25),
   });
 
-  const pendingKycUsers: KycData[] = getPendingKyc?.data || [];
+  const pendingKycUsers: KycData[] = getPendingKyc?.data.content ?? [];
 
   // track which KYC is in view now
   const [currentIndex, setCurrentIndex] = useState(0);

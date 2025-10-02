@@ -75,9 +75,6 @@ const UserTable = () => {
             <TableHead className="font-semibold text-xs">
               Phone number
             </TableHead>
-            <TableHead className="font-semibold text-xs">
-              Residential Address
-            </TableHead>
             <TableHead className="font-semibold text-xs">Status</TableHead>
             <TableHead className="font-semibold sr-only">Action</TableHead>
           </TableRow>
@@ -115,9 +112,6 @@ const UserTable = () => {
                 </TableCell>
                 <TableCell>{user?.email}</TableCell>
                 <TableCell>{user?.phone}</TableCell>
-                <TableCell className="whitespace-normal break-words max-w-[170px] xl:max-w-[210px]">
-                  No. 10, Oyin Street, Ibadan, Delta State
-                </TableCell>
                 <TableCell>
                   <Badge
                     className={cn(
@@ -156,14 +150,6 @@ const UserTable = () => {
                               Phone Number
                             </h3>
                             <p className="text-xs font-light">{user?.phone}</p>
-                          </div>
-                          <div className="flex w-full text-foreground justify-between items-start">
-                            <h3 className="text-xs font-semibold">
-                              Residential Address
-                            </h3>
-                            <p className="text-xs text-end w-[60%] font-light">
-                              No. 10, Oyin Street, Ibadan, Delta State
-                            </p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
                             <h3 className="text-xs font-semibold">Status</h3>

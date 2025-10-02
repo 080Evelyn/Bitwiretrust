@@ -24,7 +24,7 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
     queryKey: ["transactionLogFiltered", searchParams.toString()],
     queryFn: () =>
       filteredTransaction({
-        transactionTypes: searchParams.getAll("transactionTypes") || [],
+        category: searchParams.getAll("transactionTypes") || [],
         status: searchParams.get("status")!,
         fromDate: searchParams.get("fromDate")!,
         toDate: searchParams.get("toDate")!,

@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/ui/table";
-import { ChevronRightCircle } from "lucide-react";
+import { ChevronRightCircle, User2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +20,11 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { AllUsersPage, AllCryptoTransactions } from "@/admin/type";
+import {
+  AllUsersPage,
+  WithdrawalRequestProps,
+  WithdrawalTableProps,
+} from "@/admin/type";
 import {
   Pagination,
   PaginationContent,
@@ -31,51 +35,60 @@ import {
 } from "@/Components/ui/pagination";
 import { Badge } from "@/Components/ui/badge";
 import { cn } from "@/lib/utils";
-import { allCryptoTransactions } from "@/admin/api/crypto";
 import { formatDate } from "date-fns";
 import { DialogClose } from "@/Components/ui/dialog";
-import { buttonVariants } from "@/Components/ui/button";
+import { Button, buttonVariants } from "@/Components/ui/button";
+import { fiatWithdrawalRequest } from "@/admin/api/withdrawal-request";
 
-const CryptoTable = () => {
+const WithdrawalTable = ({ compact = false }: WithdrawalTableProps) => {
   const [page, setPage] = useState(0);
 
   const queryClient = useQueryClient();
 
   const { data, isPending, isError, error, isFetching } = useQuery({
-    queryKey: ["all-crypto-transactions", page],
-    queryFn: () => allCryptoTransactions(page),
+    queryKey: ["withdrawal-request", page],
+    queryFn: () => fiatWithdrawalRequest(page),
     placeholderData: keepPreviousData,
     staleTime: Infinity,
   });
 
-  const transactions = data?.data?.content;
+  const transactions = data?.data?.content ?? [];
   const pageProperty: AllUsersPage = data?.data?.page ?? 0;
 
+  // prefetch next page
   useEffect(() => {
-    if (!pageProperty?.totalPages) return;
-    if (page < pageProperty?.totalPages - 1) {
+    if (
+      !compact &&
+      pageProperty?.totalPages &&
+      page < pageProperty?.totalPages - 1
+    ) {
       queryClient.prefetchQuery({
-        queryKey: ["all-crypto-transactions", page + 1],
-        queryFn: () => allCryptoTransactions(page + 1),
+        queryKey: ["withdrawal-request", page + 1],
+        queryFn: () => fiatWithdrawalRequest(page + 1),
         staleTime: Infinity,
       });
     }
-  }, [page, pageProperty, queryClient]);
+  }, [page, pageProperty, queryClient, compact]);
+
+  // split transactions to 4 if compact, otherwise show all
+  const visibleTransactions = compact ? transactions.slice(0, 4) : transactions;
 
   return (
     <div className="bg-white rounded-md px-3 py-2">
       <div className="flex flex-col gap-3">
         <h3 className="text-sm py-2 font-semibold text-[#7901b1]">
-          Crypto Management
+          Withdrawal Management
         </h3>
         <hr className="border-[#D9D9D9]" />
       </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-semibold text-xs">Reference</TableHead>
+            <TableHead className="font-semibold text-xs">
+              Account Name
+            </TableHead>
             <TableHead className="font-semibold text-xs">Amount (₦)</TableHead>
-            <TableHead className="font-semibold text-xs">Category</TableHead>
+            <TableHead className="font-semibold text-xs">Bank Name</TableHead>
             <TableHead className="font-semibold text-xs">Date</TableHead>
             <TableHead className="font-semibold text-xs">Status</TableHead>
             <TableHead className="font-semibold sr-only">Action</TableHead>
@@ -95,9 +108,17 @@ const CryptoTable = () => {
               </TableCell>
             </TableRow>
           ) : (
-            transactions.map((transaction: AllCryptoTransactions) => (
+            visibleTransactions.map((transaction: WithdrawalRequestProps) => (
               <TableRow key={transaction?.id} className="font-medium text-xs">
-                <TableCell>{transaction?.reference}</TableCell>
+                <TableCell>
+                  {" "}
+                  <div className="flex items-center font-semibold gap-1">
+                    <div className="p-1 rounded-full bg-[#28003E]">
+                      <User2 className="fill-[#B71FFF]/40 size-6" />
+                    </div>
+                    {transaction?.accountName}
+                  </div>
+                </TableCell>
                 <TableCell className="text-sm font-semibold">
                   {transaction?.amount
                     ? new Intl.NumberFormat("en-NG", {
@@ -109,7 +130,7 @@ const CryptoTable = () => {
                         .replace(/\.00$/, "")
                     : `${transaction?.amount}`}
                 </TableCell>
-                <TableCell>{transaction?.category}</TableCell>
+                <TableCell>{transaction?.bankName}</TableCell>
                 <TableCell>
                   {formatDate(transaction?.createdAt, "dd MMM, yyyy")}
                 </TableCell>
@@ -118,6 +139,8 @@ const CryptoTable = () => {
                     className={cn(
                       transaction?.status === "SUCCESS"
                         ? "bg-green-500 hover:bg-green-600"
+                        : transaction?.status === "PENDING"
+                        ? "bg-yellow-500"
                         : "bg-red-400 hover:bg-red-500",
                       "text-xs font-medium lowercase"
                     )}
@@ -137,14 +160,30 @@ const CryptoTable = () => {
                       <DialogDescription asChild>
                         <div className="flex flex-col mt-2 gap-2">
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">Reference</h3>
-                            <p className="text-xs font-light">
-                              {transaction?.reference}
+                            <h3 className="text-xs font-semibold">
+                              Account Name
+                            </h3>
+                            <p className="text-xs font-medium">
+                              {transaction?.accountName}
+                            </p>
+                          </div>
+                          <div className="flex text-foreground justify-between items-center">
+                            <h3 className="text-xs font-semibold">Bank Name</h3>
+                            <p className="text-xs font-medium">
+                              {transaction?.bankName}
+                            </p>
+                          </div>
+                          <div className="flex text-foreground justify-between items-center">
+                            <h3 className="text-xs font-semibold">
+                              Account Number
+                            </h3>
+                            <p className="text-xs font-medium">
+                              {transaction?.accountNumber}
                             </p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
                             <h3 className="text-xs font-semibold">Amount</h3>
-                            <p className="text-xs font-light">
+                            <p className="text-sm font-medium">
                               {new Intl.NumberFormat("en-NG", {
                                 style: "decimal",
                                 minimumFractionDigits: 2,
@@ -155,34 +194,21 @@ const CryptoTable = () => {
                           </div>
                           <div className="flex text-foreground justify-between items-center">
                             <h3 className="text-xs font-semibold">
-                              Balance Before
+                              Request ID
                             </h3>
+                            <p className="text-xs font-light">
+                              {transaction?.requestId}
+                            </p>
+                          </div>
+                          <div className="flex text-foreground justify-between items-center">
+                            <h3 className="text-xs font-semibold">Fee</h3>
                             <p className="text-xs font-light">
                               {new Intl.NumberFormat("en-NG", {
                                 style: "decimal",
                                 minimumFractionDigits: 2,
                                 maximumFractionDigits: 2,
                                 useGrouping: true,
-                              }).format(transaction?.balanceBefore)}
-                            </p>
-                          </div>
-                          <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">
-                              Balance After
-                            </h3>
-                            <p className="text-xs font-light">
-                              {new Intl.NumberFormat("en-NG", {
-                                style: "decimal",
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                                useGrouping: true,
-                              }).format(transaction?.balanceAfter)}
-                            </p>
-                          </div>
-                          <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">Category</h3>
-                            <p className="text-xs font-light">
-                              {transaction?.category}
+                              }).format(transaction?.fee)}
                             </p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
@@ -201,6 +227,8 @@ const CryptoTable = () => {
                               className={cn(
                                 transaction?.status === "SUCCESS"
                                   ? "bg-green-500 hover:bg-green-600"
+                                  : transaction?.status === "PENDING"
+                                  ? "bg-yellow-500"
                                   : "bg-red-400 hover:bg-red-500",
                                 "text-xs font-medium lowercase"
                               )}
@@ -210,9 +238,17 @@ const CryptoTable = () => {
                           </div>
                         </div>
                       </DialogDescription>
-                      <DialogClose className={cn(buttonVariants(), "w-full")}>
-                        Close
-                      </DialogClose>
+                      <div className="flex w-full gap-2 mt-2">
+                        <Button className="w-1/2">Mark as Paid</Button>
+                        <DialogClose
+                          className={cn(
+                            buttonVariants({ variant: "outline" }),
+                            "w-1/2 border-primary text-primary"
+                          )}
+                        >
+                          Close
+                        </DialogClose>
+                      </div>
                     </DialogContent>
                   </Dialog>
                 </TableCell>
@@ -221,48 +257,58 @@ const CryptoTable = () => {
           )}
         </TableBody>
       </Table>
-      <Pagination className="my-4">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (page > 0) setPage((prev) => prev - 1);
-              }}
-            />
-          </PaginationItem>
-
-          {/* Page links */}
-          {Array.from({ length: pageProperty.totalPages }).map((_, i) => (
-            <PaginationItem key={i}>
-              <PaginationLink
+      {!compact && (
+        <Pagination className="my-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
                 href="#"
-                isActive={i === page}
                 onClick={(e) => {
                   e.preventDefault();
-                  setPage(i);
+                  if (page > 0) setPage((prev) => prev - 1);
                 }}
-              >
-                {i + 1}
-              </PaginationLink>
+              />
             </PaginationItem>
-          ))}
 
-          <PaginationItem>
-            <PaginationNext
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (page < pageProperty.totalPages - 1)
-                  setPage((prev) => prev + 1);
-              }}
-            />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+            {/* Page links */}
+            {Array.from({ length: pageProperty.totalPages }).map((_, i) => (
+              <PaginationItem key={i}>
+                <PaginationLink
+                  href="#"
+                  isActive={i === page}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPage(i);
+                  }}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (page < pageProperty.totalPages - 1)
+                    setPage((prev) => prev + 1);
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
+
+      {compact && transactions.length > 4 && (
+        <div className="flex justify-end mt-3">
+          <Button variant="outline" asChild>
+            <a href="/withdrawal-request">View More</a>
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default CryptoTable;
+export default WithdrawalTable;
