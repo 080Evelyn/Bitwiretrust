@@ -23,7 +23,8 @@ import UserManagement from "@/admin/pages/UserManagement";
 import PageNotFound from "@/Pages/404/PageNotFound";
 import ErrorBoundary from "@/ErrorBoundary";
 import CryptoManagement from "@/admin/pages/CryptoManagement";
-import WithdrawalRequest from "@/admin/pages/WithdrawalRequest";
+import PendingWithdrawalRequest from "@/admin/pages/PendingWithdrawalRequest";
+import SuccessfulWithdrawalRequest from "@/admin/pages/SuccessfulWithdrawalRequest";
 
 export const router = createBrowserRouter([
   {
@@ -100,7 +101,14 @@ export const router = createBrowserRouter([
           { path: "kyc-management", element: <KycManagement /> },
           { path: "users-management", element: <UserManagement /> },
           { path: "crypto-management", element: <CryptoManagement /> },
-          { path: "withdrawal-request", element: <WithdrawalRequest /> },
+          {
+            path: "withdrawal-request/pending",
+            element: <PendingWithdrawalRequest />,
+          },
+          {
+            path: "withdrawal-request/success",
+            element: <SuccessfulWithdrawalRequest />,
+          },
         ],
       },
     ],
