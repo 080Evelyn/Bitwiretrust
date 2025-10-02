@@ -24,7 +24,7 @@ export interface KycData {
 }
 
 export interface FilteredTransactionProps {
-  transactionTypes?: string[];
+  category?: string[];
   status?: string;
   fromDate?: string;
   toDate?: string;

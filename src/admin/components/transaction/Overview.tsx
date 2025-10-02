@@ -1,23 +1,26 @@
-import {
-  totalTransactionCount,
-  transactionStatusCount,
-} from "@/admin/api/transactions";
+import { totalTransactionCount } from "@/admin/api/transactions";
 import { AdminTrendingUp, DoubleTick } from "@/assets";
+import { Skeleton } from "@/Components/ui/skeleton";
 import { useQuery } from "@tanstack/react-query";
 
 const Overview = () => {
-  const { data: totalTransactionStatusResponse } = useQuery({
-    queryKey: ["totalTransactionStatusCount"],
-    queryFn: transactionStatusCount,
-  });
-  const totalTransactionStatus = totalTransactionStatusResponse?.data ?? [];
-
-  const { data: totalTransactionCountResponse } = useQuery({
-    queryKey: ["totalTransactionCount"],
+  const {
+    data: totalTransactionResponse,
+    isPending: totalTransactionPending,
+    error: totalTransactionError,
+    isError: totalTransactionIsError,
+  } = useQuery({
+    queryKey: ["totalTransaction"],
     queryFn: totalTransactionCount,
+    staleTime: Infinity,
+    gcTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
+  const counts = totalTransactionResponse?.data?.counts ?? {};
   const totalTransactions =
-    totalTransactionCountResponse?.data.transactionTotal ?? "";
+    (counts.SUCCESS ?? 0) + (counts.PENDING ?? 0) + (counts.FAILED ?? 0);
 
   return (
     <div className="py-2">
@@ -35,7 +38,18 @@ const Overview = () => {
             </div>
           </div>
           <div className="flex font-semibold items-baseline">
-            <span className="text-2xl">{totalTransactions} </span>
+            <span className="text-2xl">
+              {" "}
+              <span className="text-2xl">
+                {totalTransactionPending ? (
+                  <Skeleton className="h-6 w-15 pt-1" />
+                ) : totalTransactionIsError ? (
+                  totalTransactionError
+                ) : (
+                  totalTransactions
+                )}
+              </span>{" "}
+            </span>
           </div>
         </div>
         <div className="bg-white rounded-lg py-4 px-2.5">
@@ -52,7 +66,15 @@ const Overview = () => {
           </div>
           <div className="flex font-semibold items-baseline">
             <span className="text-2xl">
-              {totalTransactionStatus.successful}
+              <span className="text-2xl">
+                {totalTransactionPending ? (
+                  <Skeleton className="h-6 w-15 pt-1" />
+                ) : totalTransactionIsError ? (
+                  totalTransactionError
+                ) : (
+                  counts.SUCCESS
+                )}
+              </span>
             </span>
           </div>
         </div>
@@ -67,7 +89,17 @@ const Overview = () => {
             </div>
           </div>
           <div className="flex font-semibold items-baseline">
-            <span className="text-2xl"> {totalTransactionStatus.failed}</span>
+            <span className="text-2xl">
+              <span className="text-2xl">
+                {totalTransactionPending ? (
+                  <Skeleton className="h-6 w-15 pt-1" />
+                ) : totalTransactionIsError ? (
+                  totalTransactionError
+                ) : (
+                  counts.FAILED
+                )}
+              </span>
+            </span>
           </div>
         </div>
       </div>
