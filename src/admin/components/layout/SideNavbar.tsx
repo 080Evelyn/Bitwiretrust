@@ -15,7 +15,7 @@ import {
   UsersRound,
 } from "lucide-react";
 import { useState } from "react";
-// import { FaCoins } from "react-icons/fa";
+import { FaCoins } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 
 const SideNavbar = () => {
@@ -47,11 +47,11 @@ const SideNavbar = () => {
       name: "Users Management",
       icon: <UsersRound className="size-4.5" />,
     },
-    // {
-    //   path: "/admin/crypto-management",
-    //   name: "Crypto Management",
-    //   icon: <FaCoins className="size-4.5" />,
-    // },
+    {
+      path: "/admin/crypto-management",
+      name: "Crypto Management",
+      icon: <FaCoins className="size-4.5" />,
+    },
   ];
 
   const SidebarContent = ({ onClick }: { onClick?: () => void }) => (
