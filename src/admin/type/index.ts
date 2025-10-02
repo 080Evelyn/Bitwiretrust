@@ -81,3 +81,17 @@ export interface AllUsersPage {
   totalElements: number;
   totalPages: number;
 }
+
+export interface AllCryptoTransactions {
+  amount: number;
+  balanceAfter: number;
+  balanceBefore: number;
+  category: string;
+  createdAt: Date;
+  description: string;
+  id: number;
+  reference: string;
+  status: string;
+  type: string;
+  walletId: number;
+}
