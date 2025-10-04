@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/ui/table";
-import { ChevronRightCircle, Trash2, User2, UserLock } from "lucide-react";
+import { ChevronRightCircle, User2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -62,9 +62,9 @@ const UserTable = () => {
   return (
     <div className="bg-white rounded-md px-3 py-2">
       <div className="flex flex-col gap-3">
-        <h3 className="text-sm py-2 font-semibold text-[#7901b1]">
+        <span className="text-sm py-2 font-semibold text-[#7901b1]">
           Users Management
-        </h3>
+        </span>
         <hr className="border-[#D9D9D9]" />
       </div>
       <Table>
@@ -136,23 +136,31 @@ const UserTable = () => {
                       <DialogDescription asChild>
                         <div className="flex flex-col mt-2 gap-2">
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">Name</h3>
+                            <span className="text-xs font-semibold">Name</span>
                             <p className="text-xs font-light">
                               {user?.first_name} {user?.last_name}
                             </p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">Email</h3>
+                            <span className="text-xs font-semibold">
+                              User ID
+                            </span>
+                            <p className="text-xs font-light">{user?.userId}</p>
+                          </div>
+                          <div className="flex text-foreground justify-between items-center">
+                            <span className="text-xs font-semibold">Email</span>
                             <p className="text-xs font-light">{user?.email}</p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">
+                            <span className="text-xs font-semibold">
                               Phone Number
-                            </h3>
+                            </span>
                             <p className="text-xs font-light">{user?.phone}</p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">Status</h3>
+                            <span className="text-xs font-semibold">
+                              Status
+                            </span>
                             <Badge
                               className={cn(
                                 user?.isKycVerified === true
@@ -168,7 +176,7 @@ const UserTable = () => {
                           </div>
                         </div>
                       </DialogDescription>
-                      <div className="flex w-full gap-5">
+                      {/* <div className="flex w-full gap-5">
                         <button className="flex gap-2 w-1/2 items-center justify-center rounded-md font-semibold cursor-pointer border border-[#7901b1] text-[#7901b1] hover:bg-accent">
                           <span>Freeze</span>
                           <UserLock className="size-5" />
@@ -177,7 +185,7 @@ const UserTable = () => {
                           <span>Delete</span>
                           <Trash2 className="size-5" />
                         </button>
-                      </div>
+                      </div> */}
                     </DialogContent>
                   </Dialog>
                 </TableCell>

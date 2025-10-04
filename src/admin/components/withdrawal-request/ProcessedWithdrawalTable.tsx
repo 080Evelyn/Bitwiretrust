@@ -37,7 +37,6 @@ import { Badge } from "@/Components/ui/badge";
 import { cn } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import { DialogClose } from "@/Components/ui/dialog";
-import { Button, buttonVariants } from "@/Components/ui/button";
 import { processedFiatWithdrawalRequest } from "@/admin/api/withdrawal-request";
 
 const ProcessedWithdrawalTable = ({
@@ -249,17 +248,7 @@ const ProcessedWithdrawalTable = ({
                           </div>
                         </div>
                       </DialogDescription>
-                      <div className="flex w-full gap-2 mt-2">
-                        <Button className="w-1/2">Mark as Paid</Button>
-                        <DialogClose
-                          className={cn(
-                            buttonVariants({ variant: "outline" }),
-                            "w-1/2 border-primary text-primary"
-                          )}
-                        >
-                          Close
-                        </DialogClose>
-                      </div>
+                      <DialogClose className="btn-primary">Done</DialogClose>
                     </DialogContent>
                   </Dialog>
                 </TableCell>
@@ -309,14 +298,6 @@ const ProcessedWithdrawalTable = ({
             </PaginationItem>
           </PaginationContent>
         </Pagination>
-      )}
-
-      {compact && transactions.length > 4 && (
-        <div className="flex justify-end mt-3">
-          <Button variant="outline" asChild>
-            <a href="/withdrawal-request">View More</a>
-          </Button>
-        </div>
       )}
     </div>
   );
