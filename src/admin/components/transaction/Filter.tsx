@@ -1,5 +1,5 @@
 import {
-  datesConstant,
+  // datesConstant,
   servicesConstant,
   statusConstant,
 } from "@/admin/constant/transactions";
@@ -18,13 +18,13 @@ interface FilterProps {
 
 const Filter = ({ searchParams, setSearchParams }: FilterProps) => {
   const toggleService = (name: string) => {
-    const types = searchParams.getAll("transactionTypes");
-    const newTypes = types.includes(name)
-      ? types.filter((t) => t !== name)
-      : [...types, name];
+    // if same service clicked again, unselect it
+    if (searchParams.get("category") === name) {
+      searchParams.delete("category");
+    } else {
+      searchParams.set("category", name);
+    }
 
-    searchParams.delete("transactionTypes");
-    newTypes.forEach((t) => searchParams.append("transactionTypes", t));
     setSearchParams(searchParams);
   };
 
@@ -37,46 +37,46 @@ const Filter = ({ searchParams, setSearchParams }: FilterProps) => {
     setSearchParams(searchParams);
   };
 
-  const toggleDate = (preset: string) => {
-    const now = new Date();
+  // const toggleDate = (preset: string) => {
+  //   const now = new Date();
 
-    if (searchParams.get("datePreset") === preset) {
-      searchParams.delete("fromDate");
-      searchParams.delete("toDate");
-      searchParams.delete("datePreset");
-    } else {
-      let fromDate: Date | null = null;
+  //   if (searchParams.get("datePreset") === preset) {
+  //     searchParams.delete("fromDate");
+  //     searchParams.delete("toDate");
+  //     searchParams.delete("datePreset");
+  //   } else {
+  //     let fromDate: Date | null = null;
 
-      if (preset === "Last 3 days") {
-        fromDate = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate() - 3
-        );
-      } else if (preset === "This Month") {
-        fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
-      } else if (preset === "Last 3 months") {
-        fromDate = new Date(
-          now.getFullYear(),
-          now.getMonth() - 3,
-          now.getDate()
-        );
-      }
+  //     if (preset === "Last 3 days") {
+  //       fromDate = new Date(
+  //         now.getFullYear(),
+  //         now.getMonth(),
+  //         now.getDate() - 3
+  //       );
+  //     } else if (preset === "This Month") {
+  //       fromDate = new Date(now.getFullYear(), now.getMonth(), 1);
+  //     } else if (preset === "Last 3 months") {
+  //       fromDate = new Date(
+  //         now.getFullYear(),
+  //         now.getMonth() - 3,
+  //         now.getDate()
+  //       );
+  //     }
 
-      if (fromDate) {
-        const formatDate = (date: Date) => date.toISOString().split("T")[0];
-        searchParams.set("fromDate", formatDate(fromDate));
-        searchParams.set("toDate", formatDate(now));
-        searchParams.set("datePreset", preset);
-      }
-    }
+  //     if (fromDate) {
+  //       const formatDate = (date: Date) => date.toISOString().split("T")[0];
+  //       searchParams.set("fromDate", formatDate(fromDate));
+  //       searchParams.set("toDate", formatDate(now));
+  //       searchParams.set("datePreset", preset);
+  //     }
+  //   }
 
-    setSearchParams(searchParams);
-  };
+  //   setSearchParams(searchParams);
+  // };
 
-  const selectedServices = searchParams.getAll("transactionTypes");
+  const selectedServices = searchParams.get("category");
   const selectedStatus = searchParams.get("status");
-  const selectedDate = searchParams.get("datePreset");
+  // const selectedDate = searchParams.get("datePreset");
 
   return (
     <div className="w-full py-2 rounded-md bg-white">
@@ -98,8 +98,8 @@ const Filter = ({ searchParams, setSearchParams }: FilterProps) => {
                   <div className="flex max-md:gap-2 justify-between items-center text-sm text-[#8C8C8C]">
                     <span>{service.name}</span>
                     <Checkbox
-                      checked={selectedServices.includes(service.name)}
-                      onCheckedChange={() => toggleService(service.name)}
+                      checked={selectedServices === service.id}
+                      onCheckedChange={() => toggleService(service.id)}
                     />
                   </div>
                 </div>
@@ -126,7 +126,7 @@ const Filter = ({ searchParams, setSearchParams }: FilterProps) => {
             </AccordionContent>
           </AccordionItem>
 
-          <AccordionItem value="date" className="border-b-0 mt-1">
+          {/* <AccordionItem value="date" className="border-b-0 mt-1">
             <AccordionTrigger className="font-semibold px-1.5 py-1.5 bg-[#FAFAFA] rounded-sm border border-[#f1f1f1]">
               Date
             </AccordionTrigger>
@@ -143,7 +143,7 @@ const Filter = ({ searchParams, setSearchParams }: FilterProps) => {
                 </div>
               ))}
             </AccordionContent>
-          </AccordionItem>
+          </AccordionItem> */}
         </Accordion>
       </div>
     </div>

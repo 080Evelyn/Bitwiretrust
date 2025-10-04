@@ -25,8 +25,17 @@ export interface KycData {
   utilityBillImageUrl: string;
 }
 
+export enum category {
+  MICROTRANSACTION = "MICROTRANSACTION",
+  GIFTCARD = "GIFTCARD",
+  CRYPTOSWAP = "CRYPTOSWAP",
+  MAINNET = "MAINNET",
+  FIAT_WITHDRAWAL = "FIAT_WITHDRAWAL",
+  REFUND = "REFUND",
+}
+
 export interface FilteredTransactionProps {
-  category?: string[];
+  category?: category;
   status?: string;
   fromDate?: string;
   toDate?: string;

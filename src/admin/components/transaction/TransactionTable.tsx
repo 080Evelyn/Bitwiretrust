@@ -11,7 +11,7 @@ import { Dialog, DialogTrigger } from "../ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/Components/ui/skeleton";
 import UsersDialog from "./users-dialog";
-import { TransactionLogProps } from "@/admin/type";
+import { category, TransactionLogProps } from "@/admin/type";
 import { format } from "date-fns";
 import { filteredTransaction } from "@/admin/api/transactions";
 
@@ -24,13 +24,14 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
     queryKey: ["transactionLogFiltered", searchParams.toString()],
     queryFn: () =>
       filteredTransaction({
-        category: searchParams.getAll("transactionTypes") || [],
+        category: searchParams.get("category") as category,
         status: searchParams.get("status")!,
         fromDate: searchParams.get("fromDate")!,
         toDate: searchParams.get("toDate")!,
         page: searchParams.get("page") || "0",
         size: searchParams.get("size") || "20",
       }),
+    staleTime: Infinity,
   });
 
   const contents: TransactionLogProps[] =
