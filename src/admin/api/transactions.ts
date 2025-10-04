@@ -23,8 +23,11 @@ export const totalTransactionCount = async () => {
 };
 
 export const filteredTransaction = async (params: FilteredTransactionProps) => {
-  const response = await axios.get(`${url}/v1/admin/transactions/filter`, {
-    params,
-  });
+  const response = await axios.get(
+    `${url}/v1/admin/dashboard/wallet-transactions-with-status-and-status`,
+    {
+      params,
+    }
+  );
   return response.data;
 };

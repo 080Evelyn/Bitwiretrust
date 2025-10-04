@@ -16,6 +16,7 @@ import {
 } from "../ui/dialog";
 import {
   keepPreviousData,
+  useMutation,
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
@@ -38,11 +39,16 @@ import { cn } from "@/lib/utils";
 import { formatDate } from "date-fns";
 import { DialogClose } from "@/Components/ui/dialog";
 import { Button, buttonVariants } from "@/Components/ui/button";
-import { fiatWithdrawalRequest } from "@/admin/api/withdrawal-request";
+import {
+  approveWithdrawalRequest,
+  fiatWithdrawalRequest,
+} from "@/admin/api/withdrawal-request";
+import { toast } from "sonner";
+import axios from "axios";
+import ButtonLoading from "@/Components/common/ButtonLoading";
 
 const PendingWithdrawalTable = ({ compact = false }: WithdrawalTableProps) => {
   const [page, setPage] = useState(0);
-
   const queryClient = useQueryClient();
 
   const { data, isPending, isError, error, isFetching } = useQuery({
@@ -69,6 +75,30 @@ const PendingWithdrawalTable = ({ compact = false }: WithdrawalTableProps) => {
       });
     }
   }, [page, pageProperty, queryClient, compact]);
+
+  const approveWithdrawalMutation = useMutation({
+    mutationFn: (withdrawalId: number) =>
+      approveWithdrawalRequest(withdrawalId),
+    onSuccess: () => {
+      toast.success("Payment marked as paid successfully");
+      queryClient.invalidateQueries({ queryKey: ["withdrawal-request", page] });
+    },
+    onError: (error: unknown) => {
+      if (axios.isAxiosError(error)) {
+        const responseDesc =
+          error.response?.data?.responseDesc || "Something went wrong";
+        toast.error(responseDesc);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    },
+  });
+
+  const handleMarkAsPaid = (withdrawalId: number) => {
+    approveWithdrawalMutation.mutate(withdrawalId);
+  };
+
+  const isLoading = approveWithdrawalMutation.isPending;
 
   // split transactions to 4 if compact, otherwise show all
   const visibleTransactions = compact ? transactions.slice(0, 4) : transactions;
@@ -239,7 +269,13 @@ const PendingWithdrawalTable = ({ compact = false }: WithdrawalTableProps) => {
                         </div>
                       </DialogDescription>
                       <div className="flex w-full gap-2 mt-2">
-                        <Button className="w-1/2">Mark as Paid</Button>
+                        <Button
+                          className="w-1/2"
+                          onClick={() => handleMarkAsPaid(transaction?.id)}
+                          disabled={isLoading}
+                        >
+                          {isLoading ? <ButtonLoading /> : " Mark as Paid"}
+                        </Button>
                         <DialogClose
                           className={cn(
                             buttonVariants({ variant: "outline" }),

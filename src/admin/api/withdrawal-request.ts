@@ -24,3 +24,10 @@ export const processedFiatWithdrawalRequest = async (
   });
   return response.data;
 };
+
+export const approveWithdrawalRequest = async (id: number) => {
+  const response = await axios.patch(
+    `${url}/v1/admin/${id}/approve-mark-successful`
+  );
+  return response.data;
+};

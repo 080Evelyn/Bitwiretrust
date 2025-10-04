@@ -6,7 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/ui/table";
-import { ChevronRightCircle, User2 } from "lucide-react";
+import { ChevronRightCircle } from "lucide-react";
 import { Dialog, DialogTrigger } from "../ui/dialog";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/Components/ui/skeleton";
@@ -34,7 +34,7 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
   });
 
   const contents: TransactionLogProps[] =
-    filteredTransactionResponse?.data.content ?? [];
+    filteredTransactionResponse?.data?.content ?? [];
 
   return (
     <div className="bg-white rounded-md px-3 py-2">
@@ -47,9 +47,9 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-semibold">Name</TableHead>
+            <TableHead className="font-semibold">Reference ID</TableHead>
+            <TableHead className="font-semibold">Amount</TableHead>
             <TableHead className="font-semibold">Transaction Type</TableHead>
-            <TableHead className="font-semibold">Transaction ID</TableHead>
             <TableHead className="font-semibold">Date</TableHead>
             <TableHead className="font-semibold">Status</TableHead>
             <TableHead className="font-semibold sr-only">Action</TableHead>
@@ -68,31 +68,15 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
         ) : (
           <TableBody>
             {contents?.map((content) => (
-              <TableRow
-                key={content.transactionId}
-                className="font-semibold text-xs"
-              >
-                <TableCell>
-                  <div className="flex items-center gap-1">
-                    {content.avatar ? (
-                      <img
-                        src={content.avatar}
-                        className="size-8 rounded-full object-contain"
-                      />
-                    ) : (
-                      <div className="p-1 rounded-full bg-[#28003E]">
-                        <User2 className="fill-[#B71FFF]/40 size-6" />
-                      </div>
-                    )}
-                    {content.name}
-                  </div>
-                </TableCell>
-                <TableCell>{content.transactionType}</TableCell>
+              <TableRow key={content.id} className="font-semibold text-xs">
+                <TableCell>{content.reference}</TableCell>
+                <TableCell>{content.amount}</TableCell>
+                <TableCell className="font-medium">{content.type}</TableCell>
                 <TableCell className="font-medium">
-                  {content.transactionId}
-                </TableCell>
-                <TableCell className="font-medium">
-                  {format(new Date(content.date), "dd MMM, yyyy, hh:mm:ss")}
+                  {format(
+                    new Date(content.createdAt),
+                    "dd MMM, yyyy, hh:mm:ss"
+                  )}
                 </TableCell>
                 <TableCell className="font-medium">
                   <div className="flex items-center gap-2">
