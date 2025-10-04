@@ -39,8 +39,8 @@ export interface FilteredTransactionProps {
   status?: string;
   fromDate?: string;
   toDate?: string;
-  page?: string;
-  size?: string;
+  page?: number;
+  size?: number;
 }
 
 export interface AllUsersProps {
