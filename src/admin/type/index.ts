@@ -1,10 +1,12 @@
 export interface TransactionLogProps {
-  avatar: string;
-  name: string;
-  transactionType: string;
-  transactionId: string;
+  amount: number;
+  createdAt: string;
+  currency: string;
+  description: string;
+  id: number;
+  reference: string;
   status: string;
-  date: Date;
+  type: string;
 }
 
 export interface KycData {
