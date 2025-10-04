@@ -81,12 +81,13 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
                 </TableCell>
                 <TableCell className="font-medium">
                   <div className="flex items-center gap-2">
-                    {content.status === "success" ? (
-                      <span className="size-[10px] rounded-full bg-[#11C600] mr-1" />
+                    {content.status === "SUCCESS" ||
+                    content.status === "SUCCESSFUL" ? (
+                      <span className="size-2 rounded-full bg-[#11C600] mr-1" />
                     ) : (
-                      <span className="size-[10px] rounded-full bg-[#FF0000] mr-1" />
+                      <span className="size-2 rounded-full bg-[#FF0000] mr-1" />
                     )}
-                    <span className="capitalize">{content.status}</span>
+                    <span className="lowercase">{content.status}</span>
                   </div>
                 </TableCell>
                 <Dialog>

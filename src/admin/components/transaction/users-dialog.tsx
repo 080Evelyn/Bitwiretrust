@@ -6,6 +6,8 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { TransactionLogProps } from "@/admin/type";
+import { formatDate } from "date-fns";
+import { Badge } from "@/Components/ui/badge";
 
 const UsersDialog = (content: TransactionLogProps) => {
   return (
@@ -14,42 +16,41 @@ const UsersDialog = (content: TransactionLogProps) => {
         <DialogTitle className="sr-only">User Details</DialogTitle>
         <DialogDescription>
           <div className="flex justify-center pt-2 pb-4">
-            {content.avatar ? (
-              <img
-                src={content.avatar}
-                className="size-[108px] rounded-full object-contain"
-              />
-            ) : (
-              <div className="p-2 items-center justify-center max-h-22 max-w-22 rounded-full bg-[#28003E]">
-                <User2 className="fill-[#B71FFF]/40 size-18" />
-              </div>
-            )}
+            <div className="p-2 items-center justify-center max-h-22 max-w-22 rounded-full bg-[#28003E]">
+              <User2 className="fill-[#B71FFF]/40 size-18" />
+            </div>
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex text-foreground justify-between items-center">
-              <span className="text-sm font-semibold">Name</span>
-              <p className="text-xs font-light">{content.name}</p>
+              <span className="text-sm font-semibold">Reference ID</span>
+              <p className="text-xs font-light">{content.reference}</p>
+            </div>
+            <div className="flex text-foreground justify-between items-center">
+              <span className="text-sm font-semibold">Amount</span>
+              <p className="text-xs font-light">{content.amount}</p>
             </div>
             <div className="flex text-foreground justify-between items-center">
               <span className="text-sm font-semibold">Transaction Type</span>
-              <p className="text-xs font-light">{content.transactionType}</p>
+              <p className="text-xs font-light">{content.type}</p>
             </div>
             <div className="flex text-foreground justify-between items-center">
               <span className="text-sm font-semibold">Transaction ID</span>
-              <p className="text-xs font-light">{content.transactionId}</p>
+              <p className="text-xs font-light">{content.id}</p>
             </div>
             <div className="flex text-foreground justify-between items-center">
               <span className="text-sm font-semibold">Date</span>
               <p className="text-xs font-light">
-                {" "}
-                {typeof content.date === "string"
-                  ? content.date
-                  : content.date?.toLocaleString?.()}
+                {formatDate(content.createdAt, "yyyy-MM-dd, hh:mm aa")}
               </p>
             </div>
             <div className="flex text-foreground justify-between items-center">
               <span className="text-sm font-semibold">Status</span>
-              <p className="text-xs font-light">{content.status}</p>
+              <Badge
+                className="text-xs font-light lowercase"
+                variant="secondary"
+              >
+                {content.status}
+              </Badge>
             </div>
           </div>
         </DialogDescription>

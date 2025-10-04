@@ -78,9 +78,9 @@ const KycTable = () => {
   return (
     <div className="bg-white rounded-md px-3 py-2">
       <div className="flex flex-col gap-3">
-        <h3 className="text-sm py-2 font-semibold text-[#7901b1]">
+        <span className="text-sm py-2 font-semibold text-[#7901b1]">
           KYC Management
-        </h3>
+        </span>
         <hr className="border-[#D9D9D9]" />
       </div>
       <Table>
@@ -158,47 +158,49 @@ const KycTable = () => {
                       <DialogDescription>
                         <div className="flex flex-col mt-2 gap-2">
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">Name</h3>
+                            <span className="text-xs font-semibold">Name</span>
                             <p className="text-xs font-light">
                               {user.fullName}
                             </p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">Email</h3>
+                            <span className="text-xs font-semibold">Email</span>
                             <p className="text-xs font-light">{user.email}</p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">
+                            <span className="text-xs font-semibold">
                               Phone Number
-                            </h3>
+                            </span>
                             <p className="text-xs font-light">
                               {user.phoneNumber}
                             </p>
                           </div>
                           <div className="flex w-full text-foreground justify-between items-start">
-                            <h3 className="text-xs font-semibold">
+                            <span className="text-xs font-semibold">
                               Resedential Address
-                            </h3>
+                            </span>
                             <p className="text-xs text-end w-[60%] font-light">
                               {user.residentialAddress}
                             </p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">Gender</h3>
+                            <span className="text-xs font-semibold">
+                              Gender
+                            </span>
                             <p className="text-xs font-light">{user.gender}</p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">
+                            <span className="text-xs font-semibold">
                               Date of Birth
-                            </h3>
+                            </span>
                             <p className="text-xs font-light">
                               {formatDate(user.dateOfBirth, "dd MMM, yyyy")}
                             </p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
-                            <h3 className="text-xs font-semibold">
+                            <span className="text-xs font-semibold">
                               Source of income
-                            </h3>
+                            </span>
                             <p className="text-xs font-light">
                               {user.sourceOfIncome}
                             </p>

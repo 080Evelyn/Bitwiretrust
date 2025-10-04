@@ -46,6 +46,7 @@ import {
 import { toast } from "sonner";
 import axios from "axios";
 import ButtonLoading from "@/Components/common/ButtonLoading";
+import { Link } from "react-router-dom";
 
 const PendingWithdrawalTable = ({ compact = false }: WithdrawalTableProps) => {
   const [page, setPage] = useState(0);
@@ -339,7 +340,7 @@ const PendingWithdrawalTable = ({ compact = false }: WithdrawalTableProps) => {
       {compact && transactions.length > 4 && (
         <div className="flex justify-end mt-3">
           <Button variant="outline" asChild>
-            <a href="/withdrawal-request">View More</a>
+            <Link to="/withdrawal-request">View More</Link>
           </Button>
         </div>
       )}
