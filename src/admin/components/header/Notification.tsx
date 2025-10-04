@@ -73,7 +73,7 @@ const AdminNotification = ({
 
         <PopoverContent
           sideOffset={5}
-          className="z-55 max-lg:h-[80vh] h-[85vh] md:pb-4 md:w-[340px] md:mr-4 lg:mt-2 p-0 border border-[#F1F1F1] rounded-lg bg-white"
+          className="z-55 max-lg:h-[80dvh] h-[85dvh] md:pb-4 md:w-[340px] md:mr-4 mt-1 lg:mt-2 p-0 border border-[#F1F1F1] rounded-lg bg-white"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <div className="flex justify-between items-center py-3 px-4">
