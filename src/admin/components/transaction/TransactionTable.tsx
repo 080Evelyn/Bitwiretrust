@@ -6,36 +6,67 @@ import {
   TableHeader,
   TableRow,
 } from "@/Components/ui/table";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/Components/ui/pagination";
 import { ChevronRightCircle } from "lucide-react";
 import { Dialog, DialogTrigger } from "../ui/dialog";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/Components/ui/skeleton";
 import UsersDialog from "./users-dialog";
-import { category, TransactionLogProps } from "@/admin/type";
+import { AllUsersPage, category, TransactionLogProps } from "@/admin/type";
 import { format } from "date-fns";
 import { filteredTransaction } from "@/admin/api/transactions";
+import { useState, useMemo } from "react";
 
 interface TransactionTableProps {
   searchParams: URLSearchParams;
 }
 
 const TransactionTable = ({ searchParams }: TransactionTableProps) => {
-  const { isFetching, data: filteredTransactionResponse } = useQuery({
-    queryKey: ["transactionLogFiltered", searchParams.toString()],
+  const [page, setPage] = useState<number>(0);
+
+  // memoize your query params, avoids re-running query when not needed
+  const queryParams = useMemo(() => {
+    return {
+      category: searchParams.get("category") as category | null,
+      status: searchParams.get("status") ?? "",
+      fromDate: searchParams.get("fromDate") ?? "",
+      toDate: searchParams.get("toDate") ?? "",
+    };
+  }, [searchParams]);
+
+  const {
+    isFetching,
+    data: filteredTransactionResponse,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["transactionLogFiltered", queryParams, page],
     queryFn: () =>
       filteredTransaction({
-        category: searchParams.get("category") as category,
-        status: searchParams.get("status")!,
-        fromDate: searchParams.get("fromDate")!,
-        toDate: searchParams.get("toDate")!,
-        page: searchParams.get("page") || "0",
-        size: searchParams.get("size") || "20",
+        category: queryParams.category ?? undefined,
+        status: queryParams.status,
+        fromDate: queryParams.fromDate,
+        toDate: queryParams.toDate,
+        page,
+        size: 20,
       }),
-    staleTime: Infinity,
+    placeholderData: keepPreviousData,
+    staleTime: 5 * 60 * 1000,
   });
 
+  const pageProperty: AllUsersPage | undefined =
+    filteredTransactionResponse?.data?.page;
   const contents: TransactionLogProps[] =
     filteredTransactionResponse?.data?.content ?? [];
+
+  const totalPages = pageProperty?.totalPages ?? 0;
 
   return (
     <div className="bg-white rounded-md px-3 py-2">
@@ -45,6 +76,7 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
         </h3>
         <span className="border-b-[0.5px] w-full border-[#D9D9D9]" />
       </div>
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -56,19 +88,27 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
             <TableHead className="font-semibold sr-only">Action</TableHead>
           </TableRow>
         </TableHeader>
-        {isFetching ? (
-          <TableBody>
-            {Array.from({ length: 8 }).map((_, i) => (
+
+        <TableBody>
+          {isFetching ? (
+            Array.from({ length: 8 }).map((_, i) => (
               <TableRow key={i}>
                 <TableCell colSpan={6}>
                   <Skeleton className="h-10 w-full" />
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        ) : (
-          <TableBody>
-            {contents?.map((content) => (
+            ))
+          ) : isError ? (
+            <TableRow>
+              <TableCell
+                colSpan={6}
+                className="text-center text-red-500 font-semibold"
+              >
+                {error?.message}
+              </TableCell>
+            </TableRow>
+          ) : (
+            contents.map((content) => (
               <TableRow key={content.id} className="font-semibold text-xs">
                 <TableCell>{content.reference}</TableCell>
                 <TableCell>{content.amount}</TableCell>
@@ -81,8 +121,7 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
                 </TableCell>
                 <TableCell className="font-medium">
                   <div className="flex items-center gap-2">
-                    {content.status === "SUCCESS" ||
-                    content.status === "SUCCESSFUL" ? (
+                    {["SUCCESS", "SUCCESSFUL"].includes(content.status) ? (
                       <span className="size-2 rounded-full bg-[#11C600] mr-1" />
                     ) : (
                       <span className="size-2 rounded-full bg-[#FF0000] mr-1" />
@@ -92,17 +131,67 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
                 </TableCell>
                 <Dialog>
                   <TableCell className="text-right">
-                    <DialogTrigger>
+                    <DialogTrigger asChild>
                       <ChevronRightCircle className="size-5 cursor-pointer text-[#141B34]" />
                     </DialogTrigger>
                     <UsersDialog {...content} />
                   </TableCell>
                 </Dialog>
               </TableRow>
-            ))}
-          </TableBody>
-        )}
+            ))
+          )}
+
+          {contents.length === 0 && !isError && (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center">
+                No transaction found
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
       </Table>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <Pagination className="mt-4">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage((prev) => Math.max(prev - 1, 0));
+                }}
+              />
+            </PaginationItem>
+
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <PaginationItem key={i}>
+                <PaginationLink
+                  href="#"
+                  isActive={i === page}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPage(i);
+                  }}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setPage((prev) => Math.min(prev + 1, totalPages - 1));
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   );
 };
