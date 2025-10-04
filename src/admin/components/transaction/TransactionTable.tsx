@@ -111,7 +111,14 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
             contents.map((content) => (
               <TableRow key={content.id} className="font-semibold text-xs">
                 <TableCell>{content.reference}</TableCell>
-                <TableCell>{content.amount}</TableCell>
+                <TableCell>
+                  {new Intl.NumberFormat("en-NG", {
+                    style: "currency",
+                    currency: "NGN",
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(content.amount)}
+                </TableCell>
                 <TableCell className="font-medium">{content.type}</TableCell>
                 <TableCell className="font-medium">
                   {format(

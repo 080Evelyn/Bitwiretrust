@@ -27,7 +27,14 @@ const UsersDialog = (content: TransactionLogProps) => {
             </div>
             <div className="flex text-foreground justify-between items-center">
               <span className="text-sm font-semibold">Amount</span>
-              <p className="text-xs font-light">{content.amount}</p>
+              <p className="text-xs font-light">
+                {new Intl.NumberFormat("en-NG", {
+                  style: "currency",
+                  currency: "NGN",
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                }).format(content.amount)}
+              </p>
             </div>
             <div className="flex text-foreground justify-between items-center">
               <span className="text-sm font-semibold">Transaction Type</span>
