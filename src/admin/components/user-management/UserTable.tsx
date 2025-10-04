@@ -32,6 +32,7 @@ import {
 } from "@/Components/ui/pagination";
 import { Badge } from "@/Components/ui/badge";
 import { cn } from "@/lib/utils";
+import { formatDate } from "date-fns";
 
 const UserTable = () => {
   const [page, setPage] = useState(0);
@@ -71,6 +72,7 @@ const UserTable = () => {
         <TableHeader>
           <TableRow>
             <TableHead className="font-semibold text-xs">Name</TableHead>
+            <TableHead className="font-semibold text-xs">User ID</TableHead>
             <TableHead className="font-semibold text-xs">Email</TableHead>
             <TableHead className="font-semibold text-xs">
               Phone number
@@ -110,18 +112,19 @@ const UserTable = () => {
                     {user?.first_name} {user?.last_name}
                   </div>
                 </TableCell>
+                <TableCell>{user?.userId}</TableCell>
                 <TableCell>{user?.email}</TableCell>
                 <TableCell>{user?.phone}</TableCell>
                 <TableCell>
                   <Badge
                     className={cn(
-                      user?.isKycVerified === true
+                      user?.accountStatus === "ACTIVE"
                         ? "bg-green-500 hover:bg-green-600"
                         : "bg-red-400 hover:bg-red-500",
-                      "text-xs font-medium"
+                      "text-xs font-medium lowercase"
                     )}
                   >
-                    {user?.isKycVerified === true ? "Verified" : "Unverified"}
+                    {user?.accountStatus}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
@@ -148,6 +151,14 @@ const UserTable = () => {
                             <p className="text-xs font-light">{user?.userId}</p>
                           </div>
                           <div className="flex text-foreground justify-between items-center">
+                            <span className="text-xs font-semibold">
+                              Wallet Banlance
+                            </span>
+                            <p className="text-xs font-light">
+                              {user?.walletBalance}
+                            </p>
+                          </div>
+                          <div className="flex text-foreground justify-between items-center">
                             <span className="text-xs font-semibold">Email</span>
                             <p className="text-xs font-light">{user?.email}</p>
                           </div>
@@ -159,20 +170,55 @@ const UserTable = () => {
                           </div>
                           <div className="flex text-foreground justify-between items-center">
                             <span className="text-xs font-semibold">
+                              Bank Name
+                            </span>
+                            <p className="text-xs font-light">
+                              {user?.bankDetails?.bank_name}
+                            </p>
+                          </div>
+                          <div className="flex text-foreground justify-between items-center">
+                            <span className="text-xs font-semibold">
+                              Account Name
+                            </span>
+                            <p className="text-xs font-light">
+                              {user?.bankDetails?.account_name}
+                            </p>
+                          </div>
+                          <div className="flex text-foreground justify-between items-center">
+                            <span className="text-xs font-semibold">
+                              Account Number
+                            </span>
+                            <p className="text-xs font-light">
+                              {user?.bankDetails?.account_number}
+                            </p>
+                          </div>
+
+                          <div className="flex text-foreground justify-between items-center">
+                            <span className="text-xs font-semibold">
                               Status
                             </span>
                             <Badge
                               className={cn(
-                                user?.isKycVerified === true
+                                user?.accountStatus === "ACTIVE"
                                   ? "bg-green-500 hover:bg-green-600"
                                   : "bg-red-400 hover:bg-red-500",
                                 "text-xs font-medium"
                               )}
                             >
-                              {user?.isKycVerified === true
-                                ? "Verified"
-                                : "Unverified"}
+                              {user?.accountStatus}
                             </Badge>
+                          </div>
+
+                          <div className="flex text-foreground justify-between items-center">
+                            <span className="text-xs font-semibold">
+                              Created At
+                            </span>
+                            <p className="text-xs font-light">
+                              {formatDate(
+                                user?.walletCreatedAt,
+                                "dd MMM, yyyy, hh:mm a"
+                              )}
+                            </p>
                           </div>
                         </div>
                       </DialogDescription>
