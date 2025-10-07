@@ -29,7 +29,6 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     first_name: "",
     last_name: "",
     phone: "",
-    dateOfBirth: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -83,14 +82,6 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       const phoneRegex = /^\+?[0-9\s\-()]+$/;
       return phoneRegex.test(phone);
     };
-    let isAdult = false;
-    if (formData.dateOfBirth) {
-      const today = new Date();
-      const birthday = new Date(formData.dateOfBirth);
-      const age = today.getFullYear() - birthday.getFullYear();
-      const month = today.getMonth() - birthday.getMonth();
-      isAdult = age >= 18 || (age === 17 && month >= 0);
-    }
 
     switch (currentStep) {
       case Step.CREATE_ACCOUNT:
@@ -99,12 +90,10 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
             formData.last_name.trim() !== "" &&
             isValidEmail(formData.email) &&
             isValidPhone(formData.phone) &&
-            formData.dateOfBirth.trim() !== "" &&
             formData.password.trim() !== "" &&
             formData.confirmPassword.trim() !== "" &&
             formData.terms !== false &&
-            formData.password === formData.confirmPassword &&
-            isAdult
+            formData.password === formData.confirmPassword
         );
         break;
       case Step.VERIFY_EMAIL:
@@ -252,7 +241,6 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       createAccountMutation.mutate({
         first_name: formData.first_name,
         last_name: formData.last_name,
-        dateOfBirth: formData.dateOfBirth,
         phone: formData.phone,
         email: formData.email,
         password: formData.password,
