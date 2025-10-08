@@ -136,17 +136,6 @@ const CreateAccount = ({
               />
             </div>
             <div className="custom-form-group">
-              <label>Date of Birth</label>
-              <input
-                type="date"
-                name="dateOfBirth"
-                value={formData.dateOfBirth}
-                className="form-input !w-full"
-                onChange={handleInputChange}
-                placeholder="DD/MM/YYYY"
-              />
-            </div>
-            <div className="custom-form-group">
               <label>Password</label>
               <div className="relative">
                 <input

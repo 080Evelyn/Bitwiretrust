@@ -40,7 +40,6 @@ export interface FormData {
   first_name: string;
   last_name: string;
   phone: string;
-  dateOfBirth: string;
   email: string;
   password: string;
   confirmPassword: string;
