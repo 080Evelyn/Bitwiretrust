@@ -17,15 +17,25 @@ interface FilterProps {
 }
 
 const Filter = ({ searchParams, setSearchParams }: FilterProps) => {
-  const toggleService = (name: string) => {
-    // if same service clicked again, unselect it
-    if (searchParams.get("category") === name) {
-      searchParams.delete("category");
-    } else {
-      searchParams.set("category", name);
-    }
+  // const toggleService = (name: string) => {
+  //   // if same service clicked again, unselect it
+  //   if (searchParams.get("category") === name) {
+  //     searchParams.delete("category");
+  //   } else {
+  //     searchParams.set("category", name);
+  //   }
 
-    setSearchParams(searchParams);
+  //   setSearchParams(searchParams);
+  // };
+
+  const toggleService = (name: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (newParams.get("category") === name) {
+      newParams.delete("category");
+    } else {
+      newParams.set("category", name);
+    }
+    setSearchParams(newParams);
   };
 
   const toggleStatus = (id: string) => {

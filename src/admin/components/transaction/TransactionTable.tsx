@@ -22,22 +22,26 @@ import UsersDialog from "./users-dialog";
 import { AllUsersPage, category, TransactionLogProps } from "@/admin/type";
 import { format } from "date-fns";
 import { filteredTransaction } from "@/admin/api/transactions";
-import { useState, useMemo } from "react";
+import { Dispatch, useMemo } from "react";
 
 interface TransactionTableProps {
   searchParams: URLSearchParams;
+  page: number;
+  setPage: Dispatch<React.SetStateAction<number>>;
 }
 
-const TransactionTable = ({ searchParams }: TransactionTableProps) => {
-  const [page, setPage] = useState<number>(0);
-
+const TransactionTable = ({
+  searchParams,
+  page,
+  setPage,
+}: TransactionTableProps) => {
   // memoize your query params, avoids re-running query when not needed
   const queryParams = useMemo(() => {
     return {
       category: searchParams.get("category") as category | null,
       status: searchParams.get("status") ?? "",
-      fromDate: searchParams.get("fromDate") ?? "",
-      toDate: searchParams.get("toDate") ?? "",
+      // fromDate: searchParams.get("fromDate") ?? "",
+      // toDate: searchParams.get("toDate") ?? "",
     };
   }, [searchParams]);
 
@@ -52,8 +56,8 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
       filteredTransaction({
         category: queryParams.category ?? undefined,
         status: queryParams.status,
-        fromDate: queryParams.fromDate,
-        toDate: queryParams.toDate,
+        // fromDate: queryParams.fromDate,
+        // toDate: queryParams.toDate,
         page,
         size: 20,
       }),
@@ -115,7 +119,10 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
             </TableRow>
           ) : (
             contents.map((content) => (
-              <TableRow key={content.id} className="font-semibold text-xs">
+              <TableRow
+                key={content.reference}
+                className="font-semibold text-xs"
+              >
                 <TableCell>{content.reference}</TableCell>
                 <TableCell>
                   {new Intl.NumberFormat("en-NG", {
