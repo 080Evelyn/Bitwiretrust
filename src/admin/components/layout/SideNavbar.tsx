@@ -245,13 +245,13 @@ const SideNavbar: React.FC = () => {
   // memoize the path for stable reference
   const locationPath = useMemo(() => location.pathname, [location.pathname]);
 
-  // auto-expand parent if current route is inside it (useful on page load / deep link)
+  // auto-expand parent if current route is inside it
   useEffect(() => {
     const parent = SIDEBAR_CONTENT.find((s) => locationPath.startsWith(s.path));
     if (parent && parent.children) {
       setExpanded(parent.path);
     } else {
-      // do not forcibly collapse to preserve user's manual toggles
+      // leave expand open to preserve user's manual toggles
       setExpanded(null);
     }
   }, [locationPath]);
@@ -276,7 +276,7 @@ const SideNavbar: React.FC = () => {
               handleLogoutClick();
               setIsOpen(false);
             }}
-            className="flex items-center gap-2 px-1.5 py-2.5 rounded-[4px] transition-all duration-500 text-sm font-semibold text-white hover:bg-white hover:text-[#7910b1] group relative overflow-hidden"
+            className="flex items-center cursor-pointer gap-2 px-1.5 py-2.5 rounded-[4px] transition-all duration-500 text-sm font-semibold text-white hover:bg-white hover:text-[#7910b1] group relative overflow-hidden"
           >
             <span className="absolute inset-0 bg-background transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
             <div className="flex items-center gap-2 relative z-10 transition-colors duration-300 delay-100">
