@@ -56,10 +56,6 @@ const Overview = () => {
     queryKey: ["totalTransaction"],
     queryFn: totalTransactionCount,
     staleTime: Infinity,
-    gcTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
   });
 
   const counts = totalTransactionResponse?.data?.counts ?? {};

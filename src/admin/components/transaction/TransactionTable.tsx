@@ -107,6 +107,12 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
                 {error?.message}
               </TableCell>
             </TableRow>
+          ) : contents.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={6} className="text-center">
+                No transaction found
+              </TableCell>
+            </TableRow>
           ) : (
             contents.map((content) => (
               <TableRow key={content.id} className="font-semibold text-xs">
@@ -146,14 +152,6 @@ const TransactionTable = ({ searchParams }: TransactionTableProps) => {
                 </Dialog>
               </TableRow>
             ))
-          )}
-
-          {contents.length === 0 && !isError && (
-            <TableRow>
-              <TableCell colSpan={6} className="text-center">
-                No transaction found
-              </TableCell>
-            </TableRow>
           )}
         </TableBody>
       </Table>

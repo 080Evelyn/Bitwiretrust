@@ -31,3 +31,10 @@ export const approveWithdrawalRequest = async (id: number) => {
   );
   return response.data;
 };
+
+export const withdrawalRequestCount = async (status: string) => {
+  const response = await axios.get(
+    `${url}/v1/admin/dashboard/withrwal-request/count/${status}`
+  );
+  return response.data;
+};
