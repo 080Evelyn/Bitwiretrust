@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SearchIcon } from "@/assets";
 import { Input } from "../ui/input";
 import { CountryGiftCardListProps } from "@/types/gift-card";
+import { Loader } from "lucide-react";
 
 type SelectGiftCardsProps = {
   onSelect: (card: CountryGiftCardListProps) => void;
@@ -54,7 +55,11 @@ const SelectGiftCards = ({
         </div>
 
         <div className="flex flex-col gap-2 overflow-y-auto">
-          {cardListIsLoading && <div>Loading...</div>}
+          {cardListIsLoading && (
+            <div className="flex items-center justify-center mt-20">
+              <Loader className="animate-spin size-5" />
+            </div>
+          )}
           {filteredCountries.length === 0 && !cardListIsLoading ? (
             <div className="text-center font-medium text-sm pt-5">
               No Card Found

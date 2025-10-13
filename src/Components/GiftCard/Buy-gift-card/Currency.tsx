@@ -2,6 +2,7 @@ import { SearchIcon } from "@/assets";
 import { Checkbox } from "@/Components/ui/checkbox";
 import { Input } from "@/Components/ui/input";
 import { GiftCardCountriesProps } from "@/types/gift-card";
+import { Loader } from "lucide-react";
 import { useState } from "react";
 
 interface CurrencyProps {
@@ -62,7 +63,9 @@ const Currency = ({
 
         <div className="flex flex-col gap-4 md:gap-2 w-full overflow-y-auto">
           {isPending ? (
-            <p>Loading...</p>
+            <div className="flex items-center justify-center mt-20">
+              <Loader className="animate-spin size-5" />
+            </div>
           ) : isError ? (
             <p> Oops! Something went wrong.</p>
           ) : filteredCountries.length === 0 ? (

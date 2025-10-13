@@ -10,6 +10,7 @@ export const useQueryInvalidation = () => {
 
   return { invalidateAfterTransaction };
 };
+
 export const useNotificationInvalidation = () => {
   const queryClient = useQueryClient();
 

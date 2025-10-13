@@ -1,7 +1,6 @@
 import {
   about_us,
   contact_us,
-  dark_mode,
   edit_profile,
   invite_friends,
   kyc,
@@ -18,8 +17,6 @@ interface profileProps {
   fullName: string;
   profileImage: string;
   user: User | undefined;
-  darkMode: boolean;
-  toggleDarkMode: () => void;
   handleClose: () => void;
 }
 
@@ -28,8 +25,6 @@ const Profile = ({
   fullName,
   profileImage,
   user,
-  darkMode,
-  toggleDarkMode,
   handleClose,
 }: profileProps) => {
   return (
@@ -74,7 +69,7 @@ const Profile = ({
           <IoIosArrowForward />
         </div>
 
-        <div className="option">
+        {/* <div className="option">
           <div className="option-left">
             <img
               src={dark_mode}
@@ -91,7 +86,7 @@ const Profile = ({
             />
             <span className="slider round"></span>
           </label>
-        </div>
+        </div> */}
 
         <div className="option" onClick={() => toggleModal("contact")}>
           <div className="option-left">

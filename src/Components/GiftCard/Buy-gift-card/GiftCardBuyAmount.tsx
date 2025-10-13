@@ -109,6 +109,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
     amt in map ? parseFloat(map[amt]) : Number(amt) * rate || 0;
   const quantity = parseFloat(form.watch("quantity"));
   const totalAmount = rateAmount * quantity || 0;
+  const maxSenderAmount = selectedCard?.maxSenderDenomination || 170000;
 
   // Mutation
   const orderMutation = useMutation({
@@ -270,9 +271,17 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
             {/* Summary */}
             <div className="flex flex-col items-center py-2.5 bg-[#FCF6FF] shadow-xs rounded-2xl gap-[3px] text-sm">
               <span>You are paying</span>
-              <h2 className="text-3xl md:text-xl text-[#7910B1] font-semibold">
+              <span className="text-3xl md:text-xl text-[#7910B1] font-semibold">
                 ₦{totalAmount.toLocaleString()}
-              </h2>
+              </span>
+              <div>
+                {totalAmount > maxSenderAmount && (
+                  <span className="text-xs text-red-500 text-center">
+                    You cannot buy more than ₦{maxSenderAmount.toLocaleString()}{" "}
+                    at once
+                  </span>
+                )}
+              </div>
               <span>
                 Fee = ₦{selectedCard?.senderFee.toLocaleString() || "0"}
               </span>
@@ -281,10 +290,16 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
             {/* Submit */}
             <button
               type="submit"
-              disabled={orderMutation.isPending || !selectedCard?.productId}
+              disabled={
+                orderMutation.isPending ||
+                !selectedCard?.productId ||
+                totalAmount > maxSenderAmount
+              }
               className={cn("btn-primary w-full max-md:mt-20", {
                 "cursor-not-allowed":
-                  orderMutation.isPending || !selectedCard?.productId,
+                  orderMutation.isPending ||
+                  !selectedCard?.productId ||
+                  totalAmount > maxSenderAmount,
               })}
             >
               {orderMutation.isPending ? "Processing..." : "Buy Gift Card"}
@@ -296,7 +311,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
       <SuccessModal
         isOpen={isSuccessModalOpen}
         onClose={() => setIsSuccessModalOpen(false)}
-        title="Gitf Card Purchase Successful!"
+        title="Gift Card Purchase Successful!"
       />
     </div>
   );
