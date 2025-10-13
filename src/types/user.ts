@@ -16,7 +16,7 @@ export interface User {
   bitWalletId: string;
   email: string;
   first_name: string;
-  isKycVerified: string;
+  isKycVerified: boolean;
   isPinSet: string;
   last_name: string;
   phone: string;

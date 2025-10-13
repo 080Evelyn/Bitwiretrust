@@ -22,7 +22,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
   user,
 }) => {
   const [activeModal, setActiveModal] = useState<ModalType>("profile");
-  const [darkMode, setDarkMode] = useState(false);
+  // const [darkMode, setDarkMode] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -42,15 +42,15 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
     setActiveModal(modal);
   };
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+  // const toggleDarkMode = () => {
+  //   setDarkMode(!darkMode);
 
-    if (!darkMode) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
-    }
-  };
+  //   if (!darkMode) {
+  //     document.body.classList.add("dark-mode");
+  //   } else {
+  //     document.body.classList.remove("dark-mode");
+  //   }
+  // };
 
   const copyReferralCode = () => {
     const code = "bitwirejoneswie3iu44";
@@ -114,8 +114,8 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
           fullName={fullName}
           profileImage={profileImage}
           user={user || ""}
-          darkMode={darkMode}
-          toggleDarkMode={toggleDarkMode}
+          // darkMode={darkMode}
+          // toggleDarkMode={toggleDarkMode}
           handleClose={handleClose}
         />
       )}

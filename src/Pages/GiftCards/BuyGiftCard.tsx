@@ -20,7 +20,7 @@ const BuyGiftCard = () => {
   } = useQuery({
     queryKey: ["giftCardCountries"],
     queryFn: () => giftcardCountries(),
-    staleTime: 5 * 60 * 1000,
+    staleTime: Infinity,
   });
   const giftCardsCountriesList = giftCardCountriesResponse?.data;
 
@@ -46,7 +46,7 @@ const BuyGiftCard = () => {
   }, [checked]);
 
   return (
-    <div>
+    <div className="pb-5">
       <div className="hidden md:block">
         <BalanceOverview pathName="Trade Gift Cards" />
       </div>
