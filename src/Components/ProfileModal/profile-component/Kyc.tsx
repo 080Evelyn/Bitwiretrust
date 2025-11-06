@@ -30,32 +30,6 @@ import axios from "axios";
 import ButtonLoading from "@/Components/common/ButtonLoading";
 
 const formSchema = z.object({
-  fullName: z.string().min(1, { message: "Full Name is required." }),
-  dob: z
-    .string()
-    .min(1, { message: "Date of birth is required" })
-    .regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Invalid date format" })
-    .refine(
-      (date) => {
-        const dobDate = new Date(date);
-        const today = new Date();
-        const age = today.getFullYear() - dobDate.getFullYear();
-        const monthDiff = today.getMonth() - dobDate.getMonth();
-        const dayDiff = today.getDate() - dobDate.getDate();
-
-        if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-          return age - 1 >= 18;
-        }
-        return age >= 18;
-      },
-      { message: "You must be 18 years of age or older" }
-    ),
-  gender: z.enum(["male", "female", "other"], {
-    message: "Gender is required",
-  }),
-  email: z.string().email("Invalid email address"),
-  phone_number: z.string().min(1, { message: "Phone number is required" }),
-  address: z.string().min(1, { message: "Address is required" }),
   income: z.string().min(1, { message: "Income is required" }),
   identificationNumber: z
     .string()
@@ -104,12 +78,6 @@ const UserKyc = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullName: "",
-      dob: "",
-      gender: "male",
-      email: "",
-      phone_number: "",
-      address: "",
       income: "",
       documentType: "nin",
       identificationNumber: "",
@@ -128,16 +96,6 @@ const UserKyc = ({
       field.onChange(e.target.files);
     }
   };
-  // const handleFaceUpload = (
-  //   e: React.ChangeEvent<HTMLInputElement>,
-  //   field: ControllerRenderProps<z.infer<typeof formSchema>, "faceVerification">
-  // ) => {
-  //   const file = e.target.files?.[0];
-  //   if (file) {
-  //     setFacePreview(URL.createObjectURL(file));
-  //     field.onChange(e.target.files);
-  //   }
-  // };
 
   const submitKycMutation = useMutation({
     mutationFn: (data: KycSubmitProps) => kycSubmission(data),
@@ -145,14 +103,8 @@ const UserKyc = ({
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const requestData = {
-      fullName: values.fullName,
       userId: getUserId() || "0",
       idNumber: values.identificationNumber,
-      email: values.email,
-      phoneNumber: values.phone_number,
-      residentialAddress: values.address,
-      gender: values.gender,
-      dateOfBirth: values.dob,
       sourceOfIncome: values.income,
       documentType: values.documentType,
       utilityBillImageUrl: values.utilityBill?.[0]?.name,
@@ -194,105 +146,6 @@ const UserKyc = ({
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-4 p-2.5"
         >
-          {/* Full Name */}
-          <FormField
-            control={form.control}
-            name="fullName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Full Name</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Date of Birth */}
-          <FormField
-            control={form.control}
-            name="dob"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date of Birth</FormLabel>
-                <FormControl>
-                  <Input type="date" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Gender */}
-          <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Gender</FormLabel>
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <FormControl>
-                    <SelectTrigger className="w-full bg-[#F9EDFF] rounded-[5px]">
-                      <SelectValue placeholder="Select gender" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="z-1000">
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Email */}
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email Address</FormLabel>
-                <FormControl>
-                  <Input type="email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Phone Number */}
-          <FormField
-            control={form.control}
-            name="phone_number"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone Number</FormLabel>
-                <FormControl>
-                  <Input type="tel" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Address */}
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Residential Address</FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
           {/* Income */}
           <FormField
             control={form.control}
@@ -369,12 +222,6 @@ const UserKyc = ({
                   </FormControl>
                   <SelectContent className="z-1000">
                     <SelectItem value="nin">NIN </SelectItem>
-                    {/* <SelectItem value="Passport">
-                      International Passport
-                    </SelectItem>
-                    <SelectItem value="Driver_license">
-                      Drivers License
-                    </SelectItem> */}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -396,52 +243,6 @@ const UserKyc = ({
               </FormItem>
             )}
           />
-
-          {/* Face Upload */}
-          {/* <FormField
-            control={form.control}
-            name="faceVerification"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Faciel Verification</FormLabel>
-                <FormControl>
-                  <>
-                    {facePreview && (
-                      <div className="my-2">
-                        <img
-                          src={facePreview}
-                          alt="Preview"
-                          className="max-h-30"
-                        />
-                      </div>
-                    )}
-
-                    <label
-                      htmlFor="upload-face"
-                      className="flex flex-col items-center gap-2 justify-center rounded-md py-8 cursor-pointer bg-[#F9EDFF] hover:bg-[#f5e8fc]"
-                    >
-                      <img
-                        src={GalleryAdd}
-                        className="size-12"
-                        alt="Upload Icon"
-                      />
-                      <span className="!text-sm text-center w-full lg:px-1.5 font-medium tracking-[-0.17px]">
-                        Upload a photo of yourself clearly showing your face
-                      </span>
-                      <input
-                        id="upload-face"
-                        className="hidden"
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleFaceUpload(e, field)}
-                      />
-                    </label>
-                  </>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
 
           <button
             type="submit"

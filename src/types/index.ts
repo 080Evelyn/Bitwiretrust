@@ -171,14 +171,14 @@ export interface TransactionData {
 }
 
 export interface KycSubmitProps {
-  fullName: string;
+  // fullName: string;
   userId: string;
   idNumber: string;
-  email: string;
-  phoneNumber: string;
-  residentialAddress: string;
-  gender: string;
-  dateOfBirth: string;
+  // email: string;
+  // phoneNumber: string;
+  // residentialAddress: string;
+  // gender: string;
+  // dateOfBirth: string;
   sourceOfIncome: string;
   documentType: string;
   utilityBillImageUrl: string;
