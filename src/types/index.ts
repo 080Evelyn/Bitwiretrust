@@ -181,9 +181,14 @@ export interface KycSubmitProps {
   // dateOfBirth: string;
   sourceOfIncome: string;
   documentType: string;
-  utilityBillImageUrl: string;
+  // utilityBillImageUrl: string;
   //   documentImageUrl: string;
   //   selfieImageUrl: string;
+}
+
+export interface UtilityUploadProps {
+  userId: string;
+  file: string;
 }
 
 export interface TransactionListResponse {
