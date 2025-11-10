@@ -11,7 +11,6 @@ export const getUserRole = () => localStorage.getItem("userRole");
 
 export const clearAuth = () => {
   memoryToken = null;
-  localStorage.removeItem("token");
   localStorage.removeItem("userId");
   localStorage.removeItem("email");
   localStorage.removeItem("userRole");
