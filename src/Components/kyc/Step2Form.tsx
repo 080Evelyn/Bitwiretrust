@@ -75,6 +75,7 @@ const Step2Form = ({
       await submitMutation.mutateAsync(formData);
       toast.success("Utility bill uploaded successfully");
       form.reset();
+      setPreview(null);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         const msg =
