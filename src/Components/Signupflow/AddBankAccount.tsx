@@ -27,7 +27,7 @@ import {
 } from "@/api/wallet-service";
 import { Link, useNavigate } from "react-router-dom";
 import { full_logo } from "@/assets";
-import { ChevronsUpDown, Loader2 } from "lucide-react";
+import { ChevronsUpDown, Loader, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { AddBankProps } from "@/types";
 import { toast } from "sonner";
@@ -58,15 +58,16 @@ const AddBankAccount = ({
 
   const watchedAccountNumber = form.watch("account");
 
-  const { data: apiResponse } = useQuery<BankListInfo>({
-    queryKey: ["bankList"],
-    queryFn: bankList,
-    staleTime: Infinity,
-    gcTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-  });
+  const { data: apiResponse, isPending: bankListIsPending } =
+    useQuery<BankListInfo>({
+      queryKey: ["bankList"],
+      queryFn: bankList,
+      staleTime: Infinity,
+      gcTime: Infinity,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+    });
 
   const {
     data: bankUserDetails,
@@ -176,7 +177,16 @@ const AddBankAccount = ({
                     placeholder="Search bank..."
                     className="!h-6 sm:!h-7.5 w-[80%]"
                   />
-                  <CommandEmpty>No bank found.</CommandEmpty>
+                  <CommandEmpty>
+                    {bankListIsPending ? (
+                      <div className="flex justify-center items-center p-4">
+                        <Loader className="animate-spin size-5 text-primary mr-2" />
+                        Loading Bank List...
+                      </div>
+                    ) : (
+                      "No bank found."
+                    )}
+                  </CommandEmpty>
                   <CommandList>
                     <CommandGroup>
                       {bankListData?.map((bank) => (

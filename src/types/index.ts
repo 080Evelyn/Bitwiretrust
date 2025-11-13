@@ -41,6 +41,7 @@ export interface FormData {
   last_name: string;
   phone: string;
   email: string;
+  username: string;
   password: string;
   confirmPassword: string;
   terms: boolean;

@@ -7,6 +7,7 @@ export const createAccount = async (data: {
   first_name: string;
   last_name: string;
   phone: string;
+  username: string;
   email: string;
   password: string;
 }) => {

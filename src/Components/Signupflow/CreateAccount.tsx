@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { full_logo } from "@/assets";
-import { FormData, Step } from "@/types";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import {
   Dialog,
@@ -14,28 +13,35 @@ import TermsAndCondition from "@/constants/TermsAndCondition";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
+import { useCreateAccount } from "@/hooks/signup/useCreateAccount";
+import { CreateAccountFormData } from "@/lib/schemas/signup";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import { Input } from "../ui/input";
+import { Checkbox } from "../ui/checkbox";
+import { Button } from "../ui/button";
+import { Step } from "@/types";
 
 interface CreateAccountProps {
-  formData: FormData;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  isButtonEnabled: boolean;
-  handleNextStep: () => void;
   getLeftSideClass: () => string;
   getStepBackground: () => string;
-  isLoading: boolean;
+  onSuccess: (email: string) => void;
   setCurrentStep: (step: Step) => void;
 }
 
 const CreateAccount = ({
-  formData,
-  handleInputChange,
-  isButtonEnabled,
-  handleNextStep,
   getLeftSideClass,
   getStepBackground,
-  isLoading,
+  onSuccess,
   setCurrentStep,
 }: CreateAccountProps) => {
+  const { form, onSubmit, isLoading } = useCreateAccount();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
@@ -48,11 +54,15 @@ const CreateAccount = ({
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  const handleSubmit = (data: CreateAccountFormData) => {
+    onSubmit(data, onSuccess);
+  };
+
   return (
-    <div className="flex w-full justify-center items-center">
+    <div className="grid grid-cols-7 md:gap-5 xl:gap-10 w-full justify-center items-center">
       <div
         className={cn(
-          "items-center justify-center !hidden sm:!flex w-[55%]",
+          "items-center justify-center sm:col-span-4",
           getLeftSideClass()
         )}
         style={{ backgroundImage: `url(${getStepBackground()})` }}
@@ -64,7 +74,7 @@ const CreateAccount = ({
           <div className="progress-dot"></div>
         </div>
       </div>
-      <ScrollArea className="h-[96dvh] w-full">
+      <ScrollArea className="h-[96dvh] col-span-7 sm:col-span-3">
         <div className="flex flex-1 flex-col">
           <div className="app-logo flex justify-center ">
             <Link to="/">
@@ -90,141 +100,206 @@ const CreateAccount = ({
               </button>
             </Link>
           </div>
-          <form className="flex flex-col w-full gap-3">
-            <div className="custom-form-group">
-              <label>Enter Your First</label>
-              <input
-                type="text"
-                name="first_name"
-                className="form-input"
-                value={formData.first_name}
-                onChange={handleInputChange}
-                placeholder="First Name"
-              />
-            </div>
-            <div className="custom-form-group">
-              <label>Enter Your Last Name</label>
-              <input
-                type="text"
-                name="last_name"
-                className="form-input"
-                value={formData.last_name}
-                onChange={handleInputChange}
-                placeholder="Last Name"
-              />
-            </div>
-            <div className="custom-form-group">
-              <label>Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                className="form-input"
-                onChange={handleInputChange}
-                placeholder="example@email.com"
-              />
-            </div>
-            <div className="custom-form-group">
-              <label>Phone Number</label>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                className="form-input"
-                onChange={handleInputChange}
-                placeholder="0803 456 7890"
-              />
-            </div>
-            <div className="custom-form-group">
-              <label>Password</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleInputChange}
-                  placeholder="••••••••"
-                  className="!pr-14 form-input placeholder:text-xl"
-                />
-                <button
-                  type="button"
-                  className="absolute top-1/2 right-4 cursor-pointer transform -translate-y-1/2 focus:text-[#7910B1]"
-                  onClick={togglePasswordVisibility}
-                >
-                  {showPassword ? (
-                    <FaEyeSlash className="size-4.5" />
-                  ) : (
-                    <FaEye className="size-4.5" />
-                  )}
-                </button>
-              </div>
-            </div>
-            <div className="custom-form-group">
-              <label>Confirm Password</label>
-              <div className="relative">
-                <input
-                  type={showConfirmPassword ? "text" : "password"}
-                  name="confirmPassword"
-                  className="!pr-14 form-input placeholder:text-xl"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  placeholder="••••••••"
-                />
-                <button
-                  type="button"
-                  className="absolute top-1/2 right-4 cursor-pointer transform -translate-y-1/2 focus:text-[#7910B1]"
-                  onClick={toggleConfirmPasswordVisibility}
-                >
-                  {showConfirmPassword ? (
-                    <FaEyeSlash className="size-4.5" />
-                  ) : (
-                    <FaEye className="size-4.5" />
-                  )}
-                </button>
-              </div>
-            </div>
-            <div className="custom-form-group flex-row gap-3 items-center">
-              <input
-                type="checkbox"
-                id="terms"
-                name="terms"
-                className="!w-4 !h-4"
-                checked={formData.terms}
-                onChange={handleInputChange}
-              />
-              <label
-                htmlFor="terms"
-                className="!underline cursor-pointer text-blue-700 hover:text-foreground"
-                onClick={() => setShowDialog(true)}
-              >
-                Accept Terms and Condition
-              </label>
-            </div>
-
-            <Dialog open={showDialog} onOpenChange={setShowDialog}>
-              <DialogOverlay>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Terms and Conditions</DialogTitle>
-                  </DialogHeader>
-                  <DialogDescription>
-                    <TermsAndCondition />
-                  </DialogDescription>
-                </DialogContent>
-              </DialogOverlay>
-            </Dialog>
-
-            <button
-              type="button"
-              className={`btn-primary mx-4 ${
-                isButtonEnabled ? "cursor-pointer" : "cursor-not-allowed"
-              }`}
-              onClick={handleNextStep}
-              disabled={!isButtonEnabled || isLoading}
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+              className="flex flex-col w-full gap-3"
             >
-              {isLoading ? "Processing..." : "Next"}
-            </button>
-          </form>
+              <FormField
+                control={form.control}
+                name="first_name"
+                render={({ field }) => (
+                  <FormItem className="custom-form-group">
+                    <FormLabel>Enter Your First Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="First Name"
+                        className="form-input"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="last_name"
+                render={({ field }) => (
+                  <FormItem className="custom-form-group">
+                    <FormLabel>Enter Your Last Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Last Name"
+                        className="form-input"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem className="custom-form-group">
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="email"
+                        placeholder="example@email.com"
+                        className="form-input"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem className="custom-form-group">
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="johndoe123"
+                        className="form-input"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem className="custom-form-group">
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        type="tel"
+                        placeholder="0803 456 7890"
+                        className="form-input"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem className="custom-form-group">
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          {...field}
+                          type={showPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          className="!pr-14 form-input placeholder:text-xl"
+                        />
+                        <button
+                          type="button"
+                          className="absolute top-1/2 right-4 cursor-pointer transform -translate-y-1/2 focus:text-[#7910B1]"
+                          onClick={togglePasswordVisibility}
+                        >
+                          {showPassword ? (
+                            <FaEyeSlash className="size-4.5" />
+                          ) : (
+                            <FaEye className="size-4.5" />
+                          )}
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem className="custom-form-group">
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input
+                          {...field}
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          className="!pr-14 form-input placeholder:text-xl"
+                        />
+                        <button
+                          type="button"
+                          className="absolute top-1/2 right-4 cursor-pointer transform -translate-y-1/2 focus:text-[#7910B1]"
+                          onClick={toggleConfirmPasswordVisibility}
+                        >
+                          {showConfirmPassword ? (
+                            <FaEyeSlash className="size-4.5" />
+                          ) : (
+                            <FaEye className="size-4.5" />
+                          )}
+                        </button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="terms"
+                render={({ field }) => (
+                  <FormItem className="flex px-4 gap-3 items-center">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                        className="!w-4 !h-4"
+                      />
+                    </FormControl>
+                    <label
+                      htmlFor="terms"
+                      className="!underline cursor-pointer text-blue-700 hover:text-foreground"
+                      onClick={() => setShowDialog(true)}
+                    >
+                      Accept Terms and Condition
+                    </label>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Dialog open={showDialog} onOpenChange={setShowDialog}>
+                <DialogOverlay>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Terms and Conditions</DialogTitle>
+                    </DialogHeader>
+                    <DialogDescription>
+                      <TermsAndCondition />
+                    </DialogDescription>
+                  </DialogContent>
+                </DialogOverlay>
+              </Dialog>
+
+              <Button
+                type="submit"
+                className="btn-primary mx-4"
+                disabled={isLoading}
+              >
+                {isLoading ? "Processing..." : "Next"}
+              </Button>
+            </form>
+          </Form>
         </div>
       </ScrollArea>
     </div>
