@@ -111,7 +111,7 @@ const GetStarted = ({
               name="email"
               render={({ field }) => (
                 <FormItem className="custom-form-group">
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Email or Username</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
