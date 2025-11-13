@@ -125,6 +125,17 @@ const CreateAccount = ({
               />
             </div>
             <div className="custom-form-group">
+              <label>Username</label>
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                className="form-input"
+                onChange={handleInputChange}
+                placeholder="johndoe123"
+              />
+            </div>
+            <div className="custom-form-group">
               <label>Phone Number</label>
               <input
                 type="tel"
@@ -183,7 +194,7 @@ const CreateAccount = ({
                 </button>
               </div>
             </div>
-            <div className="custom-form-group flex-row gap-3 items-center">
+            <div className="flex px-4 gap-3 items-center">
               <input
                 type="checkbox"
                 id="terms"

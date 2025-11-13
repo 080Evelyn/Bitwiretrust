@@ -1,4 +1,4 @@
-// This is being used for withdrawal pin code creation rather than passcode.
+// This is being used for withdrawal pin code creation rather than passcode creation.
 
 import { full_logo, passcode_lock } from "@/assets";
 import { ArrowLeft } from "lucide-react";

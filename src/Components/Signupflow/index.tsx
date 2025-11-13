@@ -30,6 +30,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
     last_name: "",
     phone: "",
     email: "",
+    username: "",
     password: "",
     confirmPassword: "",
     terms: false,
@@ -89,6 +90,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
           formData.first_name.trim() !== "" &&
             formData.last_name.trim() !== "" &&
             isValidEmail(formData.email) &&
+            formData.username.trim() !== "" &&
             isValidPhone(formData.phone) &&
             formData.password.trim() !== "" &&
             formData.confirmPassword.trim() !== "" &&
@@ -241,6 +243,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
       createAccountMutation.mutate({
         first_name: formData.first_name,
         last_name: formData.last_name,
+        username: formData.username,
         phone: formData.phone,
         email: formData.email,
         password: formData.password,
