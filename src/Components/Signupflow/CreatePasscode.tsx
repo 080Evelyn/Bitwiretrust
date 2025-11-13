@@ -1,41 +1,43 @@
-// This is being used for withdrawal pin code creation rather than passcode creation.
-
 import { full_logo, passcode_lock } from "@/assets";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
+import { useCreatePasscode } from "@/hooks/signup/useCreatePasscode";
 
 interface CreatePasscodeProps {
   getLeftSideClass: () => string;
   getStepBackground: () => string;
-  renderPasscodeInputs: () => React.ReactNode;
-  handleNextStep: () => void;
-  isButtonEnabled: boolean;
-  passcode: string[];
-  confirmPasscode: string[];
-  setPasscode: (passcode: string[]) => void;
-  setConfirmPasscode: (passcode: string[]) => void;
-  passcodeMatchError: boolean;
-  setPasscodeMatchError: (error: boolean) => void;
-  getStartedFields: { email: string; password: string };
-  isLoading: boolean;
+  onSuccess: () => void;
 }
 
 const CreatePasscode = ({
   getLeftSideClass,
   getStepBackground,
-  renderPasscodeInputs,
-  handleNextStep,
-  isButtonEnabled,
-  passcode,
-  confirmPasscode,
-  setPasscode,
-  setConfirmPasscode,
-  passcodeMatchError,
-  getStartedFields,
-  isLoading,
-  setPasscodeMatchError,
+  onSuccess,
 }: CreatePasscodeProps) => {
+  const { onSubmit, isLoading } = useCreatePasscode();
   const [isConfirming, setIsConfirming] = useState(false);
+  const [passcode, setPasscode] = useState<string[]>(["", "", "", ""]);
+  const [confirmPasscode, setConfirmPasscode] = useState<string[]>([
+    "",
+    "",
+    "",
+    "",
+  ]);
+  const [passcodeMatchError, setPasscodeMatchError] = useState<boolean>(false);
+
+  const handlePasscodeChange = (index: number, value: string) => {
+    const newPasscode = [...passcode];
+    newPasscode[index] = value.replace(/[^0-9]/g, "").slice(0, 1);
+    setPasscode(newPasscode);
+    setPasscodeMatchError(false);
+
+    if (value && index < 3) {
+      const nextInput = document.getElementById(`passcode-input-${index + 1}`);
+      if (nextInput) {
+        nextInput.focus();
+      }
+    }
+  };
 
   const handleConfirmPasscodeChange = (index: number, value: string) => {
     const newPasscode = [...confirmPasscode];
@@ -58,7 +60,30 @@ const CreatePasscode = ({
       setPasscodeMatchError(true);
       return;
     }
-    handleNextStep();
+    const data = {
+      passcode: passcode.join(""),
+      confirmPasscode: confirmPasscode.join(""),
+    };
+    onSubmit(data, onSuccess);
+  };
+
+  const renderPasscodeInputs = () => {
+    return (
+      <div className="passcode-inputs">
+        {passcode.map((digit, index) => (
+          <input
+            key={index}
+            id={`passcode-input-${index}`}
+            type="password"
+            className={`passcode-input ${digit ? "filled" : ""}`}
+            value={digit}
+            onChange={(e) => handlePasscodeChange(index, e.target.value)}
+            maxLength={1}
+            autoFocus={index === 0}
+          />
+        ))}
+      </div>
+    );
   };
 
   const renderConfirmPasscodeInputs = () => {
@@ -118,7 +143,7 @@ const CreatePasscode = ({
           </span>
         </p>
         <form>
-          <input type="hidden" name="email" value={getStartedFields.email} />
+          <input type="hidden" name="email" value="" />
           <div className="form-group passcode-form-group">
             <div className="passcode-lock">
               <img src={passcode_lock} alt="lock" />
@@ -137,12 +162,18 @@ const CreatePasscode = ({
             <button
               type="button"
               className={`next-button ${
-                isButtonEnabled ? "enabled" : "disabled"
+                (
+                  isConfirming
+                    ? confirmPasscode.every((d) => d)
+                    : passcode.every((d) => d)
+                )
+                  ? "enabled"
+                  : "disabled"
               }`}
               onClick={
                 isConfirming ? handleSubmit : () => setIsConfirming(true)
               }
-              disabled={!isButtonEnabled || isLoading}
+              disabled={isLoading}
             >
               {isLoading ? "Processing" : isConfirming ? "Submit" : "Next"}
             </button>
