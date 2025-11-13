@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import CreateAccount from "./CreateAccount";
 import VerifyEmail from "./VerifyEmail";
 import GetStarted from "./GetStarted";
-import CreatePasscode from "./CreatePasscode";
+import CreatePin from "./CreatePin";
 import SuccessModal from "./SuccessModal";
 import { useAuth } from "@/context/AuthContext";
 import AddBankAccount from "./AddBankAccount";
@@ -109,10 +109,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
         );
       case Step.CREATE_PASSCODE:
         return (
-          <CreatePasscode
-            {...sharedProps}
-            onSuccess={handleCreatePasscodeSuccess}
-          />
+          <CreatePin {...sharedProps} onSuccess={handleCreatePasscodeSuccess} />
         );
 
       case Step.ADD_BANK_ACCOUNT:

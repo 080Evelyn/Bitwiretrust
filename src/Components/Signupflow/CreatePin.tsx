@@ -9,7 +9,7 @@ interface CreatePasscodeProps {
   onSuccess: () => void;
 }
 
-const CreatePasscode = ({
+const CreatePin = ({
   getLeftSideClass,
   getStepBackground,
   onSuccess,
@@ -200,4 +200,4 @@ const CreatePasscode = ({
   );
 };
 
-export default CreatePasscode;
+export default CreatePin;
