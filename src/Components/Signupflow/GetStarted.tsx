@@ -115,8 +115,8 @@ const GetStarted = ({
                   <FormControl>
                     <Input
                       {...field}
-                      type="email"
-                      placeholder="example@email.com"
+                      type="text"
+                      placeholder="example@email.com or username"
                       className="form-input"
                     />
                   </FormControl>

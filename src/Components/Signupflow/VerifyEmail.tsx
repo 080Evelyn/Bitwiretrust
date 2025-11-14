@@ -30,6 +30,7 @@ const VerifyEmail = ({
 }: VerifyEmailProps) => {
   const { form, onSubmit, isLoading } = useVerifyEmail(email);
   const [timer, setTimer] = useState(120);
+  const [resendLocked, setResendLocked] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -45,12 +46,17 @@ const VerifyEmail = ({
 
   const handleResendOtp = () => {
     if (timer > 0) return;
+    if (resendLocked) return;
+
+    setResendLocked(true);
+
     mutateResendOtp.mutate(
       { email },
       {
         onSuccess: () => {
           toast.success("OTP sent successfully");
           setTimer(120);
+          setResendLocked(false);
         },
         onError: (error: unknown) => {
           if (axios.isAxiosError(error)) {
@@ -60,11 +66,11 @@ const VerifyEmail = ({
           } else {
             toast.error("Unexpected error occurred");
           }
+          setResendLocked(false);
         },
       }
     );
   };
-
   const handleSubmit = (data: { otp: string }) => {
     onSubmit(data, onSuccess);
   };
