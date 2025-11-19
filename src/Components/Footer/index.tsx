@@ -104,7 +104,7 @@ const Footer = (_props: Props) => {
             &copy; {currentYear} Bitwire trust is a product of Bitwire Digital
             Services Limited. All rights reserved
           </p>
-          <p>Developed by Lynog Tech Nig</p>
+          <p>Developed by Lynog Tech Nig LTD</p>
         </div>
       </footer>
     </>

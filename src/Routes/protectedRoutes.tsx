@@ -2,13 +2,12 @@ import { useAuth } from "@/context/AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "@/api/axiosConfig";
-import { getToken, getUserId, getUserRole } from "@/utils/AuthStorage";
+import { getUserId, getUserRole } from "@/utils/AuthStorage";
 import MainLoader from "@/Components/seketon-loader/MainLoader";
 
 // authentication check hook
 function useAuthCheck() {
-  const { isLoggingOut, isLoading } = useAuth();
-  const token = getToken();
+  const { isLoggingOut, isLoading, token } = useAuth();
   const userId = getUserId();
 
   return {
