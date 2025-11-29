@@ -40,19 +40,15 @@ const Profile = ({
         <p>{user?.email}</p>
         <span
           className={cn(
-            "text-sm",
-            user?.isKycVerified === true
+            "text-sm capitalize",
+            user?.userKycVerificationStatus === "VERIFIED"
               ? "text-green-600"
-              : user?.isKycVerified === false
-              ? "text-red-600"
-              : "text-yellow-500"
+              : user?.userKycVerificationStatus === "PENDING"
+              ? "text-yellow-500"
+              : "text-red-500"
           )}
         >
-          {user?.isKycVerified === true
-            ? "Verified"
-            : user?.isKycVerified === false
-            ? "Not Verified"
-            : "Processing"}
+          {user?.userKycVerificationStatus}
         </span>
       </div>
 
