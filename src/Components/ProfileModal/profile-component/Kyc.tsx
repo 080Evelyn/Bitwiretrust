@@ -20,6 +20,11 @@ const UserKyc = ({
   if (kycStatus === "VERIFIED") {
     return (
       <div className="modal terms-conditions-modal">
+        <div className="modal-header">
+          <button className="back-btn" onClick={() => toggleModal("profile")}>
+            Back
+          </button>
+        </div>
         <div className="p-6 text-center">
           <CheckCircle className="mx-auto h-12 w-12 text-green-600" />
 
@@ -36,6 +41,11 @@ const UserKyc = ({
   if (kycStatus === "PENDING") {
     return (
       <div className="modal terms-conditions-modal">
+        <div className="modal-header">
+          <button className="back-btn" onClick={() => toggleModal("profile")}>
+            Back
+          </button>
+        </div>
         <div className="p-6 text-center">
           <h2 className="text-lg font-semibold">KYC In Progress</h2>
           <p className="mt-2 text-sm text-gray-600">
