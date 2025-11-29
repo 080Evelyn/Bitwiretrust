@@ -19,6 +19,7 @@ export interface User {
   isKycVerified: boolean;
   isPinSet: string;
   last_name: string;
+  kycState: string;
   phone: string;
   userId: number;
   userKycVerificationStatus: "VERIFIED" | "PENDING" | "REJECTED" | "UNVERIFIED";

@@ -6,14 +6,18 @@ import Step1Form from "@/Components/kyc/Step1Form";
 import { useOutletContext } from "react-router-dom";
 import { UserContext } from "@/types/user";
 import { CheckCircle } from "lucide-react";
+import KycCompletion from "@/Components/kyc/KycCompletion";
 
 const UserKyc = ({
   toggleModal,
 }: {
   toggleModal: (modal: ModalType) => void;
 }) => {
-  const [step, setStep] = useState(1);
   const { user } = useOutletContext<UserContext>();
+
+  const userCurrentStep = user.kycState === "BASIC_INFO_VERIFIED" ? 2 : 1;
+
+  const [step, setStep] = useState(userCurrentStep);
 
   const kycStatus = user.userKycVerificationStatus;
 
@@ -61,8 +65,10 @@ const UserKyc = ({
     <div className="modal terms-conditions-modal">
       {step === 1 ? (
         <Step1Form onNext={() => setStep(2)} toggleModal={toggleModal} />
+      ) : step === 2 ? (
+        <Step2Form onNext={() => setStep(3)} toggleModal={toggleModal} />
       ) : (
-        <Step2Form onBack={() => setStep(1)} toggleModal={toggleModal} />
+        <KycCompletion toggleModal={toggleModal} />
       )}
     </div>
   );

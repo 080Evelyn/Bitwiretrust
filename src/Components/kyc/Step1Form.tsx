@@ -69,7 +69,7 @@ const Step1Form = ({
       onSuccess: (response) => {
         toast.success(response.data);
         form.reset();
-        onNext(); // Move to Step 2
+        onNext();
       },
       onError: (error: unknown) => {
         if (axios.isAxiosError(error)) {
@@ -92,9 +92,28 @@ const Step1Form = ({
           <button className="back-btn" onClick={() => toggleModal("profile")}>
             Back
           </button>
-          <h3 className="text-center !text-base font-semibold">
-            KYC Verification - Step 1
-          </h3>
+
+          <div className="flex items-center ms-12 ">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
+                1
+              </div>
+              <span className="text-xs mt-1 font-medium text-primary">
+                Basic Info
+              </span>
+            </div>
+
+            <div className="w-12 h-0.5 bg-gray-300 mx-2" />
+
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-gray-300 text-gray-500 flex items-center justify-center text-sm font-bold">
+                2
+              </div>
+              <span className="text-xs mt-1 font-medium text-gray-400">
+                Utility upload
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* Income */}

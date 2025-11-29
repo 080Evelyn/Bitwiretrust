@@ -72,6 +72,10 @@ const NotificationModal = ({
               <span>{notification?.id}</span>
             </div>
             <div className="flex justify-between">
+              <span>Request ID</span>
+              <span>{notification?.requestId || "rxn-404"}</span>
+            </div>
+            <div className="flex justify-between">
               <span>Date</span>
               <span className="text-xs mt-2 text-right">
                 {notification && format(notification.createdAt, "MM-dd-yyyy")}
