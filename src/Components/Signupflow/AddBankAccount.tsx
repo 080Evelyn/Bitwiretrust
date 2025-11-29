@@ -64,9 +64,6 @@ const AddBankAccount = ({
       queryFn: bankList,
       staleTime: Infinity,
       gcTime: Infinity,
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      refetchOnReconnect: false,
     });
 
   const {

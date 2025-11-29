@@ -15,11 +15,9 @@ const UserKyc = ({
   const [step, setStep] = useState(1);
   const { user } = useOutletContext<UserContext>();
 
-  const isKycVerified = user.isKycVerified;
+  const kycStatus = user.userKycVerificationStatus;
 
-  const kycStatus = isKycVerified ? "verified" : "none";
-
-  if (kycStatus === "verified") {
+  if (kycStatus === "VERIFIED") {
     return (
       <div className="modal terms-conditions-modal">
         <div className="p-6 text-center">
@@ -35,19 +33,19 @@ const UserKyc = ({
     );
   }
 
-  // if (kycStatus === "pending") {
-  //   return (
-  //     <div className="modal terms-conditions-modal">
-  //       <div className="p-6 text-center">
-  //         <h2 className="text-lg font-semibold">KYC In Progress</h2>
-  //         <p className="mt-2 text-sm text-gray-600">
-  //           Your submission has been received and is currently being processed.
-  //           You will be notified once verification is complete.
-  //         </p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
+  if (kycStatus === "PENDING") {
+    return (
+      <div className="modal terms-conditions-modal">
+        <div className="p-6 text-center">
+          <h2 className="text-lg font-semibold">KYC In Progress</h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Your submission has been received and is currently being processed.
+            You will be notified once verification is complete.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="modal terms-conditions-modal">

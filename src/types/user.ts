@@ -21,6 +21,7 @@ export interface User {
   last_name: string;
   phone: string;
   userId: number;
+  userKycVerificationStatus: "VERIFIED" | "PENDING" | "REJECTED" | "UNVERIFIED";
   userRole: string;
   walletBalance: number;
   walletCurrency: string;
