@@ -18,6 +18,7 @@ import { getUserId } from "@/utils/AuthStorage";
 import { toast } from "sonner";
 import axios from "axios";
 import ButtonLoading from "@/Components/common/ButtonLoading";
+import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
 
 const stepTwoSchema = z.object({
   utilityBill: z
@@ -37,12 +38,15 @@ const stepTwoSchema = z.object({
 export type StepTwoValues = z.infer<typeof stepTwoSchema>;
 
 const Step2Form = ({
-  onBack,
+  toggleModal,
+  onNext,
 }: {
   toggleModal: (modal: ModalType) => void;
-  onBack: () => void;
+  onNext: () => void;
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
+
+  const { invalidateAfterTransaction } = useQueryInvalidation();
 
   const form = useForm<StepTwoValues>({
     resolver: zodResolver(stepTwoSchema),
@@ -73,8 +77,9 @@ const Step2Form = ({
       formData.append("file", file);
 
       await submitMutation.mutateAsync(formData);
-      toast.success("Utility bill uploaded successfully");
       form.reset();
+      onNext();
+      invalidateAfterTransaction();
       setPreview(null);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -93,12 +98,30 @@ const Step2Form = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-2.5">
         <div className="modal-header">
-          <button onClick={onBack} className="back-btn">
+          <button onClick={() => toggleModal("profile")} className="back-btn">
             Back
           </button>
-          <h3 className="text-center !text-base font-semibold">
-            KYC Verification - Step 2
-          </h3>
+          <div className="flex items-center ms-12">
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-bold">
+                ✓
+              </div>
+              <span className="text-xs mt-1 font-medium text-green-600">
+                Basic Info
+              </span>
+            </div>
+
+            <div className="w-12 h-0.5 bg-primary mx-2" />
+
+            <div className="flex flex-col items-center">
+              <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold current-step">
+                2
+              </div>
+              <span className="text-xs mt-1 font-medium text-primary">
+                Utility upload
+              </span>
+            </div>
+          </div>
         </div>
 
         <FormField

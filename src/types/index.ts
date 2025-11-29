@@ -163,6 +163,7 @@ export interface TransactionData {
   userId: string;
   title: string;
   message: string;
+  requestId: string;
   type: string;
   isRead: boolean;
   createdAt: Date;

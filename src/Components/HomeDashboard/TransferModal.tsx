@@ -21,6 +21,7 @@ import TransferSuccess from "./transfer/TransferSuccess";
 import { Step1Form } from "./transfer/Step1";
 import { WalletRequestProps } from "@/types";
 import { getUserId } from "@/utils/AuthStorage";
+import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
 
 const step1Schema = z.object({
   amount: z.coerce
@@ -44,6 +45,7 @@ export default function WithdrawalDialog({
 }) {
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const { openPinModal } = usePinModal();
+  const { invalidateAfterTransaction } = useQueryInvalidation();
 
   const form = useForm<Step1Values>({
     resolver: zodResolver(step1Schema),
@@ -86,8 +88,9 @@ export default function WithdrawalDialog({
         },
         {
           onSuccess: () => {
-            setShowSuccess(true);
             form.reset();
+            setShowSuccess(true);
+            invalidateAfterTransaction();
           },
         }
       );
