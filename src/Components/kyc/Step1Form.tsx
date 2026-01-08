@@ -24,6 +24,8 @@ import { getUserId } from "@/utils/AuthStorage";
 import { toast } from "sonner";
 import axios from "axios";
 import ButtonLoading from "@/Components/common/ButtonLoading";
+import { useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 const stepOneSchema = z.object({
   income: z.string().min(1, { message: "Income is required" }),
@@ -52,6 +54,8 @@ const Step1Form = ({
       identificationNumber: "",
     },
   });
+  const location = useLocation();
+  const isOnKycPage = location.pathname === "/kyc";
 
   const submitKycMutation = useMutation({
     mutationFn: (data: KycSubmitProps) => kycSubmission(data),
@@ -87,13 +91,18 @@ const Step1Form = ({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-2.5">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className={cn("space-y-4", isOnKycPage ? "p-1" : "p-2.5")}
+      >
         <div className="modal-header">
-          <button className="back-btn" onClick={() => toggleModal("profile")}>
-            Back
-          </button>
+          {!isOnKycPage && (
+            <button className="back-btn" onClick={() => toggleModal("profile")}>
+              Back
+            </button>
+          )}
 
-          <div className="flex items-center ms-12 ">
+          <div className="flex items-center mx-auto">
             <div className="flex flex-col items-center">
               <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
                 1

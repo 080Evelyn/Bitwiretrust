@@ -9,20 +9,29 @@ const LoginPage = () => {
   const { ContextLogin, updatePinStatus } = useAuth();
 
   const handleLoginSuccess = (response: {
-    data: { jwt: string; isPinSet: boolean; userRole: string };
+    data: {
+      jwt: string;
+      isPinSet: boolean;
+      userRole: string;
+      isKycVerified: boolean;
+    };
   }) => {
     const isPinSet = response.data.isPinSet === true;
+    const isKycVerified = response?.data?.isKycVerified;
     const userRole = response.data.userRole.toLowerCase();
     updatePinStatus();
     ContextLogin(response.data.jwt);
 
-    if (isPinSet && userRole === "user") {
+    if (isPinSet && isKycVerified && userRole === "user") {
       navigate("/dashboard");
     } else if (userRole === "admin") {
       navigate("/admin/dashboard");
     } else {
-      // no pin yet: go to set-pin
-      navigate("/set-pin");
+      if (!isKycVerified) {
+        navigate("/kyc");
+      } else {
+        navigate("/set-pin");
+      }
     }
   };
 

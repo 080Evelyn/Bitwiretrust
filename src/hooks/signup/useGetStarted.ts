@@ -29,7 +29,12 @@ export const useGetStarted = () => {
   const onSubmit = (
     data: GetStartedFormData,
     onSuccess?: (response: {
-      data: { jwt: string; isPinSet: boolean; userRole: string };
+      data: {
+        jwt: string;
+        isPinSet: boolean;
+        userRole: string;
+        isKycVerified: boolean;
+      };
     }) => void
   ) => {
     loginMutation.mutate(data, {

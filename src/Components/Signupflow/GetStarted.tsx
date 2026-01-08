@@ -18,7 +18,12 @@ import { AlertCircle } from "lucide-react";
 
 interface GetStartedProps {
   onSuccess: (response: {
-    data: { jwt: string; isPinSet: boolean; userRole: string };
+    data: {
+      jwt: string;
+      isPinSet: boolean;
+      userRole: string;
+      isKycVerified: boolean;
+    };
   }) => void;
 }
 
