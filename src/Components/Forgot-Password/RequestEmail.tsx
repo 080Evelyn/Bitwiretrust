@@ -87,6 +87,13 @@ const RequestEmail = ({
             )}
           </button>
         </form>
+
+        <div className="text-center">
+          Remembered your password?{" "}
+          <Link to="/login" className="text-primary font-medium !underline">
+            Login
+          </Link>
+        </div>
       </div>
     </div>
   );

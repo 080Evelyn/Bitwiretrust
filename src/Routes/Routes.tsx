@@ -2,9 +2,11 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Home from "../Pages/Home/Home";
 import About from "../Pages/About";
-import Register from "../Pages/Register";
-import Authlayout from "../Authlayout";
-import { Step } from "../types";
+import CreateAccountPage from "@/Pages/Register/CreateAccountPage";
+import VerifyEmailPage from "@/Pages/Register/VerifyEmailPage";
+import LoginPage from "@/Pages/Register/LoginPage";
+import SetPinPage from "@/Pages/Register/SetPinPage";
+import AddBankPage from "@/Pages/Register/AddBankPage";
 import DashboardLayout from "../Pages/DashboardLayout";
 import HomeDashboard from "../Components/HomeDashboard";
 import Utilitypayment from "../Pages/Utilitypayment";
@@ -25,6 +27,7 @@ import ErrorBoundary from "@/ErrorBoundary";
 import CryptoManagement from "@/admin/pages/CryptoManagement";
 import PendingWithdrawalRequest from "@/admin/pages/PendingWithdrawalRequest";
 import SuccessfulWithdrawalRequest from "@/admin/pages/SuccessfulWithdrawalRequest";
+import Authlayout from "@/Authlayout";
 
 export const router = createBrowserRouter([
   {
@@ -43,15 +46,13 @@ export const router = createBrowserRouter([
       {
         element: <Authlayout />,
         children: [
-          { path: "register", element: <Register /> },
-          {
-            path: "get-started",
-            element: <Register initialStep={Step.GET_STARTED} />,
-          },
-          {
-            path: "login",
-            element: <Register initialStep={Step.GET_STARTED} />,
-          },
+          { path: "register", element: <CreateAccountPage /> },
+          { path: "create-account", element: <CreateAccountPage /> },
+          { path: "verify-email", element: <VerifyEmailPage /> },
+          { path: "login", element: <LoginPage /> },
+          { path: "get-started", element: <LoginPage /> },
+          { path: "set-pin", element: <SetPinPage /> },
+          { path: "add-bank", element: <AddBankPage /> },
           { path: "forgot-password", element: <ForgotPassword /> },
         ],
       },

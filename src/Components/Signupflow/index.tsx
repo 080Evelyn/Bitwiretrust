@@ -100,13 +100,7 @@ const Signupflow = ({ initialStep = Step.CREATE_ACCOUNT }: Props) => {
           />
         );
       case Step.GET_STARTED:
-        return (
-          <GetStarted
-            {...sharedProps}
-            onSuccess={handleLoginSuccess}
-            setCurrentStep={setCurrentStep}
-          />
-        );
+        return <GetStarted {...sharedProps} onSuccess={handleLoginSuccess} />;
       case Step.CREATE_PASSCODE:
         return (
           <CreatePin {...sharedProps} onSuccess={handleCreatePasscodeSuccess} />

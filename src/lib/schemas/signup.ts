@@ -19,7 +19,7 @@ export const createAccountSchema = z
       ),
     confirmPassword: z.string(),
     terms: z.boolean().refine((val) => val === true, {
-      message: "You must accept the terms and conditions",
+      message: "Terms and conditions required",
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -39,12 +39,21 @@ export const getStartedSchema = z.object({
 export const createPasscodeSchema = z
   .object({
     passcode: z.string().length(4, "pin must be 4 digits"),
-    confirmPasscode: z.string(),
+    confirmPasscode: z
+      .string()
+      .length(4, "pin must be 4 digits")
+      .or(z.literal("")),
   })
-  .refine((data) => data.passcode === data.confirmPasscode, {
-    message: "pin don't match",
-    path: ["confirmPasscode"],
-  });
+  .refine(
+    (data) => {
+      if (data.confirmPasscode === "") return true;
+      return data.passcode === data.confirmPasscode;
+    },
+    {
+      message: "pin does not match",
+      path: ["confirmPasscode"],
+    }
+  );
 
 export type CreateAccountFormData = z.infer<typeof createAccountSchema>;
 export type VerifyEmailFormData = z.infer<typeof verifyEmailSchema>;

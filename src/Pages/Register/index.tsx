@@ -1,12 +1,14 @@
-import Signupflow from "../../Components/Signupflow";
-import { Step } from "../../types";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-type RegisterProps = {
-  initialStep?: Step;
-};
+const Register = () => {
+  const navigate = useNavigate();
 
-const Register = ({ initialStep = Step.CREATE_ACCOUNT }: RegisterProps) => {
-  return <Signupflow initialStep={initialStep} />;
+  useEffect(() => {
+    navigate("/create-account", { replace: true });
+  }, [navigate]);
+
+  return null;
 };
 
 export default Register;
