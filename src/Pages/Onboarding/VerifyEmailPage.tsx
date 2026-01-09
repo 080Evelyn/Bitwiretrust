@@ -13,13 +13,15 @@ const VerifyEmailPage = () => {
   };
 
   return (
-    <AuthSignupLayout
-      backgroundImage={verify_email_png}
-      progressDots={2}
-      title="Discover a Smarter Way to Manage Your Finances"
-    >
-      <VerifyEmail email={email} onSuccess={handleSuccess} />
-    </AuthSignupLayout>
+    <main className="max-h-screen overflow-hidden">
+      <AuthSignupLayout
+        backgroundImage={verify_email_png}
+        progressDots={2}
+        title="Discover a Smarter Way to Manage Your Finances"
+      >
+        <VerifyEmail email={email} onSuccess={handleSuccess} />
+      </AuthSignupLayout>
+    </main>
   );
 };
 

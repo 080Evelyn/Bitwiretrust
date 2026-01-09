@@ -67,6 +67,17 @@ export interface WalletAddressProps {
   network: string;
 }
 
+export type SendCryptoProps = {
+  currency: string;
+  amount: number;
+  fundUid: string;
+  narration: string;
+  network: string;
+  swapId: string;
+  requestId: string;
+  commissionWithdrawal: boolean;
+};
+
 export interface NetworkWalletsProps {
   data: {
     responseCode: string;
