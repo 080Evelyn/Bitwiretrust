@@ -19,6 +19,7 @@ export const useCreatePasscode = () => {
       passcode: "",
       confirmPasscode: "",
     },
+    mode: "onBlur",
   });
 
   const createPinMutation = useMutation({

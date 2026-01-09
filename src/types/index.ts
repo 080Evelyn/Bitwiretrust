@@ -55,6 +55,13 @@ export enum Step {
   ADD_BANK_ACCOUNT = 4,
 }
 
+export type loginResponseData = {
+  accessToken: string;
+  isPinSet: boolean;
+  userRole: string;
+  isKycVerified: boolean;
+};
+
 export interface HeaderProps {
   username: string;
 }

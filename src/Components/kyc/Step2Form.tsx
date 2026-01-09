@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import ButtonLoading from "@/Components/common/ButtonLoading";
 import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
+import { useLocation } from "react-router-dom";
 
 const stepTwoSchema = z.object({
   utilityBill: z
@@ -41,12 +42,14 @@ const Step2Form = ({
   toggleModal,
   onNext,
 }: {
-  toggleModal: (modal: ModalType) => void;
+  toggleModal?: (modal: ModalType) => void;
   onNext: () => void;
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
 
   const { invalidateAfterTransaction } = useQueryInvalidation();
+  const location = useLocation();
+  const isOnKycPage = location.pathname === "/kyc";
 
   const form = useForm<StepTwoValues>({
     resolver: zodResolver(stepTwoSchema),
@@ -98,10 +101,15 @@ const Step2Form = ({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-2.5">
         <div className="modal-header">
-          <button onClick={() => toggleModal("profile")} className="back-btn">
-            Back
-          </button>
-          <div className="flex items-center ms-12">
+          {!isOnKycPage && (
+            <button
+              onClick={() => toggleModal && toggleModal("profile")}
+              className="back-btn"
+            >
+              Back
+            </button>
+          )}
+          <div className="flex items-center mx-auto">
             <div className="flex flex-col items-center">
               <div className="w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-sm font-bold">
                 ✓
