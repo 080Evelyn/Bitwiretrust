@@ -101,7 +101,7 @@ const VerifyEmail = ({ email, onSuccess }: VerifyEmailProps) => {
                     </InputOTPGroup>
                   </InputOTP>
                 </FormControl>
-                <FormMessage className="!text-red-600" />
+                <FormMessage className="!text-red-600 max-w-sm" />
               </FormItem>
             )}
           />
