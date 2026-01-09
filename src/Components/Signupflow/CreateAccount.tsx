@@ -57,7 +57,7 @@ const CreateAccount = ({ onSuccess }: CreateAccountProps) => {
       <div className="flex flex-1 flex-col">
         <div className="app-logo flex justify-center ">
           <Link to="/">
-            <img src={full_logo} alt="Bitwire" />
+            <img src={full_logo} alt="Bitwire logo" />
           </Link>
         </div>
         <h2 className="text-lg font-medium max-md:text-center">
@@ -83,7 +83,7 @@ const CreateAccount = ({ onSuccess }: CreateAccountProps) => {
           >
             <FormField
               control={form.control}
-              name="first_name"
+              name="firstName"
               render={({ field }) => (
                 <FormItem className="custom-form-group">
                   <FormLabel>Enter Your First Name</FormLabel>
@@ -100,7 +100,7 @@ const CreateAccount = ({ onSuccess }: CreateAccountProps) => {
             />
             <FormField
               control={form.control}
-              name="last_name"
+              name="lastName"
               render={({ field }) => (
                 <FormItem className="custom-form-group">
                   <FormLabel>Enter Your Last Name</FormLabel>

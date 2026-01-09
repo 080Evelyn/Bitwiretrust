@@ -13,8 +13,8 @@ export const useCreateAccount = () => {
   const form = useForm<CreateAccountFormData>({
     resolver: zodResolver(createAccountSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
+      firstName: "",
+      lastName: "",
       phone: "",
       email: "",
       username: "",
@@ -47,8 +47,8 @@ export const useCreateAccount = () => {
   ) => {
     createAccountMutation.mutate(
       {
-        first_name: data.first_name,
-        last_name: data.last_name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         username: data.username,
         phone: data.phone,
         email: data.email,
