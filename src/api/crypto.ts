@@ -1,6 +1,10 @@
 import { getUserId } from "@/utils/AuthStorage";
 import axios from "./axiosConfig";
-import { SwapQuotationProps, WalletAddressProps } from "@/types/crypto";
+import {
+  SendCryptoProps,
+  SwapQuotationProps,
+  WalletAddressProps,
+} from "@/types/crypto";
 
 const url = import.meta.env.VITE_API_URL;
 export const cryptoMarkets = async () => {
@@ -97,6 +101,15 @@ export const fetchWalletAddressByNetwork = async (currency: string) => {
 
   const response = await axios.get(
     `${url}/v1/user/crypto/${userId}/${currency}/addresses?userId=${userId}`
+  );
+  return response;
+};
+
+export const sendCrypto = async (data: SendCryptoProps) => {
+  const userId = getUserId();
+  const response = await axios.post(
+    `${url}/v1/user/crypto/send/crypto/external-withdrawal?userId=${userId}`,
+    data
   );
   return response;
 };
