@@ -42,7 +42,7 @@ const Step2Form = ({
   toggleModal,
   onNext,
 }: {
-  toggleModal: (modal: ModalType) => void;
+  toggleModal?: (modal: ModalType) => void;
   onNext: () => void;
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
@@ -102,7 +102,10 @@ const Step2Form = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-2.5">
         <div className="modal-header">
           {!isOnKycPage && (
-            <button onClick={() => toggleModal("profile")} className="back-btn">
+            <button
+              onClick={() => toggleModal && toggleModal("profile")}
+              className="back-btn"
+            >
               Back
             </button>
           )}

@@ -18,19 +18,6 @@ const KycPage = () => {
     navigate("/set-pin");
   };
 
-  const handleBack = () => {
-    if (step === 2) {
-      setStep(1);
-    }
-    // If step 1, maybe let user go back to login? Or prevent back?
-  };
-
-  // Mock toggleModal function required by the components
-  // In this page context, we treat "profile" as going back or no-op
-  const toggleModal = () => {
-    handleBack();
-  };
-
   return (
     <main className="max-h-screen overflow-y-hidden">
       <AuthSignupLayout
@@ -48,9 +35,9 @@ const KycPage = () => {
             Verify Your Identity
           </h2>
           {step === 1 ? (
-            <Step1Form onNext={handleNext} toggleModal={toggleModal} />
+            <Step1Form onNext={handleNext} />
           ) : (
-            <Step2Form onNext={handleComplete} toggleModal={toggleModal} />
+            <Step2Form onNext={handleComplete} />
           )}
         </div>
       </AuthSignupLayout>

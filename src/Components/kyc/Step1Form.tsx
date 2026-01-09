@@ -44,7 +44,7 @@ const Step1Form = ({
   toggleModal,
 }: {
   onNext: () => void;
-  toggleModal: (modal: ModalType) => void;
+  toggleModal?: (modal: ModalType) => void;
 }) => {
   const form = useForm<StepOneValues>({
     resolver: zodResolver(stepOneSchema),
@@ -97,7 +97,10 @@ const Step1Form = ({
       >
         <div className="modal-header">
           {!isOnKycPage && (
-            <button className="back-btn" onClick={() => toggleModal("profile")}>
+            <button
+              className="back-btn"
+              onClick={() => toggleModal && toggleModal("profile")}
+            >
               Back
             </button>
           )}

@@ -15,16 +15,10 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { AlertCircle } from "lucide-react";
+import { loginResponseData } from "@/types";
 
 interface GetStartedProps {
-  onSuccess: (response: {
-    data: {
-      jwt: string;
-      isPinSet: boolean;
-      userRole: string;
-      isKycVerified: boolean;
-    };
-  }) => void;
+  onSuccess: (response: { data: loginResponseData }) => void;
 }
 
 const GetStarted = ({ onSuccess }: GetStartedProps) => {
@@ -92,12 +86,12 @@ const GetStarted = ({ onSuccess }: GetStartedProps) => {
             name="email"
             render={({ field }) => (
               <FormItem className="custom-form-group">
-                <FormLabel>Email or Username</FormLabel>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    type="text"
-                    placeholder="example@email.com or username"
+                    type="email"
+                    placeholder="example@email.com"
                     className="form-input"
                   />
                 </FormControl>

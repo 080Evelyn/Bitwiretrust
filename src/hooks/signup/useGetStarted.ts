@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { login } from "@/api/auth";
 import { getStartedSchema, GetStartedFormData } from "@/lib/schemas/signup";
 import axios from "axios";
+import { loginResponseData } from "@/types";
 
 export const useGetStarted = () => {
   const form = useForm<GetStartedFormData>({
@@ -28,14 +29,7 @@ export const useGetStarted = () => {
 
   const onSubmit = (
     data: GetStartedFormData,
-    onSuccess?: (response: {
-      data: {
-        jwt: string;
-        isPinSet: boolean;
-        userRole: string;
-        isKycVerified: boolean;
-      };
-    }) => void
+    onSuccess?: (response: { data: loginResponseData }) => void
   ) => {
     loginMutation.mutate(data, {
       onSuccess: (response) => {
