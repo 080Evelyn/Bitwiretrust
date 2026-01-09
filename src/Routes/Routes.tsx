@@ -1,43 +1,76 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import Home from "../Pages/Home/Home";
-import About from "../Pages/About";
-import CreateAccountPage from "@/Pages/Onboarding/CreateAccountPage";
-import VerifyEmailPage from "@/Pages/Onboarding/VerifyEmailPage";
-import LoginPage from "@/Pages/Onboarding/LoginPage";
-import SetPinPage from "@/Pages/Onboarding/SetPinPage";
-import AddBankPage from "@/Pages/Onboarding/AddBankPage";
-import KycPage from "@/Pages/Onboarding/KycPage";
-import DashboardLayout from "../Pages/DashboardLayout";
-import HomeDashboard from "../Components/HomeDashboard";
-import Utilitypayment from "../Pages/Utilitypayment";
-import Contact from "../Pages/Contact";
-import VirtualTopUp from "@/Pages/VirtualTopUp";
-import BuyGiftCard from "@/Pages/GiftCards/BuyGiftCard";
-import SellGiftCards from "@/Pages/GiftCards/SellGiftCards";
-import CryptoTrading from "@/Pages/CryptoTrading";
 import { AdminProtectedRoute, UserProtectedRoute } from "./protectedRoutes";
-import ForgotPassword from "@/Pages/Forget-Password/ForgetPassword";
-import AdminLayout from "@/admin/components/layout/AdminLayout";
-import AdminDashboard from "@/admin/pages/AdminDashboard";
-import Transactions from "@/admin/pages/Transactions";
-import KycManagement from "@/admin/pages/KycManagement";
-import UserManagement from "@/admin/pages/UserManagement";
-import PageNotFound from "@/Pages/404/PageNotFound";
 import ErrorBoundary from "@/ErrorBoundary";
-import CryptoManagement from "@/admin/pages/CryptoManagement";
-import PendingWithdrawalRequest from "@/admin/pages/PendingWithdrawalRequest";
-import SuccessfulWithdrawalRequest from "@/admin/pages/SuccessfulWithdrawalRequest";
-import Authlayout from "@/Authlayout";
+
+// Lazy load all page components for code splitting
+const Home = lazy(() => import("../Pages/Home/Home"));
+const About = lazy(() => import("../Pages/About"));
+const Contact = lazy(() => import("../Pages/Contact"));
+const PageNotFound = lazy(() => import("@/Pages/404/PageNotFound"));
+
+// Onboarding pages
+const Authlayout = lazy(() => import("@/Authlayout"));
+const CreateAccountPage = lazy(
+  () => import("@/Pages/Onboarding/CreateAccountPage")
+);
+const VerifyEmailPage = lazy(
+  () => import("@/Pages/Onboarding/VerifyEmailPage")
+);
+const LoginPage = lazy(() => import("@/Pages/Onboarding/LoginPage"));
+const SetPinPage = lazy(() => import("@/Pages/Onboarding/SetPinPage"));
+const AddBankPage = lazy(() => import("@/Pages/Onboarding/AddBankPage"));
+const KycPage = lazy(() => import("@/Pages/Onboarding/KycPage"));
+const ForgotPassword = lazy(
+  () => import("@/Pages/Forget-Password/ForgetPassword")
+);
+
+// User dashboard pages
+const DashboardLayout = lazy(() => import("../Pages/DashboardLayout"));
+const HomeDashboard = lazy(() => import("../Components/HomeDashboard"));
+const Utilitypayment = lazy(() => import("../Pages/Utilitypayment"));
+const VirtualTopUp = lazy(() => import("@/Pages/VirtualTopUp"));
+const BuyGiftCard = lazy(() => import("@/Pages/GiftCards/BuyGiftCard"));
+const SellGiftCards = lazy(() => import("@/Pages/GiftCards/SellGiftCards"));
+const CryptoTrading = lazy(() => import("@/Pages/CryptoTrading"));
+
+// Admin pages
+const AdminLayout = lazy(() => import("@/admin/components/layout/AdminLayout"));
+const AdminDashboard = lazy(() => import("@/admin/pages/AdminDashboard"));
+const Transactions = lazy(() => import("@/admin/pages/Transactions"));
+const KycManagement = lazy(() => import("@/admin/pages/KycManagement"));
+const UserManagement = lazy(() => import("@/admin/pages/UserManagement"));
+const CryptoManagement = lazy(() => import("@/admin/pages/CryptoManagement"));
+const PendingWithdrawalRequest = lazy(
+  () => import("@/admin/pages/PendingWithdrawalRequest")
+);
+const SuccessfulWithdrawalRequest = lazy(
+  () => import("@/admin/pages/SuccessfulWithdrawalRequest")
+);
+
+// Loading fallback component
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+  </div>
+);
+
+// Suspense wrapper helper
+const withSuspense = (Component: React.ComponentType) => (
+  <Suspense fallback={<PageLoader />}>
+    <Component />
+  </Suspense>
+);
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { path: "", element: <Home /> },
-      { path: "about", element: <About /> },
-      { path: "contact", element: <Contact /> },
+      { path: "", element: withSuspense(Home) },
+      { path: "about", element: withSuspense(About) },
+      { path: "contact", element: withSuspense(Contact) },
     ],
   },
   { path: "*", element: <PageNotFound /> },
@@ -45,11 +78,7 @@ export const router = createBrowserRouter([
   {
     children: [
       {
-        element: (
-          <ErrorBoundary>
-            <Authlayout />
-          </ErrorBoundary>
-        ),
+        element: <ErrorBoundary>{withSuspense(Authlayout)}</ErrorBoundary>,
         children: [
           { path: "register", element: <CreateAccountPage /> },
           { path: "create-account", element: <CreateAccountPage /> },
@@ -74,11 +103,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        element: (
-          <ErrorBoundary>
-            <DashboardLayout />
-          </ErrorBoundary>
-        ),
+        element: <ErrorBoundary>{withSuspense(DashboardLayout)}</ErrorBoundary>,
         children: [
           { path: "dashboard", element: <HomeDashboard /> },
           { path: "utility-payment", element: <Utilitypayment /> },
@@ -101,7 +126,7 @@ export const router = createBrowserRouter([
     path: "admin/",
     children: [
       {
-        element: <AdminLayout />,
+        element: withSuspense(AdminLayout),
         children: [
           { path: "dashboard", element: <AdminDashboard /> },
           { path: "transactions", element: <Transactions /> },
