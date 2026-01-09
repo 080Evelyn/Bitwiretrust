@@ -4,8 +4,8 @@ import axios from "./axiosConfig";
 const url = import.meta.env.VITE_API_URL;
 
 export const createAccount = async (data: {
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   phone: string;
   username: string;
   email: string;
