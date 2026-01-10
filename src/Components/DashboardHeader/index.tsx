@@ -1,7 +1,6 @@
 import "./styles.css";
 import { format } from "date-fns";
 import { calendar_svg, ellipse_user } from "../../assets";
-import { HiOutlineBell } from "react-icons/hi2";
 import ProfileModal from "../ProfileModal";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -10,11 +9,14 @@ import { User } from "@/types/user";
 import { useQuery } from "@tanstack/react-query";
 import { TransactionListResponse } from "@/types";
 import { transactions } from "@/api/user-notification";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const DashboardHeader = ({ user }: { user: User }) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [hasProfileNotifications] = useState(true);
   const [hasNotifications, setHasNotifications] = useState(true);
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const { isPending, data: transactionsList } =
     useQuery<TransactionListResponse>({
       queryKey: ["transactions"],
@@ -33,6 +35,12 @@ const DashboardHeader = ({ user }: { user: User }) => {
   }, [transactionsList]);
 
   const fullName = user?.first_name + " " + user?.last_name;
+  const currentDate = format(new Date(), "MMMM dd, yyyy - h:mm a");
+
+  const toggleProfileModal = () => {
+    setIsProfileModalOpen(!isProfileModalOpen);
+  };
+  const location = useLocation();
 
   const HeaderContent = () => (
     <div className="dashboard-header flex items-center justify-between">
@@ -60,14 +68,9 @@ const DashboardHeader = ({ user }: { user: User }) => {
         <NotificationPopover
           notifications={transactionsList?.data || []}
           isPending={isPending}
-          trigger={
-            <div className="relative cursor-pointer">
-              <HiOutlineBell className="h-7.5 w-7.5 bell-animation" />
-              {hasNotifications && (
-                <span className="notification-badge orange" />
-              )}
-            </div>
-          }
+          hasNotifications={hasNotifications}
+          isOpen={isNotificationOpen}
+          setIsOpen={setIsNotificationOpen}
         />
 
         <div
@@ -87,24 +90,19 @@ const DashboardHeader = ({ user }: { user: User }) => {
     </div>
   );
 
-  const toggleProfileModal = () => {
-    setIsProfileModalOpen(!isProfileModalOpen);
-  };
-  const location = useLocation();
-
-  const currentDate = format(new Date(), "MMMM dd, yyyy - h:mm a");
-
   return (
     <div className="ps-4 pe-10 pt-9 lg:pt-3 pb-3">
-      {location.pathname === "/dashboard" && (
+      {location.pathname === "/dashboard" && !isDesktop && (
         <div className="md:hidden">
           <HeaderContent />
         </div>
       )}
 
-      <div className="hidden md:block">
-        <HeaderContent />
-      </div>
+      {isDesktop && (
+        <div className="hidden md:block">
+          <HeaderContent />
+        </div>
+      )}
 
       <ProfileModal
         isOpen={isProfileModalOpen}

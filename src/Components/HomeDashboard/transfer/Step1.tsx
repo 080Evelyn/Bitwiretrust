@@ -11,6 +11,7 @@ import { useOutletContext } from "react-router-dom";
 import { Step1Values } from "../TransferModal";
 import { Button } from "@/Components/ui/button";
 import ButtonLoading from "@/Components/common/ButtonLoading";
+import { Input } from "@/Components/ui/input";
 
 interface FormData {
   form: UseFormReturn<Step1Values>;
@@ -41,7 +42,7 @@ export function Step1Form({ form, onSubmit, isLoading }: FormData) {
               <FormItem className="relative w-full">
                 <span className="left-4 text-xs">Amount</span>
                 <FormControl>
-                  <input
+                  <Input
                     inputMode="numeric"
                     pattern="[0-9]*"
                     placeholder="1,000,000"

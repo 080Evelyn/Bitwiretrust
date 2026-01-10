@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "../ui/popover";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 import {
   Select,
   SelectTrigger,
@@ -17,13 +18,15 @@ import { useScrollLock } from "@/hooks/useScrollLock";
 import { useResponsivePopover } from "@/hooks/viewportResize";
 import { LogoWhite, MoneyIn, MoneyOut, NotificationArrowDown } from "@/assets";
 import { Skeleton } from "../ui/skeleton";
-import { useMutation } from "@tanstack/react-query";
 import { markAsRead } from "@/api/user-notification";
+import { HiOutlineBell } from "react-icons/hi2";
 
 interface NotificationPopoverProps {
-  trigger: React.ReactNode;
+  hasNotifications: boolean;
   isPending: boolean;
   notifications: TransactionData[];
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const statusColorMap = {
@@ -33,11 +36,13 @@ const statusColorMap = {
 };
 
 const NotificationPopover = ({
-  trigger,
+  hasNotifications,
   notifications,
   isPending,
+  isOpen,
+  setIsOpen,
 }: NotificationPopoverProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
   const [selectedNotif, setSelectedNotif] = useState<TransactionData | null>(
     null
   );
@@ -56,6 +61,9 @@ const NotificationPopover = ({
   const readMutation = useMutation({
     mutationFn: (id: string) => {
       return markAsRead(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
     },
   });
 
@@ -91,8 +99,20 @@ const NotificationPopover = ({
 
   return (
     <div>
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger asChild>{trigger}</PopoverTrigger>
+      <Popover
+        open={isOpen}
+        onOpenChange={(open) => {
+          if (!open && selectedNotif) return;
+          setIsOpen(open);
+        }}
+      >
+        <PopoverTrigger asChild>
+          <div className="relative cursor-pointer">
+            <HiOutlineBell className="h-7.5 w-7.5 bell-animation" />
+            {hasNotifications && <span className="notification-badge orange" />}
+          </div>
+        </PopoverTrigger>
+
         {isOpen && (
           <div
             className="fixed inset-0 bg-black/30 backdrop-blur-xs md:z-50 z-49"
