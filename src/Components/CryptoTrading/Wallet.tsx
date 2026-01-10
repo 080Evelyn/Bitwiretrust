@@ -79,7 +79,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
       </div>
 
       <div
-        className="flex flex-col items-center text-white gap-6 md:gap-4 rounded-md max-md:rounded-none px-3 pt-11 pb-8 md:py-7.5"
+        className="flex flex-col items-center text-white gap-6 md:gap-4 rounded-md max-md:rounded-none px-3 pt-11 pb-8 md:py-15 h-full md:max-h-86"
         style={{ backgroundColor: bgColor }}
       >
         {coin ? (
@@ -106,7 +106,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
               onClick={() => handleActionClick(action.title)}
             >
               <div
-                className="size-13 md:size-9.75 rounded-[4.5px] drop-shadow-lg flex items-center justify-center"
+                className="size-13 md:size-10 xl:size-13 rounded-[4.5px] drop-shadow-lg flex items-center justify-center"
                 style={{
                   backgroundColor: coin ? hexToRgba(bgColor, 0.5) : undefined,
                   mixBlendMode: "screen",

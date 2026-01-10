@@ -17,8 +17,8 @@ const TransactionHistory = ({ coin }: Transactions) => {
         Transaction History
       </div>
 
-      <div className="h-full desktop-card-container rounded-md p-2">
-        <div className="flex flex-col gap-2 md:max-h-[14.4rem]">
+      <div className="h-full desktop-card-container md:max-h-86 rounded-md p-2">
+        <div className="flex flex-col gap-2">
           <div className="flex gap-2 w-full">
             <div className="relative flex-1 max-md:hidden">
               <Input

@@ -163,6 +163,7 @@ const Airtime = () => {
                 );
                 if (found) setSelectedBiller(found);
               }}
+              value={selectedBiller?.serviceID || ""}
             >
               <SelectTrigger className="!text-white bg-[#7910B1] w-full rounded-[4.91px] py-5">
                 <div className="flex items-center gap-2">
@@ -231,6 +232,7 @@ const Airtime = () => {
                       min={selectedBiller?.minimium_amount || 10}
                       max={selectedBiller?.maximum_amount || 1000000}
                       {...field}
+                      value={field.value ?? ""}
                       className="font-semibold tracking-[-0.13px]"
                     />
                   </FormControl>
@@ -249,6 +251,7 @@ const Airtime = () => {
                       type="tel"
                       placeholder="Enter Phone Number"
                       {...field}
+                      value={field.value ?? ""}
                       className="font-semibold tracking-[-0.13px]"
                     />
                   </FormControl>
