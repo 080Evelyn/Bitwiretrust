@@ -27,7 +27,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar">
+    <div className="navbar w-full !fixed top-0 z-50 backdrop-blur-lg bg-white/60">
       {isMenuOpen === true && (
         <div className="sm:hidden backdrop-blur-xs fixed bg-black/40 w-full h-full top-0 left-0 z-100" />
       )}
@@ -60,13 +60,11 @@ const Navbar = () => {
 
         <div className="flex items-center gap-3 lg:mt-1">
           {isAuthenticated ? (
-            <div>
-              <Link to="/dashboard">
-                <div className="py-1.75 px-3.5 outline-[#7910b9] outline-[1.5px] rounded-sm hover:bg-[#f9f9f9] hover:scale-[1.05] transition-all ease-in-out duration-300">
-                  Dashboard
-                </div>
-              </Link>
-            </div>
+            <Link to="/dashboard">
+              <div className="py-1.75 px-3.5 outline-[#7910b9] outline-[1.5px] rounded-sm hover:bg-[#f9f9f9] hover:scale-[1.05] transition-all ease-in-out duration-300">
+                Dashboard
+              </div>
+            </Link>
           ) : (
             <>
               <Link to="/login">

@@ -51,7 +51,7 @@ const SelectWallet = ({
         {title}
       </div>
 
-      <div className="flex flex-col gap-2 desktop-card-container rounded-md p-2 h-[80vh] md:max-h-[14.4rem]">
+      <div className="flex flex-col gap-2 desktop-card-container rounded-md p-2 h-[80vh] md:max-h-86">
         <div className="w-full relative">
           <Input
             type="search"

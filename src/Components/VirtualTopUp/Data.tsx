@@ -78,7 +78,7 @@ const Data = () => {
   });
 
   useEffect(() => {
-    form.setValue("phone", beneficiaryNumber);
+    form.setValue("phone", beneficiaryNumber || "");
   }, [beneficiaryNumber, form]);
 
   // Set default biller on mount
@@ -148,7 +148,7 @@ const Data = () => {
               );
               if (found) setSelectedBiller(found);
             }}
-            value={selectedBiller?.serviceID}
+            value={selectedBiller?.serviceID || ""}
           >
             <SelectTrigger className="!text-white bg-[#7910B1] w-full rounded-[4.91px] py-5">
               <div className="flex items-center gap-2">
@@ -190,7 +190,7 @@ const Data = () => {
               <FormItem>
                 <FormControl>
                   <Select
-                    value={field.value}
+                    value={field.value || ""}
                     onValueChange={(value) => {
                       field.onChange(value);
                       const found =

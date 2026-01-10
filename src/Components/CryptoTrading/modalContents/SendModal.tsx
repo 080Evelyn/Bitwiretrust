@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +18,7 @@ import {
   NativeSelect,
   NativeSelectOption,
 } from "@/Components/ui/native-select";
+import { Check } from "lucide-react";
 
 const formSchema = z.object({
   address: z.string().min(1, "Recipient address is required"),
@@ -39,6 +41,7 @@ interface SendModalCryptoProps extends CoinWalletProps {
 }
 
 const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
+  const [isSuccess, setIsSuccess] = useState(false);
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,8 +54,7 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
   const sendCryptoMutation = useMutation({
     mutationFn: sendCrypto,
     onSuccess: () => {
-      toast.success("Transaction sent successfully");
-      closeModal();
+      setIsSuccess(true);
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message || "Failed to send crypto");
@@ -76,88 +78,108 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
 
   return (
     <div className="pt-3">
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-3"
-        >
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    placeholder="Enter Recipient's Address"
-                    {...field}
-                    aria-label="Enter Recipient's Address"
-                  />
-                </FormControl>
-                <FormMessage />
-                <p className="text-xs font-medium">
-                  Available: {coin?.balance}
-                </p>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="network"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <NativeSelect
-                    onChange={field.onChange}
-                    value={field.value}
-                    aria-label="Select Network"
-                  >
-                    <NativeSelectOption value="">
-                      Select Network
-                    </NativeSelectOption>
-
-                    {coin?.networks?.map((network) => (
-                      <NativeSelectOption key={network.id} value={network.id}>
-                        {network.name}
-                      </NativeSelectOption>
-                    ))}
-                  </NativeSelect>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="amount"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    type="tel"
-                    aria-label="Enter Amount to Send"
-                    placeholder="Enter Amount to Send"
-                    {...field}
-                  />
-                </FormControl>
-                <p className="text-sm text-end font-medium">
-                  Sending Fee: $5.00
-                </p>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <button
-            className="btn-primary w-full"
-            type="submit"
-            disabled={sendCryptoMutation.isPending}
-          >
-            {sendCryptoMutation.isPending ? "Processing..." : "Proceed"}
+      {isSuccess ? (
+        <div className="flex flex-col items-center justify-center gap-6 py-10 animate-in fade-in zoom-in duration-400">
+          <div className="bg-[#11C600]/50 rounded-full size-19 flex items-center justify-center">
+            <div className="bg-[#0FA301] size-15.5 rounded-full flex items-center justify-center">
+              <Check className="text-white size-10" />
+            </div>
+          </div>
+          <div className="text-center space-y-2">
+            <h3 className="text-xl font-bold">Transaction Successful!</h3>
+            <p className="text-sm text-muted-foreground px-6">
+              Your crypto has been sent successfully. The recipient will receive
+              the funds shortly.
+            </p>
+          </div>
+          <button onClick={closeModal} className="btn-primary w-full mt-4">
+            Close
           </button>
-        </form>
-      </Form>
+        </div>
+      ) : (
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-3"
+          >
+            <FormField
+              control={form.control}
+              name="address"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter Recipient's Address"
+                      {...field}
+                      aria-label="Enter Recipient's Address"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                  <p className="text-xs font-medium">
+                    Available: {coin?.balance}
+                  </p>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="network"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <NativeSelect
+                      onChange={field.onChange}
+                      value={field.value}
+                      aria-label="Select Network"
+                    >
+                      <NativeSelectOption value="">
+                        Select Network
+                      </NativeSelectOption>
+
+                      {coin?.networks?.map((network) => (
+                        <NativeSelectOption key={network.id} value={network.id}>
+                          {network.name}
+                        </NativeSelectOption>
+                      ))}
+                    </NativeSelect>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="amount"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      type="tel"
+                      aria-label="Enter Amount to Send"
+                      placeholder="Enter Amount to Send"
+                      {...field}
+                    />
+                  </FormControl>
+                  <p className="text-sm text-end font-medium">
+                    Sending Fee: $5.00
+                  </p>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <button
+              className="btn-primary w-full"
+              type="submit"
+              disabled={sendCryptoMutation.isPending}
+            >
+              {sendCryptoMutation.isPending ? "Processing..." : "Proceed"}
+            </button>
+          </form>
+        </Form>
+      )}
     </div>
   );
 };

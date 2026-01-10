@@ -32,7 +32,7 @@ const Herosection = (_props: Props) => {
     pendingTransactions[1],
   ];
   return (
-    <div className="hero-container">
+    <div className="hero-container mt-30">
       <div className="hero-content">
         <div className="hero-header">
           <h1>

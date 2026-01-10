@@ -15,8 +15,9 @@
 }
 
 .hero-header {
-  width: 1031px;
-  height: 160px;
+  width: 100%;
+  max-width: 1031px;
+  height: 180px;
   padding-top: 30px;
   text-align: center;
 }
