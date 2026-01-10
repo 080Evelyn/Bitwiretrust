@@ -83,7 +83,7 @@
 }
 
 /* Responsive Styling */
-@media (max-width: 540px) {
+@media (max-width: 690px) {
   .navbar {
     padding: 20px;
   }
