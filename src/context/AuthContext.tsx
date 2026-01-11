@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       );
 
-      const newToken = res.data.data.jwt;
+      const newToken = res.data.data.accessToken;
       setToken(newToken);
       setMemoryToken(newToken);
       scheduleRefresh(newToken);
