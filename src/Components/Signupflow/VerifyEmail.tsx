@@ -80,7 +80,7 @@ const VerifyEmail = ({ email, onSuccess }: VerifyEmailProps) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="flex flex-col gap-3"
+          className="flex flex-col gap-3 !max-w-sm "
         >
           <FormField
             control={form.control}
@@ -101,7 +101,7 @@ const VerifyEmail = ({ email, onSuccess }: VerifyEmailProps) => {
                     </InputOTPGroup>
                   </InputOTP>
                 </FormControl>
-                <FormMessage className="!text-red-600 max-w-sm" />
+                <FormMessage className="w-fit px-1" />
               </FormItem>
             )}
           />
