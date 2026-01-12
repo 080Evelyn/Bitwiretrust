@@ -44,16 +44,16 @@ const Footer = (_props: Props) => {
             <h3>Services</h3>
             <ul>
               <li>
-                <a href="/login">Virtual Top-ups</a>
+                <Link to="/login">Virtual Top-ups</Link>
               </li>
               <li>
-                <a href="/login">Utility Payment</a>
+                <Link to="/login">Utility Payment</Link>
               </li>
               <li>
-                <a href="/login">Gift Cards</a>
+                <Link to="/login">Gift Cards</Link>
               </li>
               <li>
-                <a href="/login">Buy/Sell Cards</a>
+                <Link to="/login">Buy/Sell Cards</Link>
               </li>
             </ul>
           </div>
