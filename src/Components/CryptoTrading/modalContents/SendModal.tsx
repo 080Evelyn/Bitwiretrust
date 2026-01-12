@@ -148,6 +148,7 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
                       }}
                       value={field.value}
                       aria-label="Select Network"
+                      className="w-full"
                     >
                       <NativeSelectOption value="">
                         Select Network

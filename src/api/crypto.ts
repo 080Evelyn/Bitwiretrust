@@ -1,6 +1,7 @@
 import { getUserId } from "@/utils/AuthStorage";
 import axios from "./axiosConfig";
 import {
+  CreateSwapQuotationProps,
   SendCryptoProps,
   SwapQuotationProps,
   WalletAddressProps,
@@ -66,6 +67,34 @@ export const swapQuotation = async (data: SwapQuotationProps) => {
   const response = await axios.post(
     `${url}/v1/user/crypto/${userId}/swap-quotation`,
     data
+  );
+  return response;
+};
+export const createSwapQuotation = async (data: CreateSwapQuotationProps) => {
+  const userId = getUserId();
+  const response = await axios.post(
+    `${url}/v1/user/crypto/${userId}/create-swap-quotation`,
+    data
+  );
+  return response;
+};
+
+export const refreshSwapQuotation = async (
+  swapQuoteId: string,
+  data: CreateSwapQuotationProps
+) => {
+  const userId = getUserId();
+  const response = await axios.post(
+    `${url}/v1/user/crypto/${userId}/swap-quotation/${swapQuoteId}/refresh`,
+    data
+  );
+  return response;
+};
+
+export const confirmSwapQuotation = async (swapQuoteId: string) => {
+  const userId = getUserId();
+  const response = await axios.post(
+    `${url}/v1/user/crypto/${swapQuoteId}/confirm-swap/${userId}`
   );
   return response;
 };

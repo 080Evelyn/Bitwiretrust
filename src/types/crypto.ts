@@ -62,6 +62,13 @@ export interface SwapQuotationProps {
   requestId: string;
 }
 
+export interface CreateSwapQuotationProps {
+  from_currency?: string;
+  to_currency?: string;
+  from_amount?: string;
+  requestId: string;
+}
+
 export interface WalletAddressProps {
   currency: string;
   network: string;
