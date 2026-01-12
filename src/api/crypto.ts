@@ -113,3 +113,16 @@ export const sendCrypto = async (data: SendCryptoProps) => {
   );
   return response;
 };
+
+export const cryptoCurrencyFee = async ({
+  currency,
+  network,
+}: {
+  currency: string;
+  network: string;
+}) => {
+  const response = await axios.get(`${url}/v1/currencies/fee`, {
+    params: { currency, network },
+  });
+  return response.data;
+};

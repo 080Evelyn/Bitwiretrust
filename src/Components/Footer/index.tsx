@@ -3,6 +3,7 @@ import Readysetup from "../Readysetup";
 // import { footer_logo } from "../../assets";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 type Props = object;
 
@@ -19,10 +20,10 @@ const Footer = (_props: Props) => {
             <h3>About Us</h3>
             <ul>
               <li>
-                <a href="#">Our Story</a>
+                <Link to="/about">Our Story</Link>
               </li>
               <li>
-                <a href="#">Mission & Values</a>
+                <Link to="/about">Mission & Values</Link>
               </li>
             </ul>
           </div>
@@ -31,7 +32,7 @@ const Footer = (_props: Props) => {
             <h3>Customer Support</h3>
             <ul>
               <li>
-                <a href="#">Help Center</a>
+                <Link to="/contact">Help Center</Link>
               </li>
               <li>
                 <a href="#faqs">FAQs</a>
@@ -43,16 +44,16 @@ const Footer = (_props: Props) => {
             <h3>Services</h3>
             <ul>
               <li>
-                <a href="#">Virtual Top-ups</a>
+                <a href="/login">Virtual Top-ups</a>
               </li>
               <li>
-                <a href="#">Utility Payment</a>
+                <a href="/login">Utility Payment</a>
               </li>
               <li>
-                <a href="#">Gift Cards</a>
+                <a href="/login">Gift Cards</a>
               </li>
               <li>
-                <a href="#">Buy/Sell Cards</a>
+                <a href="/login">Buy/Sell Cards</a>
               </li>
             </ul>
           </div>
@@ -61,8 +62,8 @@ const Footer = (_props: Props) => {
             <h3>Contact Us</h3>
             <ul>
               <li>
-                <a href="mailto:bitwireng@gmail.com">
-                  Email: Bitwireng@gmail.com
+                <a href="mailto:support@bitwiretrust.com">
+                  Email: support@bitwiretrust.com
                 </a>
               </li>
               <li>
