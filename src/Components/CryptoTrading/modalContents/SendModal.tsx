@@ -11,8 +11,8 @@ import {
   FormMessage,
 } from "@/Components/ui/form";
 import { CoinWalletProps } from "@/types/crypto";
-import { sendCrypto } from "@/api/crypto";
-import { useMutation } from "@tanstack/react-query";
+import { cryptoCurrencyFee, sendCrypto } from "@/api/crypto";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   NativeSelect,
@@ -42,6 +42,7 @@ interface SendModalCryptoProps extends CoinWalletProps {
 
 const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
   const [isSuccess, setIsSuccess] = useState(false);
+  const [selectedNetwork, setSelectedNetwork] = useState<string | null>(null);
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,6 +51,18 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
       network: "",
     },
   });
+
+  const { data } = useQuery({
+    queryFn: () =>
+      cryptoCurrencyFee({
+        currency: coin?.currency ?? "",
+        network: selectedNetwork ?? "",
+      }),
+    queryKey: ["crypto-currency-fee", coin?.currency, selectedNetwork],
+    enabled: !!selectedNetwork,
+  });
+
+  console.log("selected crypto fee:", data);
 
   const sendCryptoMutation = useMutation({
     mutationFn: sendCrypto,
@@ -129,7 +142,10 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
                 <FormItem>
                   <FormControl>
                     <NativeSelect
-                      onChange={field.onChange}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        setSelectedNetwork(e.target.value);
+                      }}
                       value={field.value}
                       aria-label="Select Network"
                     >
