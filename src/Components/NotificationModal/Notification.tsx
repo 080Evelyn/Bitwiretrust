@@ -14,7 +14,6 @@ import { TransactionData } from "@/types";
 import { format } from "date-fns";
 import { ArrowLeft, X } from "lucide-react";
 import NotificationModal from "./NotificationModal";
-import { useScrollLock } from "@/hooks/useScrollLock";
 import { useResponsivePopover } from "@/hooks/viewportResize";
 import { LogoWhite, MoneyIn, MoneyOut, NotificationArrowDown } from "@/assets";
 import { Skeleton } from "../ui/skeleton";
@@ -68,14 +67,12 @@ const NotificationPopover = ({
   });
 
   const handleNotificationClick = (notif: TransactionData) => {
-    if (selectedNotif?.id !== notif.id) {
-      setSelectedNotif(notif);
+    setSelectedNotif(notif);
 
-      // instant UI feedback
-      if (!notif.isRead) {
-        setLocalReadIds((prev) => new Set(prev).add(notif.id));
-        readMutation.mutate(notif.id);
-      }
+    // instant UI feedback
+    if (!notif.isRead) {
+      setLocalReadIds((prev) => new Set(prev).add(notif.requestId));
+      readMutation.mutate(notif.requestId);
     }
   };
 
@@ -93,13 +90,12 @@ const NotificationPopover = ({
     });
   }, [notifications, monthFilter, categoryFilter, statusFilter]);
 
-  useScrollLock(isOpen);
-
   useResponsivePopover(isOpen, setIsOpen);
 
   return (
     <div>
       <Popover
+        modal={true}
         open={isOpen}
         onOpenChange={(open) => {
           if (!open && selectedNotif) return;
@@ -168,7 +164,9 @@ const NotificationPopover = ({
               <div className="flex gap-1">
                 <Select onValueChange={setCategoryFilter}>
                   <SelectTrigger className="font-semibold text-base hover:text-primary border-0 flex cursor-pointer gap-1 shadow-none  h-8 [&_svg]:hidden">
-                    <SelectValue placeholder="Categories" />
+                    <SelectValue placeholder="Categories">
+                      {categoryFilter !== "All" ? categoryFilter : "Categories"}
+                    </SelectValue>
                     <img src={NotificationArrowDown} alt="arrow-icon" />
                   </SelectTrigger>
                   <SelectContent className="z-[60]">
@@ -182,7 +180,9 @@ const NotificationPopover = ({
 
                 <Select onValueChange={setStatusFilter}>
                   <SelectTrigger className="font-semibold text-base hover:text-primary border-0 flex cursor-pointer gap-1 shadow-none  h-8 [&_svg]:hidden">
-                    <SelectValue placeholder="Status" />
+                    <SelectValue placeholder="Status">
+                      {statusFilter !== "All" ? statusFilter : "Status"}
+                    </SelectValue>
                     <img src={NotificationArrowDown} alt="arrow-icon" />
                   </SelectTrigger>
                   <SelectContent className="z-[60]">

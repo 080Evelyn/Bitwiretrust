@@ -26,8 +26,7 @@ import { ikejaDisco } from "@/assets";
 import { Biller } from "@/types/utility-payment";
 import { useMutation } from "@tanstack/react-query";
 import {
-  prepaidElectricityPurchase,
-  postpaidElectricityPurchase,
+  electricityPurchase,
   verifyMeterNumber,
 } from "@/api/micro-transaction";
 import { FaSpinner } from "react-icons/fa";
@@ -78,7 +77,7 @@ const Electricity = () => {
     },
   });
 
-  const BuyPrepaidMutation = useMutation({
+  const BuyElectricityMutation = useMutation({
     mutationFn: (data: {
       requestId: string;
       serviceID: string;
@@ -86,23 +85,9 @@ const Electricity = () => {
       billersCode: string;
       phone: string;
       amount: number;
-      type: string;
     }) => {
-      return prepaidElectricityPurchase(data);
-    },
-  });
-
-  const BuyPostpaidMutation = useMutation({
-    mutationFn: (data: {
-      requestId: string;
-      serviceID: string;
-      variation_code: string;
-      billersCode: string;
-      phone: string;
-      amount: number;
-      type: string;
-    }) => {
-      return postpaidElectricityPurchase(data);
+      const type = selected.toLowerCase();
+      return electricityPurchase(data, type);
     },
   });
 
@@ -199,77 +184,42 @@ const Electricity = () => {
       return;
     }
     openPinModal(() => {
-      if (selected === "Prepaid") {
-        BuyPrepaidMutation.mutate(
-          {
-            requestId: "",
-            serviceID: values.serviceID,
-            variation_code: "prepaid",
-            billersCode: values.meterNumber,
-            phone: user.phone,
-            amount: Number(values.amount),
-            type: selected,
+      BuyElectricityMutation.mutate(
+        {
+          requestId: "",
+          serviceID: values.serviceID,
+          variation_code: selected.toLowerCase(),
+          billersCode: values.meterNumber,
+          phone: user.phone,
+          amount: Number(values.amount),
+        },
+        {
+          onSuccess: (response: any) => {
+            setTransactionData({
+              title: "Electricity Purchase Successful!",
+              amount: Number(values.amount),
+              electricityToken: response.data?.token,
+              electricityUnit: response.data?.units,
+              meterNumber: values.meterNumber,
+            });
+            setIsSuccessModalOpen(true);
+            form.reset();
+            setMeterName("");
+            setMeterError("");
+            invalidateAfterTransaction();
           },
-          {
-            onSuccess: (response) => {
-              setTransactionData({
-                title: "Electricity Purchase Successful!",
-                amount: Number(values.amount),
-                electricityToken: response.data?.token,
-                electricityUnit: response.data?.units,
-                meterNumber: values.meterNumber,
-              });
-              setIsSuccessModalOpen(true);
-              form.reset();
-              setMeterName("");
-              setMeterError("");
-              invalidateAfterTransaction();
-            },
-            onError: (error) => {
-              toast.error("Purchase failed:" + error.message);
-            },
-          }
-        );
-      } else {
-        BuyPostpaidMutation.mutate(
-          {
-            requestId: "",
-            serviceID: values.serviceID,
-            variation_code: "postpaid",
-            billersCode: values.meterNumber,
-            phone: user.phone,
-            amount: Number(values.amount),
-            type: selected,
+          onError: (error: any) => {
+            toast.error("Purchase failed:" + error.message);
           },
-          {
-            onSuccess: (response) => {
-              setTransactionData({
-                title: "Electricity Purchase Successful!",
-                amount: Number(values.amount),
-                electricityToken: response.data?.token,
-                electricityUnit: response.data?.units,
-                meterNumber: values.meterNumber,
-              });
-              setIsSuccessModalOpen(true);
-              form.reset();
-              setMeterName("");
-              setMeterError("");
-              invalidateAfterTransaction();
-            },
-            onError: (error) => {
-              toast.error("Purchase failed:" + error.message);
-            },
-          }
-        );
-      }
+        }
+      );
     });
   };
 
   const isLoading =
     isMeterVerifying ||
     !!meterError ||
-    BuyPostpaidMutation.isPending ||
-    BuyPrepaidMutation.isPending ||
+    BuyElectricityMutation.isPending ||
     !meterName;
 
   const providerOptions = useMemo(() => {
@@ -430,7 +380,7 @@ const Electricity = () => {
             type="submit"
             disabled={isLoading}
           >
-            {BuyPostpaidMutation.isPending || BuyPrepaidMutation.isPending ? (
+            {BuyElectricityMutation.isPending ? (
               <span className="inline-flex items-center">
                 Buying...
                 <FaSpinner className="animate-spin ml-1" />

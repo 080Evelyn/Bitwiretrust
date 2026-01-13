@@ -44,7 +44,7 @@ export interface ElectricityPurchase {
   billersCode: string;
   phone: string;
   amount: number;
-  type: string;
+  type?: string;
 }
 
 export interface CableSubscriptionProps {

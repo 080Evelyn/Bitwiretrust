@@ -91,10 +91,14 @@ export const refreshSwapQuotation = async (
   return response;
 };
 
-export const confirmSwapQuotation = async (swapQuoteId: string) => {
+export const confirmSwapQuotation = async (
+  swapQuoteId: string,
+  data: { requestId: string; commissionFee: number }
+) => {
   const userId = getUserId();
   const response = await axios.post(
-    `${url}/v1/user/crypto/${swapQuoteId}/confirm-swap/${userId}`
+    `${url}/v1/user/crypto/${swapQuoteId}/confirm-swap/${userId}`,
+    data
   );
   return response;
 };

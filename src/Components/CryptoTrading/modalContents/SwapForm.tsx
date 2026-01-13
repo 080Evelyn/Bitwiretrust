@@ -11,7 +11,6 @@ import { FaSpinner } from "react-icons/fa";
 interface SwapFormProps {
   wallets: WalletProps[];
   selectedWallet: WalletProps | null;
-  formattedConvertedAmount: string;
   setSelectedWallet: (wallet: WalletProps) => void;
   coin: WalletProps | null;
   amount: string;
@@ -28,7 +27,6 @@ interface SwapFormProps {
 export default function SwapForm({
   wallets,
   selectedWallet,
-  formattedConvertedAmount,
   setSelectedWallet,
   coin,
   amount,
@@ -97,8 +95,6 @@ export default function SwapForm({
             aria-label="Select currency"
             className="rounded-r-none w-32 uppercase !h-11.5 font-semibold text-[#7910B1] bg-transparent border-0 outline-none ring-0 focus:ring-0"
           >
-            <NativeSelectOption value="">Select Currency</NativeSelectOption>
-
             {wallets
               .filter(
                 (wallet: WalletProps) => wallet.currency !== coin?.currency
@@ -120,7 +116,7 @@ export default function SwapForm({
         <Input
           type="text"
           readOnly
-          value={formattedConvertedAmount}
+          value={convertedAmount}
           placeholder="0.00"
           className="w-full border-0 bg-transparent"
         />
@@ -140,7 +136,7 @@ export default function SwapForm({
                 <span className="text-xs text-red-500">Rate unavailable</span>
               ) : (
                 <>
-                  {formattedConvertedAmount} {selectedWallet?.currency}
+                  {convertedAmount} {selectedWallet?.currency}
                 </>
               )}
             </div>

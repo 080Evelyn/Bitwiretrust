@@ -64,29 +64,15 @@ export const verifyMeterNumber = async (data: {
   return response.data;
 };
 
-export const prepaidElectricityPurchase = async (data: ElectricityPurchase) => {
-  const token = getToken();
-  const userId = getUserId();
-
-  const response = await axios.post(
-    `${url}/v1/user/microtransaction/electricity/prepaid/purchase/${userId}`,
-    data,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    }
-  );
-
-  return response.data;
-};
-
-export const postpaidElectricityPurchase = async (
-  data: ElectricityPurchase
+export const electricityPurchase = async (
+  data: ElectricityPurchase,
+  type: string
 ) => {
   const token = getToken();
   const userId = getUserId();
 
   const response = await axios.post(
-    `${url}/v1/user/microtransaction/electricity/postpaid/purchase/${userId}`,
+    `${url}/v1/user/microtransaction/electricity/${type}/purchase/${userId}`,
     data,
     {
       headers: { Authorization: `Bearer ${token}` },

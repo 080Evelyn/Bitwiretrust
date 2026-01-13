@@ -34,6 +34,13 @@ const SuccessModal = ({
   electricityUnit,
   mobileMaxWidth,
 }: SuccessModalProps) => {
+  const formatElectricityToken = (token?: string) => {
+    if (!token) return "";
+    return String(token)
+      .replace(/(.{4})/g, "$1-")
+      .replace(/-$/, "");
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent
@@ -65,8 +72,8 @@ const SuccessModal = ({
           {electricityToken && (
             <div className="flex justify-between gap-10 items-start">
               <span className="text-sm font-medium flex-shrink-0">Token:</span>
-              <span className="text-sm text-muted-foreground font-bold break-all text-right">
-                {electricityToken}
+              <span className="text-sm text-muted-foreground font-bold break-words text-right">
+                {formatElectricityToken(electricityToken)}
               </span>
             </div>
           )}
