@@ -43,8 +43,7 @@ export function Step1Form({ form, onSubmit, isLoading }: FormData) {
                 <span className="left-4 text-xs">Amount</span>
                 <FormControl>
                   <Input
-                    inputMode="numeric"
-                    pattern="[0-9]*"
+                    type="number"
                     placeholder="1,000,000"
                     className="w-full h-10 !bg-white !rounded-sm !border-0"
                     {...field}

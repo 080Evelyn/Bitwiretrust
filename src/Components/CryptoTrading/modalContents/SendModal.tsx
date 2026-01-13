@@ -19,6 +19,7 @@ import {
   NativeSelectOption,
 } from "@/Components/ui/native-select";
 import { Check } from "lucide-react";
+import axios from "axios";
 
 const formSchema = z.object({
   address: z.string().min(1, "Recipient address is required"),
@@ -69,8 +70,12 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
     onSuccess: () => {
       setIsSuccess(true);
     },
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "Failed to send crypto");
+    onError: (err) => {
+      if (axios.isAxiosError(err)) {
+        toast.error(err.response?.data?.responseDesc || "Something went wrong");
+      } else {
+        toast.error("Unexpected error occurred");
+      }
     },
   });
 
@@ -150,7 +155,7 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
                       aria-label="Select Network"
                       className="w-full"
                     >
-                      <NativeSelectOption value="">
+                      <NativeSelectOption value="" className="text-sm py-1">
                         Select Network
                       </NativeSelectOption>
 
@@ -173,7 +178,7 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      type="tel"
+                      type="number"
                       aria-label="Enter Amount to Send"
                       placeholder="Enter Amount to Send"
                       {...field}

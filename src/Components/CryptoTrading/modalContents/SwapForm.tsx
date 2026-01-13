@@ -45,8 +45,7 @@ export default function SwapForm({
         <span className="px-3 font-medium uppercase">{coin?.currency}</span>
         <span className="border-r border-1 h-11 border-[#7910B1]" />
         <Input
-          type="text"
-          inputMode="numeric"
+          type="number"
           placeholder="0.00"
           value={amount}
           onChange={(e) =>
