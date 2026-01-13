@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -144,11 +144,9 @@ const SwapModal = ({ coin }: CoinWalletProps) => {
         from_amount: amount,
         requestId: "",
       });
-    }, 500);
+    }, 1000);
 
     return () => clearTimeout(timer);
-    // intentionally exclude the mutation object to avoid re-triggering effect
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [amount, selectedWallet, coin]);
 
   const convertedAmount = previewQuote?.to_amount ?? 0;
@@ -165,25 +163,8 @@ const SwapModal = ({ coin }: CoinWalletProps) => {
     lastQuotationRequestRef.current = payload;
 
     GetQuotationMutation.mutate(payload);
+    form.reset();
   });
-
-  // Format the converted amount based on preview quote (if available)
-  const formattedConvertedAmount = useMemo(() => {
-    if (!selectedWallet) return "0.00";
-
-    if (previewQuote && previewQuote.to_amount != null) {
-      const quotedCurrency =
-        previewQuote.quoted_currency ?? selectedWallet.currency;
-      const isFiat = ["USD", "NGN", "USDT"].includes(
-        String(quotedCurrency).toUpperCase()
-      );
-      return isFiat
-        ? Number(previewQuote.to_amount).toFixed(2)
-        : Number(previewQuote.to_amount).toFixed(6);
-    }
-
-    return "0.00";
-  }, [previewQuote, selectedWallet]);
 
   return (
     <div className="pt-3">
@@ -191,7 +172,6 @@ const SwapModal = ({ coin }: CoinWalletProps) => {
         <SwapForm
           wallets={wallets}
           selectedWallet={selectedWallet}
-          formattedConvertedAmount={formattedConvertedAmount}
           setSelectedWallet={setSelectedWallet}
           coin={coin}
           amount={amount}

@@ -10,7 +10,7 @@ type CreatedSwapQuote = {
   from_amount?: number;
   to_amount?: number;
   from_currency?: string;
-  quoted_currency?: string;
+  to_currency?: string;
   expires_at?: string;
 };
 
@@ -29,11 +29,16 @@ const SwapConfirmation = ({
   const intervalRef = useRef<number | null>(null);
 
   const mutateSwapConfirmation = useMutation({
-    mutationFn: () => confirmSwapQuotation(swapQuote?.id || ""),
+    mutationFn: () =>
+      confirmSwapQuotation(swapQuote?.id || "", {
+        requestId: "",
+        commissionFee: 0,
+      }),
   });
 
   const handleConfirmSwap = () => {
     mutateSwapConfirmation.mutate();
+    setStep(3);
   };
 
   // Reset timer whenever we receive a new quote
@@ -70,8 +75,8 @@ const SwapConfirmation = ({
         <div className="bg-primary/15 font-medium text-xl py-5  px-8 rounded-md">
           {swapQuote ? (
             <>
-              {formattedFromAmount} {swapQuote.from_currency} ={" "}
-              {formattedToAmount} {swapQuote.quoted_currency}
+              {formattedFromAmount} {swapQuote?.from_currency} ={" "}
+              {formattedToAmount} {swapQuote?.to_currency}
             </>
           ) : (
             "Preparing quote..."
