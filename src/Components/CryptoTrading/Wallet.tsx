@@ -7,6 +7,7 @@ import SendModal from "./modalContents/SendModal";
 import DepositModal from "./modalContents/DepositModal";
 import SwapModal from "./modalContents/SwapModal";
 import { CoinWalletProps } from "@/types/crypto";
+import { formatNaira } from "@/lib/formatNaira";
 const Wallet = ({ coin }: CoinWalletProps) => {
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -90,7 +91,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
             <div className="flex flex-col items-center">
               <span className="md:text-xs">Balance</span>
               <h1 className="font-bold text-[34px] md:text-[1.6rem] tracking-[-0.13px]">
-                ₦{coin?.converted_balance}
+                {formatNaira(coin?.converted_balance, true)}
               </h1>
             </div>
           </>

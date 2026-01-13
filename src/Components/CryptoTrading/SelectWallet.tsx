@@ -4,6 +4,7 @@ import { Input } from "../ui/input";
 import { SelectWalletProps, WalletProps } from "@/types/crypto";
 import { useQuery } from "@tanstack/react-query";
 import { fetchWalletAddressByNetwork } from "@/api/crypto";
+import { formatNaira } from "@/lib/formatNaira";
 
 const SelectWallet = ({
   title = "Select Wallet",
@@ -94,7 +95,7 @@ const SelectWallet = ({
                 >
                   <span className="text-xs font-medium">{wallet?.balance}</span>
                   <span className="text-[10px]">
-                    {wallet?.converted_balance} NGN
+                    {formatNaira(wallet?.converted_balance)} NGN
                   </span>
                 </div>
               </div>

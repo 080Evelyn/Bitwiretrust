@@ -194,7 +194,7 @@ const Electricity = () => {
           amount: Number(values.amount),
         },
         {
-          onSuccess: (response: any) => {
+          onSuccess: (response) => {
             setTransactionData({
               title: "Electricity Purchase Successful!",
               amount: Number(values.amount),
@@ -208,7 +208,7 @@ const Electricity = () => {
             setMeterError("");
             invalidateAfterTransaction();
           },
-          onError: (error: any) => {
+          onError: (error) => {
             toast.error("Purchase failed:" + error.message);
           },
         }
@@ -305,6 +305,7 @@ const Electricity = () => {
               <FormItem>
                 <FormControl>
                   <Input
+                    type="tel"
                     placeholder="Enter Meter Number"
                     maxLength={13}
                     {...field}
