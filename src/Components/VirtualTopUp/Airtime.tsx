@@ -129,7 +129,7 @@ const Airtime = () => {
           form.reset();
         },
 
-        onError: (error: unknown) => {
+        onError: (error) => {
           if (axios.isAxiosError(error)) {
             const responseDesc =
               error.response?.data?.responseDesc || "Something went wrong";
