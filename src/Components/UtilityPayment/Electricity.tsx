@@ -37,6 +37,7 @@ import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
 import SuccessModal from "../SuccessModal/SuccessModal";
 import { useOutletContext } from "react-router-dom";
 import { UserContext } from "@/types/user";
+import axios from "axios";
 
 type FormData = {
   meterNumber: string;
@@ -163,7 +164,9 @@ const Electricity = () => {
         onError: () => {
           setIsMeterVerifying(false);
           setMeterName("");
-          setMeterError("Account does not exist. Please check and re-enter");
+          setMeterError(
+            "Error verifying meter number. Please check and re-enter"
+          );
         },
       }
     );
@@ -209,7 +212,13 @@ const Electricity = () => {
             invalidateAfterTransaction();
           },
           onError: (error) => {
-            toast.error("Purchase failed:" + error.message);
+            if (axios.isAxiosError(error)) {
+              const responseDesc =
+                error.response?.data?.responseDesc || "Something went wrong";
+              toast.error(responseDesc);
+            } else {
+              toast.error("Unexpected error occurred");
+            }
           },
         }
       );

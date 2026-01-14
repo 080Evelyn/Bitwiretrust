@@ -38,6 +38,7 @@ import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
 import { useOutletContext } from "react-router-dom";
 import { UserContext } from "@/types/user";
 import SuccessModal from "../SuccessModal/SuccessModal";
+import axios from "axios";
 
 const formSchema = z.object({
   phone: z
@@ -112,8 +113,13 @@ const MediaSubscriptions = () => {
             invalidateAfterTransaction();
           },
           onError: (error) => {
-            console.error("Subscription failed:", error);
-            toast.error("Transaction failed");
+            if (axios.isAxiosError(error)) {
+              const responseDesc =
+                error.response?.data?.responseDesc || "Something went wrong";
+              toast.error(responseDesc);
+            } else {
+              toast.error("Unexpected error occurred");
+            }
           },
         }
       );

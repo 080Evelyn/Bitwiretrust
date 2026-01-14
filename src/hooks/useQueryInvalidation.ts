@@ -6,6 +6,7 @@ export const useQueryInvalidation = () => {
   const invalidateAfterTransaction = () => {
     queryClient.invalidateQueries({ queryKey: ["user"] });
     queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    queryClient.invalidateQueries({ queryKey: ["transaction-history"] });
   };
 
   return { invalidateAfterTransaction };

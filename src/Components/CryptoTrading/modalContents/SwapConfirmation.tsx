@@ -1,6 +1,6 @@
 import { confirmSwapQuotation } from "@/api/crypto";
 import { Button } from "@/Components/ui/button";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { FaSpinner } from "react-icons/fa";
@@ -27,6 +27,7 @@ const SwapConfirmation = ({
 }) => {
   const [secondsLeft, setSecondsLeft] = useState<number>(15);
   const intervalRef = useRef<number | null>(null);
+  const queryClient = useQueryClient();
 
   const mutateSwapConfirmation = useMutation({
     mutationFn: () =>
@@ -34,11 +35,16 @@ const SwapConfirmation = ({
         requestId: "",
         commissionFee: 0,
       }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["all-wallets"],
+      });
+      setStep(3);
+    },
   });
 
   const handleConfirmSwap = () => {
     mutateSwapConfirmation.mutate();
-    setStep(3);
   };
 
   // Reset timer whenever we receive a new quote
