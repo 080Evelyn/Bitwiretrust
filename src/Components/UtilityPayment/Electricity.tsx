@@ -350,7 +350,7 @@ const Electricity = () => {
                 <FormControl>
                   <Input
                     type="text"
-                    inputMode="numeric"
+                    inputMode="decimal"
                     placeholder="Enter Amount"
                     {...field}
                     value={field.value ?? ""}
