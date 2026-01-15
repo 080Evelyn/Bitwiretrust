@@ -35,9 +35,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
       return (
         <div className="flex h-screen flex-col items-center justify-center text-center p-6">
           <h1 className="text-2xl font-bold mb-2">
-            Oops! Something went wrong
+            Oops! Something went wrong.
           </h1>
-          <span>Please contact support if the problem persists.</span>
+          <span>
+            Please refresh the page and try again. If the problem persists,
+            please contact support.
+          </span>
           <Link
             className={cn(buttonVariants({ size: "lg" }), "my-3")}
             to="/contact"
