@@ -9,7 +9,7 @@ const VerifyEmailPage = () => {
   const email = searchParams.get("email") || "";
 
   const handleSuccess = () => {
-    navigate("/login");
+    navigate("/login?prev=verify-email", { replace: true });
   };
 
   return (

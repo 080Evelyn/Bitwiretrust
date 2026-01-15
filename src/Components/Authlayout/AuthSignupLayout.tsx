@@ -23,7 +23,11 @@ const AuthSignupLayout = ({
         className={cn(
           "items-center justify-center sm:col-span-7 left-side hidden sm:flex"
         )}
-        style={{ backgroundImage: `url(${backgroundImage})` }}
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
       >
         {title && (
           <>
