@@ -178,7 +178,8 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      type="number"
+                      type="text"
+                      inputMode="decimal"
                       aria-label="Enter Amount to Send"
                       placeholder="Enter Amount to Send"
                       {...field}

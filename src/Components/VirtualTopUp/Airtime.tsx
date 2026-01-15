@@ -227,7 +227,8 @@ const Airtime = () => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      type="tel"
+                      type="text"
+                      inputMode="decimal"
                       placeholder="Enter Amount"
                       min={selectedBiller?.minimium_amount || 10}
                       max={selectedBiller?.maximum_amount || 1000000}

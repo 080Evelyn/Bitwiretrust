@@ -66,7 +66,11 @@ const withSuspense = (Component: React.ComponentType) => (
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: (
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
+    ),
     children: [
       { path: "", element: withSuspense(Home) },
       { path: "about", element: withSuspense(About) },
