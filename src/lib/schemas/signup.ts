@@ -9,7 +9,6 @@ export const createAccountSchema = z
       .min(1, "Phone number is required")
       .regex(/^\+?[0-9\s\-()]+$/, "Invalid phone number format"),
     email: z.string().email("Invalid email address"),
-    username: z.string().min(1, "Username is required"),
     password: z
       .string()
       .min(8, "Password must be at least 8 characters")

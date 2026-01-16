@@ -114,7 +114,9 @@ const GetStarted = ({ onSuccess }: GetStartedProps) => {
                       placeholder="••••••••"
                       className="form-input"
                     />
-                    <div
+                    <button
+                      type="button"
+                      aria-label="Toggle password visibility"
                       className="absolute top-1/2 right-4 cursor-pointer transform -translate-y-1/2 focus:text-[#7910B1]"
                       onClick={() => setShowPassword((prev) => !prev)}
                     >
@@ -123,7 +125,7 @@ const GetStarted = ({ onSuccess }: GetStartedProps) => {
                       ) : (
                         <FaEye className="size-4.5" />
                       )}
-                    </div>
+                    </button>
                   </div>
                 </FormControl>
                 <FormMessage />
