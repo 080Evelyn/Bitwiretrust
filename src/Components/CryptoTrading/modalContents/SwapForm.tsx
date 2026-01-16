@@ -1,4 +1,3 @@
-import { Input } from "@/Components/ui/input";
 import {
   NativeSelect,
   NativeSelectOption,
@@ -44,7 +43,7 @@ export default function SwapForm({
       <div className="flex items-center bg-[#f9edff] border rounded-md overflow-hidden">
         <span className="px-3 font-medium uppercase">{coin?.currency}</span>
         <span className="border-r border-1 h-11 border-[#7910B1]" />
-        <Input
+        <input
           type="text"
           inputMode="decimal"
           placeholder="0.00"
@@ -54,7 +53,7 @@ export default function SwapForm({
               shouldValidate: true,
             })
           }
-          className="flex-1"
+          className="flex-1 h-11.5 px-3"
         />
       </div>
       {form.formState.errors.amount && (
@@ -113,13 +112,9 @@ export default function SwapForm({
 
         <span className=" border-r border-[#7910B1]" />
 
-        <Input
-          type="text"
-          readOnly
-          value={convertedAmount}
-          placeholder="0.00"
-          className="w-full border-0 bg-transparent"
-        />
+        <div className="w-full border-0 bg-transparent flex items-center px-3">
+          {convertedAmount}
+        </div>
       </div>
 
       {selectedWallet &&

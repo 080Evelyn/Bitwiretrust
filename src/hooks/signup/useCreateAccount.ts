@@ -17,7 +17,6 @@ export const useCreateAccount = () => {
       lastName: "",
       phone: "",
       email: "",
-      username: "",
       password: "",
       confirmPassword: "",
       terms: false,
@@ -49,7 +48,6 @@ export const useCreateAccount = () => {
       {
         firstName: data.firstName,
         lastName: data.lastName,
-        username: data.username,
         phone: data.phone,
         email: data.email,
         password: data.password,

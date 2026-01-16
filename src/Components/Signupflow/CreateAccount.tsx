@@ -135,23 +135,6 @@ const CreateAccount = ({ onSuccess }: CreateAccountProps) => {
             />
             <FormField
               control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem className="custom-form-group">
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="johndoe123"
-                      className="form-input"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="phone"
               render={({ field }) => (
                 <FormItem className="custom-form-group">
