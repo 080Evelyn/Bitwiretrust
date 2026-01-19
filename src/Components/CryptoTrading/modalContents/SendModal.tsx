@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -53,7 +53,11 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
     },
   });
 
-  const { data } = useQuery({
+  const {
+    data: cryptoFeeData,
+    isFetching: cryptoFeeIsFetching,
+    isError,
+  } = useQuery({
     queryFn: () =>
       cryptoCurrencyFee({
         currency: coin?.currency ?? "",
@@ -63,7 +67,15 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
     enabled: !!selectedNetwork,
   });
 
-  console.log("selected crypto fee:", data);
+  useEffect(() => {
+    if (isError && coin?.currency !== "btc") {
+      toast.error("Failed to fetch fee");
+    }
+  }, [isError]);
+
+  const fee = cryptoFeeData?.data?.data?.fee;
+
+  const sendingFee = fee ?? (coin?.currency === "btc" ? "0.00005" : "0");
 
   const sendCryptoMutation = useMutation({
     mutationFn: sendCrypto,
@@ -185,10 +197,12 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
                       {...field}
                     />
                   </FormControl>
-                  <p className="text-sm text-end font-medium">
-                    Sending Fee: $5.00
-                  </p>
                   <FormMessage />
+                  <p className="text-sm text-end font-medium">
+                    Sending Fee:{" "}
+                    {cryptoFeeIsFetching ? "loading..." : sendingFee}{" "}
+                    {coin?.currency}
+                  </p>
                 </FormItem>
               )}
             />
