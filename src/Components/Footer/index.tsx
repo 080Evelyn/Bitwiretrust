@@ -66,9 +66,9 @@ const Footer = (_props: Props) => {
                   Email: support@bitwiretrust.com
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a href="tel:+2348105907370">Phone: +234 810 590 7370</a>
-              </li>
+              </li> */}
               <li>
                 <span>Address: 15, Circular Road Rumuodara, Rivers State</span>
               </li>

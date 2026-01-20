@@ -174,12 +174,19 @@ export const fetchCryptoWithdrawalHistory = async (data: {
   });
   return response;
 };
-export const fetchCryptoSwapHistory = async () => {
+export const fetchCryptoSwapHistory = async ({
+  currency,
+}: {
+  currency: string;
+}) => {
   const userId = getUserId();
   const response = await axios.get(
-    `${url}/v1/user/crypto/${userId}/swaps/initiated-confirmed`,
+    `${url}/v1/user/crypto/${userId}/swap-transactions
+
+
+`,
     {
-      params: { userId },
+      params: { userId, currency },
     },
   );
   return response;

@@ -99,7 +99,7 @@ const TransactionHistory = ({ coin }: Transactions) => {
       let response;
       switch (activeTab) {
         case "Swap":
-          response = await fetchCryptoSwapHistory();
+          response = await fetchCryptoSwapHistory(params);
           break;
         case "Deposit":
           response = await fetchCryptoDepositHistory(params);
