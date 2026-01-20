@@ -1,15 +1,108 @@
-import { SearchIcon } from "@/assets";
-import { Input } from "../ui/input";
-import { coinTransactions } from "@/constants/coins";
 import { WalletProps } from "@/types/crypto";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchCryptoWithdrawalHistory,
+  fetchCryptoSwapHistory,
+  fetchCryptoDepositHistory,
+} from "@/api/crypto";
+import { Badge } from "../ui/badge";
+import { formatDate } from "date-fns";
+import { cn } from "@/lib/utils";
 
 interface Transactions {
   coin: WalletProps | null;
 }
+
+type TabType = "Swap" | "Deposit" | "Withdrawal";
+
+interface TransactionData {
+  id: string;
+  reference: string;
+  type: string;
+  currency: string;
+  amount: string;
+  fee: string;
+  total: string;
+  txid: string;
+  transaction_note: string;
+  narration: string;
+  status: string;
+  reason: string;
+  created_at: Date;
+  done_at: Date;
+  recipient: {
+    type: string;
+    details: {
+      address: string;
+      destination_tag: string;
+      name: string;
+      user_id: string;
+    };
+  };
+  wallet: {
+    id: string;
+    name: string;
+    currency: string;
+    balance: string;
+    locked: string;
+    staked: string;
+    user: {
+      id: string;
+      sn: string;
+      email: string;
+      reference: string;
+      first_name: string;
+      last_name: string;
+      display_name: string;
+      created_at: Date;
+      updated_at: Date;
+    };
+  };
+  user: {
+    id: string;
+    sn: string;
+    email: string;
+    reference: string;
+    first_name: string;
+    last_name: string;
+    display_name: string;
+    created_at: Date;
+    updated_at: Date;
+  };
+}
+
 const TransactionHistory = ({ coin }: Transactions) => {
-  const filteredTransactions = coinTransactions.filter(
-    (tx) => tx.coinId === coin?.id
-  );
+  const [activeTab, setActiveTab] = useState<TabType>("Deposit");
+
+  const { data: transactions = [], isLoading } = useQuery({
+    queryKey: ["transactions", activeTab, coin?.currency],
+    queryFn: async () => {
+      if (!coin?.currency) return [];
+
+      const params = {
+        userId: "",
+        currency: coin.currency.toLowerCase(),
+        state: "done",
+      };
+
+      let response;
+      switch (activeTab) {
+        case "Swap":
+          response = await fetchCryptoSwapHistory(params);
+          break;
+        case "Deposit":
+          response = await fetchCryptoDepositHistory(params);
+          break;
+        case "Withdrawal":
+          response = await fetchCryptoWithdrawalHistory(params);
+          break;
+      }
+
+      return response?.data?.data?.data || [];
+    },
+    enabled: !!coin?.currency,
+  });
 
   return (
     <div className="flex flex-col gap-3">
@@ -19,47 +112,69 @@ const TransactionHistory = ({ coin }: Transactions) => {
 
       <div className="h-full desktop-card-container md:max-h-86 rounded-md p-2">
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2 w-full">
-            <div className="relative flex-1 max-md:hidden">
-              <Input
-                type="search"
-                placeholder="Search History"
-                className="h-9 w-full !pl-9 !rounded-[4.7px]"
-              />
-              <img src={SearchIcon} className="absolute size-4 top-3 left-3" />
-            </div>
-          </div>
           <h3 className="md:hidden font-medium self-start tracking-[-0.17px]">
             Transaction History
           </h3>
+          <div className="max-md:mt-2 flex gap-2 w-full justify-center">
+            {(["Swap", "Deposit", "Withdrawal"] as TabType[]).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 md:px-2 xl:px-4 py-2 rounded-md text-sm md:text-xs xl:text-sm font-medium cursor-pointer transition-colors ${
+                  activeTab === tab
+                    ? "bg-primary text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
           <div className="flex flex-col gap-2 overflow-y-auto">
-            {filteredTransactions.length > 0 ? (
-              filteredTransactions.map((tx) => (
+            {isLoading ? (
+              <div className="text-center text-xs text-gray-400 py-4">
+                Loading transactions...
+              </div>
+            ) : transactions.length > 0 ? (
+              transactions.map((tx: TransactionData) => (
                 <div
                   key={tx.id}
-                  className="flex font-medium justify-between py-4 md:py-1.5 px-1 md:px-2.5 bg-[#F8F8F8] rounded-sm"
+                  className="flex items-center justify-between gap-4 py-3 px-3 bg-[#F8F8F8] rounded-md"
                 >
-                  <div className="flex gap-2 items-center">
-                    <img src={tx.image} alt={tx.type} className="size-8" />
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium md:text-xs">
-                        {tx.type}
-                      </span>
-                      <span className="text-[10px] md:text-[8px] tracking-[-0.17px] md:tracking-[-0.13px]">
-                        {tx.date}
+                  {/* Left: transaction meta */}
+                  <div className="flex flex-col leading-tight">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium capitalize">
+                        {activeTab}
                       </span>
                     </div>
+
+                    <span className="text-[11px] text-muted-foreground">
+                      {formatDate(tx.created_at, "MMM dd, yyyy")}
+                    </span>
                   </div>
+
+                  {/* Right: amount + status */}
                   <div
-                    className="flex flex-col items-end gap-1 tracking-[-0.12px]"
+                    className="flex flex-col items-end gap-1"
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
-                    <span className="text-xs font-medium">{tx.amount} NGN</span>
-                    {tx.value && (
-                      <span className="text-[10px] text-[#615D5D]">
-                        {tx.value} {tx.symbol}
-                      </span>
-                    )}
+                    <span className="text-sm font-semibold tracking-tight">
+                      {tx.amount} {tx.currency.toUpperCase()}
+                    </span>
+
+                    <Badge
+                      className={cn(
+                        tx.status === "pending"
+                          ? "bg-yellow-400"
+                          : tx.status === "Done"
+                            ? "bg-[#11C600]"
+                            : "bg-[#FF0000]",
+                        "text-[10px] px-2 py-0.5 capitalize",
+                      )}
+                    >
+                      {tx.status}
+                    </Badge>
                   </div>
                 </div>
               ))

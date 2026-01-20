@@ -93,6 +93,9 @@ const Wallet = ({ coin }: CoinWalletProps) => {
               <h1 className="font-bold text-[34px] md:text-[1.6rem] tracking-[-0.13px]">
                 {formatNaira(coin?.converted_balance, true)}
               </h1>
+              <h3 className="font-medium">
+                {coin?.balance} {coin?.currency}
+              </h3>
             </div>
           </>
         ) : (
