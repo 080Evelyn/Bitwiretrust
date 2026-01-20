@@ -30,7 +30,7 @@ const Currency = ({
           country.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
           country.currencyCode
             ?.toLowerCase()
-            .includes(searchTerm?.toLowerCase())
+            .includes(searchTerm?.toLowerCase()),
       )
     : [];
 
@@ -43,9 +43,9 @@ const Currency = ({
         Buy Gift Card
       </div>
 
-      <div className="flex flex-col gap-2 card-container rounded-md px-2 py-3 md:py-2 md:max-h-86 h-[80vh]">
+      <div className="flex flex-col gap-2 card-container rounded-md px-2 pt-3 pb-6 md:py-2 md:max-h-86 h-[80vh]">
         <div className="w-full">
-          <div className="relative flex-1">
+          <div className="relative flex-1 max-md:py-1">
             <Input
               type="search"
               placeholder="Search..."
@@ -89,7 +89,7 @@ const Currency = ({
         </div>
       </div>
 
-      <div className="fixed bottom-2 md:hidden w-full right-0 px-4">
+      <div className="fixed bottom-5 md:hidden w-full right-0 px-4">
         <button onClick={onProceed} className="btn-primary w-full">
           Proceed
         </button>

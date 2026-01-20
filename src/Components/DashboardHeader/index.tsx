@@ -91,15 +91,15 @@ const DashboardHeader = ({ user }: { user: User }) => {
   );
 
   return (
-    <div className="ps-4 pe-10 pt-9 lg:pt-3 pb-3">
+    <>
       {location.pathname === "/dashboard" && !isDesktop && (
-        <div className="md:hidden">
+        <div className="md:hidden ps-5 pe-10 pt-20 lg:pt-3 pb-3">
           <HeaderContent />
         </div>
       )}
 
       {isDesktop && (
-        <div className="hidden md:block">
+        <div className="hidden md:block ps-4 pe-10 pt-9 lg:pt-3 pb-3">
           <HeaderContent />
         </div>
       )}
@@ -111,7 +111,7 @@ const DashboardHeader = ({ user }: { user: User }) => {
         fullName={fullName}
         user={user}
       />
-    </div>
+    </>
   );
 };
 

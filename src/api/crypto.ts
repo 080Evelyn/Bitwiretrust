@@ -22,7 +22,7 @@ export const fetchPersistWallet = async () => {
   const userId = getUserId()!;
   const response = await axios.get(
     `${url}/v1/user/crypto/${userId}/fetch-persist-wallets`,
-    { params: { userId } }
+    { params: { userId } },
   );
   return response.data;
 };
@@ -30,7 +30,7 @@ export const fetchWallets = async () => {
   const dbUserId = getUserId()!;
   const response = await axios.get(
     `${url}/v1/user/crypto/${dbUserId}/get-crypto/wallets`,
-    { params: { dbUserId } }
+    { params: { dbUserId } },
   );
   return response.data;
 };
@@ -58,7 +58,7 @@ export const validateAddress = async (data: {
 
 export const walletAddress = async (quidaxUserId: string, currency: string) => {
   const response = await axios.get(
-    `${url}/v1/user/crypto/wallet-address/${quidaxUserId}/${currency}`
+    `${url}/v1/user/crypto/wallet-address/${quidaxUserId}/${currency}`,
   );
   return response;
 };
@@ -66,7 +66,7 @@ export const swapQuotation = async (data: SwapQuotationProps) => {
   const userId = getUserId();
   const response = await axios.post(
     `${url}/v1/user/crypto/${userId}/swap-quotation`,
-    data
+    data,
   );
   return response;
 };
@@ -74,31 +74,31 @@ export const createSwapQuotation = async (data: CreateSwapQuotationProps) => {
   const userId = getUserId();
   const response = await axios.post(
     `${url}/v1/user/crypto/${userId}/create-swap-quotation`,
-    data
+    data,
   );
   return response;
 };
 
 export const refreshSwapQuotation = async (
   swapQuoteId: string,
-  data: CreateSwapQuotationProps
+  data: CreateSwapQuotationProps,
 ) => {
   const userId = getUserId();
   const response = await axios.post(
     `${url}/v1/user/crypto/${userId}/swap-quotation/${swapQuoteId}/refresh`,
-    data
+    data,
   );
   return response;
 };
 
 export const confirmSwapQuotation = async (
   swapQuoteId: string,
-  data: { requestId: string; commissionFee: number }
+  data: { requestId: string; commissionFee: number },
 ) => {
   const userId = getUserId();
   const response = await axios.post(
     `${url}/v1/user/crypto/${swapQuoteId}/confirm-swap/${userId}`,
-    data
+    data,
   );
   return response;
 };
@@ -124,7 +124,7 @@ export const fetchWalletAddress = async (data: WalletAddressProps) => {
 
   const response = await axios.post(
     `${url}/v1/user/crypto/${userId}/addresses?userId=${userId}`,
-    data
+    data,
   );
   return response;
 };
@@ -133,7 +133,7 @@ export const fetchWalletAddressByNetwork = async (currency: string) => {
   const userId = getUserId();
 
   const response = await axios.get(
-    `${url}/v1/user/crypto/${userId}/${currency}/addresses?userId=${userId}`
+    `${url}/v1/user/crypto/${userId}/${currency}/addresses?userId=${userId}`,
   );
   return response;
 };
@@ -142,7 +142,7 @@ export const sendCrypto = async (data: SendCryptoProps) => {
   const userId = getUserId();
   const response = await axios.post(
     `${url}/v1/user/crypto/send/crypto/external-withdrawal?userId=${userId}`,
-    data
+    data,
   );
   return response;
 };
@@ -158,4 +158,43 @@ export const cryptoCurrencyFee = async ({
     params: { currency, network },
   });
   return response.data;
+};
+
+export const fetchCryptoWithdrawalHistory = async (data: {
+  userId: string;
+  currency: string;
+  state?: string;
+}) => {
+  const userId = getUserId();
+  if (userId) {
+    data.userId = userId;
+  }
+  const response = await axios.get(`${url}/v1/user/crypto/all-withdrawals`, {
+    params: data,
+  });
+  return response;
+};
+export const fetchCryptoSwapHistory = async () => {
+  const userId = getUserId();
+  const response = await axios.get(
+    `${url}/v1/user/crypto/${userId}/swaps/initiated-confirmed`,
+    {
+      params: { userId },
+    },
+  );
+  return response;
+};
+export const fetchCryptoDepositHistory = async (data: {
+  userId: string;
+  currency: string;
+  state?: string;
+}) => {
+  const userId = getUserId();
+  if (userId) {
+    data.userId = userId;
+  }
+  const response = await axios.get(`${url}/v1/user/crypto/${userId}/deposits`, {
+    params: data,
+  });
+  return response;
 };

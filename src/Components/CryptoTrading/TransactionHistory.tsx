@@ -1,15 +1,118 @@
-import { SearchIcon } from "@/assets";
-import { Input } from "../ui/input";
-import { coinTransactions } from "@/constants/coins";
 import { WalletProps } from "@/types/crypto";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  fetchCryptoWithdrawalHistory,
+  fetchCryptoSwapHistory,
+  fetchCryptoDepositHistory,
+} from "@/api/crypto";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/Components/ui/dialog";
+import { Badge } from "../ui/badge";
+import { formatDate } from "date-fns";
+import { cn } from "@/lib/utils";
+import SwapHistory from "./SwapHistory";
 
 interface Transactions {
   coin: WalletProps | null;
 }
+
+type TabType = "Swap" | "Deposit" | "Withdrawal";
+
+interface TransactionData {
+  id: string;
+  reference: string;
+  type: string;
+  currency: string;
+  amount: string;
+  fee: string;
+  total: string;
+  txid: string;
+  transaction_note: string;
+  narration: string;
+  status: string;
+  reason: string;
+  created_at?: string;
+  done_at: string;
+  recipient: {
+    type: string;
+    details: {
+      address: string;
+      destination_tag: string;
+      name: string;
+      user_id: string;
+    };
+  };
+  wallet: {
+    id: string;
+    name: string;
+    currency: string;
+    balance: string;
+    locked: string;
+    staked: string;
+    user: {
+      id: string;
+      sn: string;
+      email: string;
+      reference: string;
+      first_name: string;
+      last_name: string;
+      display_name: string;
+      created_at?: string;
+      updated_at: string;
+    };
+  };
+  user: {
+    id: string;
+    sn: string;
+    email: string;
+    reference: string;
+    first_name: string;
+    last_name: string;
+    display_name: string;
+    created_at?: string;
+    updated_at: string;
+  };
+}
+
 const TransactionHistory = ({ coin }: Transactions) => {
-  const filteredTransactions = coinTransactions.filter(
-    (tx) => tx.coinId === coin?.id
-  );
+  const [activeTab, setActiveTab] = useState<TabType>("Deposit");
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<TransactionData | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const { data: transactions = [], isLoading } = useQuery({
+    queryKey: ["transactions", activeTab, coin?.currency],
+    queryFn: async () => {
+      if (!coin?.currency) return [];
+
+      const params = {
+        userId: "",
+        currency: coin.currency.toLowerCase(),
+      };
+
+      let response;
+      switch (activeTab) {
+        case "Swap":
+          response = await fetchCryptoSwapHistory();
+          break;
+        case "Deposit":
+          response = await fetchCryptoDepositHistory(params);
+          break;
+        case "Withdrawal":
+          response = await fetchCryptoWithdrawalHistory(params);
+          break;
+      }
+
+      return response?.data?.data || [];
+    },
+    enabled: !!coin?.currency,
+  });
 
   return (
     <div className="flex flex-col gap-3">
@@ -19,47 +122,76 @@ const TransactionHistory = ({ coin }: Transactions) => {
 
       <div className="h-full desktop-card-container md:max-h-86 rounded-md p-2">
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2 w-full">
-            <div className="relative flex-1 max-md:hidden">
-              <Input
-                type="search"
-                placeholder="Search History"
-                className="h-9 w-full !pl-9 !rounded-[4.7px]"
-              />
-              <img src={SearchIcon} className="absolute size-4 top-3 left-3" />
-            </div>
-          </div>
           <h3 className="md:hidden font-medium self-start tracking-[-0.17px]">
             Transaction History
           </h3>
-          <div className="flex flex-col gap-2 overflow-y-auto">
-            {filteredTransactions.length > 0 ? (
-              filteredTransactions.map((tx) => (
+          <div className="max-md:mt-2 flex gap-2 w-full justify-center">
+            {(["Swap", "Deposit", "Withdrawal"] as TabType[]).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 md:px-2 xl:px-4 py-2 rounded-md text-sm md:text-xs xl:text-sm font-medium cursor-pointer transition-colors ${
+                  activeTab === tab
+                    ? "bg-primary text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+          <div className="flex flex-col gap-2 overflow-y-auto md:max-h-75 pb-4">
+            {activeTab === "Swap" ? (
+              <SwapHistory transactions={transactions} isLoading={isLoading} />
+            ) : isLoading ? (
+              <div className="text-center text-xs text-gray-400 py-4">
+                Loading transactions...
+              </div>
+            ) : transactions.length > 0 ? (
+              transactions.map((tx: TransactionData) => (
                 <div
                   key={tx.id}
-                  className="flex font-medium justify-between py-4 md:py-1.5 px-1 md:px-2.5 bg-[#F8F8F8] rounded-sm"
+                  onClick={() => {
+                    setSelectedTransaction(tx);
+                    setIsDialogOpen(true);
+                  }}
+                  className="flex items-center justify-between gap-4 py-3 px-3 bg-[#F8F8F8] rounded-md cursor-pointer hover:bg-gray-100 transition-colors"
                 >
-                  <div className="flex gap-2 items-center">
-                    <img src={tx.image} alt={tx.type} className="size-8" />
-                    <div className="flex flex-col">
-                      <span className="text-sm font-medium md:text-xs">
-                        {tx.type}
-                      </span>
-                      <span className="text-[10px] md:text-[8px] tracking-[-0.17px] md:tracking-[-0.13px]">
-                        {tx.date}
+                  {/* Left: transaction meta */}
+                  <div className="flex flex-col leading-tight">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium capitalize">
+                        {activeTab}
                       </span>
                     </div>
+
+                    <span className="text-[11px] text-muted-foreground">
+                      {tx.created_at &&
+                        formatDate(tx.created_at, "MMM dd, yyyy")}
+                    </span>
                   </div>
+
+                  {/* Right: amount + status */}
                   <div
-                    className="flex flex-col items-end gap-1 tracking-[-0.12px]"
+                    className="flex flex-col items-end gap-1"
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
-                    <span className="text-xs font-medium">{tx.amount} NGN</span>
-                    {tx.value && (
-                      <span className="text-[10px] text-[#615D5D]">
-                        {tx.value} {tx.symbol}
-                      </span>
-                    )}
+                    <span className="text-sm font-semibold capitalize tracking-tight">
+                      {tx.amount} {tx.currency}
+                    </span>
+
+                    <Badge
+                      className={cn(
+                        tx.status === "pending"
+                          ? "bg-yellow-400"
+                          : tx.status === "Done" || tx.status === "accepted"
+                            ? "bg-[#11C600]"
+                            : "bg-[#FF0000]",
+                        "text-[10px] px-2 py-0.5 capitalize",
+                      )}
+                    >
+                      {tx.status}
+                    </Badge>
                   </div>
                 </div>
               ))
@@ -71,6 +203,163 @@ const TransactionHistory = ({ coin }: Transactions) => {
           </div>
         </div>
       </div>
+
+      {/* Transaction Details Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Transaction Details</DialogTitle>
+            <DialogDescription>
+              Detailed information about this transaction
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedTransaction && (
+            <div className="space-y-3">
+              {/* Transaction ID */}
+              {selectedTransaction.txid && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Transaction ID
+                  </span>
+                  <span className="text-sm font-mono bg-gray-100 px-2 py-1 rounded break-all max-w-[60%]">
+                    {selectedTransaction.txid}
+                  </span>
+                </div>
+              )}
+
+              {/* Amount */}
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-gray-600">
+                  Amount
+                </span>
+                <span className="text-sm font-semibold capitalize">
+                  {selectedTransaction.amount} {selectedTransaction?.currency}
+                </span>
+              </div>
+
+              {/* Fee */}
+              {selectedTransaction.fee && selectedTransaction.fee !== "0" && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">Fee</span>
+                  <span className="text-sm capitalize">
+                    {selectedTransaction.fee} {selectedTransaction?.currency}
+                  </span>
+                </div>
+              )}
+
+              {/* Total */}
+              {selectedTransaction.total && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Total
+                  </span>
+                  <span className="text-sm font-semibold capitalize">
+                    {selectedTransaction.total} {selectedTransaction?.currency}
+                  </span>
+                </div>
+              )}
+
+              {/* Status */}
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-gray-600">
+                  Status
+                </span>
+                <Badge
+                  className={cn(
+                    selectedTransaction.status === "pending"
+                      ? "bg-yellow-400"
+                      : selectedTransaction.status === "Done" ||
+                          selectedTransaction.status === "accepted"
+                        ? "bg-[#11C600]"
+                        : "bg-[#FF0000]",
+                    "text-xs px-2 py-1 capitalize",
+                  )}
+                >
+                  {selectedTransaction.status}
+                </Badge>
+              </div>
+
+              {/* Recipient Address */}
+              {selectedTransaction.recipient?.details?.address && (
+                <div className="flex justify-between items-start">
+                  <span className="text-sm font-medium text-gray-600">
+                    Recipient Address
+                  </span>
+                  <span className="text-sm font-mono bg-gray-100 px-2 py-1 rounded break-all max-w-[60%]">
+                    {selectedTransaction.recipient.details.address}
+                  </span>
+                </div>
+              )}
+
+              {/* Destination Tag */}
+              {selectedTransaction.recipient?.details?.destination_tag && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Destination Tag
+                  </span>
+                  <span className="text-sm font-mono bg-gray-100 px-2 py-1 rounded">
+                    {selectedTransaction.recipient.details.destination_tag}
+                  </span>
+                </div>
+              )}
+
+              {/* Recipient Name */}
+              {selectedTransaction.recipient?.details?.name && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Recipient Name
+                  </span>
+                  <span className="text-sm bg-gray-100 px-2 py-1 rounded">
+                    {selectedTransaction.recipient.details.name}
+                  </span>
+                </div>
+              )}
+
+              {/* Created At */}
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-gray-600">
+                  Created At
+                </span>
+                <span className="text-sm bg-gray-100 px-2 py-1 rounded">
+                  {selectedTransaction.created_at &&
+                    formatDate(
+                      selectedTransaction.created_at,
+                      "MMM dd, yyyy HH:mm:ss",
+                    )}
+                </span>
+              </div>
+
+              {/* Done At */}
+              {selectedTransaction.done_at && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Completed At
+                  </span>
+                  <span className="text-sm bg-gray-100 px-2 py-1 rounded">
+                    {formatDate(
+                      selectedTransaction.done_at,
+                      "MMM dd, yyyy HH:mm:ss",
+                    )}
+                  </span>
+                </div>
+              )}
+
+              {/* Reason */}
+              {selectedTransaction.reason && (
+                <div className="flex justify-between items-start">
+                  <span className="text-sm font-medium text-gray-600">
+                    Reason
+                  </span>
+                  <span className="text-sm bg-gray-100 px-2 py-1 rounded max-w-[60%] break-words">
+                    {selectedTransaction.reason}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

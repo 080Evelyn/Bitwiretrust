@@ -43,7 +43,7 @@ const NotificationPopover = ({
 }: NotificationPopoverProps) => {
   const queryClient = useQueryClient();
   const [selectedNotif, setSelectedNotif] = useState<TransactionData | null>(
-    null
+    null,
   );
   const [monthFilter, setMonthFilter] = useState("All");
   const [categoryFilter, setCategoryFilter] = useState("All");
@@ -118,7 +118,7 @@ const NotificationPopover = ({
 
         <PopoverContent
           sideOffset={5}
-          className="z-55 w-screen max-md:h-[94vh] md:pb-4 max-md:-mt-14 md:w-[420px] md:mr-4 p-0 border border-[#F1F1F1] rounded-none md:rounded-2xl bg-white"
+          className="z-55 w-screen max-md:h-[94dvh] md:pb-4 max-md:-mt-14 md:w-[420px] md:mr-4 p-0 border border-[#F1F1F1] rounded-none md:rounded-2xl bg-white"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <button
@@ -217,7 +217,7 @@ const NotificationPopover = ({
                         !notif.isRead && !localReadIds.has(notif.id)
                           ? "bg-blue-500/8"
                           : "bg-background",
-                        "flex justify-between items-start text-left hover:opacity-90 cursor-pointer rounded-md px-2 mx-1 py-1 transition"
+                        "flex justify-between items-start text-left hover:opacity-90 cursor-pointer rounded-md px-2 mx-1 py-1 transition",
                       )}
                     >
                       <div className="flex gap-2 w-[70%]">
@@ -225,7 +225,7 @@ const NotificationPopover = ({
                           className={cn(
                             "size-9.5 flex items-center justify-center rounded-[3px] bg-primary",
                             notif.type === "CREDITED" && "bg-[#16D005]",
-                            notif.type === "DEBITED" && "bg-[#2EBAC6]"
+                            notif.type === "DEBITED" && "bg-[#2EBAC6]",
                           )}
                         >
                           <img
@@ -233,16 +233,16 @@ const NotificationPopover = ({
                               notif.type === "CREDITED"
                                 ? MoneyIn
                                 : notif.type === "DEBITED"
-                                ? MoneyOut
-                                : LogoWhite
+                                  ? MoneyOut
+                                  : LogoWhite
                             }
                             className="size-5"
                             alt={
                               notif.type === "CREDITED"
                                 ? "money-in"
                                 : notif.type === "DEBITED"
-                                ? "money-out"
-                                : "logo"
+                                  ? "money-out"
+                                  : "logo"
                             }
                           />
                         </div>
@@ -262,7 +262,7 @@ const NotificationPopover = ({
                         <div
                           className={cn(
                             "font-semibold capitalize",
-                            getStatusColor(notif.status)
+                            getStatusColor(notif.status),
                           )}
                         >
                           {notif?.status && notif.status.toLowerCase()}
