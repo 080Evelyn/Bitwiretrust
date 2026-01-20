@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { ChevronRight, Menu } from "lucide-react";
 import { navLinks } from "../../constants";
-import { exchange, full_logo, login_png } from "../../assets";
+import { full_logo, login_png } from "../../assets";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
 import "./styles.css";
 import { format } from "date-fns";
@@ -117,10 +117,6 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
             <img src={login_png} alt="" className="side-navbar-icon" />
             Log out
           </div>
-          <Link to={"#"} onClick={onClick} className="text-sm">
-            <img src={exchange} alt="exchange" className="side-navbar-icon" />
-            Switch account
-          </Link>
         </div>
       </div>
     </div>

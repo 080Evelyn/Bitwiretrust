@@ -1,9 +1,9 @@
 import {
   contact_email,
-  facebook_contact,
-  instagram,
+  // facebook_contact,
+  // instagram,
   phone_icon,
-  twitter,
+  // twitter,
 } from "@/assets";
 import { ModalType } from "@/types";
 import { IoIosArrowForward } from "react-icons/io";
@@ -45,21 +45,6 @@ const Contact = ({
             <span>+2348105907370</span>
           </div>
           <IoIosArrowForward />
-        </div>
-      </div>
-
-      <div className="social-media">
-        <h4>Social Media</h4>
-        <div className="social-icons">
-          <a href="#" className="social-icon facebook">
-            <img src={facebook_contact} alt="facebook" />
-          </a>
-          <a href="#" className="social-icon twitter">
-            <img src={twitter} alt="twitter" />
-          </a>
-          <a href="#" className="social-icon instagram">
-            <img src={instagram} alt="instragram" />
-          </a>
         </div>
       </div>
     </div>
