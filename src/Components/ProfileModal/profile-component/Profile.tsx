@@ -1,8 +1,8 @@
 import {
-  about_us,
+  // about_us,
   contact_us,
   edit_profile,
-  invite_friends,
+  // invite_friends,
   kyc,
   legal,
   settings,
@@ -44,8 +44,8 @@ const Profile = ({
             user?.userKycVerificationStatus === "VERIFIED"
               ? "text-green-600"
               : user?.userKycVerificationStatus === "PENDING"
-              ? "text-yellow-500"
-              : "text-red-500"
+                ? "text-yellow-500"
+                : "text-red-500",
           )}
         >
           {user?.userKycVerificationStatus}
@@ -53,7 +53,7 @@ const Profile = ({
       </div>
 
       <div className="profile-options">
-        <div className="option" onClick={() => toggleModal("invite")}>
+        {/* <div className="option" onClick={() => toggleModal("invite")}>
           <div className="option-left">
             <img
               src={invite_friends}
@@ -63,7 +63,7 @@ const Profile = ({
             <span>Invite Friends</span>
           </div>
           <IoIosArrowForward />
-        </div>
+        </div> */}
 
         {/* <div className="option">
           <div className="option-left">
@@ -124,7 +124,7 @@ const Profile = ({
           <IoIosArrowForward />
         </div>
 
-        <div className="option">
+        {/* <div className="option">
           <div className="option-left">
             <img
               src={about_us}
@@ -134,7 +134,7 @@ const Profile = ({
             <span>About Us</span>
           </div>
           <IoIosArrowForward />
-        </div>
+        </div> */}
       </div>
 
       <button className="close-modal-btn" onClick={handleClose}>

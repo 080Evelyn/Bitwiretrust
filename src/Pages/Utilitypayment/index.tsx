@@ -30,13 +30,13 @@ const Utilitypayment = () => {
         </div>
       )}
       {/* mobile view */}
-      <div className="md:hidden w-full">
+      <div className="md:hidden w-full max-md:mt-20">
         <h2 className="font-medium text-lg text-foreground mb-6 flex justify-center ">
-          Utility Patments
+          Utility Payments
         </h2>
 
         <Tabs defaultValue="electricity">
-          <TabsList className="flex w-full border border-[#7910B1] rounded-[5.16px] overflow-hidden">
+          <TabsList className="flex w-full border border-primary rounded-[5.16px] overflow-hidden">
             {[
               { label: "Electricity", value: "electricity" },
               { label: "Cable", value: "media-subscriptions" },
@@ -45,9 +45,9 @@ const Utilitypayment = () => {
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className={`w-full text-[#7910B1] text-sm py-5.5 cursor-pointer transition-all 
-        data-[state=active]:bg-[#7910B1] data-[state=active]:text-white 
-        ${index !== arr.length - 1 ? " border-r-[#7910B1] rounded-none" : ""}
+                className={`w-full text-primary text-sm py-5.5 cursor-pointer transition-all 
+        data-[state=active]:bg-primary data-[state=active]:text-white 
+        ${index !== arr.length - 1 ? " border-r-primary rounded-none" : ""}
       `}
               >
                 {tab.label}
