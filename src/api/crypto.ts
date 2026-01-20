@@ -163,7 +163,7 @@ export const cryptoCurrencyFee = async ({
 export const fetchCryptoWithdrawalHistory = async (data: {
   userId: string;
   currency: string;
-  state: string;
+  state?: string;
 }) => {
   const userId = getUserId();
   if (userId) {
@@ -174,19 +174,12 @@ export const fetchCryptoWithdrawalHistory = async (data: {
   });
   return response;
 };
-export const fetchCryptoSwapHistory = async (data: {
-  userId: string;
-  currency: string;
-  state: string;
-}) => {
+export const fetchCryptoSwapHistory = async () => {
   const userId = getUserId();
-  if (userId) {
-    data.userId = userId;
-  }
   const response = await axios.get(
-    `${url}/v1/user/crypto/${userId}/swap-transactions`,
+    `${url}/v1/user/crypto/${userId}/swaps/initiated-confirmed`,
     {
-      params: data,
+      params: { userId },
     },
   );
   return response;
@@ -194,7 +187,7 @@ export const fetchCryptoSwapHistory = async (data: {
 export const fetchCryptoDepositHistory = async (data: {
   userId: string;
   currency: string;
-  state: string;
+  state?: string;
 }) => {
   const userId = getUserId();
   if (userId) {

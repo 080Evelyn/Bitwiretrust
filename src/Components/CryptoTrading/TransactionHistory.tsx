@@ -6,9 +6,17 @@ import {
   fetchCryptoSwapHistory,
   fetchCryptoDepositHistory,
 } from "@/api/crypto";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/Components/ui/dialog";
 import { Badge } from "../ui/badge";
 import { formatDate } from "date-fns";
 import { cn } from "@/lib/utils";
+import SwapHistory from "./SwapHistory";
 
 interface Transactions {
   coin: WalletProps | null;
@@ -29,8 +37,8 @@ interface TransactionData {
   narration: string;
   status: string;
   reason: string;
-  created_at: Date;
-  done_at: Date;
+  created_at?: string;
+  done_at: string;
   recipient: {
     type: string;
     details: {
@@ -55,8 +63,8 @@ interface TransactionData {
       first_name: string;
       last_name: string;
       display_name: string;
-      created_at: Date;
-      updated_at: Date;
+      created_at?: string;
+      updated_at: string;
     };
   };
   user: {
@@ -67,13 +75,16 @@ interface TransactionData {
     first_name: string;
     last_name: string;
     display_name: string;
-    created_at: Date;
-    updated_at: Date;
+    created_at?: string;
+    updated_at: string;
   };
 }
 
 const TransactionHistory = ({ coin }: Transactions) => {
   const [activeTab, setActiveTab] = useState<TabType>("Deposit");
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<TransactionData | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data: transactions = [], isLoading } = useQuery({
     queryKey: ["transactions", activeTab, coin?.currency],
@@ -83,13 +94,12 @@ const TransactionHistory = ({ coin }: Transactions) => {
       const params = {
         userId: "",
         currency: coin.currency.toLowerCase(),
-        state: "done",
       };
 
       let response;
       switch (activeTab) {
         case "Swap":
-          response = await fetchCryptoSwapHistory(params);
+          response = await fetchCryptoSwapHistory();
           break;
         case "Deposit":
           response = await fetchCryptoDepositHistory(params);
@@ -99,7 +109,7 @@ const TransactionHistory = ({ coin }: Transactions) => {
           break;
       }
 
-      return response?.data?.data?.data || [];
+      return response?.data?.data || [];
     },
     enabled: !!coin?.currency,
   });
@@ -130,8 +140,10 @@ const TransactionHistory = ({ coin }: Transactions) => {
               </button>
             ))}
           </div>
-          <div className="flex flex-col gap-2 overflow-y-auto">
-            {isLoading ? (
+          <div className="flex flex-col gap-2 overflow-y-auto md:max-h-75 pb-4">
+            {activeTab === "Swap" ? (
+              <SwapHistory transactions={transactions} isLoading={isLoading} />
+            ) : isLoading ? (
               <div className="text-center text-xs text-gray-400 py-4">
                 Loading transactions...
               </div>
@@ -139,7 +151,11 @@ const TransactionHistory = ({ coin }: Transactions) => {
               transactions.map((tx: TransactionData) => (
                 <div
                   key={tx.id}
-                  className="flex items-center justify-between gap-4 py-3 px-3 bg-[#F8F8F8] rounded-md"
+                  onClick={() => {
+                    setSelectedTransaction(tx);
+                    setIsDialogOpen(true);
+                  }}
+                  className="flex items-center justify-between gap-4 py-3 px-3 bg-[#F8F8F8] rounded-md cursor-pointer hover:bg-gray-100 transition-colors"
                 >
                   {/* Left: transaction meta */}
                   <div className="flex flex-col leading-tight">
@@ -150,7 +166,8 @@ const TransactionHistory = ({ coin }: Transactions) => {
                     </div>
 
                     <span className="text-[11px] text-muted-foreground">
-                      {formatDate(tx.created_at, "MMM dd, yyyy")}
+                      {tx.created_at &&
+                        formatDate(tx.created_at, "MMM dd, yyyy")}
                     </span>
                   </div>
 
@@ -159,15 +176,15 @@ const TransactionHistory = ({ coin }: Transactions) => {
                     className="flex flex-col items-end gap-1"
                     style={{ fontFamily: "Poppins, sans-serif" }}
                   >
-                    <span className="text-sm font-semibold tracking-tight">
-                      {tx.amount} {tx.currency.toUpperCase()}
+                    <span className="text-sm font-semibold capitalize tracking-tight">
+                      {tx.amount} {tx.currency}
                     </span>
 
                     <Badge
                       className={cn(
                         tx.status === "pending"
                           ? "bg-yellow-400"
-                          : tx.status === "Done"
+                          : tx.status === "Done" || tx.status === "accepted"
                             ? "bg-[#11C600]"
                             : "bg-[#FF0000]",
                         "text-[10px] px-2 py-0.5 capitalize",
@@ -186,6 +203,163 @@ const TransactionHistory = ({ coin }: Transactions) => {
           </div>
         </div>
       </div>
+
+      {/* Transaction Details Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Transaction Details</DialogTitle>
+            <DialogDescription>
+              Detailed information about this transaction
+            </DialogDescription>
+          </DialogHeader>
+
+          {selectedTransaction && (
+            <div className="space-y-3">
+              {/* Transaction ID */}
+              {selectedTransaction.txid && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Transaction ID
+                  </span>
+                  <span className="text-sm font-mono bg-gray-100 px-2 py-1 rounded break-all max-w-[60%]">
+                    {selectedTransaction.txid}
+                  </span>
+                </div>
+              )}
+
+              {/* Amount */}
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-gray-600">
+                  Amount
+                </span>
+                <span className="text-sm font-semibold capitalize">
+                  {selectedTransaction.amount} {selectedTransaction?.currency}
+                </span>
+              </div>
+
+              {/* Fee */}
+              {selectedTransaction.fee && selectedTransaction.fee !== "0" && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">Fee</span>
+                  <span className="text-sm capitalize">
+                    {selectedTransaction.fee} {selectedTransaction?.currency}
+                  </span>
+                </div>
+              )}
+
+              {/* Total */}
+              {selectedTransaction.total && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Total
+                  </span>
+                  <span className="text-sm font-semibold capitalize">
+                    {selectedTransaction.total} {selectedTransaction?.currency}
+                  </span>
+                </div>
+              )}
+
+              {/* Status */}
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-gray-600">
+                  Status
+                </span>
+                <Badge
+                  className={cn(
+                    selectedTransaction.status === "pending"
+                      ? "bg-yellow-400"
+                      : selectedTransaction.status === "Done" ||
+                          selectedTransaction.status === "accepted"
+                        ? "bg-[#11C600]"
+                        : "bg-[#FF0000]",
+                    "text-xs px-2 py-1 capitalize",
+                  )}
+                >
+                  {selectedTransaction.status}
+                </Badge>
+              </div>
+
+              {/* Recipient Address */}
+              {selectedTransaction.recipient?.details?.address && (
+                <div className="flex justify-between items-start">
+                  <span className="text-sm font-medium text-gray-600">
+                    Recipient Address
+                  </span>
+                  <span className="text-sm font-mono bg-gray-100 px-2 py-1 rounded break-all max-w-[60%]">
+                    {selectedTransaction.recipient.details.address}
+                  </span>
+                </div>
+              )}
+
+              {/* Destination Tag */}
+              {selectedTransaction.recipient?.details?.destination_tag && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Destination Tag
+                  </span>
+                  <span className="text-sm font-mono bg-gray-100 px-2 py-1 rounded">
+                    {selectedTransaction.recipient.details.destination_tag}
+                  </span>
+                </div>
+              )}
+
+              {/* Recipient Name */}
+              {selectedTransaction.recipient?.details?.name && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Recipient Name
+                  </span>
+                  <span className="text-sm bg-gray-100 px-2 py-1 rounded">
+                    {selectedTransaction.recipient.details.name}
+                  </span>
+                </div>
+              )}
+
+              {/* Created At */}
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-medium text-gray-600">
+                  Created At
+                </span>
+                <span className="text-sm bg-gray-100 px-2 py-1 rounded">
+                  {selectedTransaction.created_at &&
+                    formatDate(
+                      selectedTransaction.created_at,
+                      "MMM dd, yyyy HH:mm:ss",
+                    )}
+                </span>
+              </div>
+
+              {/* Done At */}
+              {selectedTransaction.done_at && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium text-gray-600">
+                    Completed At
+                  </span>
+                  <span className="text-sm bg-gray-100 px-2 py-1 rounded">
+                    {formatDate(
+                      selectedTransaction.done_at,
+                      "MMM dd, yyyy HH:mm:ss",
+                    )}
+                  </span>
+                </div>
+              )}
+
+              {/* Reason */}
+              {selectedTransaction.reason && (
+                <div className="flex justify-between items-start">
+                  <span className="text-sm font-medium text-gray-600">
+                    Reason
+                  </span>
+                  <span className="text-sm bg-gray-100 px-2 py-1 rounded max-w-[60%] break-words">
+                    {selectedTransaction.reason}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

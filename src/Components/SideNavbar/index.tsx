@@ -37,7 +37,7 @@ const SidebarContent = ({ onClick }: { onClick?: () => void }) => {
             const isActive = location.pathname === link.to;
 
             const isSubLinkActive = link.subLinks?.some((sub) =>
-              location.pathname.startsWith(sub.to)
+              location.pathname.startsWith(sub.to),
             );
 
             return (
@@ -138,16 +138,16 @@ const SideNavbar = () => {
     () =>
       location.pathname.startsWith("/gift-cards/") ||
       location.pathname.startsWith("/crypto-trading"),
-    [location.pathname]
+    [location.pathname],
   );
 
   const headerClasses = cn(
-    "lg:hidden pt-4 fixed top-0 left-0 right-0 z-50 transition-colors duration-300",
+    "lg:hidden pt-4 top-0 left-0 right-0 z-50 transition-colors duration-300",
     {
       "shadow-sm": scrolled && !isGiftCardSellPage,
-      "bg-white": !isGiftCardSellPage,
-      "bg-transparent md:bg-white": isGiftCardSellPage,
-    }
+      "bg-white fixed": !isGiftCardSellPage,
+      "bg-transparent": isGiftCardSellPage,
+    },
   );
 
   useEffect(() => {
@@ -183,7 +183,12 @@ const SideNavbar = () => {
           </div>
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <button className="text-[#7910B1]">
+              <button
+                className={cn(
+                  isGiftCardSellPage ? "text-foreground" : "text-[#7910B1]",
+                  "z-50",
+                )}
+              >
                 <Menu className="h-6 w-6" />
               </button>
             </SheetTrigger>
