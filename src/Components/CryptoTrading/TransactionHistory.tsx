@@ -140,7 +140,7 @@ const TransactionHistory = ({ coin }: Transactions) => {
               </button>
             ))}
           </div>
-          <div className="flex flex-col gap-2 overflow-y-auto md:max-h-75 pb-4">
+          <div className="flex flex-col gap-2 overflow-y-auto md:max-h-72 pb-3">
             {activeTab === "Swap" ? (
               <SwapHistory transactions={transactions} isLoading={isLoading} />
             ) : isLoading ? (

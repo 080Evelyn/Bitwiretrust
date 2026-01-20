@@ -12,7 +12,7 @@ const VirtualTopUp = () => {
 
   return (
     <PhoneNumberProvider>
-      <div className="h-screen">
+      <div className="h-screen max-md:mt-20">
         <div className="hidden md:block">
           <BalanceOverview pathName="Virtual Top Up" />
         </div>

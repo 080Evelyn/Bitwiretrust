@@ -1,7 +1,6 @@
 import {
   contact_email,
   facebook_contact,
-  faq,
   instagram,
   phone_icon,
   twitter,
@@ -31,7 +30,7 @@ const Contact = ({
               alt="email"
               className="option-icon support-icon"
             />
-            <span>Support@bitwire.com</span>
+            <span>support@bitwiretrust.com</span>
           </div>
           <IoIosArrowForward />
         </div>
@@ -43,15 +42,7 @@ const Contact = ({
               alt="phone-icon"
               className="option-icon phone-icon"
             />
-            <span>01234567890</span>
-          </div>
-          <IoIosArrowForward />
-        </div>
-
-        <div className="contact-option">
-          <div className="option-left">
-            <img src={faq} alt="faq" className="option-icon faq-icon" />
-            <span>FAQs</span>
+            <span>+2348105907370</span>
           </div>
           <IoIosArrowForward />
         </div>
