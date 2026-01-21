@@ -118,7 +118,7 @@ const NotificationPopover = ({
 
         <PopoverContent
           sideOffset={5}
-          className="z-55 w-screen max-md:h-[94dvh] md:pb-4 max-md:-mt-14 md:w-[420px] md:mr-4 p-0 border border-[#F1F1F1] rounded-none md:rounded-2xl bg-white"
+          className="z-55 w-screen max-md:h-[92dvh] md:pb-4 max-md:-mt-14 md:w-[420px] md:mr-4 p-0 border border-[#F1F1F1] rounded-none md:rounded-2xl bg-white"
           onOpenAutoFocus={(e) => e.preventDefault()}
         >
           <button
@@ -196,7 +196,7 @@ const NotificationPopover = ({
             </div>
           </div>
 
-          <ScrollArea className="h-[80vh] md:h-[65vh] lg:h-[75vh] p-3">
+          <ScrollArea className="h-[78dvh] md:h-[65vh] lg:h-[75vh] p-3">
             <div className="flex flex-col gap-4.5 tracking-[-0.15px]">
               {isPending ? (
                 <div className="flex flex-col gap-4">
