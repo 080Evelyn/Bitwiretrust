@@ -61,15 +61,15 @@ const Currency = ({
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 md:gap-2 w-full overflow-y-auto">
+        <div className="flex flex-col gap-4 md:gap-2 w-full scrollbar-hide h-full overflow-y-auto">
           {isPending ? (
-            <div className="flex items-center justify-center mt-20">
+            <div className="flex items-center justify-center pt-10">
               <Loader className="animate-spin size-5" />
             </div>
           ) : isError ? (
-            <p> Oops! Something went wrong.</p>
+            <p className="text-sm font-medium"> Oops! Something went wrong.</p>
           ) : filteredCountries.length === 0 ? (
-            <p>No results found.</p>
+            <p className="text-sm font-medium">No results found.</p>
           ) : (
             filteredCountries.map((currency: GiftCardCountriesProps) => (
               <div

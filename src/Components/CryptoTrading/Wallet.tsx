@@ -104,9 +104,12 @@ const Wallet = ({ coin }: CoinWalletProps) => {
 
         <div className="flex justify-center max-md:gap-5 md:justify-between w-full px-2">
           {actions.map((action) => (
-            <div
+            <button
+              aria-label={action.title + "crypto"}
+              role="button"
+              tabIndex={0}
               key={action.title}
-              className="flex flex-col items-center gap-2 cursor-pointer"
+              className="flex flex-col items-center gap-2 cursor-pointer focus:ring-1"
               onClick={() => handleActionClick(action.title)}
             >
               <div
@@ -125,7 +128,7 @@ const Wallet = ({ coin }: CoinWalletProps) => {
               <span className="font-semibold text-sm md:text-[10px] tracking-[-0.17px] md:tracking-[-0.13px]">
                 {action.title}
               </span>
-            </div>
+            </button>
           ))}
         </div>
       </div>
@@ -133,12 +136,12 @@ const Wallet = ({ coin }: CoinWalletProps) => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="flex flex-col max-md:min-w-full max-w-full h-full md:h-auto md:max-w-[28.7rem] max-md:rounded-none [&>button.absolute]:hidden">
           <DialogHeader className="relative">
-            <span
+            <button
               onClick={() => setIsDialogOpen(false)}
               className="cursor-pointer absolute left-1 top-1/2 -translate-y-1/2 text-sm text-[#7910B1] font-semibold z-10"
             >
               Back
-            </span>
+            </button>
 
             <DialogTitle className="text-center font-semibold max-md:mt-4 capitalize">
               {(selectedAction === "Buy" || selectedAction === "Send") && coin

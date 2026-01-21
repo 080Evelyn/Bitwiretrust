@@ -37,7 +37,7 @@ const SwapHistory = ({ transactions, isLoading }: SwapHistoryProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-2 overflow-y-auto">
+    <div className="flex flex-col gap-2">
       {transactions.map((tx: SwapTransaction) => (
         <div
           key={tx.id}
@@ -58,7 +58,7 @@ const SwapHistory = ({ transactions, isLoading }: SwapHistoryProps) => {
 
           <div className="flex flex-col max-md:items-end gap-1">
             <span className="text-xs font-mono text-gray-500">
-              {tx?.reference}
+              {tx?.swapQuoteId}
             </span>
           </div>
         </div>

@@ -113,27 +113,12 @@ const HomeDashboard = () => {
         <div className="rate-container-right">
           <div className="all-view">
             <div className="all-tab">
-              <p>All</p>
-              <span className="all-count">{notifications?.length}</span>
-            </div>
-
-            <div className="tab-item">
               <p>Transaction</p>
-              <span className="status-dot green"></span>
-            </div>
-
-            <div className="tab-item">
-              <p>Announcement</p>
-              <span className="status-dot red"></span>
-            </div>
-
-            <div className="tab-item">
-              <p>Activities</p>
-              <span className="status-dot orange"></span>
+              <span className="all-count">{notifications?.length}</span>
             </div>
           </div>
 
-          <div className="transaction-list max-h-[60vh] md:max-h-[calc(100vh-150px)] overflow-y-auto">
+          <div className="transaction-list max-h-[60vh] md:max-h-[calc(100vh-150px)] scrollbar-hide overflow-y-auto">
             {isFetching ? (
               <div className="flex flex-col gap-4">
                 {Array.from({ length: 8 }).map((_, i) => (
@@ -146,7 +131,7 @@ const HomeDashboard = () => {
                   ?.filter(
                     (notif) =>
                       new Date(notif.createdAt).getMonth() ===
-                      new Date().getMonth()
+                      new Date().getMonth(),
                   )
                   .map((notif) => (
                     <div key={notif.requestId} className="transaction-item">
@@ -154,7 +139,7 @@ const HomeDashboard = () => {
                         className="transaction-icon-wrapper !rounded-[3.5px]"
                         style={{
                           backgroundColor: getBackgroundColorTransaction(
-                            notif.type
+                            notif.type,
                           ),
                         }}
                       >
@@ -163,8 +148,8 @@ const HomeDashboard = () => {
                             notif.type === "CREDIT"
                               ? MoneyIn
                               : notif.type === "DEBIT"
-                              ? MoneyOut
-                              : LogoWhite
+                                ? MoneyOut
+                                : LogoWhite
                           }
                           alt="Transaction icon"
                           className="transaction-icon"
@@ -182,7 +167,7 @@ const HomeDashboard = () => {
                         className="transaction-status"
                         style={{
                           backgroundColor: getStatusColorTransaction(
-                            notif.type
+                            notif.type,
                           ),
                         }}
                       ></div>
