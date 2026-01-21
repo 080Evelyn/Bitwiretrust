@@ -1,8 +1,23 @@
 {
-    "rewrites": [
+  "rewrites": [
+    {
+      "source": "/assets/(.*)",
+      "destination": "/assets/$1"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/",
+      "headers": [
         {
-            "source": "/(.*)",
-            "destination": "/"
+          "key": "Cache-Control",
+          "value": "no-store"
         }
-    ]
+      ]
+    }
+  ]
 }
