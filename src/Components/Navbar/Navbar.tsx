@@ -27,7 +27,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="navbar w-full !fixed top-0 z-50 backdrop-blur-lg bg-white/60">
+    <div className="navbar w-full !fixed top-0 z-50  bg-white">
       {isMenuOpen === true && (
         <div className="sm:hidden backdrop-blur-xs fixed bg-black/40 w-full h-full top-0 left-0 z-100" />
       )}
