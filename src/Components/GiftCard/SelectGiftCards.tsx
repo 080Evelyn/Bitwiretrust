@@ -22,7 +22,7 @@ const SelectGiftCards = ({
 
   const filteredCountries = CountriesCardList
     ? CountriesCardList.filter((card: CountryGiftCardListProps) =>
-        card.productName?.toLowerCase().includes(searchTerm?.toLowerCase())
+        card.productName?.toLowerCase().includes(searchTerm?.toLowerCase()),
       )
     : [];
 
@@ -54,7 +54,7 @@ const SelectGiftCards = ({
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 overflow-y-auto">
+        <div className="flex flex-col gap-2 overflow-y-auto scrollbar-hide">
           {cardListIsLoading && (
             <div className="flex items-center justify-center mt-20">
               <Loader className="animate-spin size-5" />

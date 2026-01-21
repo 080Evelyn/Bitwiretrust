@@ -141,7 +141,7 @@ const GiftCardBuyAmount = ({ selectedCard }: GiftCardBuyAmountProps) => {
         onError: (err) => {
           if (axios.isAxiosError(err)) {
             toast.error(
-              err.response?.data?.responseDesc || "Something went wrong"
+              err.response?.data?.responseDesc || "Something went wrong",
             );
           } else {
             toast.error("Unexpected error occurred");

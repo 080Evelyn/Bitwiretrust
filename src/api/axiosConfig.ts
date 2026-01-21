@@ -1,61 +1,89 @@
-import axios, { AxiosError, AxiosRequestConfig } from "axios";
-import { getToken, setMemoryToken, clearAuth } from "@/utils/AuthStorage";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import { getToken, clearAuth, setMemoryToken } from "@/utils/AuthStorage";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-axios.defaults.baseURL = API_URL;
-axios.defaults.withCredentials = true;
+const api = axios.create({
+  baseURL: API_URL,
+  withCredentials: true,
+});
 
-axios.interceptors.request.use(
-  (config) => {
+//  Request Interceptor
+api.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
     const token = getToken();
+
     if (token) {
-      config.headers = config.headers || {};
-      config.headers["Authorization"] = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
+
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
-axios.interceptors.response.use(
-  (response) => response,
-  async (
-    error: AxiosError & { config?: AxiosRequestConfig & { _retry?: boolean } }
-  ) => {
-    const originalRequest = error.config!;
-    const status = error.response?.status;
+//  Refresh handling state
+let isRefreshing = false;
+let failedQueue: {
+  resolve: (value?: unknown) => void;
+  reject: (error?: unknown) => void;
+}[] = [];
 
-    //  intercept 401/403, skip refresh-token endpoint itself, and only once per request
+const processQueue = (error: unknown, token: string | null = null) => {
+  failedQueue.forEach((p) => {
+    if (error) {
+      p.reject(error);
+    } else {
+      p.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
+//  Response Interceptor
+api.interceptors.response.use(
+  (response) => response,
+  async (error: AxiosError) => {
+    const originalRequest: any = error.config;
+
     if (
-      (status === 401 || status === 403) &&
+      error.response?.status === 401 &&
       !originalRequest._retry &&
       !originalRequest.url?.includes("/auth/refresh-token")
     ) {
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        }).then((token: any) => {
+          originalRequest.headers.Authorization = `Bearer ${token}`;
+          return api(originalRequest);
+        });
+      }
+
       originalRequest._retry = true;
+      isRefreshing = true;
 
       try {
-        const refreshRes = await axios.post<{ data: { accessToken: string } }>(
-          "/v1/auth/refresh-token",
-          {},
-          { withCredentials: true }
-        );
-        const newToken = refreshRes.data.data.accessToken;
+        const res = await api.post("/v1/auth/refresh-token");
+        const newToken = (res.data as any).data.accessToken;
 
         setMemoryToken(newToken);
+        api.defaults.headers.common.Authorization = `Bearer ${newToken}`;
 
-        originalRequest.headers!["Authorization"] = `Bearer ${newToken}`;
-
-        return axios(originalRequest);
-      } catch (refreshErr) {
+        processQueue(null, newToken);
+        return api(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
         clearAuth();
         window.location.href = "/login";
-        return Promise.reject(refreshErr);
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
       }
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
-export default axios;
+export default api;

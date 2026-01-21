@@ -14,10 +14,10 @@ const SelectWallet = ({
   error,
 }: SelectWalletProps) => {
   const [selectedCardId, setSelectedCardId] = useState<string>(
-    wallets[0]?.name
+    wallets[0]?.name,
   );
   const [selectedWallet, setSelectedWallet] = useState<WalletProps | null>(
-    null
+    null,
   );
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,7 +39,7 @@ const SelectWallet = ({
     ? wallets.filter(
         (wallet: WalletProps) =>
           wallet.name?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
-          wallet.currency?.toLowerCase().includes(searchTerm?.toLowerCase())
+          wallet.currency?.toLowerCase().includes(searchTerm?.toLowerCase()),
       )
     : [];
 
@@ -68,7 +68,7 @@ const SelectWallet = ({
           />
         </div>
 
-        <div className="flex flex-col gap-2 overflow-y-auto">
+        <div className="flex flex-col gap-2 scrollbar-hide overflow-y-auto">
           {isPending ? (
             <span className="text-sm text-center">Loading...</span>
           ) : error ? (
@@ -77,7 +77,7 @@ const SelectWallet = ({
             </span>
           ) : filteredWallets.length > 0 ? (
             filteredWallets.map((wallet: WalletProps) => (
-              <div
+              <button
                 key={wallet.name}
                 onClick={() => handleSelect(wallet)}
                 className={`flex font-medium justify-between py-4 md:py-1.5 px-1.5 md:px-2.5 rounded-sm cursor-pointer ${
@@ -98,7 +98,7 @@ const SelectWallet = ({
                     {formatNaira(wallet?.converted_balance)} NGN
                   </span>
                 </div>
-              </div>
+              </button>
             ))
           ) : (
             <span className="text-sm text-center">No Wallets Found</span>

@@ -138,11 +138,11 @@ const SideNavbar = () => {
   );
 
   const headerClasses = cn(
-    "lg:hidden pt-4 top-0 left-0 right-0 z-50 transition-colors duration-300",
+    "lg:hidden pt-4 top-0 z-50 transition-colors duration-300",
     {
       "shadow-sm": scrolled && !isGiftCardSellPage,
-      "bg-white fixed": !isGiftCardSellPage,
-      "bg-transparent": isGiftCardSellPage,
+      "bg-white fixed left-0 right-0": !isGiftCardSellPage,
+      "bg-transparent pr-3": isGiftCardSellPage,
     },
   );
 

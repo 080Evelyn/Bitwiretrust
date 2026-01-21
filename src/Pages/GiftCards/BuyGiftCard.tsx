@@ -24,7 +24,7 @@ const BuyGiftCard = () => {
   });
   const giftCardsCountriesList = giftCardCountriesResponse?.data;
 
-  const { isPending: cardListIsLoading, data: CountriesCardResponse } =
+  const { isFetching: cardListIsLoading, data: CountriesCardResponse } =
     useQuery({
       queryKey: ["countriesGiftCard", checked],
       queryFn: () => countriesGiftCard(checked!),
