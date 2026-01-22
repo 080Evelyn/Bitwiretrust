@@ -5,14 +5,18 @@ import { AdminProtectedRoute, UserProtectedRoute } from "./protectedRoutes";
 import ErrorBoundary from "@/ErrorBoundary";
 import { lazyWithRetry } from "@/lib/lazyWithRetry";
 
-// Lazy load all page components for code splitting
+// layouts
+import Authlayout from "@/Authlayout";
+import DashboardLayout from "../Pages/DashboardLayout";
+import AdminLayout from "@/admin/components/layout/AdminLayout";
+
+// Public pages
 const Home = lazyWithRetry(() => import("../Pages/Home/Home"));
 const About = lazyWithRetry(() => import("../Pages/About"));
 const Contact = lazyWithRetry(() => import("../Pages/Contact"));
 const PageNotFound = lazyWithRetry(() => import("@/Pages/404/PageNotFound"));
 
-// Onboarding pages
-const Authlayout = lazyWithRetry(() => import("@/Authlayout"));
+// Onboarding
 const CreateAccountPage = lazyWithRetry(
   () => import("@/Pages/Onboarding/CreateAccountPage"),
 );
@@ -30,7 +34,6 @@ const ForgotPassword = lazyWithRetry(
 );
 
 // User dashboard pages
-const DashboardLayout = lazyWithRetry(() => import("../Pages/DashboardLayout"));
 const HomeDashboard = lazyWithRetry(
   () => import("../Components/HomeDashboard"),
 );
@@ -45,9 +48,6 @@ const SellGiftCards = lazyWithRetry(
 const CryptoTrading = lazyWithRetry(() => import("@/Pages/CryptoTrading"));
 
 // Admin pages
-const AdminLayout = lazyWithRetry(
-  () => import("@/admin/components/layout/AdminLayout"),
-);
 const AdminDashboard = lazyWithRetry(
   () => import("@/admin/pages/AdminDashboard"),
 );
@@ -68,20 +68,14 @@ const SuccessfulWithdrawalRequest = lazyWithRetry(
   () => import("@/admin/pages/SuccessfulWithdrawalRequest"),
 );
 
-// Loading fallback component
+// SHARED LOADER
 const PageLoader = () => (
   <div className="flex items-center justify-center min-h-screen">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary" />
   </div>
 );
 
-// Suspense wrapper helper
-const withSuspense = (Component: React.ComponentType) => (
-  <Suspense fallback={<PageLoader />}>
-    <Component />
-  </Suspense>
-);
-
+// ROUTER
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -91,33 +85,65 @@ export const router = createBrowserRouter([
       </ErrorBoundary>
     ),
     children: [
-      { path: "", element: withSuspense(Home) },
-      { path: "about", element: withSuspense(About) },
-      { path: "contact", element: withSuspense(Contact) },
-    ],
-  },
-  { path: "*", element: withSuspense(PageNotFound) },
-
-  {
-    children: [
       {
-        element: <ErrorBoundary>{withSuspense(Authlayout)}</ErrorBoundary>,
-        children: [
-          { path: "register", element: <CreateAccountPage /> },
-          { path: "create-account", element: <CreateAccountPage /> },
-          { path: "verify-email", element: <VerifyEmailPage /> },
-          { path: "login", element: <LoginPage /> },
-          { path: "get-started", element: <LoginPage /> },
-          { path: "set-pin", element: <SetPinPage /> },
-          { path: "kyc", element: <KycPage /> },
-          { path: "add-bank", element: <AddBankPage /> },
-          { path: "forgot-password", element: <ForgotPassword /> },
-        ],
+        index: true,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Home />
+          </Suspense>
+        ),
+      },
+      {
+        path: "about",
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <About />
+          </Suspense>
+        ),
+      },
+      {
+        path: "contact",
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <Contact />
+          </Suspense>
+        ),
       },
     ],
   },
 
-  //user route
+  {
+    path: "*",
+    element: (
+      <Suspense fallback={<PageLoader />}>
+        <PageNotFound />
+      </Suspense>
+    ),
+  },
+
+  // AUTH ROUTES
+  {
+    element: (
+      <ErrorBoundary>
+        <Suspense fallback={<PageLoader />}>
+          <Authlayout />
+        </Suspense>
+      </ErrorBoundary>
+    ),
+    children: [
+      { path: "register", element: <CreateAccountPage /> },
+      { path: "create-account", element: <CreateAccountPage /> },
+      { path: "verify-email", element: <VerifyEmailPage /> },
+      { path: "login", element: <LoginPage /> },
+      { path: "get-started", element: <LoginPage /> },
+      { path: "set-pin", element: <SetPinPage /> },
+      { path: "kyc", element: <KycPage /> },
+      { path: "add-bank", element: <AddBankPage /> },
+      { path: "forgot-password", element: <ForgotPassword /> },
+    ],
+  },
+
+  //  USER DASHBOARD
   {
     element: (
       <ErrorBoundary>
@@ -126,7 +152,13 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        element: <ErrorBoundary>{withSuspense(DashboardLayout)}</ErrorBoundary>,
+        element: (
+          <ErrorBoundary>
+            <Suspense fallback={<PageLoader />}>
+              <DashboardLayout />
+            </Suspense>
+          </ErrorBoundary>
+        ),
         children: [
           { path: "dashboard", element: <HomeDashboard /> },
           { path: "utility-payment", element: <Utilitypayment /> },
@@ -139,17 +171,21 @@ export const router = createBrowserRouter([
     ],
   },
 
-  //Admin route
+  //  ADMIN DASHBOARD
   {
+    path: "admin",
     element: (
       <ErrorBoundary>
         <AdminProtectedRoute />
       </ErrorBoundary>
     ),
-    path: "admin/",
     children: [
       {
-        element: withSuspense(AdminLayout),
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <AdminLayout />
+          </Suspense>
+        ),
         children: [
           { path: "dashboard", element: <AdminDashboard /> },
           { path: "transactions", element: <Transactions /> },
