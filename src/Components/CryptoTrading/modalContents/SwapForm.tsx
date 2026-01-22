@@ -56,6 +56,7 @@ export default function SwapForm({
           className="flex-1 h-11.5 px-3"
         />
       </div>
+      <p className="text-xs font-medium">Available: {coin?.balance}</p>
       {form.formState.errors.amount && (
         <p className="text-red-500 text-xs -mt-2 ml-auto">
           {form.formState.errors?.amount.message}
@@ -96,7 +97,7 @@ export default function SwapForm({
           >
             {wallets
               .filter(
-                (wallet: WalletProps) => wallet.currency !== coin?.currency
+                (wallet: WalletProps) => wallet.currency !== coin?.currency,
               )
               .map((wallet: WalletProps) => (
                 <NativeSelectOption
