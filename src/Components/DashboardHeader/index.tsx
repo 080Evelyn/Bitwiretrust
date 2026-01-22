@@ -99,7 +99,7 @@ const DashboardHeader = ({ user }: { user: User }) => {
       )}
 
       {isDesktop && (
-        <div className="hidden md:block ps-4 pe-10 md:pt-20 lg:pt-3 pb-3">
+        <div className="hidden md:block ps-4 pe-10 pt-1 lg:pt-3 pb-3">
           <HeaderContent />
         </div>
       )}

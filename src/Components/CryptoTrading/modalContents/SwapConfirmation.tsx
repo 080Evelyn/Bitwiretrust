@@ -1,9 +1,12 @@
 import { confirmSwapQuotation } from "@/api/crypto";
 import { Button } from "@/Components/ui/button";
+import { useQueryInvalidation } from "@/hooks/useQueryInvalidation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { FaSpinner } from "react-icons/fa";
+import { toast } from "sonner";
 
 type CreatedSwapQuote = {
   id: string;
@@ -28,6 +31,7 @@ const SwapConfirmation = ({
   const [secondsLeft, setSecondsLeft] = useState<number>(15);
   const intervalRef = useRef<number | null>(null);
   const queryClient = useQueryClient();
+  const { invalidateAfterTransaction } = useQueryInvalidation();
 
   const mutateSwapConfirmation = useMutation({
     mutationFn: () =>
@@ -36,20 +40,29 @@ const SwapConfirmation = ({
         commissionFee: 0,
       }),
     onSuccess: () => {
+      invalidateAfterTransaction();
       queryClient.invalidateQueries({
         queryKey: ["all-wallets"],
       });
       setStep(3);
+    },
+    onError: (err) => {
+      if (axios.isAxiosError(err)) {
+        toast.error(err.response?.data?.responseDesc || "Something went wrong");
+      } else {
+        toast.error("Unexpected error occurred");
+      }
     },
   });
 
   const handleConfirmSwap = () => {
     mutateSwapConfirmation.mutate();
   };
+  const isPending = mutateSwapConfirmation.isPending;
 
   // Reset timer whenever we receive a new quote
   useEffect(() => {
-    setSecondsLeft(15);
+    setSecondsLeft(10);
     if (intervalRef.current) window.clearInterval(intervalRef.current);
 
     intervalRef.current = window.setInterval(() => {
@@ -98,11 +111,15 @@ const SwapConfirmation = ({
               handleConfirmSwap();
             }
           }}
-          disabled={isRefreshingQuote || mutateSwapConfirmation.isPending}
+          disabled={isRefreshingQuote || isPending}
         >
           {isRefreshingQuote ? (
             <>
               <FaSpinner className="animate-spin" /> Refreshing...
+            </>
+          ) : isPending ? (
+            <>
+              <FaSpinner className="animate-spin" /> Confirming...
             </>
           ) : secondsLeft > 0 ? (
             `Confirm (${secondsLeft} sec)`
