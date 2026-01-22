@@ -112,7 +112,7 @@ const HomeDashboard = () => {
 
         <div className="rate-container-right">
           <div className="all-view">
-            <div className="all-tab">
+            <div className="flex text-sm tracking-tight gap-2 font-semibold">
               <p>Transaction</p>
               <span className="all-count">{notifications?.length}</span>
             </div>

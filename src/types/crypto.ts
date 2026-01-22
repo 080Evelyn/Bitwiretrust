@@ -77,7 +77,7 @@ export interface WalletAddressProps {
 export type SendCryptoProps = {
   currency: string;
   amount: number;
-  fundUid: string;
+  fund_uid: string;
   narration: string;
   network: string;
   swapId: string;

@@ -97,7 +97,7 @@ const SendModal = ({ closeModal, coin }: SendModalCryptoProps) => {
     sendCryptoMutation.mutate({
       currency: coin.currency,
       amount: Number(values.amount),
-      fundUid: values.address,
+      fund_uid: values.address,
       narration: "crypto withdrawal",
       network: values.network,
       swapId: "",
