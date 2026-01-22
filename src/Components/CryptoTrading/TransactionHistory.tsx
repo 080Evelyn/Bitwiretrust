@@ -66,7 +66,7 @@ const TransactionHistory = ({ coin }: Transactions) => {
         Transaction History
       </div>
 
-      <div className="h-full desktop-card-container md:max-h-86 rounded-md p-2">
+      <div className="h-full desktop-card-container md:max-h-86 rounded-md px-2 pt-2 pb-4">
         <div className="flex flex-col gap-2">
           <h3 className="md:hidden font-medium self-start tracking-[-0.17px]">
             Transaction History
@@ -86,7 +86,7 @@ const TransactionHistory = ({ coin }: Transactions) => {
               </button>
             ))}
           </div>
-          <div className="flex flex-col gap-2 overflow-y-auto scrollbar-hide max-h-[80dvh] md:max-h-70">
+          <div className="flex flex-col py-2 gap-2 overflow-y-auto scrollbar-hide max-h-[80dvh] md:max-h-70">
             {activeTab === "Swap" ? (
               <SwapHistory transactions={transactions} isLoading={isLoading} />
             ) : isLoading ? (
@@ -163,7 +163,7 @@ const TransactionHistory = ({ coin }: Transactions) => {
 
       {/* Transaction Details Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-xs sm:max-w-sm md:max-w-md">
+        <DialogContent className=" sm:max-w-sm md:max-w-md data-[state=open]:!zoom-in-0 data-[state=open]:duration-600 data-[state=closed]:!zoom-out-0 data-[state=closed]:duration-300">
           <DialogHeader>
             <DialogTitle>Transaction Details</DialogTitle>
             <DialogDescription className="sr-only">
