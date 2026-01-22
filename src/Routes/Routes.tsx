@@ -1,52 +1,71 @@
-import { lazy, Suspense } from "react";
+import { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import { AdminProtectedRoute, UserProtectedRoute } from "./protectedRoutes";
 import ErrorBoundary from "@/ErrorBoundary";
+import { lazyWithRetry } from "@/lib/lazyWithRetry";
 
 // Lazy load all page components for code splitting
-const Home = lazy(() => import("../Pages/Home/Home"));
-const About = lazy(() => import("../Pages/About"));
-const Contact = lazy(() => import("../Pages/Contact"));
-const PageNotFound = lazy(() => import("@/Pages/404/PageNotFound"));
+const Home = lazyWithRetry(() => import("../Pages/Home/Home"));
+const About = lazyWithRetry(() => import("../Pages/About"));
+const Contact = lazyWithRetry(() => import("../Pages/Contact"));
+const PageNotFound = lazyWithRetry(() => import("@/Pages/404/PageNotFound"));
 
 // Onboarding pages
-const Authlayout = lazy(() => import("@/Authlayout"));
-const CreateAccountPage = lazy(
-  () => import("@/Pages/Onboarding/CreateAccountPage")
+const Authlayout = lazyWithRetry(() => import("@/Authlayout"));
+const CreateAccountPage = lazyWithRetry(
+  () => import("@/Pages/Onboarding/CreateAccountPage"),
 );
-const VerifyEmailPage = lazy(
-  () => import("@/Pages/Onboarding/VerifyEmailPage")
+const VerifyEmailPage = lazyWithRetry(
+  () => import("@/Pages/Onboarding/VerifyEmailPage"),
 );
-const LoginPage = lazy(() => import("@/Pages/Onboarding/LoginPage"));
-const SetPinPage = lazy(() => import("@/Pages/Onboarding/SetPinPage"));
-const AddBankPage = lazy(() => import("@/Pages/Onboarding/AddBankPage"));
-const KycPage = lazy(() => import("@/Pages/Onboarding/KycPage"));
-const ForgotPassword = lazy(
-  () => import("@/Pages/Forget-Password/ForgetPassword")
+const LoginPage = lazyWithRetry(() => import("@/Pages/Onboarding/LoginPage"));
+const SetPinPage = lazyWithRetry(() => import("@/Pages/Onboarding/SetPinPage"));
+const AddBankPage = lazyWithRetry(
+  () => import("@/Pages/Onboarding/AddBankPage"),
+);
+const KycPage = lazyWithRetry(() => import("@/Pages/Onboarding/KycPage"));
+const ForgotPassword = lazyWithRetry(
+  () => import("@/Pages/Forget-Password/ForgetPassword"),
 );
 
 // User dashboard pages
-const DashboardLayout = lazy(() => import("../Pages/DashboardLayout"));
-const HomeDashboard = lazy(() => import("../Components/HomeDashboard"));
-const Utilitypayment = lazy(() => import("../Pages/Utilitypayment"));
-const VirtualTopUp = lazy(() => import("@/Pages/VirtualTopUp"));
-const BuyGiftCard = lazy(() => import("@/Pages/GiftCards/BuyGiftCard"));
-const SellGiftCards = lazy(() => import("@/Pages/GiftCards/SellGiftCards"));
-const CryptoTrading = lazy(() => import("@/Pages/CryptoTrading"));
+const DashboardLayout = lazyWithRetry(() => import("../Pages/DashboardLayout"));
+const HomeDashboard = lazyWithRetry(
+  () => import("../Components/HomeDashboard"),
+);
+const Utilitypayment = lazyWithRetry(() => import("../Pages/Utilitypayment"));
+const VirtualTopUp = lazyWithRetry(() => import("@/Pages/VirtualTopUp"));
+const BuyGiftCard = lazyWithRetry(
+  () => import("@/Pages/GiftCards/BuyGiftCard"),
+);
+const SellGiftCards = lazyWithRetry(
+  () => import("@/Pages/GiftCards/SellGiftCards"),
+);
+const CryptoTrading = lazyWithRetry(() => import("@/Pages/CryptoTrading"));
 
 // Admin pages
-const AdminLayout = lazy(() => import("@/admin/components/layout/AdminLayout"));
-const AdminDashboard = lazy(() => import("@/admin/pages/AdminDashboard"));
-const Transactions = lazy(() => import("@/admin/pages/Transactions"));
-const KycManagement = lazy(() => import("@/admin/pages/KycManagement"));
-const UserManagement = lazy(() => import("@/admin/pages/UserManagement"));
-const CryptoManagement = lazy(() => import("@/admin/pages/CryptoManagement"));
-const PendingWithdrawalRequest = lazy(
-  () => import("@/admin/pages/PendingWithdrawalRequest")
+const AdminLayout = lazyWithRetry(
+  () => import("@/admin/components/layout/AdminLayout"),
 );
-const SuccessfulWithdrawalRequest = lazy(
-  () => import("@/admin/pages/SuccessfulWithdrawalRequest")
+const AdminDashboard = lazyWithRetry(
+  () => import("@/admin/pages/AdminDashboard"),
+);
+const Transactions = lazyWithRetry(() => import("@/admin/pages/Transactions"));
+const KycManagement = lazyWithRetry(
+  () => import("@/admin/pages/KycManagement"),
+);
+const UserManagement = lazyWithRetry(
+  () => import("@/admin/pages/UserManagement"),
+);
+const CryptoManagement = lazyWithRetry(
+  () => import("@/admin/pages/CryptoManagement"),
+);
+const PendingWithdrawalRequest = lazyWithRetry(
+  () => import("@/admin/pages/PendingWithdrawalRequest"),
+);
+const SuccessfulWithdrawalRequest = lazyWithRetry(
+  () => import("@/admin/pages/SuccessfulWithdrawalRequest"),
 );
 
 // Loading fallback component
@@ -77,7 +96,7 @@ export const router = createBrowserRouter([
       { path: "contact", element: withSuspense(Contact) },
     ],
   },
-  { path: "*", element: <PageNotFound /> },
+  { path: "*", element: withSuspense(PageNotFound) },
 
   {
     children: [
