@@ -32,33 +32,33 @@ const TransactionHistory = ({ coin }: Transactions) => {
     useState<TransactionData | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { data: transactions = [], isLoading } = useQuery({
-    queryKey: ["transactions", activeTab, coin?.currency],
+  const { data: allTransactions = {}, isLoading } = useQuery({
+    queryKey: ["transactions", coin?.currency],
     queryFn: async () => {
-      if (!coin?.currency) return [];
+      if (!coin?.currency) return {};
 
       const params = {
         userId: "",
         currency: coin.currency.toLowerCase(),
       };
 
-      let response;
-      switch (activeTab) {
-        case "Swap":
-          response = await fetchCryptoSwapHistory(params);
-          break;
-        case "Deposit":
-          response = await fetchCryptoDepositHistory(params);
-          break;
-        case "Withdrawal":
-          response = await fetchCryptoWithdrawalHistory(params);
-          break;
-      }
+      const [swapResponse, depositResponse, withdrawalResponse] =
+        await Promise.all([
+          fetchCryptoSwapHistory(params),
+          fetchCryptoDepositHistory(params),
+          fetchCryptoWithdrawalHistory(params),
+        ]);
 
-      return response?.data?.data || [];
+      return {
+        Swap: swapResponse?.data?.data || [],
+        Deposit: depositResponse?.data?.data || [],
+        Withdrawal: withdrawalResponse?.data?.data || [],
+      };
     },
     enabled: !!coin?.currency,
   });
+
+  const transactions = allTransactions[activeTab] || [];
 
   return (
     <div className="flex flex-col gap-3">
