@@ -2,7 +2,7 @@ import { full_logo, passcode_lock } from "@/assets";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import { useCreatePasscode } from "@/hooks/signup/useCreatePasscode";
+import { useCreatePin } from "@/hooks/signup/useCreatePasscode";
 import {
   InputOTP,
   InputOTPGroup,
@@ -21,7 +21,7 @@ interface CreatePasscodeProps {
 }
 
 const CreatePin = ({ onSuccess }: CreatePasscodeProps) => {
-  const { form, onSubmit, isLoading } = useCreatePasscode();
+  const { form, onSubmit, isLoading } = useCreatePin();
   const [isConfirming, setIsConfirming] = useState(false);
 
   const handleReEnter = () => {

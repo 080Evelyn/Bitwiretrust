@@ -1,4 +1,4 @@
-import { change_password } from "@/assets";
+import { change_password, transaction_pin } from "@/assets";
 import { ModalType } from "@/types";
 import { IoIosArrowForward } from "react-icons/io";
 
@@ -27,12 +27,12 @@ const Settings = ({
               alt=""
               className="option-icon security-icon"
             />
-            <span>Security Settings</span>
+            <span>Change Password</span>
           </div>
           <IoIosArrowForward />
         </div>
 
-        {/* <div className="option" onClick={() => toggleModal("transaction-pin")}>
+        <div className="option" onClick={() => toggleModal("transaction-pin")}>
           <div className="option-left">
             <img
               src={transaction_pin}
@@ -42,7 +42,7 @@ const Settings = ({
             <span>Transaction Pin</span>
           </div>
           <IoIosArrowForward />
-        </div> */}
+        </div>
 
         {/* <div className="option" onClick={() => toggleModal("notifications")}>
           <div className="option-left">
