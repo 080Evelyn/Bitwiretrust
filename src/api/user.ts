@@ -21,3 +21,11 @@ export const fetchUser = async () => {
   );
   return res.data.data;
 };
+
+export const resetPasswordInProfile = async (data: {
+  oldPassword: string;
+  newPassword: string;
+}) => {
+  const response = await axios.post(`${url}/v1/auth/reset-password`, data);
+  return response.data;
+};

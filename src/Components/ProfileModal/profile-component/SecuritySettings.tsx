@@ -14,6 +14,10 @@ import {
 } from "@/Components/ui/form";
 import { Input } from "@/Components/ui/input";
 import { Button } from "@/Components/ui/button";
+import { resetPasswordInProfile } from "@/api/user";
+import { toast } from "sonner";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 interface SecuritySettingsProps {
   toggleModal: (modal: ModalType) => void;
@@ -52,9 +56,31 @@ const SecuritySettings = ({ toggleModal }: SecuritySettingsProps) => {
     },
   });
 
+  const resetPasswordMutation = useMutation({
+    mutationFn: (data: { oldPassword: string; newPassword: string }) =>
+      resetPasswordInProfile(data),
+    onSuccess: () => {
+      toast.success("Password updated successfully!");
+      toggleModal("settings");
+      form.reset();
+    },
+    onError: (error: unknown) => {
+      if (axios.isAxiosError(error)) {
+        const responseDesc =
+          error.response?.data?.responseDesc || "Something went wrong";
+        toast.error(responseDesc);
+      } else {
+        toast.error("Unexpected error occurred");
+      }
+    },
+  });
+
   const onSubmit = (data: PasswordFormData) => {
-    console.log("Form submitted:", data);
-    // TODO: Implement password change logic
+    const payload = {
+      oldPassword: data.currentPassword,
+      newPassword: data.newPassword,
+    };
+    resetPasswordMutation.mutate(payload);
   };
 
   return (
@@ -169,8 +195,14 @@ const SecuritySettings = ({ toggleModal }: SecuritySettingsProps) => {
               )}
             />
 
-            <Button type="submit" className="w-full">
-              Update Password
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={resetPasswordMutation.isPending}
+            >
+              {resetPasswordMutation.isPending
+                ? "Updating..."
+                : "Update Password"}
             </Button>
           </form>
         </Form>
