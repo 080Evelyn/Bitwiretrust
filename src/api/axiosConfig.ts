@@ -54,7 +54,7 @@ api.interceptors.response.use(
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           failedQueue.push({ resolve, reject });
-        }).then((token: any) => {
+        }).then((token) => {
           originalRequest.headers.Authorization = `Bearer ${token}`;
           return api(originalRequest);
         });
@@ -65,7 +65,7 @@ api.interceptors.response.use(
 
       try {
         const res = await api.post("/v1/auth/refresh-token");
-        const newToken = (res.data as any).data.accessToken;
+        const newToken = res.data.data.accessToken;
 
         setMemoryToken(newToken);
         api.defaults.headers.common.Authorization = `Bearer ${newToken}`;
