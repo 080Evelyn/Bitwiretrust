@@ -1,11 +1,7 @@
 import { Outlet, useOutletContext } from "react-router-dom";
 import SideNavbar from "../../Components/SideNavbar";
 import DashboardHeader from "../../Components/DashboardHeader";
-import { User } from "@/types/user";
-
-type ContextType = {
-  user: User;
-};
+import { ContextType } from "@/types";
 
 const DashboardLayout = () => {
   const { user } = useOutletContext<ContextType>();

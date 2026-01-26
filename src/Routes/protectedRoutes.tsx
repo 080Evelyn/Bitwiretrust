@@ -1,9 +1,9 @@
 import { useAuth } from "@/context/AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import axios from "@/api/axiosConfig";
 import { getUserId, getUserRole } from "@/utils/AuthStorage";
 import MainLoader from "@/Components/seketon-loader/MainLoader";
+import { fetchUser } from "@/api/user";
 
 // authentication check hook
 function useAuthCheck() {
@@ -29,12 +29,7 @@ export function UserProtectedRoute() {
     isError,
   } = useQuery({
     queryKey: ["user", userId],
-    queryFn: async () => {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/v1/users/profile/${userId}`
-      );
-      return res.data.data;
-    },
+    queryFn: fetchUser,
     enabled: isAuthenticated && userRole !== "ADMIN",
     staleTime: 5 * 60 * 1000,
   });
