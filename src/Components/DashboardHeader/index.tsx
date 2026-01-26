@@ -1,6 +1,6 @@
 import "./styles.css";
 import { format } from "date-fns";
-import { calendar_svg, ellipse_user } from "../../assets";
+import { calendar_svg } from "../../assets";
 import ProfileModal from "../ProfileModal";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -10,11 +10,11 @@ import { useQuery } from "@tanstack/react-query";
 import { TransactionListResponse } from "@/types";
 import { transactions } from "@/api/user-notification";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { User2 } from "lucide-react";
 
 const DashboardHeader = ({ user }: { user: User }) => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [hasProfileNotifications] = useState(true);
   const [hasNotifications, setHasNotifications] = useState(true);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const { isPending, data: transactionsList } =
@@ -46,16 +46,22 @@ const DashboardHeader = ({ user }: { user: User }) => {
     <div className="dashboard-header flex items-center justify-between">
       <div className="flex gap-4 items-center">
         <div onClick={toggleProfileModal} className="md:hidden cursor-pointer">
-          <img
-            src={ellipse_user}
-            alt="profile"
-            className="size-12 sm:size-10 lg:size-12 rounded-full"
-          />
+          {user?.profileUpload?.url ? (
+            <img
+              src={user?.profileUpload?.url}
+              alt="profile"
+              className="size-11 rounded-full"
+            />
+          ) : (
+            <User2 className="size-full p-2 text-primary fill-primary/50" />
+          )}
         </div>
 
-        <div className="welcome-section">
-          <h1 className="font-semibold">Welcome to Bitwire Trust</h1>
-          <p>Hi, {fullName}! Welcome Back</p>
+        <div>
+          <h1 className="font-semibold text-lg sm:text-2xl">
+            Welcome to Bitwire Trust
+          </h1>
+          <p className="text-xs sm:text-sm">Hi, {fullName}! Welcome Back</p>
         </div>
       </div>
 
@@ -74,16 +80,17 @@ const DashboardHeader = ({ user }: { user: User }) => {
         />
 
         <div
-          className="hidden md:block relative cursor-pointer"
+          className="hidden md:block relative cursor-pointer bg-[#E9A9FF80] rounded-full"
           onClick={toggleProfileModal}
         >
-          <img
-            src={ellipse_user}
-            alt="profile"
-            className="h-9 w-9 rounded-full"
-          />
-          {hasProfileNotifications && (
-            <span className="notification-badge green" />
+          {user?.profileUpload?.url ? (
+            <img
+              src={user?.profileUpload?.url}
+              alt="profile"
+              className="size-10 rounded-full"
+            />
+          ) : (
+            <User2 className="size-full p-2 text-primary fill-primary/50" />
           )}
         </div>
       </div>
@@ -107,9 +114,7 @@ const DashboardHeader = ({ user }: { user: User }) => {
       <ProfileModal
         isOpen={isProfileModalOpen}
         onClose={toggleProfileModal}
-        profileImage={ellipse_user}
         fullName={fullName}
-        user={user}
       />
     </>
   );

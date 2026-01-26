@@ -13,3 +13,11 @@ export const uploadProfileImage = async (data: FormData) => {
 
   return response.data;
 };
+
+export const fetchUser = async () => {
+  const userId = getUserId();
+  const res = await axios.get(
+    `${import.meta.env.VITE_API_URL}/v1/users/profile/${userId}`,
+  );
+  return res.data.data;
+};

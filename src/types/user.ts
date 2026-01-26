@@ -27,6 +27,12 @@ export interface User {
   walletBalance: number;
   walletCurrency: string;
   bankDetails: bankDetails;
+  profileUpload: {
+    id: number;
+    url: string;
+    thumbnailUrl: string;
+    fileType: string;
+  };
 }
 
 interface bankDetails {

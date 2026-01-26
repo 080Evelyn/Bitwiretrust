@@ -103,9 +103,7 @@ export interface SidebarContentProps {
 export interface ProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
-  profileImage: string;
   fullName: string;
-  user: User;
 }
 
 export interface ContactData {
@@ -123,6 +121,10 @@ export interface ContactErrors {
   phone?: string;
   message?: string;
 }
+
+export type ContextType = {
+  user: User;
+};
 
 export type ModalType =
   | "profile"

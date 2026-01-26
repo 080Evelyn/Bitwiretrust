@@ -16,9 +16,7 @@ import UserKyc from "./profile-component/Kyc";
 const ProfileModal: React.FC<ProfileModalProps> = ({
   isOpen,
   onClose,
-  profileImage,
   fullName,
-  user,
 }) => {
   const [activeModal, setActiveModal] = useState<ModalType>("profile");
   // const [darkMode, setDarkMode] = useState(false);
@@ -71,8 +69,6 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
         <Profile
           toggleModal={toggleModal}
           fullName={fullName}
-          profileImage={profileImage}
-          user={user || ""}
           // darkMode={darkMode}
           // toggleDarkMode={toggleDarkMode}
           handleClose={handleClose}
