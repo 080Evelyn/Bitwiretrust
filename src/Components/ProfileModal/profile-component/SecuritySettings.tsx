@@ -1,38 +1,62 @@
-import { change_password } from "@/assets";
 import { ModalType } from "@/types";
-import { IoIosArrowForward, IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { useState } from "react";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/Components/ui/form";
+import { Input } from "@/Components/ui/input";
+import { Button } from "@/Components/ui/button";
 
 interface SecuritySettingsProps {
   toggleModal: (modal: ModalType) => void;
-  currentPassword: string;
-  setCurrentPassword: (password: string) => void;
-  showCurrentPassword: boolean;
-  setShowCurrentPassword: (show: boolean) => void;
-  newPassword: string;
-  setNewPassword: (password: string) => void;
-  showNewPassword: boolean;
-  setShowNewPassword: (show: boolean) => void;
-  confirmPassword: string;
-  setConfirmPassword: (password: string) => void;
-  showConfirmPassword: boolean;
-  setShowConfirmPassword: (show: boolean) => void;
 }
 
-const SecuritySettings = ({
-  toggleModal,
-  currentPassword,
-  setCurrentPassword,
-  showCurrentPassword,
-  setShowCurrentPassword,
-  newPassword,
-  setNewPassword,
-  showNewPassword,
-  setShowNewPassword,
-  confirmPassword,
-  setConfirmPassword,
-  showConfirmPassword,
-  setShowConfirmPassword,
-}: SecuritySettingsProps) => {
+const passwordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Current password is required"),
+    newPassword: z
+      .string()
+      .min(8, "Password must be at least 8 characters")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+        "Password must contain at least one lowercase letter, one uppercase letter, and one number",
+      ),
+    confirmPassword: z.string().min(1, "Please confirm your new password"),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+type PasswordFormData = z.infer<typeof passwordSchema>;
+
+const SecuritySettings = ({ toggleModal }: SecuritySettingsProps) => {
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const form = useForm<PasswordFormData>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
+
+  const onSubmit = (data: PasswordFormData) => {
+    console.log("Form submitted:", data);
+    // TODO: Implement password change logic
+  };
+
   return (
     <div className="modal security-settings-modal">
       <div className="modal-header">
@@ -42,73 +66,114 @@ const SecuritySettings = ({
         <h3>Security Settings</h3>
       </div>
 
-      <div className="security-content">
-        <div className="option" onClick={() => {}}>
-          <div className="option-left">
-            <img
-              src={change_password}
-              alt="change-password"
-              className="option-icon password-icon"
+      <div className="p-6">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="currentPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Current Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showCurrentPassword ? "text" : "password"}
+                        placeholder="Enter current password"
+                        {...field}
+                        className="pr-10"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                        onClick={() =>
+                          setShowCurrentPassword(!showCurrentPassword)
+                        }
+                      >
+                        {showCurrentPassword ? (
+                          <IoIosEyeOff className="size-5" />
+                        ) : (
+                          <IoIosEye className="size-5" />
+                        )}
+                      </button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <span>Change Password</span>
-          </div>
-          <IoIosArrowForward />
-        </div>
 
-        <div className="password-fields">
-          <div className="password-field">
-            <label>Current Password</label>
-            <div className="password-input-container">
-              <input
-                type={showCurrentPassword ? "text" : "password"}
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-              />
-              <button
-                className="toggle-password"
-                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-              >
-                {showCurrentPassword ? <IoIosEyeOff /> : <IoIosEye />}
-              </button>
-            </div>
-          </div>
+            <FormField
+              control={form.control}
+              name="newPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>New Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showNewPassword ? "text" : "password"}
+                        placeholder="Enter new password"
+                        {...field}
+                        className="pr-10"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                        onClick={() => setShowNewPassword(!showNewPassword)}
+                      >
+                        {showNewPassword ? (
+                          <IoIosEyeOff className="size-5" />
+                        ) : (
+                          <IoIosEye className="size-5" />
+                        )}
+                      </button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <div className="password-field">
-            <label>New Password</label>
-            <div className="password-input-container">
-              <input
-                type={showNewPassword ? "text" : "password"}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-              <button
-                className="toggle-password"
-                onClick={() => setShowNewPassword(!showNewPassword)}
-              >
-                {showNewPassword ? <IoIosEyeOff /> : <IoIosEye />}
-              </button>
-            </div>
-          </div>
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirm New Password</FormLabel>
+                  <FormControl>
+                    <div className="relative">
+                      <Input
+                        type={showConfirmPassword ? "text" : "password"}
+                        placeholder="Confirm new password"
+                        {...field}
+                        className="pr-10"
+                      />
+                      <button
+                        type="button"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                        onClick={() =>
+                          setShowConfirmPassword(!showConfirmPassword)
+                        }
+                      >
+                        {showConfirmPassword ? (
+                          <IoIosEyeOff className="size-5" />
+                        ) : (
+                          <IoIosEye className="size-5" />
+                        )}
+                      </button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-          <div className="password-field">
-            <label>Confirm New Password</label>
-            <div className="password-input-container">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <button
-                className="toggle-password"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? <IoIosEyeOff /> : <IoIosEye />}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <button className="done">Done</button>
+            <Button type="submit" className="w-full">
+              Update Password
+            </Button>
+          </form>
+        </Form>
       </div>
     </div>
   );

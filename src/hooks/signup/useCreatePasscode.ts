@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
 
-export const useCreatePasscode = () => {
+export const useCreatePin = () => {
   const { updatePinStatus } = useAuth();
 
   const form = useForm<CreatePasscodeFormData>({
