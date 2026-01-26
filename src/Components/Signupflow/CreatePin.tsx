@@ -2,7 +2,7 @@ import { full_logo, passcode_lock } from "@/assets";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { ArrowLeft } from "lucide-react";
 import { useState } from "react";
-import { useCreatePin } from "@/hooks/signup/useCreatePasscode";
+import { useCreatePin } from "@/hooks/signup/useCreatePin";
 import {
   InputOTP,
   InputOTPGroup,
@@ -15,6 +15,7 @@ import {
   FormItem,
   FormMessage,
 } from "@/Components/ui/form";
+import { CreatePinFormData } from "@/lib/schemas/signup";
 
 interface CreatePasscodeProps {
   onSuccess: () => void;
@@ -29,7 +30,7 @@ const CreatePin = ({ onSuccess }: CreatePasscodeProps) => {
     form.reset();
   };
 
-  const handleFormSubmit = (data: any) => {
+  const handleFormSubmit = (data: CreatePinFormData) => {
     if (!isConfirming) {
       setIsConfirming(true);
     } else {
@@ -70,7 +71,7 @@ const CreatePin = ({ onSuccess }: CreatePasscodeProps) => {
 
             <FormField
               control={form.control}
-              name={isConfirming ? "confirmPasscode" : "passcode"}
+              name={isConfirming ? "confirmPin" : "pin"}
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-4 justify-center items-center">
                   <FormControl>
@@ -115,8 +116,8 @@ const CreatePin = ({ onSuccess }: CreatePasscodeProps) => {
               type="submit"
               className={`next-button ${
                 (isConfirming
-                  ? form.watch("confirmPasscode")?.length === 4
-                  : form.watch("passcode")?.length === 4) && !isLoading
+                  ? form.watch("confirmPin")?.length === 4
+                  : form.watch("pin")?.length === 4) && !isLoading
                   ? "enabled"
                   : "disabled"
               }`}

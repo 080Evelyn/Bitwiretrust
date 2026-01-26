@@ -15,8 +15,9 @@ import {
   InputOTPSlot,
 } from "@/Components/ui/input-otp";
 import { Button } from "@/Components/ui/button";
-import { useCreatePin } from "@/hooks/signup/useCreatePasscode";
+import { useCreatePin } from "@/hooks/signup/useCreatePin";
 import { toast } from "sonner";
+import { CreatePinFormData } from "@/lib/schemas/signup";
 
 interface TransactionPinProps {
   toggleModal: (modal: ModalType) => void;
@@ -41,7 +42,7 @@ const TransactionPin = ({ toggleModal }: TransactionPinProps) => {
     toast.success("Transaction pin updated successfully");
   };
 
-  const handleFormSubmit = (data: any) => {
+  const handleFormSubmit = (data: CreatePinFormData) => {
     if (!isConfirming) {
       setIsConfirming(true);
     } else {
@@ -85,7 +86,7 @@ const TransactionPin = ({ toggleModal }: TransactionPinProps) => {
 
             <FormField
               control={form.control}
-              name={isConfirming ? "confirmPasscode" : "passcode"}
+              name={isConfirming ? "confirmPin" : "pin"}
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-4 justify-center items-center">
                   <FormControl>
@@ -130,8 +131,8 @@ const TransactionPin = ({ toggleModal }: TransactionPinProps) => {
               type="submit"
               className={`w-full ${
                 (isConfirming
-                  ? form.watch("confirmPasscode")?.length === 4
-                  : form.watch("passcode")?.length === 4) && !isLoading
+                  ? form.watch("confirmPin")?.length === 4
+                  : form.watch("pin")?.length === 4) && !isLoading
                   ? "enabled"
                   : "disabled"
               }`}

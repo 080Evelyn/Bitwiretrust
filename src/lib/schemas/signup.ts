@@ -14,7 +14,7 @@ export const createAccountSchema = z
       .min(8, "Password must be at least 8 characters")
       .regex(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        "Password must contain at least one uppercase letter, one lowercase letter, and one number"
+        "Password must contain at least one uppercase letter, one lowercase letter, and one number",
       ),
     confirmPassword: z.string(),
     terms: z.boolean().refine((val) => val === true, {
@@ -35,26 +35,23 @@ export const getStartedSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
-export const createPasscodeSchema = z
+export const createPinSchema = z
   .object({
-    passcode: z.string().length(4, "pin must be 4 digits"),
-    confirmPasscode: z
-      .string()
-      .length(4, "pin must be 4 digits")
-      .or(z.literal("")),
+    pin: z.string().length(4, "pin must be 4 digits"),
+    confirmPin: z.string().length(4, "pin must be 4 digits").or(z.literal("")),
   })
   .refine(
     (data) => {
-      if (data.confirmPasscode === "") return true;
-      return data.passcode === data.confirmPasscode;
+      if (data.confirmPin === "") return true;
+      return data.pin === data.confirmPin;
     },
     {
       message: "pin does not match",
-      path: ["confirmPasscode"],
-    }
+      path: ["confirmPin"],
+    },
   );
 
 export type CreateAccountFormData = z.infer<typeof createAccountSchema>;
 export type VerifyEmailFormData = z.infer<typeof verifyEmailSchema>;
 export type GetStartedFormData = z.infer<typeof getStartedSchema>;
-export type CreatePasscodeFormData = z.infer<typeof createPasscodeSchema>;
+export type CreatePinFormData = z.infer<typeof createPinSchema>;

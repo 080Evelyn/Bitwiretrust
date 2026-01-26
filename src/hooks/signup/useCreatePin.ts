@@ -2,22 +2,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { createPin } from "@/api/auth";
-import {
-  createPasscodeSchema,
-  CreatePasscodeFormData,
-} from "@/lib/schemas/signup";
 import { toast } from "sonner";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
+import { CreatePinFormData, createPinSchema } from "@/lib/schemas/signup";
 
 export const useCreatePin = () => {
   const { updatePinStatus } = useAuth();
 
-  const form = useForm<CreatePasscodeFormData>({
-    resolver: zodResolver(createPasscodeSchema),
+  const form = useForm<CreatePinFormData>({
+    resolver: zodResolver(createPinSchema),
     defaultValues: {
-      passcode: "",
-      confirmPasscode: "",
+      pin: "",
+      confirmPin: "",
     },
     mode: "onBlur",
   });
@@ -39,8 +36,8 @@ export const useCreatePin = () => {
     },
   });
 
-  const onSubmit = (data: CreatePasscodeFormData, onSuccess?: () => void) => {
-    createPinMutation.mutate(data.passcode, {
+  const onSubmit = (data: CreatePinFormData, onSuccess?: () => void) => {
+    createPinMutation.mutate(data.pin, {
       onSuccess: () => {
         onSuccess?.();
       },
