@@ -26,6 +26,11 @@ export const resetPasswordInProfile = async (data: {
   oldPassword: string;
   newPassword: string;
 }) => {
-  const response = await axios.post(`${url}/v1/auth/reset-password`, data);
+  const userId = getUserId();
+
+  const response = await axios.put(
+    `${url}/v1/users/profile/${userId}/reset-password`,
+    data,
+  );
   return response.data;
 };

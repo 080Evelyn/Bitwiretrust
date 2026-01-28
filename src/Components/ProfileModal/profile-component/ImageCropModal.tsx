@@ -66,33 +66,42 @@ const ImageCropModal = ({
   });
 
   const handleSaveCrop = useCallback(async () => {
-    if (imageSrc && croppedAreaPixels) {
-      const canvas = document.createElement("canvas");
-      const ctx = canvas.getContext("2d");
+    if (!imageSrc || !croppedAreaPixels) {
+      toast.error("No image or crop area selected");
+      return;
+    }
+
+    try {
       const image = new Image();
+      image.crossOrigin = "anonymous";
 
-      image.onload = () => {
-        canvas.width = croppedAreaPixels.width;
-        canvas.height = croppedAreaPixels.height;
+      image.onload = async () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        if (!ctx) {
+          toast.error("Failed to create canvas.");
+          return;
+        }
 
-        ctx?.drawImage(
-          image,
-          croppedAreaPixels.x,
-          croppedAreaPixels.y,
-          croppedAreaPixels.width,
-          croppedAreaPixels.height,
-          0,
-          0,
-          croppedAreaPixels.width,
-          croppedAreaPixels.height,
-        );
+        // Use the croppedAreaPixels values directly
+        // These already account for zoom and crop position
+        const { x, y, width, height } = croppedAreaPixels;
 
+        canvas.width = width;
+        canvas.height = height;
+
+        // Draw the cropped area from the original image
+        ctx.drawImage(image, x, y, width, height, 0, 0, width, height);
+
+        // Convert to blob and upload
         canvas.toBlob(
           (blob) => {
             if (blob) {
               const formData = new FormData();
               formData.append("file", blob, "profile-image.jpg");
               uploadMutation.mutate(formData);
+            } else {
+              toast.error("Failed to create image blob.");
             }
           },
           "image/jpeg",
@@ -100,10 +109,16 @@ const ImageCropModal = ({
         );
       };
 
+      image.onerror = () => {
+        toast.error("Failed to load image for cropping.");
+      };
+
       image.src = imageSrc;
+    } catch (error) {
+      console.error("Crop error:", error);
+      toast.error("An error occurred while cropping the image.");
     }
   }, [imageSrc, croppedAreaPixels, uploadMutation]);
-
   return (
     <Dialog open={isCropModalOpen} onOpenChange={onModalClose}>
       <DialogOverlay className="z-1000" />

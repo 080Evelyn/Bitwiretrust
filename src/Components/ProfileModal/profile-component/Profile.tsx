@@ -38,12 +38,20 @@ const Profile = ({ toggleModal, fullName, handleClose }: profileProps) => {
   );
 
   const onCropComplete = useCallback(
-    (croppedAreaPixels: {
-      width: number;
-      height: number;
-      x: number;
-      y: number;
-    }) => {
+    (
+      _croppedArea: {
+        width: number;
+        height: number;
+        x: number;
+        y: number;
+      },
+      croppedAreaPixels: {
+        width: number;
+        height: number;
+        x: number;
+        y: number;
+      },
+    ) => {
       setCroppedAreaPixels(croppedAreaPixels);
     },
     [],
