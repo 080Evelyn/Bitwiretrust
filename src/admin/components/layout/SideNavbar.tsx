@@ -115,8 +115,8 @@ const SidebarItemComponent = ({
           className={cn(
             "w-full flex items-center justify-between gap-2 px-1.5 py-2.5 rounded-[4px] transition-all duration-500 text-sm font-semibold group relative overflow-hidden",
             isActiveParent
-              ? "bg-white text-[#7910b1]"
-              : "text-white hover:bg-white hover:text-[#7910b1]"
+              ? "bg-white text-primary"
+              : "text-white hover:bg-white hover:text-primary",
           )}
         >
           <span className="absolute inset-0 bg-background transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
@@ -159,8 +159,8 @@ const SidebarItemComponent = ({
                     className={cn(
                       "flex items-center gap-2 mx-3 pl-8 pr-1.5 py-2 rounded-[4px] transition-all duration-300 text-sm font-medium",
                       isActiveChild
-                        ? "bg-white/95 text-[#7910b1] border-l-5 rounded-r-xl border-[#7910b1] pl-3"
-                        : "text-white hover:bg-white/10 hover:text-white"
+                        ? "bg-white/95 text-primary border-l-5 rounded-r-xl border-primary pl-3"
+                        : "text-white hover:bg-white/10 hover:text-white",
                     )}
                   >
                     <span className="relative z-10">{child.name}</span>
@@ -181,8 +181,8 @@ const SidebarItemComponent = ({
         className={cn(
           "flex items-center gap-2 mx-3 px-1.5 py-2.5 rounded-[4px] transition-all duration-500 text-sm font-semibold group relative overflow-hidden",
           isActiveExact
-            ? "bg-white text-[#7910b1]"
-            : "text-white hover:bg-white hover:text-[#7910b1]"
+            ? "bg-white text-primary"
+            : "text-white hover:bg-white hover:text-primary",
         )}
       >
         <span className="absolute inset-0 bg-background transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
@@ -276,7 +276,7 @@ const SideNavbar: React.FC = () => {
               handleLogoutClick();
               setIsOpen(false);
             }}
-            className="flex items-center cursor-pointer gap-2 px-1.5 py-2.5 rounded-[4px] transition-all duration-500 text-sm font-semibold text-white hover:bg-white hover:text-[#7910b1] group relative overflow-hidden"
+            className="flex items-center cursor-pointer gap-2 px-1.5 py-2.5 rounded-[4px] transition-all duration-500 text-sm font-semibold text-white hover:bg-white hover:text-primary group relative overflow-hidden"
           >
             <span className="absolute inset-0 bg-background transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
             <div className="flex items-center gap-2 relative z-10 transition-colors duration-300 delay-100">
@@ -297,15 +297,13 @@ const SideNavbar: React.FC = () => {
                 alt="logo"
                 className="w-full h-7 object-contain"
               />
-              <span className="text-[#7910B1] text-xl font-semibold">
-                itwire
-              </span>
+              <span className="text-primary text-xl font-semibold">itwire</span>
             </div>
           </Link>
 
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <button className="text-[#7910B1]">
+              <button className="text-primary">
                 <Menu className="h-6 w-6" />
               </button>
             </SheetTrigger>
@@ -329,7 +327,7 @@ const SideNavbar: React.FC = () => {
                     handleLogoutClick();
                     setIsOpen(false);
                   }}
-                  className="flex items-center cursor-pointer gap-2 px-1.5 py-2.5 rounded-[4px] transition-all duration-500 text-sm font-semibold text-white hover:bg-white hover:text-[#7910b1] group relative overflow-hidden"
+                  className="flex items-center cursor-pointer gap-2 px-1.5 py-2.5 rounded-[4px] transition-all duration-500 text-sm font-semibold text-white hover:bg-white hover:text-primary group relative overflow-hidden"
                 >
                   <span className="absolute inset-0 bg-background transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-0" />
                   <div className="flex items-center gap-2 relative z-10 transition-colors duration-300 delay-100">

@@ -4,7 +4,7 @@ export interface TransactionLogProps {
   currency: string;
   description: string;
   id: number;
-  reference: string;
+  requestId: string;
   status: string;
   type: string;
 }
@@ -25,17 +25,18 @@ export interface KycData {
   utilityBillImageUrl: string;
 }
 
-export enum category {
-  MICROTRANSACTION = "MICROTRANSACTION",
-  GIFTCARD = "GIFTCARD",
-  CRYPTOSWAP = "CRYPTOSWAP",
-  MAINNET = "MAINNET",
-  FIAT_WITHDRAWAL = "FIAT_WITHDRAWAL",
-  REFUND = "REFUND",
-}
+export const category = {
+  MICROTRANSACTION: "MICROTRANSACTION",
+  GIFTCARD: "GIFTCARD",
+  CRYPTOSWAP: "CRYPTOSWAP",
+  FIAT_WITHDRAWAL: "FIAT_WITHDRAWAL",
+  REFUND: "REFUND",
+} as const;
+
+export type CategoryType = (typeof category)[keyof typeof category];
 
 export interface FilteredTransactionProps {
-  category?: category;
+  category?: CategoryType;
   status?: string;
   fromDate?: string;
   toDate?: string;
