@@ -84,7 +84,7 @@ const TransactionTable = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-semibold">Transaction ID</TableHead>
+            <TableHead className="font-semibold">Email</TableHead>
             <TableHead className="font-semibold">Amount</TableHead>
             <TableHead className="font-semibold">Transaction Type</TableHead>
             <TableHead className="font-semibold">Date</TableHead>
@@ -120,10 +120,10 @@ const TransactionTable = ({
           ) : (
             contents.map((content) => (
               <TableRow
-                key={content.requestId}
+                key={content.reference}
                 className="font-semibold text-xs"
               >
-                <TableCell>{content.requestId}</TableCell>
+                <TableCell>{content.email}</TableCell>
                 <TableCell>
                   {new Intl.NumberFormat("en-NG", {
                     style: "currency",

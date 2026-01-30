@@ -4,7 +4,8 @@ export interface TransactionLogProps {
   currency: string;
   description: string;
   id: number;
-  requestId: string;
+  reference: string;
+  email: string;
   status: string;
   type: string;
 }
@@ -29,7 +30,9 @@ export const category = {
   MICROTRANSACTION: "MICROTRANSACTION",
   GIFTCARD: "GIFTCARD",
   CRYPTOSWAP: "CRYPTOSWAP",
-  FIAT_WITHDRAWAL: "FIAT_WITHDRAWAL",
+  WITHDRAWAL: "WITHDRAWAL",
+  MAIN: "MAIN",
+  SYSTEM_FEE: "SYSTEM_FEE",
   REFUND: "REFUND",
 } as const;
 

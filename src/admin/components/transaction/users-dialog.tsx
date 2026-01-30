@@ -23,8 +23,8 @@ const UsersDialog = (content: TransactionLogProps) => {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex text-foreground justify-between items-center">
-              <span className="text-sm font-semibold">Request ID</span>
-              <p className="text-xs font-light">{content.requestId}</p>
+              <span className="text-sm font-semibold">User Email</span>
+              <p className="text-xs font-light">{content.email}</p>
             </div>
             <div className="flex text-foreground justify-between items-center">
               <span className="text-sm font-semibold">Amount</span>

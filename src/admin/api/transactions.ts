@@ -24,7 +24,7 @@ export const totalTransactionCount = async () => {
 
 export const filteredTransaction = async (params: FilteredTransactionProps) => {
   const response = await axios.get(
-    `${url}/v1/admin/get-all/wallet-transactions-with-status`,
+    `${url}/v1/admin/dashboard/wallet-transactions-with-status-and-category`,
     {
       params,
     },
