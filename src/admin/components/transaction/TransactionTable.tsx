@@ -23,6 +23,13 @@ import { AllUsersPage, CategoryType, TransactionLogProps } from "@/admin/type";
 import { formatDate } from "date-fns";
 import { filteredTransaction } from "@/admin/api/transactions";
 import { Dispatch, useMemo } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/Components/ui/select";
 
 interface TransactionTableProps {
   searchParams: URLSearchParams;
@@ -73,7 +80,7 @@ const TransactionTable = ({
   const totalPages = pageProperty?.totalPages ?? 0;
 
   return (
-    <div className="bg-white rounded-md px-3 py-2">
+    <div className="bg-white rounded-md px-1 sm:px-3 py-2">
       <div className="flex flex-col gap-3">
         <h3 className="text-sm py-2 font-semibold text-[#7901b1]">
           Transactions
@@ -84,7 +91,7 @@ const TransactionTable = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-semibold">Transaction ID</TableHead>
+            <TableHead className="font-semibold">Email</TableHead>
             <TableHead className="font-semibold">Amount</TableHead>
             <TableHead className="font-semibold">Transaction Type</TableHead>
             <TableHead className="font-semibold">Date</TableHead>
@@ -93,7 +100,7 @@ const TransactionTable = ({
           </TableRow>
         </TableHeader>
 
-        <TableBody>
+        <TableBody className="overflow-y-auto">
           {isFetching ? (
             Array.from({ length: 8 }).map((_, i) => (
               <TableRow key={i}>
@@ -120,10 +127,10 @@ const TransactionTable = ({
           ) : (
             contents.map((content) => (
               <TableRow
-                key={content.requestId}
+                key={content.reference}
                 className="font-semibold text-xs"
               >
-                <TableCell>{content.requestId}</TableCell>
+                <TableCell>{content.email}</TableCell>
                 <TableCell>
                   {new Intl.NumberFormat("en-NG", {
                     style: "currency",
@@ -164,44 +171,136 @@ const TransactionTable = ({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <Pagination className="mt-4">
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPage((prev) => Math.max(prev - 1, 0));
-                }}
-              />
-            </PaginationItem>
-
-            {Array.from({ length: totalPages }).map((_, i) => (
-              <PaginationItem key={i}>
-                <PaginationLink
+        <div className="mt-4 flex items-center justify-between">
+          <Pagination>
+            <PaginationContent className="gap-0 sm:gap-0.5 md:gap-1">
+              <PaginationItem>
+                <PaginationPrevious
                   href="#"
-                  isActive={i === page}
                   onClick={(e) => {
                     e.preventDefault();
-                    setPage(i);
+                    setPage((prev) => Math.max(prev - 1, 0));
                   }}
-                >
-                  {i + 1}
-                </PaginationLink>
+                />
               </PaginationItem>
-            ))}
 
-            <PaginationItem>
-              <PaginationNext
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPage((prev) => Math.min(prev + 1, totalPages - 1));
-                }}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
+              {totalPages <= 7 ? (
+                Array.from({ length: totalPages }).map((_, i) => (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      href="#"
+                      isActive={i === page}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPage(i);
+                      }}
+                      className="max-sm:text-xs"
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))
+              ) : (
+                <>
+                  {/* First page */}
+                  <PaginationItem>
+                    <PaginationLink
+                      href="#"
+                      isActive={page === 0}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPage(0);
+                      }}
+                      className="max-sm:text-xs"
+                    >
+                      1
+                    </PaginationLink>
+                  </PaginationItem>
+
+                  {/* Ellipsis if needed */}
+                  {page > 3 && (
+                    <span className="font-semibold text-xl">... </span>
+                  )}
+
+                  {/* Pages around current */}
+                  {Array.from({ length: 3 }, (_, i) => {
+                    const pageNum = page - 1 + i;
+                    if (pageNum <= 0 || pageNum >= totalPages - 1) return null;
+                    return (
+                      <PaginationItem key={pageNum} className="gap-1!">
+                        <PaginationLink
+                          href="#"
+                          isActive={pageNum === page}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPage(pageNum);
+                          }}
+                          className="max-sm:text-sm"
+                        >
+                          {pageNum + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    );
+                  }).filter(Boolean)}
+
+                  {/* Ellipsis if needed */}
+                  {page < totalPages - 4 && (
+                    <span className="font-semibold text-xl">... </span>
+                  )}
+
+                  {/* Last page */}
+                  <PaginationItem>
+                    <PaginationLink
+                      className="max-sm:hidden"
+                      href="#"
+                      isActive={page === totalPages - 1}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setPage(totalPages - 1);
+                      }}
+                    >
+                      {totalPages}
+                    </PaginationLink>
+                  </PaginationItem>
+                </>
+              )}
+
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setPage((prev) => Math.min(prev + 1, totalPages - 1));
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+
+          {/* Page selector dropdown */}
+          {totalPages > 7 && (
+            <div className="flex justify-center">
+              <Select
+                value={page.toString()}
+                onValueChange={(value) => setPage(parseInt(value))}
+              >
+                <SelectTrigger className="w-25">
+                  <SelectValue
+                    className="max-sm:text-sm"
+                    placeholder="Go to page"
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: totalPages }).map((_, i) => (
+                    <SelectItem key={i} value={i.toString()}>
+                      Page {i + 1}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

@@ -15,7 +15,15 @@ export const servicesConstant = [
   },
   {
     name: "Fiat Withdrawal",
-    id: category.FIAT_WITHDRAWAL,
+    id: category.WITHDRAWAL,
+  },
+  {
+    name: "System Fee",
+    id: category.SYSTEM_FEE,
+  },
+  {
+    name: "Main",
+    id: category.MAIN,
   },
   {
     name: "Refund",
