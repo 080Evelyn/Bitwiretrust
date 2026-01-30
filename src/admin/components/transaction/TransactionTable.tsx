@@ -127,7 +127,7 @@ const TransactionTable = ({
           ) : (
             contents.map((content) => (
               <TableRow
-                key={content.reference}
+                key={content.reference + content.createdAt}
                 className="font-semibold text-xs"
               >
                 <TableCell>{content.email}</TableCell>
