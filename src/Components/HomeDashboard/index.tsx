@@ -14,11 +14,12 @@ const HomeDashboard = () => {
 
   const { isFetching, data: transactionsList } = useQuery({
     queryKey: ["transaction-history"],
-    queryFn: transactionHistory,
+    queryFn: () => transactionHistory({ size: 20 }),
     staleTime: 10 * 60 * 1000,
   });
 
-  const notifications = transactionsList?.data as TransactionHistoryProps[];
+  const notifications = transactionsList?.data
+    ?.data as TransactionHistoryProps[];
 
   return (
     <>

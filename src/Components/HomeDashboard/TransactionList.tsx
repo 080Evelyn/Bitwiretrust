@@ -55,47 +55,39 @@ const TransactionList = ({
           </div>
         ) : (
           <div className="py-1">
-            {notifications
-              ?.filter(
-                (notif) =>
-                  new Date(notif.createdAt).getMonth() ===
-                  new Date().getMonth(),
-              )
-              .map((notif) => (
+            {notifications?.map((notif) => (
+              <div
+                key={notif.createdAt + notif.requestId}
+                className="transaction-item cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => setSelectedTransaction(notif)}
+              >
                 <div
-                  key={notif.requestId}
-                  className="transaction-item cursor-pointer hover:bg-gray-50 transition-colors"
-                  onClick={() => setSelectedTransaction(notif)}
+                  className="transaction-icon-wrapper !rounded-[3.5px]"
+                  style={{
+                    backgroundColor: getBackgroundColorTransaction(notif.type),
+                  }}
                 >
-                  <div
-                    className="transaction-icon-wrapper !rounded-[3.5px]"
-                    style={{
-                      backgroundColor: getBackgroundColorTransaction(
-                        notif.type,
-                      ),
-                    }}
-                  >
-                    <img
-                      src={
-                        notif.type === "CREDIT"
-                          ? MoneyIn
-                          : notif.type === "DEBIT"
-                            ? MoneyOut
-                            : LogoWhite
-                      }
-                      alt="Transaction icon"
-                      className="transaction-icon"
-                    />
-                  </div>
-
-                  <div className="transaction-details flex-1">
-                    <p className="transaction-title">{notif.serviceType}</p>
-                    <p className="transaction-subtitle">{notif.description}</p>
-                  </div>
-
-                  <ChevronRightCircle className="text-primary size-5" />
+                  <img
+                    src={
+                      notif.type === "CREDIT"
+                        ? MoneyIn
+                        : notif.type === "DEBIT"
+                          ? MoneyOut
+                          : LogoWhite
+                    }
+                    alt="Transaction icon"
+                    className="transaction-icon"
+                  />
                 </div>
-              ))}
+
+                <div className="transaction-details flex-1">
+                  <p className="transaction-title">{notif.serviceType}</p>
+                  <p className="transaction-subtitle">{notif.description}</p>
+                </div>
+
+                <ChevronRightCircle className="text-primary size-5" />
+              </div>
+            ))}
             {notifications?.length === 0 && (
               <div className="pt-4 text-center text-sm text-[#7901b1]">
                 No notifications for this month
@@ -212,42 +204,10 @@ const TransactionList = ({
                 </span>
               </div>
             )}
-            {selectedTransaction?.category && (
+            {selectedTransaction?.tariff && (
               <div className="flex justify-between">
-                <span>Category</span>
-                <span>{selectedTransaction.category}</span>
-              </div>
-            )}
-            {selectedTransaction?.balanceBefore !== undefined && (
-              <div className="flex justify-between">
-                <span>Balance Before</span>
-                <span>
-                  {new Intl.NumberFormat("en-NG", {
-                    style: "currency",
-                    currency: "NGN",
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }).format(selectedTransaction.balanceBefore)}
-                </span>
-              </div>
-            )}
-            {selectedTransaction?.balanceAfter !== undefined && (
-              <div className="flex justify-between">
-                <span>Balance After</span>
-                <span>
-                  {new Intl.NumberFormat("en-NG", {
-                    style: "currency",
-                    currency: "NGN",
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }).format(selectedTransaction.balanceAfter)}
-                </span>
-              </div>
-            )}
-            {selectedTransaction?.microTransactionType && (
-              <div className="flex justify-between">
-                <span>Micro Transaction Type</span>
-                <span>{selectedTransaction.microTransactionType}</span>
+                <span>Tariff</span>
+                <span>{selectedTransaction.tariff}</span>
               </div>
             )}
             {selectedTransaction?.beneficiary && (
@@ -274,7 +234,7 @@ const TransactionList = ({
                 <span>{selectedTransaction.providerTransactionId}</span>
               </div>
             )}
-            {selectedTransaction?.completedAt && (
+            {/* {selectedTransaction?.completedAt && (
               <div className="flex justify-between">
                 <span>Completed At</span>
                 <span>
@@ -295,7 +255,7 @@ const TransactionList = ({
                   )}
                 </span>
               </div>
-            )}
+            )} */}
             {selectedTransaction?.meterNumber && (
               <div className="flex justify-between">
                 <span>Meter Number</span>
