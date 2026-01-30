@@ -7,17 +7,17 @@ export const transactions = async () => {
   const userId = getUserId();
 
   const response = await axios.get(
-    `${url}/v1/user/notification/transaction/all?userId=${userId}`
+    `${url}/v1/user/notification/transaction/all?userId=${userId}`,
   );
 
   return response.data;
 };
 
-export const transactionHistory = async () => {
+export const transactionHistory = async ({ size }: { size: number }) => {
   const userId = getUserId();
 
   const response = await axios.get(
-    `${url}/v1/user/wallet-service/${userId}/wallet-trx/history`
+    `${url}/v1/user/wallet-service/${userId}/wallet-trx/history/keyset?size=${size}`,
   );
 
   return response.data;
