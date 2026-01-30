@@ -14,10 +14,6 @@ export const servicesConstant = [
     id: category.CRYPTOSWAP,
   },
   {
-    name: "Mainnet",
-    id: category.MAINNET,
-  },
-  {
     name: "Fiat Withdrawal",
     id: category.FIAT_WITHDRAWAL,
   },
@@ -30,11 +26,15 @@ export const servicesConstant = [
 export const statusConstant = [
   {
     name: "Unsuccessful",
-    id: "failed",
+    id: "FAILED",
   },
   {
     name: "Successful",
-    id: "success",
+    id: "SUCCESS",
+  },
+  {
+    name: "Pending",
+    id: "PENDING",
   },
 ];
 

@@ -19,8 +19,8 @@ import { Dialog, DialogTrigger } from "../ui/dialog";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/Components/ui/skeleton";
 import UsersDialog from "./users-dialog";
-import { AllUsersPage, category, TransactionLogProps } from "@/admin/type";
-import { format } from "date-fns";
+import { AllUsersPage, CategoryType, TransactionLogProps } from "@/admin/type";
+import { formatDate } from "date-fns";
 import { filteredTransaction } from "@/admin/api/transactions";
 import { Dispatch, useMemo } from "react";
 
@@ -35,10 +35,10 @@ const TransactionTable = ({
   page,
   setPage,
 }: TransactionTableProps) => {
-  // memoize your query params, avoids re-running query when not needed
+  // memoize you query params, avoids re-running query when not needed
   const queryParams = useMemo(() => {
     return {
-      category: searchParams.get("category") as category | null,
+      category: searchParams.get("category") as CategoryType | null,
       status: searchParams.get("status") ?? "",
       // fromDate: searchParams.get("fromDate") ?? "",
       // toDate: searchParams.get("toDate") ?? "",
@@ -84,7 +84,7 @@ const TransactionTable = ({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="font-semibold">Reference ID</TableHead>
+            <TableHead className="font-semibold">Transaction ID</TableHead>
             <TableHead className="font-semibold">Amount</TableHead>
             <TableHead className="font-semibold">Transaction Type</TableHead>
             <TableHead className="font-semibold">Date</TableHead>
@@ -120,10 +120,10 @@ const TransactionTable = ({
           ) : (
             contents.map((content) => (
               <TableRow
-                key={content.reference}
+                key={content.requestId}
                 className="font-semibold text-xs"
               >
-                <TableCell>{content.reference}</TableCell>
+                <TableCell>{content.requestId}</TableCell>
                 <TableCell>
                   {new Intl.NumberFormat("en-NG", {
                     style: "currency",
@@ -134,17 +134,16 @@ const TransactionTable = ({
                 </TableCell>
                 <TableCell className="font-medium">{content.type}</TableCell>
                 <TableCell className="font-medium">
-                  {format(
-                    new Date(content.createdAt),
-                    "dd MMM, yyyy, hh:mm:ss"
-                  )}
+                  {formatDate(content.createdAt, "dd MMM, yyyy, hh:mm a")}
                 </TableCell>
                 <TableCell className="font-medium">
                   <div className="flex items-center gap-2">
                     {["SUCCESS", "SUCCESSFUL"].includes(content.status) ? (
                       <span className="size-2 rounded-full bg-[#11C600] mr-1" />
-                    ) : (
+                    ) : ["FAILED", "UNSUCCESSFUL"].includes(content.status) ? (
                       <span className="size-2 rounded-full bg-[#FF0000] mr-1" />
+                    ) : (
+                      <span className="size-2 rounded-full bg-yellow-400 mr-1" />
                     )}
                     <span className="lowercase">{content.status}</span>
                   </div>

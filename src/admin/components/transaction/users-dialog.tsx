@@ -8,6 +8,7 @@ import {
 import { TransactionLogProps } from "@/admin/type";
 import { formatDate } from "date-fns";
 import { Badge } from "@/Components/ui/badge";
+import { cn } from "@/lib/utils";
 
 const UsersDialog = (content: TransactionLogProps) => {
   return (
@@ -22,8 +23,8 @@ const UsersDialog = (content: TransactionLogProps) => {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex text-foreground justify-between items-center">
-              <span className="text-sm font-semibold">Reference ID</span>
-              <p className="text-xs font-light">{content.reference}</p>
+              <span className="text-sm font-semibold">Request ID</span>
+              <p className="text-xs font-light">{content.requestId}</p>
             </div>
             <div className="flex text-foreground justify-between items-center">
               <span className="text-sm font-semibold">Amount</span>
@@ -47,14 +48,20 @@ const UsersDialog = (content: TransactionLogProps) => {
             <div className="flex text-foreground justify-between items-center">
               <span className="text-sm font-semibold">Date</span>
               <p className="text-xs font-light">
-                {formatDate(content.createdAt, "yyyy-MM-dd, hh:mm aa")}
+                {formatDate(content.createdAt, "yyyy-MM-dd, hh:mm a")}
               </p>
             </div>
             <div className="flex text-foreground justify-between items-center">
               <span className="text-sm font-semibold">Status</span>
               <Badge
-                className="text-xs font-light lowercase"
-                variant="secondary"
+                className={cn(
+                  content.status === "SUCCESS"
+                    ? "bg-green-500"
+                    : content.status === "PENDING"
+                      ? "bg-yellow-500"
+                      : "bg-red-500",
+                  "text-xs lowercase",
+                )}
               >
                 {content.status}
               </Badge>

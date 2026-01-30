@@ -10,7 +10,7 @@ export const transactionLog = async () => {
 
 export const transactionStatusCount = async () => {
   const response = await axios.get(
-    `${url}/v1/admin/transactions/status-counts`
+    `${url}/v1/admin/transactions/status-counts`,
   );
   return response.data;
 };
@@ -24,10 +24,10 @@ export const totalTransactionCount = async () => {
 
 export const filteredTransaction = async (params: FilteredTransactionProps) => {
   const response = await axios.get(
-    `${url}/v1/admin/dashboard/wallet-transactions-with-status-and-status`,
+    `${url}/v1/admin/get-all/wallet-transactions-with-status`,
     {
       params,
-    }
+    },
   );
   return response.data;
 };
